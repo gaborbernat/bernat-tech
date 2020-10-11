@@ -1,0 +1,17 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: 'Zola build'
+        uses: shalzz/zola-deploy-action@master
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
+          BUILD_THEMES: false
+          BUILD_ONLY: ${{ github.ref != 'refs/heads/main' }}
