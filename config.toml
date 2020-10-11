@@ -1,0 +1,6 @@
+base_url = "https://www.bernat.tech/"
+compile_sass = false
+highlight_code = true
+build_search_index = true
+
+[extra]
