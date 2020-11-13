@@ -1,17 +1,26 @@
+name: github pages
 on:
   push:
     branches:
       - main
-  pull_request:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      - name: 'Zola build'
-        uses: shalzz/zola-deploy-action@master
-        env:
-          TOKEN: ${{ secrets.TOKEN }}
-          BUILD_THEMES: false
-          BUILD_ONLY: ${{ github.ref != 'refs/heads/main' }}
+        with:
+          submodules: true
+          fetch-depth: 0
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.78.2'
+          extended: true
+      - name: Build
+        run: hugo --minify
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.TOKEN }}
+          publish_dir: ./public
