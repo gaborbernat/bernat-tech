@@ -1,6 +1,60 @@
-base_url = "https://www.bernat.tech/"
-compile_sass = false
-highlight_code = true
-build_search_index = true
+baseURL = "https://gaborbernat.github.io/bernat-tech"
+title = "Tech articles by Bernát Gábor"
+disablePathToLower = true
+theme = "hugo-coder"
+languagecode = "en"
+defaultcontentlanguage = "en"
 
-[extra]
+paginate = 20
+
+pygmentsstyle = "bw"
+pygmentscodefences = true
+pygmentscodefencesguesssyntax = true
+
+[params]
+author = "Bernát Gábor"
+info = "Python open-source developer"
+description = "Bernát Gábor's personal website"
+keywords = "blog,developer,personal"
+avatarurl = "img/avatar.jpg"
+favicon_32 = "img/android-chrome-192x192.png"
+favicon_16 = "img/android-chrome-192x192.png"
+touchIcon =  "img/android-chrome-192x192.png"
+customCSS = ["css/custom.css"]
+
+footercontent = "Software engineer <a href='https://github.com/bloomberg'> at Bloomberg (London)</a>. Maintainer of <a href='https://github.com/gaborbernat/'> many FOSS Python packages</a>. Opinions are my own."
+hideCredits = true
+hideCopyright = true
+since = 2018
+enableTwemoji = true
+
+colorScheme = "auto"
+hidecolorschemetoggle = false
+
+[[params.social]]
+name = "Github"
+icon = "fa fa-github fa-2x"
+weight = 1
+url = "https://github.com/gaborbernat/"
+
+[[params.social]]
+name = "Twitter"
+icon = "fa fa-twitter fa-2x"
+weight = 3
+url = "https://twitter.com/gjbernat/"
+
+[taxonomies]
+category = "categories"
+series = "series"
+tag = "tags"
+author = "authors"
+
+[[menu.main]]
+name = "Blog"
+weight = 1
+url = "posts"
+
+[[menu.main]]
+name = "About"
+weight = 2
+url = "about"
