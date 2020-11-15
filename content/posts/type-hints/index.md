@@ -1,19 +1,18 @@
 +++
 author = "Bernat Gabor"
-date = 2018-05-30T09:51:55Z
-description = ""
-draft = false
-image = "https://images.unsplash.com/photo-1432887382605-0abf9cc49e8f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"
-slug = "the-state-of-type-hints-in-python"
+title = "The state of type hints in Python"
+description = "How to use typing in Python via mypy"
 tags = ["mypy", "python", "types", "type-hint"]
-title = "the state of type hints in Python"
+draft = false
+slug = "the-state-of-type-hints-in-python"
+date = 2018-05-30T09:51:55Z
 +++
 
 One of the main selling points for Python is that it is dynamically-typed. There is no plan to change this.
 Nevertheless, in September 2014 [Guido van Rossum](https://twitter.com/gvanrossum) (Python
 [BDFL](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life)) created a python enhancement proposal
 ([PEP-484](https://www.python.org/dev/peps/pep-0484)) to add type hints to Python. It has been released for general
-usage a year later, in September 2015, as part of Python 3.5.0.
+usage a year later, in September 2015, as part of Python `3.5.0`.
 [Twenty-five years into its existence](http://python-history.blogspot.com/2009/01/brief-timeline-of-python.html) now
 there was a standard way to add type information to Python code. In this blog post, I'll explore how the system matured,
 how you can use it and what's next for type hints.
@@ -23,7 +22,7 @@ admiration for these animals; and hey nothing like some cute animals to help dig
 
 # Why do we need this?
 
-<p align="center"><img alt="https://www.pexels.com/photo/cold-nature-cute-ice-52509/" src="/content/images/2018/05/pinguin.jpg"></p>
+{{< img src="pinguin.jpeg" alt="The question" >}}
 
 ## What it was designed to do?
 
@@ -36,7 +35,7 @@ Knowing the type of the parameters makes it a lot easier to understand and maint
 assume you have a function. While we do know the parameters types at the time of creating the function, a few months
 down the line this is no longer the case. Having stated the types of all parameters and return types right beside the
 code can speed up significantly the time required to catch up with a code snippet. Always remember that code you read
-code a lot more often than you write it. Therefore you should optimise for ease of reading.
+code a lot more often than you write it. Therefore you should optimize for ease of reading.
 
 Having type hints informs you of what parameter types you need to pass on when calling a function, and when you need to
 extend/modify the function tells you about the type of data you get both as input and output. For example, imagine the
