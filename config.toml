@@ -7,9 +7,6 @@ defaultcontentlanguage = "en"
 
 paginate = 20
 
-pygmentsstyle = "bw"
-pygmentscodefences = true
-pygmentscodefencesguesssyntax = true
 
 [params]
 author = "Bernát Gábor"
@@ -58,3 +55,16 @@ url = "posts"
 name = "About"
 weight = 2
 url = "about"
+
+[markup]
+  [markup.highlight]
+    anchorLineNos = true
+    codeFences = true
+    guessSyntax = false
+    lineAnchors = "c"
+    lineNoStart = 1
+    lineNos = false
+    lineNumbersInTable = true
+    noClasses = false
+    style = "monokai"
+    tabWidth = 4
