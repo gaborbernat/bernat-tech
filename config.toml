@@ -23,7 +23,7 @@ footercontent = "Software engineer <a href='https://github.com/bloomberg'> at Bl
 hideCredits = true
 hideCopyright = true
 since = 2018
-enableTwemoji = true
+enableTwemoji = false
 
 colorScheme = "auto"
 hidecolorschemetoggle = false
