@@ -1,6 +1,6 @@
 +++
 author = "Bernat Gabor"
-title = "The state of type hints in Python"
+title = "the state of type hints in Python"
 description = "How to use typing in Python via mypy"
 tags = ["mypy", "python", "types", "type-hint"]
 draft = false
@@ -15,14 +15,14 @@ Nevertheless, in September 2014 [Guido van Rossum](https://twitter.com/gvanrossu
 usage a year later, in September 2015, as part of Python `3.5.0`.
 [Twenty-five years into its existence](http://python-history.blogspot.com/2009/01/brief-timeline-of-python.html) now
 there was a standard way to add type information to Python code. In this blog post, I'll explore how the system matured,
-how you can use it and what's next for type hints.
+how you can use it, and what's next for type hints.
 
-Disclaimer: throughout this blog post, you'll see many seals and penguin pictures, the reason for this is mostly my
-admiration for these animals; and hey nothing like some cute animals to help digest some complex topics, not?
+Disclaimer: throughout this blog post, you'll see many seals and penguin pictures. The reason for this is mostly my
+admiration for these animals, and hey, nothing like some cute animals to help digest some tricky topics, not?
 
 # Why do we need this?
 
-{{< img src="pinguin.jpeg" alt="The question" >}}
+{{< figure src="why.png" width="700px">}}
 
 ## What it was designed to do?
 
@@ -31,15 +31,15 @@ it in their order of importance:
 
 ### 1. Easier to reason about code
 
-Knowing the type of the parameters makes it a lot easier to understand and maintain a code base. For example, let's
-assume you have a function. While we do know the parameters types at the time of creating the function, a few months
-down the line this is no longer the case. Having stated the types of all parameters and return types right beside the
-code can speed up significantly the time required to catch up with a code snippet. Always remember that code you read
-code a lot more often than you write it. Therefore you should optimize for ease of reading.
+Knowing the type of parameters makes it a lot easier to understand and maintain a codebase. For example, let's assume
+you have a function. While we know the types of the parameters at the time of creating the function, a few months down
+the line, this is no longer the case. Having stated the types of all parameters and return types right beside the code
+can speed up significantly the time required to catch up with a code snippet. Always remember that code you read code a
+lot more often than you write it. Therefore you should optimize for ease of reading.
 
-Having type hints informs you of what parameter types you need to pass on when calling a function, and when you need to
+Having type hints informs you of what parameter types you need to pass on when calling a function and when you need to
 extend/modify the function tells you about the type of data you get both as input and output. For example, imagine the
-following send request function,
+following the send request function,
 
 ```python
 def send_request(request_data : Any,
@@ -49,46 +49,46 @@ def send_request(request_data : Any,
     ...
 ```
 
-Just looking at the signature of this I know that while the `request_data` could be anything, the `headers` content is a
-dictionary of strings. The user information is optional (defaulting to `None`) or it needs to be whatever `UserId`
-encodes it too. Also the contract for `as_json` is that it needs to be always a boolean value, being a flag essentially
-even though the name might not suggest that at first.
+Just looking at the signature of this, I know that while the `request_data` could be anything, the `headers` content is
+a dictionary of strings. The user information is optional (defaulting to `None`), or it needs to be whatever `UserId`
+encodes it too. The contract for `as_json` is that it needs to be always a boolean value, being a flag essentially even
+though the name might not suggest that at first.
 
-The truth is many of us already understand that type information is essential, however in lack of better options until
-now this was often mentioned inside the docstring. The type hint system moves this closer to the interface of the
-function and provides a well-defined way to declare complex type requirements. Building linters that can check these
+The truth is many of us already understand that type of information is essential. However, in lack of better options
+until now, this was often mentioned inside the docstring. The type hint system moves this closer to the function
+interface and provides a well-defined way to declare complex type requirements. Building linters that can check these
 type hint constraints ensure that they never become out of date, granted that you run them after every code change.
 
 ### 2.Easier refactoring
 
-Type hints make it trivial to find where a given class is used when you're trying to refactor your code base. While many
-IDEs already have some heuristic in place to achieve this, type hints allow them to have `100%` detection and accuracy
-ratio. Generally offers a smoother and more accurate detection of how types run through your code. Remember while
+Type hints make it trivial to find where a given class is used when you're trying to refactor your codebase. While many
+IDEs already have some heuristic in place to achieve this. Type hints allow them to have `100%` detection and accuracy
+ratio. Generally offers a smoother and more accurate detection of how types run through your code. Remember, while
 dynamic typing means any variable can become any of types, all your variables have at all time one and only one type.
-Type system still is very much a core component of programming, remember all the time you've used `isinstance` to drive
-your application logic.
+The type system still is very much a core component of programming. Remember all the time you've used `isinstance` to
+drive your application logic.
 
 ### 3. Easier to use libraries
 
 Having type hints mean IDEs can have a more accurate and smarter suggestion engine. Now when you invoke auto-complete,
-the IDE knows with complete confidence what methods/attributes are available on an object. Furthermore, if the user
-tries to call something which is non-existent or passes arguments of an incorrect type the IDE can instantly warn about
-it.
+the IDE knows with complete confidence, what methods/attributes are available on an object. Furthermore, if the user
+tries to call something non-existent or passes arguments of an incorrect type, the IDE can instantly warn about it.
 
-<p align="center"><img alt="IDE suggestion" src="/content/images/2018/05/editor_suggest.png"></p>
+{{< figure src="editor_suggest.png" width="500px" alt="IDE suggestion">}}
 
 ### 4. Type linters
 
-![type_missmatch](/content/images/2018/05/type_missmatch.jpg) While the IDE suggesting incorrect argument types is nice,
-an extension of this is to have a linter tool that makes sure that type wise the logic of your application is sound.
-Running this tool can help you catch bugs early on (e.g. in the example that follows the input must be of type `str`,
-passing in `None` throws an exception):
+{{< figure src="type_mismatch.png" width="500px" alt="IDE suggestion">}}
+
+While the IDE suggesting incorrect argument types is excellent, an extension of this is to have a linter tool that makes
+sure that type wise the logic of your application is sound. Running this tool can help you catch bugs early on (e.g., in
+the example that follows, the input must be of type `str`, passing in `None` throws an exception):
 
 ```python
 def transform(arg):
     return 'transformed value {}'.format(arg.upper())
-
-transform(None) # if arg would be type hinted as str the type linter could warn that this is an invalid call
+# if arg would be type hinted as str the type linter could warn that this is an invalid call
+transform(None)
 ```
 
 While in this trivial case, some could argue that it's easy to see the mismatch, remember this works in more complicated
@@ -105,14 +105,14 @@ transform( append( construct() ) )
 ```
 
 While there are more and more linters out there, the reference implementation of the Python type checking is
-[mypy](http://mypy-lang.org/). mypy is a Python command line application, making it easy to integrate into a continuous
+[mypy](http://mypy-lang.org/). mypy is a Python command-line application, making it easy to integrate into a continuous
 integration pipeline.
 
 ### 5. Runtime data validation
 
 Type hints can be used to validate at runtime to ensure that the caller does not break the contract of methods. It is no
 longer needed to start your function with a long list of type asserts; instead, use a framework that re-uses type hints
-and automatically checks that they are meet before your business logic runs (for example with
+and automatically checks that they are meet before your business logic runs (for example, with
 [pydantic](https://github.com/samuelcolvin/pydantic)):
 
 ```python
@@ -139,35 +139,36 @@ except ValidationError as e:
 ## What it wasn't designed to do?
 
 From the get-go, Guido clearly stated that type hints are not meant to be used for the following use cases (of course
-that does not mean that people do not have libraries/tools outside which do just that - open source power for the win!):
+that does not mean that people do not have libraries/tools outside, which do just that - open source power for the
+win!):
 
 ### 1. No runtime type inference
 
-The runtime interpreter (CPython) does not try to deduce type information at runtime, and perhaps validate arguments
+The runtime interpreter (CPython) does not try to deduce type information at runtime and perhaps validate arguments
 passed around based on that.
 
 ### 2. No performance tuning
 
-The runtime interpreter (CPython) does not use the type information to optimise the generated bytecode for either
+The runtime interpreter (CPython) does not use the type of information to optimize the generated byte-code for either
 security or performance. When executing a Python script type hints are treated just like comments; the interpreter
 discards it.
 
-The key takeaway should be that type hints are designed to improve developer experience, not to influence how your
-script evaluates. It creates happy developers, not faster code!
+The key takeaway should be that type hints are designed to improve developer experience, not influencing how your script
+evaluates. It creates happy developers, not faster code!
 
-![happy_programmer](/content/images/2018/05/happy_programmer.jpeg)
+{{< figure src="happy_programmer.png" width="700px">}}
 
 # What kind of type system?
 
-Python has gradual type hinting; meaning that whenever for a given function or variable the type hint is not specified
-we assume that it can have any type (that is it remains a dynamically typed section). Use this to gradually make your
-code base type-aware, one function or variable at a time. It is possible to type hint:
+Python has gradual type hinting, meaning that whenever for a given function or variable, the type hint is not specified.
+We assume that it can have any type (that is, it remains a dynamically typed section). Use this to make your gradually
+codebase type-aware, one function, or variable at a time. It is possible to type hint:
 
 - function arguments,
 - function return values,
 - variables.
 
-_Remember only type hinted code are type checked!_ When you run the linter (e.g. mypy) on a type hinted code you'll get
+_Remember only type hinted code is type-checked!_ When you run the linter (e.g., mypy) on a type hinted code, you'll get
 errors if there are type miss-matches:
 
 ```python
@@ -185,15 +186,15 @@ tests/test_magic_field.py:21: error: Argument 1 to "MagicField" has incompatible
 tests/test_magic_field.py:22: error: "MagicField" has no attribute "names"; maybe "name" or "_name"?
 ```
 
-Note we can detect both type incompatibility for the argument passed in, and accesses to inexistent attributes on
-objects. The later even suggests valid options available, making it easy to notice and fix typos.
+Note we can detect both type incompatibility for the argument passed in and accesses to inexistent attributes on
+objects. The latter even suggests valid options available, making it easy to notice and fix typos.
 
 ## How to add it
 
-Once you decide to add type hints, you'll come to realise that you can add it in more than one ways to the code base.
+Once you decide to add type hints, you'll come to realize that you can add it in more than one way to the codebase.
 Let's see what your options are.
 
-<p align="center"><img alt="https://commons.wikimedia.org/wiki/File:New_Zealand_Fur_seal.FZ200_(14502532505).jpg" src="/content/images/2018/05/interested.jpg"></p>
+{{< figure src="interested.png" width="700px">}}
 
 ### 1. Type annotations
 
@@ -219,22 +220,23 @@ The **upside** of this method is that:
 
 <div class='plus'>
 
-- It is the canonical way of doing this, which means is the cleanest out of them all.
-- Because the type information is attached right alongside the code means you'll have packaged this data out of the box.
+- It is the canonical way of doing this, which means it is the cleanest out of them all.
+- Because the type of information is attached right alongside the code means you'll have packaged this data out of the
+box.
 </div>
 
 The **downside** of it is that:
 
 <div class=''plus>
 
-- It isn't backwards compatible. You need Python `3.6` at least to use it.
+- It isn't backward compatible. You need Python `3.6` at least to use it.
 - It also forces you to import **all** of your type dependencies, even though they are not used at runtime at all.
-- In the type hints, you can have compound types, for example `List[int]`. To construct these complex types the
+- In the type hints, you can have compound types, for example, `List[int]`. To construct these complex types, the
 interpreter does need to do some operations when first loading this file.
 </div>
 
-The last two point contradicts the initial goal of the type system we enlisted before: that is to handle all type
-information basically as a comment during runtime. To resolve some of this contradiction `Python 3.7` introduces
+The last two points contradict the initial goal of the type system we enlisted before: handling all type information
+basically as a comment during runtime. To resolve some of this contradiction `Python 3.7` introduces
 [PEP-563 ~ postponed evaluation of annotations](https://www.python.org/dev/peps/pep-0563/). Once you add the import of:
 
 ```python
@@ -244,11 +246,11 @@ from __future__ import annotations
 The interpreter will no longer construct these compound types. Once the interpreter parses the scripts syntax tree, it
 identifies type hints and bypasses evaluating it, keeping it as raw strings. This mechanism allows for type hint
 interpretation to happen where they need to: by the linter when it runs type checks. Once the mythical `Python 4` comes
-to life, this mechanism shall be the default behaviour.
+to life, this mechanism shall be the default behavior.
 
 ### 2. Type comments
 
-When the annotation syntax is not available one can use the type comments:
+When the annotation syntax is not available, one can use the type comments:
 
 ```python
 from typing import List
@@ -268,9 +270,9 @@ Going down this path, we do get some benefits:
 <div class='plus'>
 
 - Type comments work under any Python version. Although the typing library has been added to the standard library with
-  Python `3.5+` it is available as PyPi package for Python `2.7+`. Moreover, because Python comments is a valid language
-  feature under virtually any Python code, this allows you to type hint any code base at or above Python `2.7`. There
-  are a few requirements: the type hint comment **must** be on the same or the next line where the function/variable
+  Python `3.5+` is available as a PyPi package for Python `2.7+`. Moreover, because Python comments is a valid language
+  feature under virtually any Python code, this allows you to type-hint any codebase at or above Python `2.7`. There are
+  a few requirements: the type hint comment **must** be on the same or the next line where the function/variable
   definition is. It also starts with the `type: ` constant.
 - This solution also has packaging solved because comments are rarely stripped of your code once you stripped it.
 Packaging type hint information with your source code allows people using your library to use your type hint information
@@ -281,15 +283,15 @@ But we also generate some new problems:
 
 <div class='cross'>
 
-- The downside is that although the type information is close to the arguments, it's not right beside it; making the
-  code a bit messier than otherwise would be. It also must be in a single line which can cause issues if you have a long
-  type hint expression and your code base enforces line length limits.
+- The downside is that although the type of information is close to the arguments, it's not right beside it, making the
+  code a bit messier than otherwise would be. It must also be in a single line, causing issues if you have a long type
+  of expression, and your codebase enforces line length limits.
 - Another problem is that now the type hint information competes with other tools using these types of comment markers
-  (e.g. suppressing other linter tools errors).
+  (e.g., suppressing other linter tools errors).
 - Besides forcing you to import all of your type information, this leaves you in an even more precarious place. Now the
 imported types are only used in the code, which leaves most linter tools to believe all those imports are unused. Were
-you to allow them to remove it does break your type linter. Note `pylint` fixed this by moving its AST parser to a
-[typed-ast parser](https://github.com/PyCQA/pylint/issues/1063), and is going to be released with version 2 just after
+you to allow them to remove it, and it does break your type linter. Note `pylint` fixed this by moving its AST parser to
+a [typed-ast parser](https://github.com/PyCQA/pylint/issues/1063), and is going to be released with version 2 just after
 Python `3.7` comes out.
 </div>
 
@@ -315,7 +317,7 @@ def swap_in_state(state, config, overrides):
     state.config, state.overrides = old_config, old_overrides
 ```
 
-First, you must add type hints. Because the type hint would be long winded you attach type hint argument by argument:
+First, you must add type hints. Because the type hint would be long-winded, you attach type hint argument by argument:
 
 ```python
 @contextmanager
@@ -330,7 +332,7 @@ def swap_in_state(state,  # type: State
     state.config, state.overrides = old_config, old_overrides
 ```
 
-However, wait you need to import your types used:
+However, wait, you need to import your types used:
 
 ```python
 from typing import Generator, Tuple, Optional, Dict, Union, List
@@ -350,8 +352,8 @@ def swap_in_state(state,  # type: State
     state.config, state.overrides = old_config, old_overrides
 ```
 
-Now formatting like this the code causes some false positives in the static linter (e.g. pylint here) so you add a few
-suppress comments for this:
+Now formatting like this, the code causes some false positives in the static linter (e.g. `pylint` here), so you add a
+few suppress comments for this:
 
 ```python
 from typing import Generator, Tuple, Optional, Dict, List
@@ -372,7 +374,7 @@ def swap_in_state(state,  # type: State
 ```
 
 Now you're done. Nevertheless, you made your six lines of code sixteen lines long. Yay, more code to maintain!
-Increasing your code base only sounds good if you're getting paid by the number line of code written and your manager is
+Increasing your codebase only sounds good if you're getting paid by the number line of code written, and your manager is
 complaining you're not performing well enough.
 
 ### 3. Interface stub files
@@ -388,7 +390,7 @@ class A(object):
       self.elements.append(element)
 ```
 
-and instead add another file with `pyi` extension right beside it:
+and instead, add another file with `pyi` extension right beside it:
 
 ```python
 # a.pyi alongside a.py
@@ -400,74 +402,73 @@ class A(object):
   def add(element: int) -> None: ...
 ```
 
-Interface files are not a new thing, C/C++ had it for decades now. Because Python is an interpreted language it does not
-need it usually, however as every problem in computer science can be solved by adding a new level of indirection, we can
-add it to store the type information.
+Interface files are not a new thing; C/C++ had it for decades now. Because Python is an interpreted language, it does
+not need it usually, however as every problem in computer science can be solved by adding a new level of indirection, we
+can add it to store the type of information.
 
 The upside of this is that:
 
 <div class='plus'>
 
-- You don't need to modify the source code, works under any Python version as the interpreter never touches these.
-- Inside the stub files, you can use the latest syntax (e.g. type annotations) because these are never looked at during
-  execution of your application.
-- Because you do not touch your source code this means by adding type hints you cannot introduce bugs, neither can what
-  you add conflict with other linter tools.
-- It is a well-tested design, the [typeshed](https://github.com/python/typeshed) project uses it to type hint the entire
-  standard library, plus some other popular libraries such as requests, yaml, dateutil and
-  [so on](https://github.com/python/typeshed/tree/master/third_party).
-- Can be used to provide type information for source code that you do not own or you cannot change it easily.
+- You don't need to modify the source code; works under any Python version as the interpreter never touches these.
+- Inside the stub files, you can use the latest syntax (e.g., type annotations) because these are never looked at during
+  your application's execution. Because you do not touch your source code, you cannot introduce bugs by adding type
+  hints, nor can you add conflict with other linter tools.
+- It is a well-tested design; the [`typeshed`](https://github.com/python/typeshed) project uses it to type hint the
+entire standard library, plus some other popular libraries such as `requests`, `yaml`, `dateutil` and
+[so on](https://github.com/python/typeshed/tree/master/third_party). It can provide type information for source code
+that you do not own or cannot change easily.
 </div>
 
 Now there are also some hefty penalties to pay:
 
 <div class='cross'>
     
-- You just duplicated your code base, as every function now has two definitions (note you don't need to replicate your body or default arguments, the ``...`` - ellipsis - is used as a placeholder for these). 
-- Now you have some extra files that need to be packaged and shipped with your code. 
-- It's not possible to annotate contents inside functions (this means both methods inside methods, and local variables).  
-- There is no check that your implementation file matches the signature of your stub (furthermore IDEs always use foremost the stub definition). 
-- However, the heaviest penalty is that you cannot type check the code you're type hinting via a stub. Stub file type hints were designed to be used to type check code that uses the library. But not too type check the code base itself what your type hinting. 
+- You just duplicated your codebase, as every function now has two definitions (note you don't need to replicate your body or default arguments, the ``...`` - ellipsis - is used as a placeholder for these). 
+- Now, you have some extra files that need to be packaged and shipped with your code. 
+- It's impossible to annotate contents inside functions (this means both methods inside methods and local variables).  
+- There is no check that your implementation file matches your stub's signature (furthermore, IDEs always use the stub definition). 
+- However, the heaviest penalty is that you cannot type check the code you're type hinting via a stub. Stub file type hints were designed to be used to type-check code that uses the library. But not too type check the codebase itself what your type hinting. 
 </div>
 
-The last two drawback makes it especially hard to check that the type hinted code base via a stub file is in sync or
-not. In this current form type stubs are a way to provide type hints to your users, but not for yourself, and are
-especially hard to maintain. To fix these, I've taken up the task of merging stub files with source files inside mypy;
-in theory, would fix both problems - you can follow on its progress under
+The last two drawback makes it incredibly hard to check that the type hinted codebase via a stub file is in sync or not.
+In this current form, type stubs are a way to provide type hints to your users, but not for yourself, and are incredibly
+hard to maintain. To fix these, I've taken up the task of merging stub files with source files inside mypy; in theory,
+fix both problems - you can follow on its progress under
 [python/mypy ~ issue 5208](https://github.com/python/mypy/issues/5028).
 
 ### 4. Docstrings
 
-It is possible to add type information into docstrings too. Even though this is not part of the type hint framework
-designed for Python, it is supported by most mainstream IDEs. They are mostly the legacy way of doing this.
+It is possible to add type information into docstrings too. Even though this is not part of Python's type-hint
+framework, it is supported by most mainstream IDEs. They are mostly the legacy way of doing this.
 
 On the plus side:
 
 <div class='plus'>
 
-- Works under any Python version, it was defined back in [PEP-257](https://www.python.org/dev/peps/pep-0257/).
-- Does not clash with other linter tools, as most of these do not check the docstrings, but usually resume on just
-inspecting the other code sections instead.
+- Works under any Python version. It was defined back in [PEP-257](https://www.python.org/dev/peps/pep-0257/). It does
+not clash with other linter tools, as most of these do not check the docstrings but usually resume just inspecting the
+other code sections instead.
 </div>
 
 However, it has serious flaws in the form of:
 
 <div class='cross'>
 
-- There is no standard way to specify complex type hints (for example either `int` or `bool`). PyCharm has
-  [its proprietary way](https://www.jetbrains.com/help/pycharm/type-hinting-in-product.html#legacy) but Sphinx, for
-  example, uses a different method. T- Docstring types does not clash with other linter tools.
-- Requires changing the documentation, and is hard to keep accurate/up to date as there is no tool to check it's
+- There is no standard way to specify complex type hints (for example, either `int` or `bool`). PyCharm has
+  [it's the proprietary way](https://www.jetbrains.com/help/pycharm/type-hinting-in-product.html#legacy) but Sphinx, for
+  example, uses a different method. T- Docstring types do not clash with other linter tools.
+- Requires changing the documentation, and it is hard to keep accurate/up to date as there is no tool to check it's
   validity.
-- Docstring types do not play well with type hinted code. If both type annotations and docstrings are specified which
+- Docstring types do not play well with type hinted code. If both type annotations and docstrings are specified, which
 takes precedence over which?
 </div>
 
 ## What to add?
 
-![deep_dive](/content/images/2018/05/deep_dive.jpg)
+{{< figure src="deep_dive.png" width="700px">}}
 
-Let's dive into the specifics though. For an exhaustive list of what type information you can add, please see the
+Let's dive into the specifics, though. For an exhaustive list of what type of information you can add, please see the
 [official documentation](https://docs.python.org/3/library/typing.html). Here I'll do a quick 3-minute overview for you
 to get the idea of it. There are two types of type categories: nominal types and duck types (protocols).
 
@@ -504,7 +505,7 @@ call_with_user_id_n_times(user_id, count)
 
 For `namedtuple` you can attach your type information directly (note the strong resemblance to a
 [data class](https://www.python.org/dev/peps/pep-0557/) from Python `3.7+` or the great
-[attrs library](https://github.com/python-attrs/attrs)):
+[`attrs` library](https://github.com/python-attrs/attrs)):
 
 ```python
 class Employee(NamedTuple):
@@ -547,15 +548,15 @@ def foo(item: Any) -> int:
 
 ### 2. Duck types - protocols
 
-In this case instead of having an actual type one can be more Pythonic, and go with the theorem that if it quacks like a
-duck, and acts like a duck, then most definitely for all intended purposes it is a duck. In this case, you define what
-operations and attributes you expect on objects instead of explicitly stating their types. The grounds of this were laid
-down in [PEP-544 ~ Protocols](https://www.python.org/dev/peps/pep-0544/).
+In this case, instead of having an actual type, one can be more Pythonic and go with the theorem that if it quacks like
+a duck, and acts like a duck, then most definitely for all intended purposes, it is a duck. In this case, you define
+what operations and attributes you expect on objects instead of explicitly stating their types. The grounds of this were
+laid down in [PEP-544 ~ Protocols](https://www.python.org/dev/peps/pep-0544/).
 
 ```python
 KEY = TypeVar('KEY', contravariant=true)
 
-# this is a protocol having a generic type as argument
+# this is a protocol having a generic type as an argument
 # it has a class variable of type var, and a getter with the same key type
 class MagicGetter(Protocol[KEY], Sized):
     var : KEY
@@ -570,12 +571,13 @@ def func_str(param: MagicGetter[str]) -> str:
 
 # Gotchas
 
-Once you start adding type hints to a code base watch out that sometimes you may experience some oddities. During this
-moments you might have the \*what the hell\*\* expression of the following seal:
-![gotcha](/content/images/2018/05/gotcha.jpg)
+Once you start adding type hints to a codebase, watch out that sometimes you may experience some oddities. During these
+moments, you might have the \*what the hell\*\* expression of the following seal:
+
+{{< figure src="gotcha.png" width="700px">}}
 
 In this section, I'll try to present a few of these to give you a heads up on what kind of oddities you may run into
-while adding type information to your code base.
+while adding type information to your codebase.
 
 ### 1. str difference in between Python 2/3
 
@@ -590,8 +592,8 @@ class A(object):
 ```
 
 This code has a bug in it. While this is correct under Python 3, it is not under Python 2 (because Python 2 expects to
-return `bytes` from `repr`, however, the `unicode_literals` import makes the returned value of type `unicode`). Having
-the from future import in place means it's not possible to write a repr that satisfies the type requirements for both
+return `bytes` from `repr`. However, the `unicode_literals` import makes the returned value of type `unicode`). Having
+the from future import in place means it's not possible to write a `repr` that satisfies the type requirements for both
 Python 2 and 3. You need to add runtime logic to do the right thing:
 
 ```python
@@ -607,8 +609,8 @@ class A(object):
         return res.encode('utf-8')
 ```
 
-Now to fight the IDE to accept this form you need to add a few linter comments, which makes this code ever so
-complicated to read. More importantly, now you have an extra runtime check forced to your type checker.
+To fight the IDE to accept this form, you need to add a few linter comments, making this code ever so complicated to
+read. More importantly, now you have an extra runtime check forced to your type checker.
 
 ### 2. Multiple return types
 
@@ -620,8 +622,8 @@ def magic(i: Union[str, int]) -> Union[str, int]:
 ```
 
 Your input is either `str` or `int`, and your return value accordingly is also either `str` or `int`. However, if you do
-it like so, you're telling to the type hint that it really can be either of for both types of inputs. Therefore on the
-call side, you need to assert the type your calling with:
+it like so, you're telling the type hint that it really can be either of for both types of inputs. Therefore on the call
+side, you need to assert the type your calling with:
 
 ```python
 def other_func() -> int:
@@ -632,7 +634,7 @@ def other_func() -> int:
 
 This inconvenience may determine some people to avoid the call side hassle by making the return value `Any`. However,
 there's a better solution. The type hint system allows you to define overloads. Overloads express that for a given input
-type only a given output type is returned. So in this case:
+type, and only a given output type is returned. So, in this case:
 
 ```python
 from typing import overload
@@ -653,13 +655,13 @@ def other_func() -> int:
     return result
 ```
 
-There is a downside to this though. Now your static linter tool is complaining that you're redefining functions with the
-same name; this is a false positive so add the static linter disable comment mark
+There is a downside to this, though. Now your static linter tool is complaining that you're redefining functions with
+the the same name; this is a false positive so add the static linter disable comment mark
 (`# pylint: disable=function-redefined` ).
 
 ### 3. Type lookup
 
-Imagine you have a class that allows representing the contained data as multiple types, or that has fields of the
+Imagine you have a class that allows representing the contained data as multiple types or that has fields of the
 different type. You want the user to have a quick and easy way to refer to them, so you add a function, having a
 built-in types name:
 
@@ -670,16 +672,16 @@ class A(object):
            return 1.0
 ```
 
-Once you run the linter you'll see:
+Once you run the linter, you'll see:
 
 ```bash
 test.py:3: error: Invalid type "test.A.float"
 ```
 
-One might ask at this point, what the hell? I've defined the return value as `float` not as `test.A.float`. The reason
-for this obscure error is that the type hinter resolves types by evaluating each scope outbound from the definition
-location. Once it finds a name match, it stops. The first level where it looks is within `class A` where it finds a
-`float` (a function that is) and substitutes that float in.
+One might ask, at this point, what the hell? I've defined the return value as `float`, not as `test.A.float`. This
+obscure error is that the type hinter resolves types by evaluating each scope outbound from the definition location.
+Once it finds a name match, it stops. The first level where it looks is within `class A` where it finds a `float` (a
+function that is) and substitutes that float in.
 
 Now the solution to not run into this issue is to explicitly define that we don't just want any `float`, but that we
 want the `builtin.float`:
@@ -694,13 +696,13 @@ class A(object):
            return 1.0
 ```
 
-Note that to do this you also need to import `builtins`, and to avoid this causing issues at runtime, you can guard it
-with the `typing.TYPE_CHECKING` flag which is true only during the type linter evaluation, always false otherwise.
+Note that to do this, you also need to import `builtins`, and to avoid this causing issues at runtime, you can guard it
+with the `typing.TYPE_CHECKING` flag, which is true only during the type linter evaluation, always false otherwise.
 
-### 4. Contravariant argument
+### 4. Contra-variant argument
 
-Examine the following use case. You define an abstract base class that contains common operations. Then you have
-specific classes which handle one type and one type only. You control the creation of the classes which ensures the
+Examine the following use case. You define an abstract base class that contains everyday operations. Then you have
+specific classes that handle one type and one type only. You control the creation of the classes, which ensures the
 correct type is passed, and the base is abstract, so this seems an agreeable design:
 
 ```python
@@ -721,16 +723,16 @@ class C(A):
         return key
 ```
 
-However, once you run a type linter check on this you'll find:
+However, once you run a type linter check on this, you'll find:
 
 ```bash
 test.py:12: error: Argument 1 of "func" incompatible with supertype "A"
 test.py:17: error: Argument 1 of "func" incompatible with supertype "A"
 ```
 
-The reason for this is that arguments to classes are contravariant. This translates in on scientific terms in your
+The reason for this is that arguments to classes are contra-variant. This translates in on scientific terms in your
 derived class you **must** handle all types from your parents. However, you may add additional types too. That is even
-in the function arguments you can only extend what you cover, but not to constrain it in any way:
+in the function arguments; you can only extend what you cover, but not to constrain it in any way:
 
 ```python
 from abc import ABCMeta, abstractmethod
@@ -766,7 +768,7 @@ class B(A):
         return cls()
 ```
 
-If you did not manage yet consider what will happen if you write the following script:
+If you did not manage yet, consider what will happen if you write the following script:
 
 ```python
 from typing import List, Type
@@ -782,9 +784,9 @@ Were you to try to run it this would fail with the following runtime error:
 TypeError: magic() missing 1 required positional argument: 'b'
 ```
 
-The reason being that `B` is a subtype of `A`. Therefore it can go into a container of `A` types (because it extends it,
-so it can do more than `A`). However the class method definition for `B` breaks this contract, it can no longer call
-magic with just one argument. Moreover, the type linter would fail to point out just this:
+The reason being that `B` is a subtype of `A`. Therefore it can go into a container of `A` types (because it extends it
+to do more than `A`). However, the class method definition for `B` breaks this contract, it can no longer call magic
+with just one argument. Moreover, the type linter would fail to point out only this:
 
 ```bash
 test.py:9: error: Signature of "magic" incompatible with supertype "A"
@@ -803,7 +805,7 @@ class B(A):
         super().__init__(a)
 ```
 
-What do you think will happen here? Note we moved class methods into constructors, and made no other change, so our
+What do you think will happen here? Note we moved class methods into constructors and made no other change, so our the
 script also needs just a slight modification:
 
 ```python
@@ -820,16 +822,16 @@ Here's the runtime error, being mostly the same, just now complaining about `__i
 TypeError: __init__() missing 1 required positional argument: 'b'
 ```
 
-So what do you think mypy will say? Were you to run it you'll find that mypy chooses to stay silent. Yes, it will mark
-this as correct, even though at runtime it fails. The mypy creators said that they found _too common of type miss-match
+So what do you think mypy will say? Were you to run it; you'll find that mypy chooses to stay silent. Yes, it will mark
+this as correct, even though at runtime, it fails. The mypy creators said that they found _too common of type miss-match
 to prohibit incompatible `__init__` and `__new__`_.
 
 ## When you hit the wall
 
-So, in conclusion, watch out, type hints sometimes cause strange warnings, which brings out the following feelings
-summarised in a tweet:
+So, in conclusion, watch out. Type hints sometimes cause strange warnings, which brings out the following feelings
+summarized in a tweet:
 
-![david](/content/images/2018/05/david.png)
+{{< figure src="david.png" width="700px">}}
 
 Remember you have some tools at hand that help you discover, understand and perhaps handle these edge cases:
 
@@ -851,58 +853,58 @@ Remember you have some tools at hand that help you discover, understand and perh
   x = confusing_function() # type: ignore # see mypy/issues/1167
   ```
 - ask the community; expose a minimal reproducible version of the problem under the
-  [python/typing](https://gitter.im/python/typing) Gitter chat.
+  [python/typing](https://gitter.im/python/typing) `Gitter` chat.
 
 # Tools
 
-Here's a non exhaustive list of tools built around the type hint system.
+Here's a non-exhaustive list of tools built around the type hint system.
 
 ## type checkers
 
 Use these tools to check against type safety inside your library or application:
 
-1. [mypy - Python](http://mypy-lang.org/) (the reference type linting tool)
-2. [pyre - Facebook](https://github.com/facebook/pyre-check) - Python 3 only, but faster than mypy. An interesting use
+1. [`mypy` - Python](http://mypy-lang.org/) (the reference type linting tool)
+2. [`pyre` - Facebook](https://github.com/facebook/pyre-check) - Python 3 only, but faster than mypy. An interesting use
    case of this is the ability to do taint/security code analysis with it - see
    [Pieter Hooimeijer - Types, Deeper Static Analysis, and you](https://www.youtube.com/watch?v=hWV8t494N88).
-3. [pytype - Google](https://github.com/google/pytype).
+3. [`pytype` - Google](https://github.com/google/pytype).
 
 ## type annotation generators
 
-When you want to add type annotations to an existing code base use these to automate the boring part:
+When you want to add type annotations to an existing codebase, use these to automate the boring part:
 
 1. `mypy stubgen` command line ([see](https://github.com/python/mypy/blob/master/mypy/stubgen.py))
-2. [pyannotate - Dropbox](https://github.com/dropbox/pyannotate) - use your tests to generate type information.
-3. [monkeytype - Instagram](https://github.com/Instagram/MonkeyType). Fun fact: Instagram actualy uses to run it in
-   their production system: it's triggered once for every million cal (makes the code run five times slower, but once
-   every million calls makes it not that noticeable).
+2. [`pyannotate` - Dropbox](https://github.com/dropbox/pyannotate) - use your tests to generate type information.
+3. [`monkeytype` - Instagram](https://github.com/Instagram/MonkeyType). Fun fact: Instagram uses to run it in their
+   production system: it's triggered once for every million cal (makes the code run five times slower, but once every
+   million calls makes it not that noticeable).
 
 ## runtime code evaluator
 
-Use these tools to check at runtime if the input arguments to your function/method are of correct type or not:
+Use these tools to check at runtime if the input arguments to your function/method are of the correct type or not:
 
-1. [pydantic](https://github.com/samuelcolvin/pydantic)
-2. [enforce](https://github.com/RussBaz/enforce)
-3. [pytypes](https://github.com/Stewori/pytypes)
+1. [`pydantic`](https://github.com/samuelcolvin/pydantic)
+2. [`enforce`](https://github.com/RussBaz/enforce)
+3. [`pytypes`](https://github.com/Stewori/pytypes)
 
 ## Documentation enrichment - merge docstrings and type hints
 
 In the first part of this blog article, we mentioned that historically people have already stored type information
-inside docstrings. The reason for this is that your type data is part of your contract, you do want to have type
-information for your library inside the documentation. So the question remains given that you did not choose to use
-docstrings as the primary type information storage system, how can you still have them in the docstrings for your
-documentation?
+inside docstrings. This is because your type of data is part of your contract. You do want to have type information for
+your library inside the documentation. So the question remains, given that you did not choose to use docstrings as the
+primary type of information storage system, how can you still have them in the docstrings for your documentation?
 
 The answer varies depending on the tool you're using to generate that documentation. However, I'm going to present here
 an option by using the most popular tool and format in Python: Sphinx and HTML.
 
 Having type information explicitly stated in both the type hints and the docstring is the sure way of eventually having
-conflicts in between them. You can count on someone at some point is going to update in one place but not in the other.
+conflicts between them. You can count on someone at some point is going to update in one place but not in the other.
 Therefore let's strip all type data from the docstring and have it only as type hints. Now, all we need to do is at
-documentation build time fetch it from the type hints and insert it into the documentation.
+documentation build time, fetch it from the type hints and insert it into the documentation.
 
 In Sphinx, you can achieve this by having a plugin. The most popular already made version of this is
-[agronholm/sphinx-autodoc-typehints](https://github.com/agronholm/sphinx-autodoc-typehints). This tool does two things:
+[`agronholm/sphinx-autodoc-typehints`](https://github.com/agronholm/sphinx-autodoc-typehints). This tool does two
+things:
 
 - first, for each function/variable to be documented, it fetches the type hint information;
 - then, it transforms the Python types into a docstring representation (this involves recursively unwrapping all the
@@ -926,25 +928,25 @@ extensions = ['sphinx_autodoc_typehints']
 That's it all. An example use case of this is [RookieGameDevs/revived](https://github.com/RookieGameDevs/revived)
 documentation. For example, given the following source code:
 
-![sphinx_doc_src](/content/images/2018/05/sphinx_doc_src.PNG)
+{{< figure src="sphinx_doc_src.png" width="800px">}}
 
 You can get the following output:
 
-![sphinx_doc](/content/images/2018/05/sphinx_doc.PNG)
+{{< figure src="sphinx_doc.png" width="800px">}}
 
 # Conclusion
 
 So at the end of this long blog post, you may ask: is it worth using type hints, or when should one use them? I think
-type hinting is at the end of the day essentially the same as your unit tests, just expressed differently in code. What
-they provide is a standard (and re-usable for other goals) way, to test the input and output types of your codebase.
+type hinting is at the end of the day virtually the same as your unit tests, just expressed differently in code. They
+provide a standard (and re-usable for other goals) way to test the input and output types of your codebase.
 
-Therefore, type hints **should be used whenever unit test are worth writing.** This can be even just ten lines of code
-if you need to maintain it later. Similarly, you should start adding type hints whenever you start writing unit tests.
-The only place when I would not add them is when I don't write unit tests, such REPL lines, or throw away one-time usage
-scripts.
+Therefore, type hints **should be used whenever the unit test is worth writing.** This can be even just ten lines of
+code if you need to maintain it later. Similarly, you should start adding type hints whenever you start writing unit
+tests. The only place when I would not add them is when I don't write unit tests, such REPL lines, or throw away
+one-time usage scripts.
 
-Remember that, similar to unit tests, while it does makes your code base contain an extra number of lines, at the end of
-the day all the code you add is code that is automatically checked and enforced to be correct. It acts as a safety net
-to ensure that when you change things around later on things keep working, so probably worth paying this extra cost.
+Remember that, similar to unit tests, while it does makes your codebase contain an extra number of lines, at the end of
+the day, all the code you add is code that is automatically checked and enforced to be correct. It acts as a safety net
+to ensure that things keep working when you change things around later on, so probably worth paying this extra cost.
 
-![thats_all_folks](/content/images/2018/05/thats_all_folks.jpg)
+{{< figure src="thats_all_folks.png" width="700px">}}
