@@ -42,17 +42,17 @@ Most notably, it used exactly the <em>setuptools</em> version that was installed
 used a <em>setuptools</em> feature available on a newer release than currently installed the only way one could complete the
 installation was to update first the installed <em>setuptools.</em></p><p>This potentially can cause problems if a new release contained a bug that broke other packages. It is especially
 troublesome on systems where the users can&rsquo;t alter installed packages. Then there was also the problem of what happens
-when the builder (e.g. setuptools) want to use other helper packages, such as cython.</p><p>If any of these helpers was missing the build usually just broke with a failed to import package error:</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>      File &#34;setup_build.py&#34;, line 99, in run
+when the builder (e.g. setuptools) want to use other helper packages, such as cython.</p><p>If any of these helpers was missing the build usually just broke with a failed to import package error:</p><pre><code>      File &quot;setup_build.py&quot;, line 99, in run
         from Cython.Build import cythonize
     ImportError: No module named Cython.Build
-</code></pre></div><p>There was no way to provision such build dependencies from the developers' side. It also meant that users needed to
+</code></pre><p>There was no way to provision such build dependencies from the developers' side. It also meant that users needed to
 install all packaging build dependencies even if they did not want to use that at runtime. To solve this issue
 <a href=https://www.python.org/dev/peps/pep-0518/>PEP-518</a> was created.</p><p>The idea is that instead of using the host python with its currently installed packages for build, the package provides
 the ability to be explicit about what they need for their build operation. Also instead of making this available on the
 host python, we create an isolated python (think of a sort of virtual environment) to run the packaging with.</p><p><code>python setup.py install</code> now becomes:</p><ol><li>create a temporary folder</li><li>create an isolated (from the third-party site packages) python environment <code>python -m virtualenv our_build_env</code>,
 let&rsquo;s refer to this python executable as <code>python_isolated</code></li><li>install the build dependencies</li><li>generate a wheel we can install via <code>python_isolated setup.py bdist_wheel</code></li><li>extract wheel to site packages of <code>python</code>.</li></ol><p>With this we can install packages that depend on <code>cython</code> without actually installing <code>cython</code> inside the runtime python
-environment. The file and method of specifying the build dependencies is the <code>pyproject.toml</code> metadata file:</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-toml data-lang=toml>[build<span>-</span>system]
-requires = [<span style=font-style:italic>&#34;setuptools &gt;= 40.8.0&#34;</span>, <span style=font-style:italic>&#34;wheel &gt;= 0.30.0&#34;</span>, <span style=font-style:italic>&#34;cython &gt;= 0.29.4&#34;</span>]
+environment. The file and method of specifying the build dependencies is the <code>pyproject.toml</code> metadata file:</p><div class=highlight><pre class=chroma><code class=language-toml data-lang=toml><span class=p>[</span><span class=nx>build</span><span class=err>-</span><span class=nx>system</span><span class=p>]</span>
+<span class=nx>requires</span> <span class=p>=</span> <span class=p>[</span><span class=s2>&#34;setuptools &gt;= 40.8.0&#34;</span><span class=p>,</span> <span class=s2>&#34;wheel &gt;= 0.30.0&#34;</span><span class=p>,</span> <span class=s2>&#34;cython &gt;= 0.29.4&#34;</span><span class=p>]</span>
 
 </code></pre></div><p>Furthermore, this also allows for whoever does the packaging to be explicit about what minimum versions they require for
 the packaging, and these can be easily provisioned via pip transparently on the user machines.</p><p>The same mechanism can also be used when generating the source distribution or the wheel on the developers' machine.
@@ -84,19 +84,19 @@ hooks that the frontend can call from its isolated environment to generate eithe
 functions. All packaging backends must provide a python object API that implements two methods
 <code>[build_wheel](https://www.python.org/dev/peps/pep-0517/#build-wheel)</code> and
 <code>[build_sdist](https://www.python.org/dev/peps/pep-0517/#id9)</code> at the minimum. The API object point is specified via the
-<code>pyproject.toml</code> file under the <code>build-backend</code> key:</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-toml data-lang=toml>[build<span>-</span>system]
-requires = [<span style=font-style:italic>&#34;flit&#34;</span>]
-build<span>-</span>backend = <span style=font-style:italic>&#34;flit.api:main&#34;</span>
+<code>pyproject.toml</code> file under the <code>build-backend</code> key:</p><div class=highlight><pre class=chroma><code class=language-toml data-lang=toml><span class=p>[</span><span class=nx>build</span><span class=err>-</span><span class=nx>system</span><span class=p>]</span>
+<span class=nx>requires</span> <span class=p>=</span> <span class=p>[</span><span class=s2>&#34;flit&#34;</span><span class=p>]</span>
+<span class=nx>build</span><span class=err>-</span><span class=nx>backend</span> <span class=p>=</span> <span class=s2>&#34;flit.api:main&#34;</span>
 
 </code></pre></div><p>The above code effectively means for the frontend that you can get hold of the backend by running the above code inside
-the isolated python environment:</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=font-weight:700>import</span> <span style=font-weight:700>flit.api</span>
-backend = flit.api.main
+the isolated python environment:</p><div class=highlight><pre class=chroma><code class=language-python data-lang=python><span class=kn>import</span> <span class=nn>flit.api</span>
+<span class=n>backend</span> <span class=o>=</span> <span class=n>flit</span><span class=o>.</span><span class=n>api</span><span class=o>.</span><span class=n>main</span>
 
-<span style=font-style:italic># build wheel via</span>
-backend.build_wheel()
+<span class=c1># build wheel via</span>
+<span class=n>backend</span><span class=o>.</span><span class=n>build_wheel</span><span class=p>()</span>
 
-<span style=font-style:italic># build source distribution via</span>
-backend.build_sdist()
+<span class=c1># build source distribution via</span>
+<span class=n>backend</span><span class=o>.</span><span class=n>build_sdist</span><span class=p>()</span>
 </code></pre></div><p>It&rsquo;s up to the backend where and how they want to expose their official API:</p><ol><li><a href=https://flit.readthedocs.io/en/latest/>flit</a> does it via <code>flit.buildapi</code></li><li><a href=https://setuptools.readthedocs.io/en/latest/history.html#v40-8-0>setuptools</a> provides two variants:
 <code>setuptools.build_meta</code> (on why read on later)</li><li><a href=https://poetry.eustace.io/docs/pyproject/#poetry-and-pep-517>poetry</a> does it via <code>poetry.masonry.api</code></li></ol><p>With this we can start having packaging tools that are no longer bound to the legacy decisions of the <code>distutils</code> in the
 frontend.</p><p>{{/<em>&lt; figure src=&ldquo;<a href="https://images.unsplash.com/photo-1536298191882-3b2dd65a853b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ%22">https://images.unsplash.com/photo-1536298191882-3b2dd65a853b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"</a> caption=&ldquo;Photo by Sarthak Dubey / Unsplash - more yay!&rdquo; ></em>/}}</p><h1 id=tox-and-packaging>tox and packaging</h1><p><a href=https://tox.readthedocs.io/en/latest/>tox is testing tool</a> and used by most projects to ensure compatibility against
@@ -106,8 +106,8 @@ make things better, turning them on can break packaging under some use cases. Th
 <a href=https://tox.readthedocs.io/en/latest/><code>tox</code></a> added isolated build in version
 <a href=https://tox.readthedocs.io/en/latest/><code>3.3.0</code></a> decided to not enable it by default, for now. You need to manually
 enable it (will probably be turned on by default in version <code>4</code> sometime later this year - 2019).</p><p>Once you&rsquo;ve specified a <code>pyproject.toml</code> with appropriate <code>requires</code> and <code>build-backend</code> you need to turn on the
-<code>isolated_build</code> flag inside <code>tox.ini</code>:</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ini data-lang=ini><span style=font-weight:700>[tox]</span>
-isolated_build = <span style=font-style:italic>True</span>
+<code>isolated_build</code> flag inside <code>tox.ini</code>:</p><div class=highlight><pre class=chroma><code class=language-ini data-lang=ini><span class=k>[tox]</span>
+<span class=na>isolated_build</span> <span class=o>=</span> <span class=s>True</span>
 </code></pre></div><p>After this, tox in its <a href=https://tox.readthedocs.io/en/latest/#system-overview>packaging phase</a> will build the source
 distribution by providing the build dependencies into an isolated python environment per PEP-518, and will call the
 build backend as stated in PEP-517. Otherwise, tox will use the old way of building source distributions, that is

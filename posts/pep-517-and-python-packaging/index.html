@@ -35,7 +35,7 @@ package installation worked in the past and how we hope it will work in the futu
 to demonstrate, let me introduce my wonderful example library: <code>pugs</code>. This library reasonably simple: it just generates
 a single package called <code>pugs</code> that contains only a single module called <code>logic</code>. The logic is to generate random
 quotes, you guessed right, about <em>pugs</em>. Here&rsquo;s a simple example structure of it viewed as a source tree (also available
-under <a href=https://github.com/gaborbernat/pugs>gaborbernat/pugs</a>):</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>pugs-project
+under <a href=https://github.com/gaborbernat/pugs>gaborbernat/pugs</a>):</p><pre><code>pugs-project
 ├── README.rst
 ├── setup.cfg
 ├── setup.py
@@ -49,35 +49,35 @@ under <a href=https://github.com/gaborbernat/pugs>gaborbernat/pugs</a>):</p><div
 │   └── test_logic.py
 ├── tox.ini
 └── azure-pipelines.yml
-</code></pre></div><p>We have four distinct content type here:</p><p>What would it mean for our <code>pugs</code> package to be available on a user machine&rsquo;s interpreter? Ideally, the user should be
+</code></pre><p>We have four distinct content type here:</p><p>What would it mean for our <code>pugs</code> package to be available on a user machine&rsquo;s interpreter? Ideally, the user should be
 able to import it and call functions from it once it starts up the interpreter:</p><ul><li>the business logic code (what&rsquo;s inside the <code>src</code> folder),</li><li>the test code (<code>tests</code> folder and <code>tox.ini</code>),</li><li>the packaging code and metadata (<code>setup.py</code>, <code>setup.cfg</code>, <code>LICENSE.txt</code>, <code>README.rst</code> - note we use nowadays the de
-facto standard packaging tool <a href=https://pypi.org/project/setuptools>setuptools</a>),</li><li>files helping with project management and maintenance:<ul><li>continuous integration (<code>azure-pipelines.yml</code>)</li><li>version control (<code>.git</code>)</li><li>project management (for example a potential <code>.github</code> folder).</li></ul></li></ul><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>Python 3.7.2 (v3.7.2:9a3ffc0492, Dec 24 2018, 02:44:43)
+facto standard packaging tool <a href=https://pypi.org/project/setuptools>setuptools</a>),</li><li>files helping with project management and maintenance:<ul><li>continuous integration (<code>azure-pipelines.yml</code>)</li><li>version control (<code>.git</code>)</li><li>project management (for example a potential <code>.github</code> folder).</li></ul></li></ul><pre><code>Python 3.7.2 (v3.7.2:9a3ffc0492, Dec 24 2018, 02:44:43)
 [Clang 6.0 (clang-600.0.57)] on darwin
-Type &#34;help&#34;, &#34;copyright&#34;, &#34;credits&#34; or &#34;license&#34; for more information.
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
 &gt;&gt;&gt; import pugs
 &gt;&gt;&gt; pugs.do_tell()
-&#34;An enlightened pug knows how to make the best of whatever he has to work with - A Pug&#39;s Guide to Dating -  Gemma Correll&#34;
-</code></pre></div><p>{{/*&lt; figure src=&ldquo;<a href="https://images.unsplash.com/photo-1536351392281-79d89dd69869?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ%22">https://images.unsplash.com/photo-1536351392281-79d89dd69869?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"</a> caption=&ldquo;Photo by Ryan Antooa / Unsplash - let&rsquo;s get started, excited!&rdquo; */>}}</p><h1 id=python-package-availability>Python package availability</h1><p>How does Python knows what&rsquo;s available or not? The short answer is it does not. Not upfront, at least, that is. Instead,
+&quot;An enlightened pug knows how to make the best of whatever he has to work with - A Pug's Guide to Dating -  Gemma Correll&quot;
+</code></pre><p>{{/*&lt; figure src=&ldquo;<a href="https://images.unsplash.com/photo-1536351392281-79d89dd69869?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ%22">https://images.unsplash.com/photo-1536351392281-79d89dd69869?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"</a> caption=&ldquo;Photo by Ryan Antooa / Unsplash - let&rsquo;s get started, excited!&rdquo; */>}}</p><h1 id=python-package-availability>Python package availability</h1><p>How does Python knows what&rsquo;s available or not? The short answer is it does not. Not upfront, at least, that is. Instead,
 it will try to load and see if it succeeds dynamically. From where does it load it? There are many possible locations,
 but in most cases, we are talking about loading it from a folder on the file system. Where is this folder? For a given
-module, one can print out the representation of the module to find out:</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>&gt;&gt;&gt; import pugs
+module, one can print out the representation of the module to find out:</p><pre><code>&gt;&gt;&gt; import pugs
 &gt;&gt;&gt; pugs
-&lt;module &#39;pugs&#39; from &#39;/Users/bernat/Library/Python/3.7/lib/python/site-packages/pugs/__init__.py&#39;&gt;
-</code></pre></div><p>The folder under you&rsquo;ll find it depends on:</p><ul><li>the type of the package it is (third-party or built-in/aka part of the standard library)</li><li>if it&rsquo;s globally or just for the current user available (see <a href=https://www.python.org/dev/peps/pep-0370/>PEP-370</a>),</li><li>and if it&rsquo;s a system python or a virtual environment.</li></ul><p>Generally speaking though, for a given python interpreter, one can find a list of possible directories by printing out
-the <code>sys.path</code> variables content, for example on my MacOS:</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>&gt;&gt;&gt; import sys
-&gt;&gt;&gt; print(&#39;\n&#39;.join(sys.path))
+&lt;module 'pugs' from '/Users/bernat/Library/Python/3.7/lib/python/site-packages/pugs/__init__.py'&gt;
+</code></pre><p>The folder under you&rsquo;ll find it depends on:</p><ul><li>the type of the package it is (third-party or built-in/aka part of the standard library)</li><li>if it&rsquo;s globally or just for the current user available (see <a href=https://www.python.org/dev/peps/pep-0370/>PEP-370</a>),</li><li>and if it&rsquo;s a system python or a virtual environment.</li></ul><p>Generally speaking though, for a given python interpreter, one can find a list of possible directories by printing out
+the <code>sys.path</code> variables content, for example on my MacOS:</p><pre><code>&gt;&gt;&gt; import sys
+&gt;&gt;&gt; print('\n'.join(sys.path))
 /Library/Frameworks/Python.framework/Versions/3.7/lib/python37.zip
 /Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7
 /Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/lib-dynload
 /Users/bernat/Library/Python/3.7/lib/python/site-packages
 /Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages
-</code></pre></div><p>For third-party packages, it&rsquo;s going to be some <code>site-packages</code> folder. Note in the above example how there&rsquo;s a
+</code></pre><p>For third-party packages, it&rsquo;s going to be some <code>site-packages</code> folder. Note in the above example how there&rsquo;s a
 system-wide and a user-specific example of this. How does packages end up inside this folder? It must be put there by
 some installer.</p><p>The following diagram displays how most of the time things go:</p><ol><li>The developer writes some python code inside a folder (referred to as the source tree).</li><li>Some tool (such as <code>setuptools</code>) then takes the source tree and packages it up for redistribution.</li><li>The generated package is uploaded via another tool (twine) to a central repository (usually
 <a href=https://pypi.org>https://pypi.org</a>) the end user machine has access to.</li><li>The end user machine uses some installer that discovers, downloads and installs the package in question. The
 installation operation boils down by creating the correct directory structure and metadata inside the <code>site-packages</code>
 folder.</li></ol><p>{{/*&lt; figure src=&ldquo;<a href="https://images.unsplash.com/photo-1538131688925-7e0eb2e7828b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ%22">https://images.unsplash.com/photo-1538131688925-7e0eb2e7828b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"</a> caption=&ldquo;Photo by Pinho . / Unsplash - discovering new things&rdquo; */>}}</p><h1 id=python-package-types>Python package types</h1><p>A package during installation must generate at least two types of content to be put in the site package: a metadata
-folder about the package contents the <code>{package}-{version}.dist-info</code> and the business logic files.</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>/Users/bgabor8/Library/Python/3.7/lib/python/site-packages/pugs
+folder about the package contents the <code>{package}-{version}.dist-info</code> and the business logic files.</p><pre><code>/Users/bgabor8/Library/Python/3.7/lib/python/site-packages/pugs
 ├── __init__.py
 ├── __pycache__
 │   ├── __init__.cpython-37.pyc
@@ -92,7 +92,7 @@ folder about the package contents the <code>{package}-{version}.dist-info</code>
 ├── WHEEL
 ├── top_level.txt
 └── zip-safe
-</code></pre></div><p>The distribution info folder describes the package: what installer was used to put it there, what license the package
+</code></pre><p>The distribution info folder describes the package: what installer was used to put it there, what license the package
 has attached to it, what files were created as part of the installation process, what is the top level python package,
 what entry points the package exposes and so on. A good description of each file can be found inside
 <a href=https://www.python.org/dev/peps/pep-0427/#id14>PEP-427</a>.</p><p>How do we get from our source tree to these two content type? We have two distinct paths in front of us:</p><ol><li>Generate this directory structure and metadata from our source tree, compress it into a single file and publish it to
