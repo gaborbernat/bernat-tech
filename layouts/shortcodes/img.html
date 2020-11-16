@@ -1,3 +1,4 @@
+{{/* from https://laurakalbag.com/processing-responsive-images-with-hugo /*/}}
 {{/* get file that matches the filename as specified as src="" in shortcode */}}
 {{ $src := .Page.Resources.GetMatch (printf "*%s*" (.Get "src")) }}
 

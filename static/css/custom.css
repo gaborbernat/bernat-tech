@@ -88,7 +88,7 @@
 /* GenericUnderline */ .colorscheme-dark .chroma .gl {  }
 /* TextWhitespace */ .colorscheme-dark .chroma .w {  }
 
-/* Background */ .colorscheme-light .chroma { color: #272822; background-color: #fafafa }
+/* Background */ .colorscheme-light .chroma { color: #272822; background-color: #f8f8f2 }
 /* Other */ .colorscheme-light .chroma .x {  }
 /* Error */ .colorscheme-light .chroma .err { color: #960050; background-color: #1e0010 }
 /* LineTableTD */ .colorscheme-light .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
