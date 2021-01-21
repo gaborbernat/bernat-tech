@@ -4,9 +4,7 @@ disablePathToLower = true
 theme = "hugo-coder"
 languagecode = "en"
 defaultcontentlanguage = "en"
-
 paginate = 20
-
 
 [params]
 author = "Bernát Gábor"
@@ -16,15 +14,13 @@ keywords = "blog,developer,personal"
 avatarurl = "img/avatar.jpg"
 favicon_32 = "img/android-chrome-192x192.png"
 favicon_16 = "img/android-chrome-192x192.png"
-touchIcon =  "img/android-chrome-192x192.png"
+touchIcon = "img/android-chrome-192x192.png"
 customCSS = ["css/custom.css"]
-
 footercontent = "Software engineer <a href='https://github.com/bloomberg'> at Bloomberg (London)</a>. Maintainer of <a href='https://github.com/gaborbernat/'> many FOSS Python packages</a>. Opinions are my own."
 hideCredits = true
 hideCopyright = true
 since = 2018
 enableTwemoji = false
-
 colorScheme = "auto"
 hidecolorschemetoggle = false
 
@@ -57,14 +53,15 @@ weight = 2
 url = "about"
 
 [markup]
-  [markup.highlight]
-    anchorLineNos = true
-    codeFences = true
-    guessSyntax = false
-    lineAnchors = "c"
-    lineNoStart = 1
-    lineNos = false
-    lineNumbersInTable = true
-    noClasses = false
-    style = "monokai"
-    tabWidth = 4
+
+[markup.highlight]
+anchorLineNos = true
+codeFences = true
+guessSyntax = false
+lineAnchors = "c"
+lineNoStart = 1
+lineNos = false
+lineNumbersInTable = true
+noClasses = false
+style = "monokai"
+tabWidth = 4
