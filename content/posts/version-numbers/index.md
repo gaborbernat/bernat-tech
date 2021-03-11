@@ -19,16 +19,18 @@ a version number.
 
 Version numbers and their meaning will come up both as a producer or as a consumer of libraries:
 
-- as a producer of libraries, you'll have to decide what versioning system to use,
-- as a consumer, you'll have to express with what versions of a given library your application/library is compatible.
+* as a producer of libraries, you'll have to decide what versioning system to use,
+* as a consumer, you'll have to express with what versions of a given library your application/library is compatible.
 
 What is a great version number, you might ask? If you do a quick search around, you'll find there are
 [multiple schools of thought here](https://en.wikipedia.org/wiki/Software_versioning):
 
-- [semantic versioning](https://semver.org/) (of which [ZeroVer](https://0ver.org/) is an ever-popular subset)
-- [calendar versioning](https://calver.org/).
+* [semantic versioning](https://semver.org/) (of which [ZeroVer](https://0ver.org/) is an ever-popular subset)
+* [calendar versioning](https://calver.org/).
 
-For those who read my articles, you'll know I like to sprinkle my otherwise technically dry posts with some lovely and cute animal photos to give you at least some moments of relief while you're going through it. In this one, I'll use pictures from my Yorkshire Terrier puppy, Silky. Without further ado (#ToT!!!)
+For those who read my articles, you'll know I like to sprinkle my otherwise technically dry posts with some lovely and
+cute animal photos to give you at least some moments of relief while you're going through it. In this one, I'll use
+pictures from my Yorkshire Terrier puppy, Silky. Without further ado (#ToT!!!)
 
 {{< figure src="silky_tot.png" width="700px">}}
 
@@ -38,9 +40,9 @@ So, which should you use? Historically, the go-to answer has been semantic versi
 string (separated with a period) in the format of `MAJOR.MINOR.PATCH`. Usually, it starts with `0.1.0`. Then depending
 on the type of change you make to the library, you increment one of these and set subsequent numbers to zero:
 
-- `MAJOR` version if you make backward-incompatible changes,
-- `MINOR` version if you add a new feature,
-- `PATCH` version if you fix bugs.
+* `MAJOR` version if you make backward-incompatible changes,
+* `MINOR` version if you add a new feature,
+* `PATCH` version if you fix bugs.
 
 Version two of semantic versioning introduced additional labels to indicate pre-releases and build metadata; these are
 appended after a hyphen at the end, for example `1.0.0-beta+exp.sha.5114f8`. For the point of this blog post, these are
@@ -58,9 +60,9 @@ By using this format whenever you rebuild your application, you'll automatically
 releases of `Django`, enabling you to use the latest and best version that is still guaranteed to work with your
 project. This is great because:
 
-- you enable automatic, compatibile security fixes,
-- it automatically pulls in bug fixes on the library side,
-- your application will keep building and working in the future as it did today because the significant version pin
+* you enable automatic, compatibile security fixes,
+* it automatically pulls in bug fixes on the library side,
+* your application will keep building and working in the future as it did today because the significant version pin
   protects you from pulling in versions whose API would not match.
 
 Does this uphold in practice? For me, [Hynek Schlawack](https://hynek.me/) pointed out first that it does not.
@@ -80,11 +82,11 @@ Maintaining a library is very time-consuming. I can attest to that, as I have ma
 tox (3) and virtualenv (2). My experience is within the Python ecosystem, but I can imagine other languages are similar.
 Most libraries have just a few active maintainers available, for example:
 
-- tox has 2,
-- virtualenv 1,
-- pytest around 4,
-- pip around 4,
-- python-dateutil 1.
+* tox has 2,
+* virtualenv 1,
+* pytest around 4,
+* pip around 4,
+* python-dateutil 1.
 
 And these are very high profile libraries. To make things even worse, some of their maintainers overlap (i.e. the same
 person is the maintainer of multiple projects). And to complicate matters even further, for most maintainers this is not
@@ -94,9 +96,9 @@ Given the scarce human resources to maintain a library, in practice there's a si
 at any given point in time: **the latest one**. Any version before that (be that major, minor, patch) is in essence
 abandoned:
 
-- if you want security updates you need to move to the latest version,
-- if you wish to a bugfix you need to move to the newest version,
-- if you want a new feature, it is only going to be available in the latest version.
+* if you want security updates you need to move to the latest version,
+* if you wish to a bugfix you need to move to the newest version,
+* if you want a new feature, it is only going to be available in the latest version.
 
 You get the idea. Unless you're thrilled with your current version, to pull in any change you will need to move to the
 last released version (be that security improvement, bugfix or feature). Otherwise, you'll not get it.
@@ -180,7 +182,6 @@ change at all, as just a small part of their public API changed.
 A mildly complex application will easily have close to (or possibly more than) 100 dependencies, so such issues in my
 experience start to appear every few months. You need only 5-6 of such cases for every 100 libraries for this issue to
 pop up every two months on your plate. And potentially for a multiple of your applications.
-
 
 {{< figure src="silky_yes.png" width="700px">}}
 

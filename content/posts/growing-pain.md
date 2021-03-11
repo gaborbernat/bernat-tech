@@ -30,7 +30,13 @@ Against all the preparations though, inevitably, the first release did break a f
 performed some operations that caught the maintainers by surprise. Let's try to understand a few of these examples, and
 how did they get addressed.
 
-{{/*< figure src="https://images.unsplash.com/photo-1543892673-921992c933f5?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ" caption="Photo by <a href="https://unsplash.com/@minkmingle?utm_source=ghost&amp;utm_medium=referral&amp;utm_campaign=api-credit">Mink Mingle</a> / <a href="https://unsplash.com/?utm_source=ghost&amp;utm_medium=referral&amp;utm_campaign=api-credit">Unsplash</a> - ready to roll!" >*/}}
+{{/_< figure
+src="https://images.unsplash.com/photo-1543892673-921992c933f5?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"
+caption="Photo by
+<a href="https://unsplash.com/@minkmingle?utm_source=ghost&amp;utm_medium=referral&amp;utm_campaign=api-credit">Mink
+Mingle</a> /
+<a href="https://unsplash.com/?utm_source=ghost&amp;utm_medium=referral&amp;utm_campaign=api-credit">Unsplash</a> -
+ready to roll!" >_/}}
 
 ## PEP-518
 
@@ -69,7 +75,13 @@ backend also needs to ensure that `pyproject.toml` is attached to the built sour
 on the user machine will not be able to use it. [setuptools 1650](https://github.com/pypa/setuptools/pull/1650) will fix
 this for setuptools, on earlier versions one can just include `pyproject.toml` by specifying it inside `MANIFEST.in`.
 
-{{/*< figure src="https://images.unsplash.com/photo-1524111890967-20e856be04d2?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ" caption="Photo by <a href="https://unsplash.com/@jorgezapatag?utm_source=ghost&amp;utm_medium=referral&amp;utm_campaign=api-credit">Jorge Zapata</a> / <a href="https://unsplash.com/?utm_source=ghost&amp;utm_medium=referral&amp;utm_campaign=api-credit">Unsplash</a> - what?! never though of that caseƒ" >*/}}
+{{/_< figure
+src="https://images.unsplash.com/photo-1524111890967-20e856be04d2?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"
+caption="Photo by
+<a href="https://unsplash.com/@jorgezapatag?utm_source=ghost&amp;utm_medium=referral&amp;utm_campaign=api-credit">Jorge
+Zapata</a> /
+<a href="https://unsplash.com/?utm_source=ghost&amp;utm_medium=referral&amp;utm_campaign=api-credit">Unsplash</a> -
+what?! never though of that caseƒ" >_/}}
 
 ### Importing the built package from within `setup.py`
 
@@ -83,9 +95,9 @@ as `from mypy.version import __version__ as version` from both the `setup.py` an
 when someone calls a python script the current working directory is automatically attached to the `sys.path` (so you can
 import stuff exposed underneath it).
 
-This behavior of adding the current working directory though was never mandated, it was more of a side-effect as
-calling the build via `python setup.py sdist`. As this behavior is a side-effect (not a guarantee) all projects that
-import from their `setup.py` should explicitly add the scripts folder to the sys path, at the start of the build.
+This behavior of adding the current working directory though was never mandated, it was more of a side-effect as calling
+the build via `python setup.py sdist`. As this behavior is a side-effect (not a guarantee) all projects that import from
+their `setup.py` should explicitly add the scripts folder to the sys path, at the start of the build.
 
 It's up for debate if importing the built package during the packaging (when it's not yet built/distributed) is a good
 idea or not (though the Python Packaging group is leaning towards it's not). Nevertheless, the fact of the matter is
@@ -119,7 +131,13 @@ Should these self build backend allowed to take on dependencies? There's a long 
 and cons, so if you're interested make sure to head over the
 [python Discourse board](https://discuss.python.org/t/pep-517-backend-bootstrapping) and give your opinion.
 
-{{/*< figure src="https://images.unsplash.com/photo-1499938971550-7ad287075e0d?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ" caption="Photo by <a href="https://unsplash.com/@sneakyelbow?utm_source=ghost&amp;utm_medium=referral&amp;utm_campaign=api-credit">Sneaky Elbow</a> / <a href="https://unsplash.com/?utm_source=ghost&amp;utm_medium=referral&amp;utm_campaign=api-credit">Unsplash</a> - we're all together in this" >*/}}
+{{/_< figure
+src="https://images.unsplash.com/photo-1499938971550-7ad287075e0d?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"
+caption="Photo by
+<a href="https://unsplash.com/@sneakyelbow?utm_source=ghost&amp;utm_medium=referral&amp;utm_campaign=api-credit">Sneaky
+Elbow</a> /
+<a href="https://unsplash.com/?utm_source=ghost&amp;utm_medium=referral&amp;utm_campaign=api-credit">Unsplash</a> -
+we're all together in this" >_/}}
 
 ## Conclusion
 
@@ -138,7 +156,13 @@ any part of packaging feel free to start a discussion on the
 [Discuss Python forums](https://discuss.python.org/c/packaging) packaging section, or open an issue for the relevant
 tool at hand.
 
-{{/*< figure src="https://images.unsplash.com/photo-1517306896387-1b417036430b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ" caption="Photo by <a href="https://unsplash.com/@itsmiki5?utm_source=ghost&amp;utm_medium=referral&amp;utm_campaign=api-credit">Milan Popovic</a> / <a href="https://unsplash.com/?utm_source=ghost&amp;utm_medium=referral&amp;utm_campaign=api-credit">Unsplash</a> - the end" >*/}}
+{{/_< figure
+src="https://images.unsplash.com/photo-1517306896387-1b417036430b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"
+caption="Photo by
+<a href="https://unsplash.com/@itsmiki5?utm_source=ghost&amp;utm_medium=referral&amp;utm_campaign=api-credit">Milan
+Popovic</a> /
+<a href="https://unsplash.com/?utm_source=ghost&amp;utm_medium=referral&amp;utm_campaign=api-credit">Unsplash</a> - the
+end" >_/}}
 
 That's all for now, thanks for reading through it all! I would like to thank
 [Paul Ganssle](https://twitter.com/pganssle) for reviewing the packaging series post, and

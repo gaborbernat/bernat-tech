@@ -164,9 +164,9 @@ Python has gradual type hinting, meaning that whenever for a given function or v
 We assume that it can have any type (that is, it remains a dynamically typed section). Use this to make your gradually
 codebase type-aware, one function, or variable at a time. It is possible to type hint:
 
-- function arguments,
-- function return values,
-- variables.
+* function arguments,
+* function return values,
+* variables.
 
 _Remember only type hinted code is type-checked!_ When you run the linter (e.g., mypy) on a type hinted code, you'll get
 errors if there are type miss-matches:
@@ -220,20 +220,20 @@ The **upside** of this method is that:
 
 <div class='plus'>
 
-- It is the canonical way of doing this, which means it is the cleanest out of them all.
-- Because the type of information is attached right alongside the code means you'll have packaged this data out of the
-box.
-</div>
+* It is the canonical way of doing this, which means it is the cleanest out of them all.
+* Because the type of information is attached right alongside the code means you'll have packaged this data out of the
+  box.
+  </div>
 
 The **downside** of it is that:
 
 <div class=''plus>
 
-- It isn't backward compatible. You need Python `3.6` at least to use it.
-- It also forces you to import **all** of your type dependencies, even though they are not used at runtime at all.
-- In the type hints, you can have compound types, for example, `List[int]`. To construct these complex types, the
-interpreter does need to do some operations when first loading this file.
-</div>
+* It isn't backward compatible. You need Python `3.6` at least to use it.
+* It also forces you to import **all** of your type dependencies, even though they are not used at runtime at all.
+* In the type hints, you can have compound types, for example, `List[int]`. To construct these complex types, the
+  interpreter does need to do some operations when first loading this file.
+  </div>
 
 The last two points contradict the initial goal of the type system we enlisted before: handling all type information
 basically as a comment during runtime. To resolve some of this contradiction `Python 3.7` introduces
@@ -269,31 +269,31 @@ Going down this path, we do get some benefits:
 
 <div class='plus'>
 
-- Type comments work under any Python version. Although the typing library has been added to the standard library with
+* Type comments work under any Python version. Although the typing library has been added to the standard library with
   Python `3.5+` is available as a PyPi package for Python `2.7+`. Moreover, because Python comments is a valid language
   feature under virtually any Python code, this allows you to type-hint any codebase at or above Python `2.7`. There are
   a few requirements: the type hint comment **must** be on the same or the next line where the function/variable
-  definition is. It also starts with the `type: ` constant.
-- This solution also has packaging solved because comments are rarely stripped of your code once you stripped it.
-Packaging type hint information with your source code allows people using your library to use your type hint information
-to improve their developer experience.
-</div>
+  definition is. It also starts with the `type:` constant.
+* This solution also has packaging solved because comments are rarely stripped of your code once you stripped it.
+  Packaging type hint information with your source code allows people using your library to use your type hint
+  information to improve their developer experience.
+  </div>
 
 But we also generate some new problems:
 
 <div class='cross'>
 
-- The downside is that although the type of information is close to the arguments, it's not right beside it, making the
+* The downside is that although the type of information is close to the arguments, it's not right beside it, making the
   code a bit messier than otherwise would be. It must also be in a single line, causing issues if you have a long type
   of expression, and your codebase enforces line length limits.
-- Another problem is that now the type hint information competes with other tools using these types of comment markers
+* Another problem is that now the type hint information competes with other tools using these types of comment markers
   (e.g., suppressing other linter tools errors).
-- Besides forcing you to import all of your type information, this leaves you in an even more precarious place. Now the
-imported types are only used in the code, which leaves most linter tools to believe all those imports are unused. Were
-you to allow them to remove it, and it does break your type linter. Note `pylint` fixed this by moving its AST parser to
-a [typed-ast parser](https://github.com/PyCQA/pylint/issues/1063), and is going to be released with version 2 just after
-Python `3.7` comes out.
-</div>
+* Besides forcing you to import all of your type information, this leaves you in an even more precarious place. Now the
+  imported types are only used in the code, which leaves most linter tools to believe all those imports are unused. Were
+  you to allow them to remove it, and it does break your type linter. Note `pylint` fixed this by moving its AST parser
+  to a [typed-ast parser](https://github.com/PyCQA/pylint/issues/1063), and is going to be released with version 2 just
+  after Python `3.7` comes out.
+  </div>
 
 To avoid having long lines of code as type hint, it's possible to type hint arguments one by one via type comments, and
 then put in the line after only the return type annotation:
@@ -410,15 +410,15 @@ The upside of this is that:
 
 <div class='plus'>
 
-- You don't need to modify the source code; works under any Python version as the interpreter never touches these.
-- Inside the stub files, you can use the latest syntax (e.g., type annotations) because these are never looked at during
+* You don't need to modify the source code; works under any Python version as the interpreter never touches these.
+* Inside the stub files, you can use the latest syntax (e.g., type annotations) because these are never looked at during
   your application's execution. Because you do not touch your source code, you cannot introduce bugs by adding type
   hints, nor can you add conflict with other linter tools.
-- It is a well-tested design; the [`typeshed`](https://github.com/python/typeshed) project uses it to type hint the
-entire standard library, plus some other popular libraries such as `requests`, `yaml`, `dateutil` and
-[so on](https://github.com/python/typeshed/tree/master/third_party). It can provide type information for source code
-that you do not own or cannot change easily.
-</div>
+* It is a well-tested design; the [`typeshed`](https://github.com/python/typeshed) project uses it to type hint the
+  entire standard library, plus some other popular libraries such as `requests`, `yaml`, `dateutil` and
+  [so on](https://github.com/python/typeshed/tree/master/third_party). It can provide type information for source code
+  that you do not own or cannot change easily.
+  </div>
 
 Now there are also some hefty penalties to pay:
 
@@ -446,23 +446,23 @@ On the plus side:
 
 <div class='plus'>
 
-- Works under any Python version. It was defined back in [PEP-257](https://www.python.org/dev/peps/pep-0257/). It does
-not clash with other linter tools, as most of these do not check the docstrings but usually resume just inspecting the
-other code sections instead.
-</div>
+* Works under any Python version. It was defined back in [PEP-257](https://www.python.org/dev/peps/pep-0257/). It does
+  not clash with other linter tools, as most of these do not check the docstrings but usually resume just inspecting the
+  other code sections instead.
+  </div>
 
 However, it has serious flaws in the form of:
 
 <div class='cross'>
 
-- There is no standard way to specify complex type hints (for example, either `int` or `bool`). PyCharm has
+* There is no standard way to specify complex type hints (for example, either `int` or `bool`). PyCharm has
   [it's the proprietary way](https://www.jetbrains.com/help/pycharm/type-hinting-in-product.html#legacy) but Sphinx, for
   example, uses a different method. T- Docstring types do not clash with other linter tools.
-- Requires changing the documentation, and it is hard to keep accurate/up to date as there is no tool to check it's
+* Requires changing the documentation, and it is hard to keep accurate/up to date as there is no tool to check it's
   validity.
-- Docstring types do not play well with type hinted code. If both type annotations and docstrings are specified, which
-takes precedence over which?
-</div>
+* Docstring types do not play well with type hinted code. If both type annotations and docstrings are specified, which
+  takes precedence over which?
+  </div>
 
 ## What to add?
 
@@ -835,12 +835,12 @@ summarized in a tweet:
 
 Remember you have some tools at hand that help you discover, understand and perhaps handle these edge cases:
 
-- use `reveal_type` to see inferred type
+* use `reveal_type` to see inferred type
   ```python
   a = [4]
   reveal_type(a)         # -> error: Revealed type is 'builtins.list[builtins.int*]'
   ```
-- use `cast` to force a given type:
+* use `cast` to force a given type:
   ```python
   from typing import List, cast
   a = [4]
@@ -848,11 +848,11 @@ Remember you have some tools at hand that help you discover, understand and perh
   c = cast(List[str], a) # type: List[str] # passes fine (no runtime check)
   reveal_type(c)         # -> error: Revealed type is 'builtins.list[builtins.str]'
   ```
-- use the type ignore marker to disable an error in a line:
+* use the type ignore marker to disable an error in a line:
   ```python
   x = confusing_function() # type: ignore # see mypy/issues/1167
   ```
-- ask the community; expose a minimal reproducible version of the problem under the
+* ask the community; expose a minimal reproducible version of the problem under the
   [python/typing](https://gitter.im/python/typing) `Gitter` chat.
 
 # Tools
@@ -906,12 +906,12 @@ In Sphinx, you can achieve this by having a plugin. The most popular already mad
 [`agronholm/sphinx-autodoc-typehints`](https://github.com/agronholm/sphinx-autodoc-typehints). This tool does two
 things:
 
-- first, for each function/variable to be documented, it fetches the type hint information;
-- then, it transforms the Python types into a docstring representation (this involves recursively unwrapping all the
+* first, for each function/variable to be documented, it fetches the type hint information;
+* then, it transforms the Python types into a docstring representation (this involves recursively unwrapping all the
   nested type classes, and replacing the type with its string representation);
-- finally, appending to the correct parameter into the docstring.
+* finally, appending to the correct parameter into the docstring.
 
-For example `Any` maps to `` py:data:`~typing.Any`  ``. Things can get even more complicated for compound types such as
+For example `Any` maps to `` py:data:`~typing.Any` ``. Things can get even more complicated for compound types such as
 `Mapping[str, bool]` needs to be translated for example too
 `` :class:`~typing.Mapping`\\[:class:`str`, :class:`bool`] ``. Getting the translation here right (e.g. having `class`
 or `data` namespace) is essential so that the `intersphinx` plugin will work correctly (a plugin that links types
