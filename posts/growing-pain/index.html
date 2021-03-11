@@ -24,7 +24,13 @@ getting paid for it, and they need to be careful to consider the myriad ways the
 not much of a surprise it took almost two years after the PEP acceptance to come out with a first implementation.
 Planning, testing and implementation has been going on for over a year in the background.</p><p>Against all the preparations though, inevitably, the first release did break a few packages, mostly where people
 performed some operations that caught the maintainers by surprise. Let&rsquo;s try to understand a few of these examples, and
-how did they get addressed.</p><p>{{/<em>&lt; figure src=&ldquo;<a href="https://images.unsplash.com/photo-1543892673-921992c933f5?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ%22">https://images.unsplash.com/photo-1543892673-921992c933f5?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"</a> caption=&ldquo;Photo by Mink Mingle / Unsplash - ready to roll!&rdquo; ></em>/}}</p><h2 id=pep-518>PEP-518
+how did they get addressed.</p><p>{{/<em>&lt; figure
+src=&ldquo;<a href="https://images.unsplash.com/photo-1543892673-921992c933f5?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ%22">https://images.unsplash.com/photo-1543892673-921992c933f5?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"</a>
+caption=&ldquo;Photo by
+Mink
+Mingle /
+Unsplash -
+ready to roll!&rdquo; ></em>/}}</p><h2 id=pep-518>PEP-518
 <a class=heading-link href=#pep-518><i class="fa fa-link" aria-hidden=true></i></a></h2><p>The PEP introduces the <a href=https://github.com/toml-lang/toml>TOML file format.</a> A format especially created to be easy to
 read/write configurations. While packaging configuration is exposed under the <code>build-system</code> section, other tools are
 free to put their configuration under the <code>tool:name</code> section, given they own the PyPi namespace for the name. Various
@@ -45,16 +51,22 @@ though, but en masse, as most CI systems run with this option turned on, just a 
 <a class=heading-link href=#pyprojecttoml-not-being-included-into-setuptools><i class="fa fa-link" aria-hidden=true></i></a></h3><p>Turns out there&rsquo;s actually more work on the build backend than just expose their API as described in PEP-517. The
 backend also needs to ensure that <code>pyproject.toml</code> is attached to the built source package, otherwise the build backend
 on the user machine will not be able to use it. <a href=https://github.com/pypa/setuptools/pull/1650>setuptools 1650</a> will fix
-this for setuptools, on earlier versions one can just include <code>pyproject.toml</code> by specifying it inside <code>MANIFEST.in</code>.</p><p>{{/<em>&lt; figure src=&ldquo;<a href="https://images.unsplash.com/photo-1524111890967-20e856be04d2?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ%22">https://images.unsplash.com/photo-1524111890967-20e856be04d2?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"</a> caption=&ldquo;Photo by Jorge Zapata / Unsplash - what?! never though of that caseƒ&rdquo; ></em>/}}</p><h3 id=importing-the-built-package-from-within-setuppy>Importing the built package from within <code>setup.py</code>
+this for setuptools, on earlier versions one can just include <code>pyproject.toml</code> by specifying it inside <code>MANIFEST.in</code>.</p><p>{{/<em>&lt; figure
+src=&ldquo;<a href="https://images.unsplash.com/photo-1524111890967-20e856be04d2?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ%22">https://images.unsplash.com/photo-1524111890967-20e856be04d2?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"</a>
+caption=&ldquo;Photo by
+Jorge
+Zapata /
+Unsplash -
+what?! never though of that caseƒ&rdquo; ></em>/}}</p><h3 id=importing-the-built-package-from-within-setuppy>Importing the built package from within <code>setup.py</code>
 <a class=heading-link href=#importing-the-built-package-from-within-setuppy><i class="fa fa-link" aria-hidden=true></i></a></h3><p>Another unexpected issue was when a package importing from within <code>setup.py</code>. The version of the package by convention
 is exposed both as metadata for the package (in case of setuptools inside the <code>setup.py</code> as the <code>version</code> argument to
 the <code>setup</code> function), but also under the <code>__version__</code> variable at the root of the package. One could specify the
 content of the variable in both places, but then it becomes troublesome to keep it in sync.</p><p>As a workaround, many packages started putting it inside a <code>version.py</code> at the root of the package, and then import it
 as <code>from mypy.version import __version__ as version</code> from both the <code>setup.py</code> and the package root. This worked because
 when someone calls a python script the current working directory is automatically attached to the <code>sys.path</code> (so you can
-import stuff exposed underneath it).</p><p>This behavior of adding the current working directory though was never mandated, it was more of a side-effect as
-calling the build via <code>python setup.py sdist</code>. As this behavior is a side-effect (not a guarantee) all projects that
-import from their <code>setup.py</code> should explicitly add the scripts folder to the sys path, at the start of the build.</p><p>It&rsquo;s up for debate if importing the built package during the packaging (when it&rsquo;s not yet built/distributed) is a good
+import stuff exposed underneath it).</p><p>This behavior of adding the current working directory though was never mandated, it was more of a side-effect as calling
+the build via <code>python setup.py sdist</code>. As this behavior is a side-effect (not a guarantee) all projects that import from
+their <code>setup.py</code> should explicitly add the scripts folder to the sys path, at the start of the build.</p><p>It&rsquo;s up for debate if importing the built package during the packaging (when it&rsquo;s not yet built/distributed) is a good
 idea or not (though the Python Packaging group is leaning towards it&rsquo;s not). Nevertheless, the fact of the matter is
 that when <code>setuptools</code> exposed its interface via the <code>setuptools.build_meta</code> it choose not to add the current working
 directory to the system path. The</p><p>PEP never mandates for the frontend to do this addition, as most build backend (declarative in nature) will never need
@@ -73,7 +85,13 @@ so the build frontend will need to build a wheel to satisfy it. The wheel build 
 isolated environment, which has build dependency again <code>setuptools</code>.</p><p>How to break this loop? Mandate all build backends must be exposed as wheels? Allow backends that can build themselves?
 Should these self build backend allowed to take on dependencies? There&rsquo;s a long discussion with various options, pros
 and cons, so if you&rsquo;re interested make sure to head over the
-<a href=https://discuss.python.org/t/pep-517-backend-bootstrapping>python Discourse board</a> and give your opinion.</p><p>{{/<em>&lt; figure src=&ldquo;<a href="https://images.unsplash.com/photo-1499938971550-7ad287075e0d?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ%22">https://images.unsplash.com/photo-1499938971550-7ad287075e0d?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"</a> caption=&ldquo;Photo by Sneaky Elbow / Unsplash - we&rsquo;re all together in this&rdquo; ></em>/}}</p><h2 id=conclusion>Conclusion
+<a href=https://discuss.python.org/t/pep-517-backend-bootstrapping>python Discourse board</a> and give your opinion.</p><p>{{/<em>&lt; figure
+src=&ldquo;<a href="https://images.unsplash.com/photo-1499938971550-7ad287075e0d?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ%22">https://images.unsplash.com/photo-1499938971550-7ad287075e0d?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"</a>
+caption=&ldquo;Photo by
+Sneaky
+Elbow /
+Unsplash -
+we&rsquo;re all together in this&rdquo; ></em>/}}</p><h2 id=conclusion>Conclusion
 <a class=heading-link href=#conclusion><i class="fa fa-link" aria-hidden=true></i></a></h2><p>Packaging is hard. Improving a packaging system without any breakage where users can write and run arbitrary code during
 the packaging in your free time is probably impossible. With PEP-518 though now build dependencies are explicit and
 build environments easy to create. With PEP-517 we can start moving into a more declarative packaging namespace, that
@@ -85,7 +103,13 @@ what went wrong, how you tried to use it, and what is your use case.</p><p>We&rs
 catch at least some of these edge cases before they land on your machine. If you have any suggestion or requirements to
 any part of packaging feel free to start a discussion on the
 <a href=https://discuss.python.org/c/packaging>Discuss Python forums</a> packaging section, or open an issue for the relevant
-tool at hand.</p><p>{{/<em>&lt; figure src=&ldquo;<a href="https://images.unsplash.com/photo-1517306896387-1b417036430b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ%22">https://images.unsplash.com/photo-1517306896387-1b417036430b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"</a> caption=&ldquo;Photo by Milan Popovic / Unsplash - the end&rdquo; ></em>/}}</p><p>That&rsquo;s all for now, thanks for reading through it all! I would like to thank
+tool at hand.</p><p>{{/<em>&lt; figure
+src=&ldquo;<a href="https://images.unsplash.com/photo-1517306896387-1b417036430b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ%22">https://images.unsplash.com/photo-1517306896387-1b417036430b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"</a>
+caption=&ldquo;Photo by
+Milan
+Popovic /
+Unsplash - the
+end&rdquo; ></em>/}}</p><p>That&rsquo;s all for now, thanks for reading through it all! I would like to thank
 <a href=https://twitter.com/pganssle>Paul Ganssle</a> for reviewing the packaging series post, and
 <a href=https://twitter.com/techatbloomberg>Tech At Bloomberg</a> for allowing me to do open source contributions during my
 working hours.</p></div><footer></footer></article></section></div><footer class=footer><section class=container><p>Software engineer <a href=https://github.com/bloomberg>at Bloomberg (London)</a>. Maintainer of <a href=https://github.com/gaborbernat/>many FOSS Python packages</a>. Opinions are my own.</p></section></footer></main><script src=/bernat-tech/js/dark-mode.min.0213e1773e6d1c5a644f847c67a6f8abac49a3776e2976f6008038af8c5b76a1.js integrity="sha256-AhPhdz5tHFpkT4R8Z6b4q6xJo3duKXb2AIA4r4xbdqE="></script></body></html>

@@ -33,7 +33,13 @@ very popular to the point that most python installation started to provide it to
 <em>distutils</em> was created back when only a few highly proficient people did packaging. As such it is very flexible and
 imperative, you write a python script, you can modify every step in the package generation process.</p><p>The downside of this though is that it&rsquo;s anything but easy to learn and understand. This started to become more and more
 an issue as Python grew in popularity and we had more and more users who were less proficient in the inner workings of
-Python.</p><p>{{/<em>&lt; figure src=&ldquo;<a href="https://images.unsplash.com/photo-1541364983171-a8ba01e95cfc?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ%22">https://images.unsplash.com/photo-1541364983171-a8ba01e95cfc?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"</a> caption=&ldquo;Photo by Charles 🇵🇭 / Unsplash - ehhh&rdquo; ></em>/}}</p><h3 id=build-requirements>build requirements
+Python.</p><p>{{/<em>&lt; figure
+src=&ldquo;<a href="https://images.unsplash.com/photo-1541364983171-a8ba01e95cfc?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ%22">https://images.unsplash.com/photo-1541364983171-a8ba01e95cfc?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"</a>
+caption=&ldquo;Photo by
+Charles
+🇵🇭 /
+Unsplash -
+ehhh&rdquo; ></em>/}}</p><h3 id=build-requirements>build requirements
 <a class=heading-link href=#build-requirements><i class="fa fa-link" aria-hidden=true></i></a></h3><p>For installing a source distribution pip mostly <strong>did</strong> the following:</p><ol><li>discover the package</li><li>download the source distribution and extract it</li><li>run <code>python setup.py install</code> on the extracted folder (does a build + install).</li></ol><p>Developers did <code>python setup.py sdist</code> to generate the distribution, and <code>python setup.py upload</code> to upload it to a
 central repository (the upload command has been deprecated with 2013 in favour of the
 <a href=https://pypi.org/project/twine/>twine</a> tool most notably due to the upload using non-secure HTTP connection, and
@@ -55,12 +61,17 @@ host python, we create an isolated python (think of a sort of virtual environmen
 let&rsquo;s refer to this python executable as <code>python_isolated</code></li><li>install the build dependencies</li><li>generate a wheel we can install via <code>python_isolated setup.py bdist_wheel</code></li><li>extract wheel to site packages of <code>python</code>.</li></ol><p>With this we can install packages that depend on <code>cython</code> without actually installing <code>cython</code> inside the runtime python
 environment. The file and method of specifying the build dependencies is the <code>pyproject.toml</code> metadata file:</p><div class=highlight><pre class=chroma><code class=language-toml data-lang=toml><span class=p>[</span><span class=nx>build</span><span class=err>-</span><span class=nx>system</span><span class=p>]</span>
 <span class=nx>requires</span> <span class=p>=</span> <span class=p>[</span><span class=s2>&#34;setuptools &gt;= 40.8.0&#34;</span><span class=p>,</span> <span class=s2>&#34;wheel &gt;= 0.30.0&#34;</span><span class=p>,</span> <span class=s2>&#34;cython &gt;= 0.29.4&#34;</span><span class=p>]</span>
-
 </code></pre></div><p>Furthermore, this also allows for whoever does the packaging to be explicit about what minimum versions they require for
 the packaging, and these can be easily provisioned via pip transparently on the user machines.</p><p>The same mechanism can also be used when generating the source distribution or the wheel on the developers' machine.
 When one invokes the <code>pip wheel . --no-deps</code> command that will automatically create in the background an isolated python
 that satisfies the build systems dependencies, and then call inside that environment the <code>python setup.py bdist_wheel</code>
-or <code>python setup.py sdist</code> command.</p><p>{{/<em>&lt; figure src=&ldquo;<a href="https://images.unsplash.com/photo-1512723185835-0700e5069a9a?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ%22">https://images.unsplash.com/photo-1512723185835-0700e5069a9a?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"</a> caption=&ldquo;Photo by Bruce Galpin / Unsplash - yay!&rdquo; ></em>/}}</p><h3 id=packaging-tool-diversity>packaging tool diversity
+or <code>python setup.py sdist</code> command.</p><p>{{/<em>&lt; figure
+src=&ldquo;<a href="https://images.unsplash.com/photo-1512723185835-0700e5069a9a?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ%22">https://images.unsplash.com/photo-1512723185835-0700e5069a9a?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"</a>
+caption=&ldquo;Photo by
+Bruce
+Galpin /
+Unsplash -
+yay!&rdquo; ></em>/}}</p><h3 id=packaging-tool-diversity>packaging tool diversity
 <a class=heading-link href=#packaging-tool-diversity><i class="fa fa-link" aria-hidden=true></i></a></h3><p>Now there&rsquo;s one more problem here though. Note all these operations still go through the mechanism introduced twenty
 years ago, aka executing <code>setup.py</code>. The whole ecosystem still builds on the top of the <em>distutils</em> and <em>setuptools</em>
 interface that cannot change much due to trying to preserving backwards compatibility.</p><p>Also, executing arbitrary user side Python code during packaging though it is dangerous which can lead to subtle errors
@@ -90,7 +101,6 @@ functions. All packaging backends must provide a python object API that implemen
 <code>pyproject.toml</code> file under the <code>build-backend</code> key:</p><div class=highlight><pre class=chroma><code class=language-toml data-lang=toml><span class=p>[</span><span class=nx>build</span><span class=err>-</span><span class=nx>system</span><span class=p>]</span>
 <span class=nx>requires</span> <span class=p>=</span> <span class=p>[</span><span class=s2>&#34;flit&#34;</span><span class=p>]</span>
 <span class=nx>build</span><span class=err>-</span><span class=nx>backend</span> <span class=p>=</span> <span class=s2>&#34;flit.api:main&#34;</span>
-
 </code></pre></div><p>The above code effectively means for the frontend that you can get hold of the backend by running the above code inside
 the isolated python environment:</p><div class=highlight><pre class=chroma><code class=language-python data-lang=python><span class=kn>import</span> <span class=nn>flit.api</span>
 <span class=n>backend</span> <span class=o>=</span> <span class=n>flit</span><span class=o>.</span><span class=n>api</span><span class=o>.</span><span class=n>main</span>
@@ -102,7 +112,13 @@ the isolated python environment:</p><div class=highlight><pre class=chroma><code
 <span class=n>backend</span><span class=o>.</span><span class=n>build_sdist</span><span class=p>()</span>
 </code></pre></div><p>It&rsquo;s up to the backend where and how they want to expose their official API:</p><ol><li><a href=https://flit.readthedocs.io/en/latest/>flit</a> does it via <code>flit.buildapi</code></li><li><a href=https://setuptools.readthedocs.io/en/latest/history.html#v40-8-0>setuptools</a> provides two variants:
 <code>setuptools.build_meta</code> (on why read on later)</li><li><a href=https://poetry.eustace.io/docs/pyproject/#poetry-and-pep-517>poetry</a> does it via <code>poetry.masonry.api</code></li></ol><p>With this we can start having packaging tools that are no longer bound to the legacy decisions of the <code>distutils</code> in the
-frontend.</p><p>{{/<em>&lt; figure src=&ldquo;<a href="https://images.unsplash.com/photo-1536298191882-3b2dd65a853b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ%22">https://images.unsplash.com/photo-1536298191882-3b2dd65a853b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"</a> caption=&ldquo;Photo by Sarthak Dubey / Unsplash - more yay!&rdquo; ></em>/}}</p><h1 id=tox-and-packaging>tox and packaging
+frontend.</p><p>{{/<em>&lt; figure
+src=&ldquo;<a href="https://images.unsplash.com/photo-1536298191882-3b2dd65a853b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ%22">https://images.unsplash.com/photo-1536298191882-3b2dd65a853b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"</a>
+caption=&ldquo;Photo by
+Sarthak
+Dubey /
+Unsplash - more
+yay!&rdquo; ></em>/}}</p><h1 id=tox-and-packaging>tox and packaging
 <a class=heading-link href=#tox-and-packaging><i class="fa fa-link" aria-hidden=true></i></a></h1><p><a href=https://tox.readthedocs.io/en/latest/>tox is testing tool</a> and used by most projects to ensure compatibility against
 multiple Python interpreter version of a given package. It also allows easily creating python environments that have the
 package under inspection installed in it, making reproducing failures faster.</p><p>To be able to test a package it first needs to build a source distribution though. While both PEP-518 and PEP-517 should
@@ -115,7 +131,13 @@ enable it (will probably be turned on by default in version <code>4</code> somet
 </code></pre></div><p>After this, tox in its <a href=https://tox.readthedocs.io/en/latest/#system-overview>packaging phase</a> will build the source
 distribution by providing the build dependencies into an isolated python environment per PEP-518, and will call the
 build backend as stated in PEP-517. Otherwise, tox will use the old way of building source distributions, that is
-invoking the <code>python setup.py sdist</code> command with the same interpreter tox is installed into.</p><p>{{/<em>&lt; figure src=&ldquo;<a href="https://images.unsplash.com/photo-1423958950820-4f2f1f44e075?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ%22">https://images.unsplash.com/photo-1423958950820-4f2f1f44e075?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"</a> caption=&ldquo;Photo by Matthew Henry / Unsplash - no free lunch here, yet!&rdquo; ></em>/}}</p><h2 id=conclusion>Conclusion
+invoking the <code>python setup.py sdist</code> command with the same interpreter tox is installed into.</p><p>{{/<em>&lt; figure
+src=&ldquo;<a href="https://images.unsplash.com/photo-1423958950820-4f2f1f44e075?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ%22">https://images.unsplash.com/photo-1423958950820-4f2f1f44e075?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjExNzczfQ"</a>
+caption=&ldquo;Photo by
+Matthew
+Henry /
+Unsplash - no
+free lunch here, yet!&rdquo; ></em>/}}</p><h2 id=conclusion>Conclusion
 <a class=heading-link href=#conclusion><i class="fa fa-link" aria-hidden=true></i></a></h2><p>The Python Packaging Authority hopes that all this makes sense and will allow to have a more user friendly, error proof
 and stable builds. The specifications for these standards were written up and debated in long threads between 2015
 and 2017. The proposals were deemed good enough to benefit the most, but some less mainstream use cases could have been

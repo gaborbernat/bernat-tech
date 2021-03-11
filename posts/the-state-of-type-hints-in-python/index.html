@@ -145,15 +145,15 @@ Python <code>3.5+</code> is available as a PyPi package for Python <code>2.7+</c
 feature under virtually any Python code, this allows you to type-hint any codebase at or above Python <code>2.7</code>. There are
 a few requirements: the type hint comment <strong>must</strong> be on the same or the next line where the function/variable
 definition is. It also starts with the <code>type:</code> constant.</li><li>This solution also has packaging solved because comments are rarely stripped of your code once you stripped it.
-Packaging type hint information with your source code allows people using your library to use your type hint information
-to improve their developer experience.</li></ul><p>But we also generate some new problems:</p><ul><li>The downside is that although the type of information is close to the arguments, it&rsquo;s not right beside it, making the
+Packaging type hint information with your source code allows people using your library to use your type hint
+information to improve their developer experience.</li></ul><p>But we also generate some new problems:</p><ul><li>The downside is that although the type of information is close to the arguments, it&rsquo;s not right beside it, making the
 code a bit messier than otherwise would be. It must also be in a single line, causing issues if you have a long type
 of expression, and your codebase enforces line length limits.</li><li>Another problem is that now the type hint information competes with other tools using these types of comment markers
 (e.g., suppressing other linter tools errors).</li><li>Besides forcing you to import all of your type information, this leaves you in an even more precarious place. Now the
 imported types are only used in the code, which leaves most linter tools to believe all those imports are unused. Were
-you to allow them to remove it, and it does break your type linter. Note <code>pylint</code> fixed this by moving its AST parser to
-a <a href=https://github.com/PyCQA/pylint/issues/1063>typed-ast parser</a>, and is going to be released with version 2 just after
-Python <code>3.7</code> comes out.</li></ul><p>To avoid having long lines of code as type hint, it&rsquo;s possible to type hint arguments one by one via type comments, and
+you to allow them to remove it, and it does break your type linter. Note <code>pylint</code> fixed this by moving its AST parser
+to a <a href=https://github.com/PyCQA/pylint/issues/1063>typed-ast parser</a>, and is going to be released with version 2 just
+after Python <code>3.7</code> comes out.</li></ul><p>To avoid having long lines of code as type hint, it&rsquo;s possible to type hint arguments one by one via type comments, and
 then put in the line after only the return type annotation:</p><div class=highlight><pre class=chroma><code class=language-python data-lang=python><span class=k>def</span> <span class=nf>add</span><span class=p>(</span><span class=n>element</span> <span class=c1># type: List[int]</span>
        <span class=p>):</span>
     <span class=c1># type: (...) -&gt; None</span>
@@ -469,7 +469,7 @@ Therefore let&rsquo;s strip all type data from the docstring and have it only as
 documentation build time, fetch it from the type hints and insert it into the documentation.</p><p>In Sphinx, you can achieve this by having a plugin. The most popular already made version of this is
 <a href=https://github.com/agronholm/sphinx-autodoc-typehints><code>agronholm/sphinx-autodoc-typehints</code></a>. This tool does two
 things:</p><ul><li>first, for each function/variable to be documented, it fetches the type hint information;</li><li>then, it transforms the Python types into a docstring representation (this involves recursively unwrapping all the
-nested type classes, and replacing the type with its string representation);</li><li>finally, appending to the correct parameter into the docstring.</li></ul><p>For example <code>Any</code> maps to <code>py:data:`~typing.Any` </code>. Things can get even more complicated for compound types such as
+nested type classes, and replacing the type with its string representation);</li><li>finally, appending to the correct parameter into the docstring.</li></ul><p>For example <code>Any</code> maps to <code>py:data:`~typing.Any`</code>. Things can get even more complicated for compound types such as
 <code>Mapping[str, bool]</code> needs to be translated for example too
 <code>:class:`~typing.Mapping`\\[:class:`str`, :class:`bool`]</code>. Getting the translation here right (e.g. having <code>class</code>
 or <code>data</code> namespace) is essential so that the <code>intersphinx</code> plugin will work correctly (a plugin that links types
