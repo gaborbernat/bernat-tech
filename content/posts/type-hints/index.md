@@ -22,7 +22,7 @@ admiration for these animals, and hey, nothing like some cute animals to help di
 
 # Why do we need this?
 
-{{< figure src="why.png" width="700px">}}
+{{< figure src="why.webp" width="700px">}}
 
 ## What it was designed to do?
 
@@ -74,11 +74,11 @@ Having type hints mean IDEs can have a more accurate and smarter suggestion engi
 the IDE knows with complete confidence, what methods/attributes are available on an object. Furthermore, if the user
 tries to call something non-existent or passes arguments of an incorrect type, the IDE can instantly warn about it.
 
-{{< figure src="editor_suggest.png" width="500px" alt="IDE suggestion">}}
+{{< figure src="editor_suggest.webp" width="500px" alt="IDE suggestion">}}
 
 ### 4. Type linters
 
-{{< figure src="type_mismatch.png" width="500px" alt="IDE suggestion">}}
+{{< figure src="type_mismatch.webp" width="500px" alt="IDE suggestion">}}
 
 While the IDE suggesting incorrect argument types is excellent, an extension of this is to have a linter tool that makes
 sure that type wise the logic of your application is sound. Running this tool can help you catch bugs early on (e.g., in
@@ -156,7 +156,7 @@ discards it.
 The key takeaway should be that type hints are designed to improve developer experience, not influencing how your script
 evaluates. It creates happy developers, not faster code!
 
-{{< figure src="happy_programmer.png" width="700px">}}
+{{< figure src="happy_programmer.webp" width="700px">}}
 
 # What kind of type system?
 
@@ -194,7 +194,7 @@ objects. The latter even suggests valid options available, making it easy to not
 Once you decide to add type hints, you'll come to realize that you can add it in more than one way to the codebase.
 Let's see what your options are.
 
-{{< figure src="interested.png" width="700px">}}
+{{< figure src="interested.webp" width="700px">}}
 
 ### 1. Type annotations
 
@@ -466,7 +466,7 @@ However, it has serious flaws in the form of:
 
 ## What to add?
 
-{{< figure src="deep_dive.png" width="700px">}}
+{{< figure src="deep_dive.webp" width="700px">}}
 
 Let's dive into the specifics, though. For an exhaustive list of what type of information you can add, please see the
 [official documentation](https://docs.python.org/3/library/typing.html). Here I'll do a quick 3-minute overview for you
@@ -574,7 +574,7 @@ def func_str(param: MagicGetter[str]) -> str:
 Once you start adding type hints to a codebase, watch out that sometimes you may experience some oddities. During these
 moments, you might have the \*what the hell\*\* expression of the following seal:
 
-{{< figure src="gotcha.png" width="700px">}}
+{{< figure src="gotcha.webp" width="700px">}}
 
 In this section, I'll try to present a few of these to give you a heads up on what kind of oddities you may run into
 while adding type information to your codebase.
@@ -831,7 +831,7 @@ to prohibit incompatible `__init__` and `__new__`_.
 So, in conclusion, watch out. Type hints sometimes cause strange warnings, which brings out the following feelings
 summarized in a tweet:
 
-{{< figure src="david.png" width="700px">}}
+{{< figure src="david.webp" width="700px">}}
 
 Remember you have some tools at hand that help you discover, understand and perhaps handle these edge cases:
 
@@ -928,11 +928,11 @@ extensions = ['sphinx_autodoc_typehints']
 That's it all. An example use case of this is [RookieGameDevs/revived](https://github.com/RookieGameDevs/revived)
 documentation. For example, given the following source code:
 
-{{< figure src="sphinx_doc_src.png" width="800px">}}
+{{< figure src="sphinx_doc_src.webp" width="800px">}}
 
 You can get the following output:
 
-{{< figure src="sphinx_doc.png" width="800px">}}
+{{< figure src="sphinx_doc.webp" width="800px">}}
 
 # Conclusion
 
@@ -949,4 +949,4 @@ Remember that, similar to unit tests, while it does makes your codebase contain 
 the day, all the code you add is code that is automatically checked and enforced to be correct. It acts as a safety net
 to ensure that things keep working when you change things around later on, so probably worth paying this extra cost.
 
-{{< figure src="thats_all_folks.png" width="700px">}}
+{{< figure src="thats_all_folks.webp" width="700px">}}
