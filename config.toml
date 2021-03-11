@@ -1,56 +1,56 @@
 baseURL = "https://gaborbernat.github.io/bernat-tech"
-title = "Tech articles by Bernát Gábor"
-disablePathToLower = true
-theme = "hugo-coder"
-languagecode = "en"
 defaultcontentlanguage = "en"
+disablePathToLower = true
+languagecode = "en"
 paginate = 20
+theme = "hugo-coder"
+title = "Tech articles by Bernát Gábor"
 
 [params]
 author = "Bernát Gábor"
-info = "Python open-source developer"
-description = "Bernát Gábor's personal website"
-keywords = "blog,developer,personal"
 avatarurl = "img/avatar.jpg"
-favicon_32 = "img/android-chrome-192x192.png"
-favicon_16 = "img/android-chrome-192x192.png"
-touchIcon = "img/android-chrome-192x192.png"
-customCSS = ["css/custom.css"]
-footercontent = "Software engineer <a href='https://github.com/bloomberg'> at Bloomberg (London)</a>. Maintainer of <a href='https://github.com/gaborbernat/'> many FOSS Python packages</a>. Opinions are my own."
-hideCredits = true
-hideCopyright = true
-since = 2018
-enableTwemoji = false
 colorScheme = "auto"
+customCSS = ["css/custom.css"]
+description = "Bernát Gábor's personal website"
+enableTwemoji = false
+favicon_16 = "img/android-chrome-192x192.png"
+favicon_32 = "img/android-chrome-192x192.png"
+footercontent = "Software engineer <a href='https://github.com/bloomberg'> at Bloomberg (London)</a>. Maintainer of <a href='https://github.com/gaborbernat/'> many FOSS Python packages</a>. Opinions are my own."
+hideCopyright = true
+hideCredits = true
 hidecolorschemetoggle = false
+info = "Python open-source developer"
+keywords = "blog,developer,personal"
+since = 2018
+touchIcon = "img/android-chrome-192x192.png"
 
 [[params.social]]
-name = "Github"
 icon = "fa fa-github fa-2x"
-weight = 1
+name = "Github"
 url = "https://github.com/gaborbernat/"
+weight = 1
 
 [[params.social]]
-name = "Twitter"
 icon = "fa fa-twitter fa-2x"
-weight = 3
+name = "Twitter"
 url = "https://twitter.com/gjbernat/"
+weight = 3
 
 [taxonomies]
+author = "authors"
 category = "categories"
 series = "series"
 tag = "tags"
-author = "authors"
 
 [[menu.main]]
 name = "Blog"
-weight = 1
 url = "posts"
+weight = 1
 
 [[menu.main]]
 name = "About"
-weight = 2
 url = "about"
+weight = 2
 
 [markup]
 
