@@ -69,14 +69,14 @@ We have four distinct content type here:
 What would it mean for our `pugs` package to be available on a user machine's interpreter? Ideally, the user should be
 able to import it and call functions from it once it starts up the interpreter:
 
-* the business logic code (what's inside the `src` folder),
-* the test code (`tests` folder and `tox.ini`),
-* the packaging code and metadata (`setup.py`, `setup.cfg`, `LICENSE.txt`, `README.rst` - note we use nowadays the de
+- the business logic code (what's inside the `src` folder),
+- the test code (`tests` folder and `tox.ini`),
+- the packaging code and metadata (`setup.py`, `setup.cfg`, `LICENSE.txt`, `README.rst` - note we use nowadays the de
   facto standard packaging tool [setuptools](https://pypi.org/project/setuptools)),
-* files helping with project management and maintenance:
-  * continuous integration (`azure-pipelines.yml`)
-  * version control (`.git`)
-  * project management (for example a potential `.github` folder).
+- files helping with project management and maintenance:
+  - continuous integration (`azure-pipelines.yml`)
+  - version control (`.git`)
+  - project management (for example a potential `.github` folder).
 
 ```
 Python 3.7.2 (v3.7.2:9a3ffc0492, Dec 24 2018, 02:44:43)
@@ -110,9 +110,9 @@ module, one can print out the representation of the module to find out:
 
 The folder under you'll find it depends on:
 
-* the type of the package it is (third-party or built-in/aka part of the standard library)
-* if it's globally or just for the current user available (see [PEP-370](https://www.python.org/dev/peps/pep-0370/)),
-* and if it's a system python or a virtual environment.
+- the type of the package it is (third-party or built-in/aka part of the standard library)
+- if it's globally or just for the current user available (see [PEP-370](https://www.python.org/dev/peps/pep-0370/)),
+- and if it's a system python or a virtual environment.
 
 Generally speaking though, for a given python interpreter, one can find a list of possible directories by printing out
 the `sys.path` variables content, for example on my MacOS:
@@ -232,12 +232,12 @@ wheel):
 
 The difference between a source tree, a source distribution and a wheel:
 
-* **source tree _-_** contains all project files available on the developers' machine/repository (business logic, tests,
+- **source tree _-_** contains all project files available on the developers' machine/repository (business logic, tests,
   packaging data, CI files, IDE files, SVC etc.) - for example, see example project above.
-* **source distribution** - \_\_ contains code files required to build a wheel (business logic + packaging data + often
+- **source distribution** - \_\_ contains code files required to build a wheel (business logic + packaging data + often
   also the unit tests files to validate the build; notably lacks developer environment content such as CI/IDE/version
   control files) - format: `pugs-0.0.1.tar.gz`.
-* **wheel** - contains the package metadata and source files to be put into the site packages folder - format:
+- **wheel** - contains the package metadata and source files to be put into the site packages folder - format:
   `pugs-0.0.1-py2.py3-none-any.whl`.
 
 {{/_< figure
