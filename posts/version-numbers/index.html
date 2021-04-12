@@ -55,7 +55,7 @@ you&rsquo;re just renaming a single rarely used function (which some may erroneo
 it&rsquo;s not always clear what&rsquo;s part of the public API and what&rsquo;s not.</p><p>You have a library with some incidental, undocumented and unspecified behavior that you consider to be obviously not
 part of the public interface. You change it to solve what seems like a bug to you, and make a patch release, only to
 find that you have angry hordes at the gate who, thanks to <a href=https://www.hyrumslaw.com/>Hyrum&rsquo;s Law</a>, depend on the old
-behavior.</p><figure><img src=https://imgs.xkcd.com/comics/workflow.webp></figure><p>While every maintainer would like to believe they&rsquo;ve thought of every use case up-front and created the best API for
+behavior.</p><figure><img src=https://imgs.xkcd.com/comics/workflow.png></figure><p>While every maintainer would like to believe they&rsquo;ve thought of every use case up-front and created the best API for
 everything, in practice, hindsight is our best teacher. As we run into more use cases, issues, and users, we get smarter
 and work out what would be a better interface for that library, and what confuses the users the most.</p><p>Therefore there will be a lot of moments when, as a maintainer, you would like to change something. Doing a major bump
 change every time will make your project quickly reach double-digit major versions, at which point users tend to
