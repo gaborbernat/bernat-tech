@@ -219,9 +219,9 @@ The difference between a source tree, a source distribution, and a wheel:
 
 - **source tree _-_** contains all project files available on the developers' machine/repository (business logic, tests,
   packaging data, CI files, IDE files, SVC, etc.) - for example, see example project above.
-- **source distribution** - contains code files required to build a wheel (business logic + packaging data + often
-  also the unit tests files to validate the build; notably lacks developer environment content such as CI/IDE/version
-  control files) - format: `pugs-0.0.1.tar.gz`.
+- **source distribution** - contains code files required to build a wheel (business logic + packaging data + often also
+  the unit tests files to validate the build; notably lacks developer environment content such as CI/IDE/version control
+  files) - format: `pugs-0.0.1.tar.gz`.
 - **wheel** - contains the package metadata and source files to be put into the `site-packages` folder - format:
   `pugs-0.0.1-py2.py3-none-any.whl`.
 

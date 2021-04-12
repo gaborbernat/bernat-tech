@@ -31,10 +31,40 @@ url = "https://github.com/gaborbernat/"
 weight = 1
 
 [[params.social]]
+icon = "fa fa-twitch fa-2x"
+name = "Twitch"
+url = "https://www.twitch.tv/gaborbernat"
+weight = 2
+
+[[params.social]]
 icon = "fa fa-twitter fa-2x"
 name = "Twitter"
 url = "https://twitter.com/gjbernat/"
 weight = 3
+
+[[params.social]]
+icon = "fa fa-python fa-2x"
+name = "PyPI"
+url = "https://pypi.org/user/gaborbernat/"
+weight = 4
+
+[[params.social]]
+icon = "fa fa-linkedin fa-2x"
+name = "LindkedIn"
+url = "https://www.linkedin.com/in/gaborbernat/"
+weight = 5
+
+[[params.social]]
+icon = "fa fa-envelope fa-2x"
+name = "GMail"
+url = "mailto:gaborjbernat@gmail.com"
+weight = 6
+
+[[params.social]]
+icon = "fa fa-instagram fa-2x"
+name = "Instagram"
+url = "https://instagram.com/gabor_bernat"
+weight = 7
 
 [taxonomies]
 author = "authors"
@@ -51,6 +81,11 @@ weight = 1
 name = "About"
 url = "about"
 weight = 2
+
+[[menu.main]]
+name = "Presentations"
+url = "presentations"
+weight = 3
 
 [markup]
 
