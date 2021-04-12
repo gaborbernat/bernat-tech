@@ -1,4 +1,4 @@
-baseURL = "https://gaborbernat.github.io/bernat-tech"
+baseURL = "https://bernat.tech"
 defaultcontentlanguage = "en"
 disablePathToLower = true
 languagecode = "en"
