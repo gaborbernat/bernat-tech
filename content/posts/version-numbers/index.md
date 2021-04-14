@@ -13,14 +13,14 @@ encourages software engineers to abstract code into a separate component and reu
 again. If this happens across the system, the best practice is to put it inside a package that lives on its own (a
 library) and then pull it in from the applications when required.
 
-As most of us can't think of every feature that the library might offer, or what bugs it might contain, these packages
+As most of us can't think of every feature that the library might offer or what bugs it might contain, these packages
 tend to evolve. Therefore, we need some mechanism to encode these evolutions of the library, and most commonly, this is
 a version number.
 
 Version numbers and their meaning will come up both as a producer or as a consumer of libraries:
 
 - as a producer of libraries, you'll have to decide what versioning system to use,
-- as a consumer, you'll have to express with what versions of a given library your application/library is compatible.
+- as a consumer, you'll have to express what versions of a given library your application/library is compatible.
 
 What is a great version number, you might ask? If you do a quick search around, you'll find there are
 [multiple schools of thought here](https://en.wikipedia.org/wiki/Software_versioning):
@@ -45,13 +45,13 @@ on the type of change you make to the library, you increment one of these and se
 - `PATCH` version if you fix bugs.
 
 Version two of semantic versioning introduced additional labels to indicate pre-releases and build metadata; these are
-appended after a hyphen at the end, for example `1.0.0-beta+exp.sha.5114f8`. For the point of this blog post, these are
+appended after a hyphen at the end, for example, `1.0.0-beta+exp.sha.5114f8`. For the point of this blog post, these are
 not important. ZeroVer (a joke versioning system - released on April 1st) is similar to this with the sole difference
-that `MAJOR` is always `0` and incompatible changes may be introduced at any point. Intended to make fun of people who
+that `MAJOR` is always `0` and incompatible changes may be introduced at any point. It intended to make fun of people who
 use "semantic versioning" but never make a `1.0` release, thus defeating the purpose of semver.
 
 The version number in this context is used as a contract between the library developer and the systems pulling it in
-about how freely they can upgrade. For example, if you wrote your.webp server against
+about how freely they can upgrade. For example, if you wrote your web server against
 [Django 3](https://pypi.org/project/Django/#history), you should be good to go with all Django 3 releases that are at
 least as new as your current one. This allows you to express your Django dependency in the format of
 `Django >= 3.0.2, <4`.
@@ -60,7 +60,7 @@ By using this format whenever you rebuild your application, you'll automatically
 releases of `Django`, enabling you to use the latest and best version that is still guaranteed to work with your
 project. This is great because:
 
-- you enable automatic, compatibile security fixes,
+- you enable automatic, compatible security fixes,
 - it automatically pulls in bug fixes on the library side,
 - your application will keep building and working in the future as it did today because the significant version pin
   protects you from pulling in versions whose API would not match.
@@ -88,20 +88,20 @@ Most libraries have just a few active maintainers available, for example:
 - pip around 4,
 - python-dateutil 1.
 
-And these are very high profile libraries. To make things even worse, some of their maintainers overlap (i.e. the same
+And these are very high-profile libraries. To make things even worse, some of their maintainers overlap (i.e., the same
 person is the maintainer of multiple projects). And to complicate matters even further, for most maintainers this is not
 a full-time job, but something on the side, part of their free time.
 
-Given the scarce human resources to maintain a library, in practice there's a single supported version for any library
+Given the scarce human resources to maintain a library, in practice, there's a single supported version for any library
 at any given point in time: **the latest one**. Any version before that (be that major, minor, patch) is in essence
 abandoned:
 
-- if you want security updates you need to move to the latest version,
+- if you want security updates, you need to move to the latest version,
 - if you wish to a bugfix you need to move to the newest version,
 - if you want a new feature, it is only going to be available in the latest version.
 
 You get the idea. Unless you're thrilled with your current version, to pull in any change you will need to move to the
-last released version (be that security improvement, bugfix or feature). Otherwise, you'll not get it.
+last released version (be that security improvement, bugfix, or feature). Otherwise, you'll not get it.
 
 {{< figure src="silky_wind.webp" width="700px">}}
 
@@ -115,7 +115,7 @@ A major version bump **must** happen not only when you rewrite an entire library
 you're just renaming a single rarely used function (which some may erroneously view as a minor change). Or even worse,
 it's not always clear what's part of the public API and what's not.
 
-You have a library with some incidental, undocumented and unspecified behavior that you consider to be obviously not
+You have a library with some incidental, undocumented, and unspecified behavior that you consider to be obviously not
 part of the public interface. You change it to solve what seems like a bug to you, and make a patch release, only to
 find that you have angry hordes at the gate who, thanks to [Hyrum's Law](https://www.hyrumslaw.com/), depend on the old
 behavior.
@@ -145,15 +145,15 @@ another aspect version pinning will introduce: version conflicts.
 
 An application or library will have a set of libraries it depends on directly. These are libraries you're directly
 importing within the application/library you're maintaining, but then the libraries themselves may rely on other
-libraries. This is known as transitive dependency. Very soon, you'll get to a point where two different components use
+libraries. This is known as a transitive dependency. Very soon, you'll get to a point where two different components use
 the same library, and both of them might express version constraints on it.
 
-For example consider the case of [tenacity](https://pypi.org/project/tenacity/#history): a general-purpose retrying
+For example, consider the case of [tenacity](https://pypi.org/project/tenacity/#history): a general-purpose retrying
 library. Imagine you were using this in your application, and being a religious follower of semantic versioning, you've
 pinned it to the version that was out when you created the app in early 2018: 4.11. The constraint would specify version
 4.11 or later, but less than the next major version 5.
 
-At the same time you also connect to a HTTP service. This connection is handled by another library, and the maintainer
+At the same time, you also connect to an HTTP service. This connection is handled by another library, and the maintainer
 of that decided to also use tenacity to offer automatic retry functionality. They pinned it similarly following the
 semantic versioning convention. Back in 2018, this caused no issues. But then August comes, and version 5.0 is released.
 
@@ -276,3 +276,5 @@ I want to thank [Anthony Sottile](https://twitter.com/codewithanthony), [Paul Ga
 article in its draft versions and suggesting changes that made it a thousand times better.
 
 {{< figure src="silky_run_happy.webp" width="700px">}}
+
+scruffydog2
