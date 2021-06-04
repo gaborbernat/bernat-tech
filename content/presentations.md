@@ -5,6 +5,8 @@ slug = "presentations"
 
 I'm a regular speaker at conferences. Here you'll find (some) of my recorded talks.
 
+{{< table_of_contents >}}
+
 ## Type hinting (and mypy) - PyCon US 2019 - [slides](https://gaborbernat.github.io/pycon-us-2019/#/) {#type-hinting-and-mypy-us-19}
 
 {{< youtube hTrjTAPnA_k >}}
