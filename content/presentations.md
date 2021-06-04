@@ -9,6 +9,14 @@ I'm a regular speaker at conferences. Here you'll find (some) of my recorded tal
 
 {{< youtube hTrjTAPnA_k >}}
 
+## Python packaging demystified - tutorial - PyCon US 2021 - [slides](https://gaborbernat.github.io/packaging-tutorial-pycon-us-21/#/) {#py-packaging-us-21}
+
+{{< youtube ApDThpsr2Fw >}}
+
+## tox 4 - lightning talk - PyCon US 2021 - [slides](https://gaborbernat.github.io/pycon-us-21-lighting/#/) {#tox-4-us-21}
+
+{{< youtube 5zEn3Jta2Dg >}}
+
 ## status quo of virtual environments - EuroPython 2019 - [slides](https://gaborbernat.github.io/euro_python_2019/#/) {#status-quo-of-virtual-environments-eu-19}
 
 {{< youtube o1Vue9CWRxU >}}
