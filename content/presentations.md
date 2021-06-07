@@ -23,6 +23,10 @@ I'm a regular speaker at conferences. Here you'll find (some) of my recorded tal
 
 {{< youtube o1Vue9CWRxU >}}
 
+## Virtualenv - A Deep Dive - PyCharm Webinar 2021
+
+{{< youtube O9_MJHDkej8 >}}
+
 ## Standardize Testing in Python - EuroPython 2018 - [slides](https://gaborbernat.github.io/pycon-eu-2018/#/) {#standardize-testing-eu-19}
 
 {{< youtube SFqna5ilqig >}}
