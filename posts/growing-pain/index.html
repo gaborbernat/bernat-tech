@@ -111,12 +111,11 @@ February 7, 2019
 </div>
 </header>
 <div>
-<p>In my previous two posts, I&rsquo;ve gone over
-<a href=https://www.bernat.tech/pep-517-and-python-packaging/>what package types python has</a>, and
-<a href=https://www.bernat.tech/pep-517-518/>how the package building works</a>, especially with the introduction of the
-PEP-517/518. Although the changes were primarily to make things more robust, we did run into a few issues while
-implementing it and releasing it. This post will go over a few, hopefully serving as lessons learned for all of us and
-presenting some interesting problems to solve in the future.</p>
+<p>In my previous two posts, I&rsquo;ve gone over <a href=https://bernat.tech/posts/pep-517-and-python-packaging/>what package types python has</a>,
+and <a href=https://bernat.tech/posts/pep-517-518/>how the package building works</a>, especially with the introduction of the PEP-517/518.
+Although the changes were primarily to make things more robust, we did run into a few issues while implementing it and
+releasing it. This post will go over a few, hopefully serving as lessons learned for all of us and presenting some
+interesting problems to solve in the future.</p>
 <p>Looking at the changes of PEP-517 and PEP-518, one can identify those build backends (aka setuptools, flit) had very
 little to do, only also to expose their functionality via a Python module. Most heavy work is on the build frontend,
 which now needs to generate the isolated Python and then invoke the build backends in a new way. When we&rsquo;re talking
