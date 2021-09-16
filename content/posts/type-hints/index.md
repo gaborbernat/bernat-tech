@@ -416,8 +416,8 @@ The upside of this is that:
   hints, nor can you add conflict with other linter tools.
 - It is a well-tested design; the [`typeshed`](https://github.com/python/typeshed) project uses it to type hint the
   entire standard library, plus some other popular libraries such as `requests`, `yaml`, `dateutil` and
-  [so on](https://github.com/python/typeshed/tree/master/third_party). It can provide type information for source code
-  that you do not own or cannot change easily.
+  [so on](https://github.com/python/typeshed/tree/master/stubs/). It can provide type information for source code that
+  you do not own or cannot change easily.
   </div>
 
 Now there are also some hefty penalties to pay:

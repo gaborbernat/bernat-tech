@@ -12,8 +12,8 @@ title = "Python packaging - Past, Present, Future"
 Have you ever wondered what happens exactly when you run pip install? This post will give you a detailed overview of the
 steps involved in the past, and how it all changes with the adoption of PEP-517 and PEP-518.
 
-[In my previous post](https://www.bernat.tech/pep-517-and-python-packaging/) I've described how it's possible to install
-three types of content: source tree, source distribution, and wheels. Only the last two types are uploaded to PyPI, the
+[In my previous post]({{< ref "pep-517-and-python-packaging" >}}) I've described how it's possible to install three
+types of content: source tree, source distribution, and wheels. Only the last two types are uploaded to PyPI, the
 central Python repository. However, one could get its hands on a source tree (by feeding, for example, a git protocol
 for pip). The advantage of wheels over the others is that it does not require any build operation to happen on the user
 machine; it's just downloading and extract.
@@ -221,8 +221,8 @@ The Python Packaging Authority hopes that all this makes sense and will have mor
 builds. The specifications for these standards were written up and debated in long threads between 2015 and 2017. The
 proposals were deemed good enough to benefit the most, but some less mainstream use cases could have been overlooked.
 
-If your use case is such, don't worry the PEPs are open to enhancement at any point if we deem required.
-[In my next post of this series here](https://www.bernat.tech/growing-pain/) I'll go over some of the pain points the
-community bumped into while releasing these two PEPs. These should serve as lessons learned and show that there's still
-some work to be done. It's not everything perfect yet. However, we're getting better. Join the packaging community if
-you can help out, and let's make things better together!
+If your use case is such, don't worry the PEPs are open to enhancement at any point if we deem required. [In my next
+post of this series here]({{< ref "growing-pain" >}}) I'll go over some of the pain points the community bumped into
+while releasing these two PEPs. These should serve as lessons learned and show that there's still some work to be done.
+It's not everything perfect yet. However, we're getting better. Join the packaging community if you can help out, and
+let's make things better together!
