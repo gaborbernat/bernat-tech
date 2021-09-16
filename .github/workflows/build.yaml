@@ -5,8 +5,8 @@ on:
       - main
 
 jobs:
-  deploy:
-    runs-on: ubuntu-18.04
+  build_and_deploy:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
@@ -15,7 +15,7 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: "0.78.2"
+          hugo-version: "0.88.1"
           extended: true
       - name: Build
         run: hugo --minify
