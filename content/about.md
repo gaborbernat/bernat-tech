@@ -20,12 +20,20 @@ primary author of the following Python open-source projects:
   [![PyPI - Downloads](https://img.shields.io/pypi/dm/virtualenv?style=flat-square)](https://pypistats.org/packages/virtualenv)
 - [_tox_](https://github.com/tox-dev/tox) -
   [![PyPI - Downloads](https://img.shields.io/pypi/dm/tox?style=flat-square)](https://pypistats.org/packages/tox)
+- [_filelock_](https://github.com/tox-dev/py-filelock) -
+  [![PyPI - Downloads](https://img.shields.io/pypi/dm/filelock?style=flat-square)](https://pypistats.org/packages/filelock)
+- [_platformdirs_](https://github.com/platformdirs/platformdirs) -
+  [![PyPI - Downloads](https://img.shields.io/pypi/dm/platformdirs?style=flat-square)](https://pypistats.org/packages/platformdirs)
 - [_pytest-print_](https://github.com/pytest-dev/pytest-print) -
   [![PyPI - Downloads](https://img.shields.io/pypi/dm/pytest-print?style=flat-square) ](https://pypistats.org/packages/pytest-print)
 - [_sphinx-argparse-cli_](https://github.com/gaborbernat/sphinx-argparse-cli) -
   [![PyPI - Downloads](https://img.shields.io/pypi/dm/sphinx-argparse-cli?style=flat-square) ](https://pypistats.org/packages/sphinx-argparse-cli)
+- [_tox-gh_](https://github.com/tox-dev/tox-gh) -
+  [![PyPI - Downloads](https://img.shields.io/pypi/dm/tox-gh?style=flat-square) ](https://pypistats.org/packages/tox-gh)
 - [_tox-ini-fmt_](https://github.com/tox-dev/tox-ini-fmt) -
   [![PyPI - Downloads](https://img.shields.io/pypi/dm/tox-ini-fmt?style=flat-square) ](https://pypistats.org/packages/tox-ini-fmt)
+- [_devpi-process_](https://github.com//devpi-process) -
+  [![PyPI - Downloads](https://img.shields.io/pypi/dm/devpi-process?style=flat-square) ](https://pypistats.org/packages/devpi-process)
 
 I'm a co-maintainer (and occasional contributor) for the following projects:
 
@@ -35,6 +43,8 @@ I'm a co-maintainer (and occasional contributor) for the following projects:
   [![PyPI - Downloads](https://img.shields.io/pypi/dm/pipx?style=flat-square) ](https://pypistats.org/packages/pipx)
 - [tox-conda](https://github.com/tox-dev/tox-conda) -
   [![PyPI - Downloads](https://img.shields.io/pypi/dm/tox-conda?style=flat-square) ](https://pypistats.org/packages/tox-conda)
+- [ipydatagrid](https://github.com/bloomberg/ipydatagrid) -
+  [![PyPI - Downloads](https://img.shields.io/pypi/dm/ipydatagrid?style=flat-square) ](https://pypistats.org/packages/ipydatagrid)
 - [attrs-strict](https://github.com/bloomberg/attrs-strict) -
   [![PyPI - Downloads](https://img.shields.io/pypi/dm/attrs-strict?style=flat-square) ](https://pypistats.org/packages/attrs-strict)
 - [retype](https://github.com/ambv/retype) -
