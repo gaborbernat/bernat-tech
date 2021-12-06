@@ -37,6 +37,10 @@ ones in bold I am the primary author):
   [![PyPI](https://img.shields.io/pypi/v/build?style=flat-square)](https://pypi.org/project/build)
   ![GitHub last commit](https://img.shields.io/github/last-commit/pypa/build?logo=python&style=flat-square)
   [![PyPI - Downloads](https://img.shields.io/pypi/dm/build?style=flat-square)](https://pypistats.org/packages/build)
+- [flit](https://github.com/pypa/flit) --
+  [![PyPI](https://img.shields.io/pypi/v/flit?style=flat-square)](https://pypi.org/project/flit)
+  ![GitHub last commit](https://img.shields.io/github/last-commit/pypa/flit?logo=python&style=flat-square)
+  [![PyPI - Downloads](https://img.shields.io/pypi/dm/flit?style=flat-square)](https://pypistats.org/packages/flit)
 - [pipx](https://github.com/pipxproject/pipx) --
   [![PyPI](https://img.shields.io/pypi/v/pipx?style=flat-square)](https://pypi.org/project/pipx)
   ![GitHub last commit](https://img.shields.io/github/last-commit/pipxproject/pipx?logo=python&style=flat-square)
