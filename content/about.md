@@ -73,6 +73,10 @@ ones in bold I am the primary author):
    [![PyPI](https://img.shields.io/pypi/v/tox-ini-fmt?style=flat-square)](https://pypi.org/project/tox-ini-fmt)
    ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/tox-ini-fmt?logo=python&style=flat-square)
    [![PyPI - Downloads](https://img.shields.io/pypi/dm/tox-ini-fmt?style=flat-square)](https://pypistats.org/packages/tox-ini-fmt)
+1. [**pypi-changes**](https://github.com/gaborbernat/pypi_changes) --
+   [![PyPI](https://img.shields.io/pypi/v/pypi-changes?style=flat-square)](https://pypi.org/project/pypi-changes)
+   ![GitHub last commit](https://img.shields.io/github/last-commit/gaborbernat/pypi_changes?logo=python&style=flat-square)
+   [![PyPI - Downloads](https://img.shields.io/pypi/dm/pypi-changes?style=flat-square)](https://pypistats.org/packages/pypi-changes)
 1. [**devpi-process**](https://github.com/tox-dev/devpi-process) --
    [![PyPI](https://img.shields.io/pypi/v/devpi-process?style=flat-square)](https://pypi.org/project/devpi-process)
    ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/devpi-process?logo=python&style=flat-square)
