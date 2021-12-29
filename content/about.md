@@ -41,9 +41,9 @@ ones in bold I am the primary author):
    [![PyPI](https://img.shields.io/pypi/v/flit?style=flat-square)](https://pypi.org/project/flit)
    ![GitHub last commit](https://img.shields.io/github/last-commit/pypa/flit?logo=python&style=flat-square)
    [![PyPI - Downloads](https://img.shields.io/pypi/dm/flit?style=flat-square)](https://pypistats.org/packages/flit)
-1. [pipx](https://github.com/pipxproject/pipx) --
+1. [pipx](https://github.com/pypa/pipx) --
    [![PyPI](https://img.shields.io/pypi/v/pipx?style=flat-square)](https://pypi.org/project/pipx)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/pipxproject/pipx?logo=python&style=flat-square)
+   ![GitHub last commit](https://img.shields.io/github/last-commit/pypa/pipx?logo=python&style=flat-square)
    [![PyPI - Downloads](https://img.shields.io/pypi/dm/pipx?style=flat-square)](https://pypistats.org/packages/pipx)
 1. [**pytest-print**](https://github.com/pytest-dev/pytest-print) --
    [![PyPI](https://img.shields.io/pypi/v/pytest-print?style=flat-square)](https://pypi.org/project/pytest-print)
@@ -57,9 +57,9 @@ ones in bold I am the primary author):
    [![PyPI](https://img.shields.io/pypi/v/attrs-strict?style=flat-square)](https://pypi.org/project/attrs-strict)
    ![GitHub last commit](https://img.shields.io/github/last-commit/bloomberg/attrs-strict?logo=python&style=flat-square)
    [![PyPI - Downloads](https://img.shields.io/pypi/dm/attrs-strict?style=flat-square)](https://pypistats.org/packages/attrs-strict)
-1. [**sphinx-argparse-cli**](https://github.com/gaborbernat/sphinx-argparse-cli) --
+1. [**sphinx-argparse-cli**](https://github.com/tox-dev/sphinx-argparse-cli) --
    [![PyPI](https://img.shields.io/pypi/v/sphinx-argparse-cli?style=flat-square)](https://pypi.org/project/sphinx-argparse-cli)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/gaborbernat/sphinx-argparse-cli?logo=python&style=flat-square)
+   ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/sphinx-argparse-cli?logo=python&style=flat-square)
    [![PyPI - Downloads](https://img.shields.io/pypi/dm/sphinx-argparse-cli?style=flat-square)](https://pypistats.org/packages/sphinx-argparse-cli)
 1. [retype](https://github.com/ambv/retype) --
    [![PyPI](https://img.shields.io/pypi/v/retype?style=flat-square)](https://pypi.org/project/retype)
@@ -73,9 +73,9 @@ ones in bold I am the primary author):
    [![PyPI](https://img.shields.io/pypi/v/tox-ini-fmt?style=flat-square)](https://pypi.org/project/tox-ini-fmt)
    ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/tox-ini-fmt?logo=python&style=flat-square)
    [![PyPI - Downloads](https://img.shields.io/pypi/dm/tox-ini-fmt?style=flat-square)](https://pypistats.org/packages/tox-ini-fmt)
-1. [**devpi-process**](https://github.com/gaborbernat/devpi-process) --
+1. [**devpi-process**](https://github.com/tox-dev/devpi-process) --
    [![PyPI](https://img.shields.io/pypi/v/devpi-process?style=flat-square)](https://pypi.org/project/devpi-process)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/gaborbernat/devpi-process?logo=python&style=flat-square)
+   ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/devpi-process?logo=python&style=flat-square)
    [![PyPI - Downloads](https://img.shields.io/pypi/dm/devpi-process?style=flat-square)](https://pypistats.org/packages/devpi-process)
 
 You can find my Curriculum Vitae (or résumé) on the following link
