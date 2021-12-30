@@ -65,6 +65,10 @@ ones in bold I am the primary author):
    [![PyPI](https://img.shields.io/pypi/v/retype?style=flat-square)](https://pypi.org/project/retype)
    ![GitHub last commit](https://img.shields.io/github/last-commit/ambv/retype?logo=python&style=flat-square)
    [![PyPI - Downloads](https://img.shields.io/pypi/dm/retype?style=flat-square)](https://pypistats.org/packages/retype)
+1. [**pyproject-api**](https://github.com/tox-dev/pyproject-api) --
+   [![PyPI](https://img.shields.io/pypi/v/pyproject-api?style=flat-square)](https://pypi.org/project/pyproject-api)
+   ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/pyproject-api?logo=python&style=flat-square)
+   [![PyPI - Downloads](https://img.shields.io/pypi/dm/pyproject-api?style=flat-square)](https://pypistats.org/packages/pyproject-api)
 1. [ipydatagrid](https://github.com/bloomberg/ipydatagrid) --
    [![PyPI](https://img.shields.io/pypi/v/ipydatagrid?style=flat-square)](https://pypi.org/project/ipydatagrid)
    ![GitHub last commit](https://img.shields.io/github/last-commit/bloomberg/ipydatagrid?logo=python&style=flat-square)
