@@ -41,6 +41,10 @@ ones in bold I am the primary author):
    [![PyPI](https://img.shields.io/pypi/v/flit?style=flat-square)](https://pypi.org/project/flit)
    ![GitHub last commit](https://img.shields.io/github/last-commit/pypa/flit?logo=python&style=flat-square)
    [![PyPI - Downloads](https://img.shields.io/pypi/dm/flit?style=flat-square)](https://pypistats.org/packages/flit)
+1. [**sphinx-autodoc-typehints**](https://github.com/tox-dev/sphinx-autodoc-typehints) --
+   [![PyPI](https://img.shields.io/pypi/v/sphinx-autodoc-typehints?style=flat-square)](https://pypi.org/project/sphinx-autodoc-typehints)
+   ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/sphinx-autodoc-typehints?logo=python&style=flat-square)
+   [![PyPI - Downloads](https://img.shields.io/pypi/dm/sphinx-autodoc-typehints?style=flat-square)](https://pypistats.org/packages/sphinx-autodoc-typehints)
 1. [pipx](https://github.com/pypa/pipx) --
    [![PyPI](https://img.shields.io/pypi/v/pipx?style=flat-square)](https://pypi.org/project/pipx)
    ![GitHub last commit](https://img.shields.io/github/last-commit/pypa/pipx?logo=python&style=flat-square)
