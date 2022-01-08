@@ -89,6 +89,10 @@ ones in bold I am the primary author):
    [![PyPI](https://img.shields.io/pypi/v/devpi-process?style=flat-square)](https://pypi.org/project/devpi-process)
    ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/devpi-process?logo=python&style=flat-square)
    [![PyPI - Downloads](https://img.shields.io/pypi/dm/devpi-process?style=flat-square)](https://pypistats.org/packages/devpi-process)
+1. [**tox-gh**](https://github.com/tox-dev/tox-gh) --
+   [![PyPI](https://img.shields.io/pypi/v/tox-gh?style=flat-square)](https://pypi.org/project/tox-gh)
+   ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/tox-gh?logo=python&style=flat-square)
+   [![PyPI - Downloads](https://img.shields.io/pypi/dm/tox-gh?style=flat-square)](https://pypistats.org/packages/tox-gh)
 
 You can find my Curriculum Vitae (or résumé) on the following link
 [![View PDF](https://img.shields.io/badge/View%20as%20PDF-latest%20CV-blue?style=flat-square&logo=docusign)](https://gaborbernat.github.io/cv/main.pdf).
