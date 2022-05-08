@@ -475,7 +475,7 @@ to get the idea of it. There are two types of type categories: nominal types and
 ### 1. Nominal type
 
 Nominal types are types that have a name to it within the Python interpreter. For example all builtin types (`int`,
-`bolean`, `float`, `type`, `object` etc). Then we have the generic types which mostly manifest in form of the
+`boolean`, `float`, `type`, `object` etc). Then we have the generic types which mostly manifest in form of the
 containers:
 
 ```python
