@@ -19,7 +19,7 @@ avatarurl = "img/avatar.jpg"
 dateFormat = "2006-01-01"
 colorScheme = "auto"
 hidecolorschemetoggle = false
-customCSS = []
+customCSS = ["css/custom.css", "css/syntax.css"]
 favicon_16 = "img/android-chrome-192x192.png"
 favicon_32 = "img/android-chrome-192x192.png"
 touchIcon = "img/android-chrome-192x192.png"
@@ -92,3 +92,17 @@ weight = 3
 
 [languages.en]
 languageName = ":uk:"
+
+[markup]
+
+[markup.highlight]
+anchorLineNos = true
+codeFences = true
+guessSyntax = false
+lineAnchors = "c"
+lineNoStart = 1
+lineNos = false
+lineNumbersInTable = true
+noClasses = false
+style = "monokai"
+tabWidth = 4

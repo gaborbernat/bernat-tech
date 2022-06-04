@@ -2,14 +2,12 @@
   <!-- prettier-ignore -->
   <section class="container">
 
-    {{ .Site.Params.author }} senior software engineer. Opinions are my own.
-    
-    <br />
-    © 2018-{{now.Year }}
+    <b>Opinions are my own</b> - {{ .Site.Params.author }} software engineer.
     {{ $date := .Page.Lastmod }} {{ if .GitInfo }} {{ $date = .GitInfo.AuthorDate }} {{ end }}
-    updated on&nbsp;{{- $date.Format "2006-01-02" -}}
+    Updated&nbsp;{{- $date.Format "2006-01-02" -}}
     {{ if .GitInfo }}
       via <a href="https://github.com/gaborbernat/bernat-tech/commit/{{ .GitInfo.Hash }}">{{ .GitInfo.AbbreviatedHash }}</a>
-    {{end}}
+    {{end}}.
+    © 2018-{{now.Year }}
   </section>
 </footer>
