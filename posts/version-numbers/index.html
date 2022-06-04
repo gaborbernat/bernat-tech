@@ -7,7 +7,7 @@
 <meta name=author content="Bernát Gábor">
 <meta name=description content="The DRY principle (an acronym for don&rsquo;t repeat yourself) encourages software engineers to abstract code into a separate component and reuse it rather than write it over and over again. If this happens across the system, the best practice is to put it inside a package that lives on its own (a library) and then pull it in from the applications when required.
 As most of us can&rsquo;t think of every feature that the library might offer or what bugs it might contain, these packages tend to evolve.">
-<meta name=keywords content="blog,developer,personal">
+<meta name=keywords content="blog,developer,personal,python,packaging">
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Version numbers: how to use them?">
 <meta name=twitter:description content="The DRY principle (an acronym for don&rsquo;t repeat yourself) encourages software engineers to abstract code into a separate component and reuse it rather than write it over and over again. If this happens across the system, the best practice is to put it inside a package that lives on its own (a library) and then pull it in from the applications when required.
@@ -18,15 +18,16 @@ As most of us can&rsquo;t think of every feature that the library might offer or
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bernat.tech/posts/version-numbers/"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2020-05-16T14:15:00+00:00">
-<meta property="article:modified_time" content="2020-05-16T14:15:00+00:00">
+<meta property="article:modified_time" content="2022-06-04T10:36:09+01:00">
 <title>
 Version numbers: how to use them? · Tech articles by Bernát Gábor
 </title>
 <link rel=canonical href=https://bernat.tech/posts/version-numbers/>
 <link rel=preload href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as=font type=font/woff2 crossorigin>
-<link rel=stylesheet href=/css/coder.min.c99932527e4ee59cd8aeb0f42c7aa4dd03a68a027a5cd24af1da34f9e9867fab.css integrity="sha256-yZkyUn5O5ZzYrrD0LHqk3QOmigJ6XNJK8do0+emGf6s=" crossorigin=anonymous media=screen>
-<link rel=stylesheet href=/css/coder-dark.min.876b132a2ef3947e5bdc3c8dbeda49fc71bd5a4abbd4ddfbc92e8112aebfebe3.css integrity="sha256-h2sTKi7zlH5b3DyNvtpJ/HG9Wkq71N37yS6BEq6/6+M=" crossorigin=anonymous media=screen>
-<link rel=stylesheet href=/css/custom.css>
+<link rel=stylesheet href=/css/coder.min.d9fddbffe6f27e69985dc5fe0471cdb0e57fbf4775714bc3d847accb08f4a1f6.css integrity="sha256-2f3b/+byfmmYXcX+BHHNsOV/v0d1cUvD2Eesywj0ofY=" crossorigin=anonymous media=screen>
+<link rel=stylesheet href=/css/coder-dark.min.ccbbada2e264e4fdbf9b2181cccc2cdb289a63dc9520a1e96ac2b9a45778df29.css integrity="sha256-zLutouJk5P2/myGBzMws2yiaY9yVIKHpasK5pFd43yk=" crossorigin=anonymous media=screen>
+<link rel=stylesheet href=/css/custom.min.f7398f7e762c65f287212667fc7da1d124e4d6c933bc8e3feb855810d29bad77.css integrity="sha256-9zmPfnYsZfKHISZn/H2h0STk1skzvI4/64VYENKbrXc=" crossorigin=anonymous media=screen>
+<link rel=stylesheet href=/css/syntax.min.8438de2e9d4a264688284c8f07c5d03c0384e1a346c23c6684a3af0531cb85bb.css integrity="sha256-hDjeLp1KJkaIKEyPB8XQPAOE4aNGwjxmhKOvBTHLhbs=" crossorigin=anonymous media=screen>
 <link rel=icon type=image/png href=/img/android-chrome-192x192.png sizes=32x32>
 <link rel=icon type=image/png href=/img/android-chrome-192x192.png sizes=16x16>
 <link rel=apple-touch-icon href=/img/android-chrome-192x192.png>
@@ -78,7 +79,7 @@ Version numbers: how to use them?
 <span class=posted-on>
 <i class="fa fa-calendar" aria-hidden=true></i>
 <time datetime=2020-05-16T14:15:00Z>
-May 16, 2020
+2020-05-05
 </time>
 </span>
 <span class=reading-time>
@@ -150,8 +151,8 @@ on the type of change you make to the library, you increment one of these and se
 <p>Version two of semantic versioning introduced additional labels to indicate pre-releases and build metadata; these are
 appended after a hyphen at the end, for example, <code>1.0.0-beta+exp.sha.5114f8</code>. For the point of this blog post, these are
 not important. ZeroVer (a joke versioning system - released on April 1st) is similar to this with the sole difference
-that <code>MAJOR</code> is always <code>0</code> and incompatible changes may be introduced at any point. It intended to make fun of people who
-use &ldquo;semantic versioning&rdquo; but never make a <code>1.0</code> release, thus defeating the purpose of semver.</p>
+that <code>MAJOR</code> is always <code>0</code> and incompatible changes may be introduced at any point. It intended to make fun of people
+who use &ldquo;semantic versioning&rdquo; but never make a <code>1.0</code> release, thus defeating the purpose of semver.</p>
 <p>The version number in this context is used as a contract between the library developer and the systems pulling it in
 about how freely they can upgrade. For example, if you wrote your web server against
 <a href=https://pypi.org/project/Django/#history>Django 3</a>, you should be good to go with all Django 3 releases that are at
@@ -365,7 +366,6 @@ versions with exact pins (this is the fundamental difference between
 article in its draft versions and suggesting changes that made it a thousand times better.</p>
 <figure><img src=silky_run_happy.webp width=700px>
 </figure>
-<p>scruffydog2</p>
 </div>
 <footer>
 </footer>
@@ -374,10 +374,15 @@ article in its draft versions and suggesting changes that made it a thousand tim
 </div>
 <footer class=footer>
 <section class=container>
-<p>Software engineer <a href=https://github.com/bloomberg> at Bloomberg (London)</a>. Maintainer of <a href=https://github.com/gaborbernat/> many FOSS Python packages</a>. Opinions are my own.</p>
+<b>Opinions are my own</b> - Bernát Gábor software engineer.
+Updated&nbsp;2022-06-04
+via <a href=https://github.com/gaborbernat/bernat-tech/commit/2e9fcee9c5cf0e56b573ded4c891e4ac4339f5af>2e9fcee</a>
+.
+© 2018-2022
 </section>
 </footer>
 </main>
 <script src=/js/coder.min.03b17769f4f91ae35667e1f2a1ca8c16f50562576cf90ff32b3179926914daa5.js integrity="sha256-A7F3afT5GuNWZ+HyocqMFvUFYlds+Q/zKzF5kmkU2qU="></script>
+<script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "3ead932f454449a799915b1721c18874"}'></script>
 </body>
 </html>
