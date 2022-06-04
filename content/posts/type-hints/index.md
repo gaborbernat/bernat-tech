@@ -1,6 +1,6 @@
 +++
 author = "Bernat Gabor"
-title = "the state of type hints in Python"
+title = "The state of type hints in Python"
 description = "How to use typing in Python via mypy"
 tags = ["mypy", "python", "types", "type-hint"]
 draft = false
