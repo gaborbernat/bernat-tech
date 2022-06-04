@@ -11,6 +11,10 @@ I'm a regular speaker at conferences. Here you'll find (some) of my recorded tal
 
 {{< youtube hTrjTAPnA_k >}}
 
+## How we standardized editable installs PEP 660 vs PEP 662 - PyCon US 2022 - [slides](https://gaborbernat.github.io/pep-660-662-2022/#/) {#editables-us-19}
+
+{{< youtube Z_-PuPwN6ZI >}}
+
 ## Python packaging demystified - tutorial - PyCon US 2021 - [slides](https://gaborbernat.github.io/packaging-tutorial-pycon-us-21/#/) {#py-packaging-us-21}
 
 {{< youtube ApDThpsr2Fw >}}
