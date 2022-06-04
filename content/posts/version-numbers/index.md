@@ -47,8 +47,8 @@ on the type of change you make to the library, you increment one of these and se
 Version two of semantic versioning introduced additional labels to indicate pre-releases and build metadata; these are
 appended after a hyphen at the end, for example, `1.0.0-beta+exp.sha.5114f8`. For the point of this blog post, these are
 not important. ZeroVer (a joke versioning system - released on April 1st) is similar to this with the sole difference
-that `MAJOR` is always `0` and incompatible changes may be introduced at any point. It intended to make fun of people who
-use "semantic versioning" but never make a `1.0` release, thus defeating the purpose of semver.
+that `MAJOR` is always `0` and incompatible changes may be introduced at any point. It intended to make fun of people
+who use "semantic versioning" but never make a `1.0` release, thus defeating the purpose of semver.
 
 The version number in this context is used as a contract between the library developer and the systems pulling it in
 about how freely they can upgrade. For example, if you wrote your web server against
@@ -276,5 +276,3 @@ I want to thank [Anthony Sottile](https://twitter.com/codewithanthony), [Paul Ga
 article in its draft versions and suggesting changes that made it a thousand times better.
 
 {{< figure src="silky_run_happy.webp" width="700px">}}
-
-scruffydog2

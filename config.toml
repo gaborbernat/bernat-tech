@@ -1,30 +1,31 @@
 baseURL = "https://bernat.tech"
-defaultcontentlanguage = "en"
-disablePathToLower = true
-languagecode = "en"
-paginate = 20
-theme = "hugo-coder"
 title = "Tech articles by Bernát Gábor"
+theme = "hugo-coder"
+languageCode = "en"
+defaultContentLanguage = "en"
+paginate = 20
+pygmentsStyle = "bw"
+pygmentsCodeFences = true
+pygmentsCodeFencesGuessSyntax = true
+enableEmoji = true
+enableGitInfo = true
 
 [params]
 author = "Bernát Gábor"
-avatarurl = "img/avatar.jpg"
-colorScheme = "auto"
-customCSS = []
-customSCSS = []
-customJS = []
 description = "Bernát Gábor's personal website"
-enableTwemoji = false
+keywords = "blog,developer,personal,python,packaging"
+info = ["Python open-source", "Bloomberg", "software engineer"]
+avatarurl = "img/avatar.jpg"
+dateFormat = "2006-01-01"
+colorScheme = "auto"
+hidecolorschemetoggle = false
+customCSS = []
 favicon_16 = "img/android-chrome-192x192.png"
 favicon_32 = "img/android-chrome-192x192.png"
-footercontent = "Software engineer <a href='https://github.com/bloomberg'> at Bloomberg (London)</a>. Maintainer of <a href='https://github.com/gaborbernat/'> many FOSS Python packages</a>. Opinions are my own."
-hideCopyright = true
-hideCredits = true
-hidecolorschemetoggle = false
-info = "Python open-source developer"
-keywords = "blog,developer,personal"
-since = 2018
 touchIcon = "img/android-chrome-192x192.png"
+
+[params.cloudflare]
+token = "3ead932f454449a799915b1721c18874"
 
 [[params.social]]
 icon = "fa fa-github fa-2x"
@@ -89,16 +90,5 @@ name = "Presentations"
 url = "presentations"
 weight = 3
 
-[markup]
-
-[markup.highlight]
-anchorLineNos = true
-codeFences = true
-guessSyntax = false
-lineAnchors = "c"
-lineNoStart = 1
-lineNos = false
-lineNumbersInTable = true
-noClasses = false
-style = "monokai"
-tabWidth = 4
+[languages.en]
+languageName = ":uk:"
