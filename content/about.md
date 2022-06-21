@@ -3,7 +3,7 @@ title = "About bernat.tech"
 slug = "about"
 +++
 
-# Hi I'm Bernát Gábor (from 🇭🇺+🇷🇴), living in 🇬🇧
+# Hi I'm Bernát Gábor (from 🇭🇺+🇷🇴+🇬🇧), living in 🇺🇸
 
 [![Github Sponsor](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&link=https://github.com/sponsors/gaborbernat&style=flat-square)](https://github.com/sponsors/gaborbernat)
 [![Twitch Status](https://img.shields.io/twitch/status/gaborbernat?style=flat-square)](https://www.twitch.tv/gaborbernat)
@@ -13,9 +13,9 @@ slug = "about"
 [![MAIL Badge](https://img.shields.io/badge/-gaborjbernat@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:gaborjbernat@gmail.com)](mailto:gaborjbernat@gmail.com)
 [![Instagram Badge](https://img.shields.io/badge/-@gabor__bernat-845EC2?style=flat-square&labelColor=white&logo=Instagram&link=https://instagram.com/gabor_bernat/)](https://instagram.com/gabor_bernat)
 
-I work at [Bloomberg London](https://www.techatbloomberg.com/) on the data ingestion pipeline. I am the maintainer of
-the following [Python](https://www.python.org/) [open-source](https://en.wikipedia.org/wiki/Open_source) projects (the
-ones in bold I am the primary author):
+I work at [Bloomberg US - Los Angeles](https://www.techatbloomberg.com/) on the data ingestion pipeline. I am the
+maintainer of the following [Python](https://www.python.org/) [open-source](https://en.wikipedia.org/wiki/Open_source)
+projects (the ones in bold I am the primary author):
 
 1. [**filelock**](https://github.com/tox-dev/py-filelock) --
    [![PyPI](https://img.shields.io/pypi/v/filelock?style=flat-square)](https://pypi.org/project/filelock)
