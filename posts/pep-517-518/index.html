@@ -1,337 +1,135 @@
-<!doctype html><html lang=en>
-<head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta http-equiv=content-language content="en">
-<meta name=color-scheme content="light dark">
-<meta name=author content="Bernát Gábor">
-<meta name=description content="Have you ever wondered what happens exactly when you run pip install? This post will give you a detailed overview of the steps involved in the past, and how it all changes with the adoption of PEP-517 and PEP-518.
-In my previous post I&rsquo;ve described how it&rsquo;s possible to install three types of content: source tree, source distribution, and wheels. Only the last two types are uploaded to PyPI, the central Python repository.">
-<meta name=keywords content="blog,developer,personal,python,packaging">
-<meta name=twitter:card content="summary">
-<meta name=twitter:title content="Python packaging - Past, Present, Future">
-<meta name=twitter:description content="Have you ever wondered what happens exactly when you run pip install? This post will give you a detailed overview of the steps involved in the past, and how it all changes with the adoption of PEP-517 and PEP-518.
-In my previous post I&rsquo;ve described how it&rsquo;s possible to install three types of content: source tree, source distribution, and wheels. Only the last two types are uploaded to PyPI, the central Python repository.">
-<meta property="og:title" content="Python packaging - Past, Present, Future">
-<meta property="og:description" content="Have you ever wondered what happens exactly when you run pip install? This post will give you a detailed overview of the steps involved in the past, and how it all changes with the adoption of PEP-517 and PEP-518.
-In my previous post I&rsquo;ve described how it&rsquo;s possible to install three types of content: source tree, source distribution, and wheels. Only the last two types are uploaded to PyPI, the central Python repository.">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://bernat.tech/posts/pep-517-518/"><meta property="article:section" content="posts">
-<meta property="article:published_time" content="2019-02-07T13:40:59+00:00">
-<meta property="article:modified_time" content="2021-09-16T10:56:56+01:00">
-<title>
-Python packaging - Past, Present, Future · Tech articles by Bernát Gábor
-</title>
-<link rel=canonical href=https://bernat.tech/posts/pep-517-518/>
-<link rel=preload href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as=font type=font/woff2 crossorigin>
-<link rel=stylesheet href=/css/coder.min.d9fddbffe6f27e69985dc5fe0471cdb0e57fbf4775714bc3d847accb08f4a1f6.css integrity="sha256-2f3b/+byfmmYXcX+BHHNsOV/v0d1cUvD2Eesywj0ofY=" crossorigin=anonymous media=screen>
-<link rel=stylesheet href=/css/coder-dark.min.ccbbada2e264e4fdbf9b2181cccc2cdb289a63dc9520a1e96ac2b9a45778df29.css integrity="sha256-zLutouJk5P2/myGBzMws2yiaY9yVIKHpasK5pFd43yk=" crossorigin=anonymous media=screen>
-<link rel=stylesheet href=/css/custom.min.6082c0515eae1732c35248ff50ce1f958fdc3f006b8c7abc91c15ce78b2e0fe4.css integrity="sha256-YILAUV6uFzLDUkj/UM4flY/cPwBrjHq8kcFc54suD+Q=" crossorigin=anonymous media=screen>
-<link rel=stylesheet href=/css/syntax.min.5ef6ece76ad413dd701da34ae4be6e9509707d3a12eb90066e18abb1c9f96dd3.css integrity="sha256-Xvbs52rUE91wHaNK5L5ulQlwfToS65AGbhirscn5bdM=" crossorigin=anonymous media=screen>
-<link rel=icon type=image/png href=/img/android-chrome-192x192.png sizes=32x32>
-<link rel=icon type=image/png href=/img/android-chrome-192x192.png sizes=16x16>
-<link rel=apple-touch-icon href=/img/android-chrome-192x192.png>
-<link rel=apple-touch-icon sizes=180x180 href=/img/android-chrome-192x192.png>
-<meta name=generator content="Hugo 0.91.2">
-</head>
-<body class="preload-transitions colorscheme-auto">
-<div class=float-container>
-<a id=dark-mode-toggle class=colorscheme-toggle>
-<i class="fa fa-adjust fa-fw" aria-hidden=true></i>
-</a>
-</div>
-<main class=wrapper>
-<nav class=navigation>
-<section class=container>
-<a class=navigation-title href=/>
-Tech articles by Bernát Gábor
-</a>
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Bernát Gábor"><meta name=description content="Have you ever wondered what happens exactly when you run pip install? This post will give you a detailed overview of the steps involved in the past, and how it all changes with the adoption of PEP-517 and PEP-518.
+In my previous post I&rsquo;ve described how it&rsquo;s possible to install three types of content: source tree, source distribution, and wheels. Only the last two types are uploaded to PyPI, the central Python repository."><meta name=keywords content="blog,developer,personal,python,packaging"><meta name=twitter:card content="summary"><meta name=twitter:title content="Python packaging - Past, Present, Future"><meta name=twitter:description content="Have you ever wondered what happens exactly when you run pip install? This post will give you a detailed overview of the steps involved in the past, and how it all changes with the adoption of PEP-517 and PEP-518.
+In my previous post I&rsquo;ve described how it&rsquo;s possible to install three types of content: source tree, source distribution, and wheels. Only the last two types are uploaded to PyPI, the central Python repository."><meta property="og:title" content="Python packaging - Past, Present, Future"><meta property="og:description" content="Have you ever wondered what happens exactly when you run pip install? This post will give you a detailed overview of the steps involved in the past, and how it all changes with the adoption of PEP-517 and PEP-518.
+In my previous post I&rsquo;ve described how it&rsquo;s possible to install three types of content: source tree, source distribution, and wheels. Only the last two types are uploaded to PyPI, the central Python repository."><meta property="og:type" content="article"><meta property="og:url" content="https://bernat.tech/posts/pep-517-518/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2019-02-07T13:40:59+00:00"><meta property="article:modified_time" content="2021-09-16T10:56:56+01:00"><title>Tech articles by Bernát Gábor</title><link rel=canonical href=https://bernat.tech/posts/pep-517-518/><link rel=preload href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.6b1a4fbc48955b72aea7913e43fabeb45e8bc120da5aa41b598dd33adcac4b59.css integrity="sha256-axpPvEiVW3Kup5E+Q/q+tF6LwSDaWqQbWY3TOtysS1k=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.39e41a7f16bdf8cb16e43cae7d714fa1016f1d2d2898a5b3f27f42c9979204e2.css integrity="sha256-OeQafxa9+MsW5DyufXFPoQFvHS0omKWz8n9CyZeSBOI=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/custom.min.6082c0515eae1732c35248ff50ce1f958fdc3f006b8c7abc91c15ce78b2e0fe4.css integrity="sha256-YILAUV6uFzLDUkj/UM4flY/cPwBrjHq8kcFc54suD+Q=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/syntax.min.5ef6ece76ad413dd701da34ae4be6e9509707d3a12eb90066e18abb1c9f96dd3.css integrity="sha256-Xvbs52rUE91wHaNK5L5ulQlwfToS65AGbhirscn5bdM=" crossorigin=anonymous media=screen><link rel=icon type=image/png href=/img/android-chrome-192x192.png sizes=32x32><link rel=icon type=image/png href=/img/android-chrome-192x192.png sizes=16x16><link rel=apple-touch-icon href=/img/android-chrome-192x192.png><link rel=apple-touch-icon sizes=180x180 href=/img/android-chrome-192x192.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5><meta name=generator content="Hugo 0.101.0"></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><a class=navigation-title href=/>Tech articles by Bernát Gábor</a>
 <input type=checkbox id=menu-toggle>
-<label class="menu-button float-right" for=menu-toggle>
-<i class="fa fa-bars fa-fw" aria-hidden=true></i>
-</label>
-<ul class=navigation-list>
-<li class=navigation-item>
-<a class=navigation-link href=/posts>Blog</a>
-</li>
-<li class=navigation-item>
-<a class=navigation-link href=/about>About</a>
-</li>
-<li class=navigation-item>
-<a class=navigation-link href=/presentations>Presentations</a>
-</li>
-</ul>
-</section>
-</nav>
-<div class=content>
-<section class="container post">
-<article>
-<header>
-<div class=post-title>
-<h1 class=title>
-<a class=title-link href=https://bernat.tech/posts/pep-517-518/>
-Python packaging - Past, Present, Future
-</a>
-</h1>
-</div>
-<div class=post-meta>
-<div class=date>
-<span class=posted-on>
-<i class="fa fa-calendar" aria-hidden=true></i>
-<time datetime=2019-02-07T13:40:59Z>
-2019-02-02
-</time>
-</span>
-<span class=reading-time>
-<i class="fa fa-clock-o" aria-hidden=true></i>
-9-minute read
-</span>
-</div>
-<div class=tags>
-<i class="fa fa-tag" aria-hidden=true></i>
-<span class=tag>
-<a href=/tags/python/>python</a>
-</span>
+<label class="menu-button float-right" for=menu-toggle><i class="fa fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/posts>Blog</a></li><li class=navigation-item><a class=navigation-link href=/about>About</a></li><li class=navigation-item><a class=navigation-link href=/presentations>Presentations</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://bernat.tech/posts/pep-517-518/>Python packaging - Past, Present, Future</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa fa-calendar" aria-hidden=true></i>
+<time datetime=2019-02-07T13:40:59Z>2019-02-02</time></span>
+<span class=reading-time><i class="fa fa-clock-o" aria-hidden=true></i>
+9-minute read</span></div><div class=tags><i class="fa fa-tag" aria-hidden=true></i>
+<span class=tag><a href=/tags/python/>python</a></span>
 <span class=separator>•</span>
-<span class=tag>
-<a href=/tags/pip/>pip</a>
-</span>
+<span class=tag><a href=/tags/pip/>pip</a></span>
 <span class=separator>•</span>
-<span class=tag>
-<a href=/tags/install/>install</a>
-</span>
+<span class=tag><a href=/tags/install/>install</a></span>
 <span class=separator>•</span>
-<span class=tag>
-<a href=/tags/packaging/>packaging</a>
-</span>
+<span class=tag><a href=/tags/packaging/>packaging</a></span>
 <span class=separator>•</span>
-<span class=tag>
-<a href=/tags/setuptools/>setuptools</a>
-</span>
+<span class=tag><a href=/tags/setuptools/>setuptools</a></span>
 <span class=separator>•</span>
-<span class=tag>
-<a href=/tags/pep517/>pep517</a>
-</span>
+<span class=tag><a href=/tags/pep517/>pep517</a></span>
 <span class=separator>•</span>
-<span class=tag>
-<a href=/tags/pep518/>pep518</a>
-</span></div>
-</div>
-</header>
-<div>
-<p>Have you ever wondered what happens exactly when you run pip install? This post will give you a detailed overview of the
-steps involved in the past, and how it all changes with the adoption of PEP-517 and PEP-518.</p>
-<p><a href=https://bernat.tech/posts/pep-517-and-python-packaging/>In my previous post</a> I&rsquo;ve described how it&rsquo;s possible to install three
+<span class=tag><a href=/tags/pep518/>pep518</a></span></div></div></header><div><p>Have you ever wondered what happens exactly when you run pip install? This post will give you a detailed overview of the
+steps involved in the past, and how it all changes with the adoption of PEP-517 and PEP-518.</p><p><a href=https://bernat.tech/posts/pep-517-and-python-packaging/>In my previous post</a> I&rsquo;ve described how it&rsquo;s possible to install three
 types of content: source tree, source distribution, and wheels. Only the last two types are uploaded to PyPI, the
 central Python repository. However, one could get its hands on a source tree (by feeding, for example, a git protocol
 for pip). The advantage of wheels over the others is that it does not require any build operation to happen on the user
-machine; it&rsquo;s just downloading and extract.</p>
-<h2 id=building-python-packages>
-Building python packages
-<a class=heading-link href=#building-python-packages>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h2>
-<p>Now independent of where the build happens (user or the developer machine), you still need to build the package (either
+machine; it&rsquo;s just downloading and extract.</p><h2 id=building-python-packages>Building python packages
+<a class=heading-link href=#building-python-packages><i class="fa fa-link" aria-hidden=true></i></a></h2><p>Now independent of where the build happens (user or the developer machine), you still need to build the package (either
 the sdist or wheel). To do this, you need some builders in place. Historically, the need for third-party packages
 manifested itself early on. Following the principle that Python has batteries included in the year 2000 with Python 1.6,
 the <a href=https://packaging.python.org/key_projects/#distutils>distutils</a> package was added to the Python standard library.
-It introduced the concept of the <code>setup.py</code> file containing the build logic and is triggered via <code>python setup.py cmd</code>.</p>
-<p>It allowed users to package code as libraries but did not have features such as declaration and automatic installation
+It introduced the concept of the <code>setup.py</code> file containing the build logic and is triggered via <code>python setup.py cmd</code>.</p><p>It allowed users to package code as libraries but did not have features such as declaration and automatic installation
 of dependencies. Furthermore, its improvement lifecycle was directly tied to the core interpreter release cycle. In 2004
 <code>setuptools</code> was created, built on top of <code>distutils</code>, and extended with other excellent features. It quickly became so
-prevalent that most python installations started to provide it together with the core interpreter itself.</p>
-<p>Back in those days, all packages were source distributions. Wheel distributions came along a lot later, in 2014.
+prevalent that most python installations started to provide it together with the core interpreter itself.</p><p>Back in those days, all packages were source distributions. Wheel distributions came along a lot later, in 2014.
 <em>distutils</em> was created back when only a few highly proficient people did the packaging. It is very flexible and
-imperative; you write a python script to modify every step in the package generation process.</p>
-<p>The downside of this, though, is that it&rsquo;s anything but easy to learn and understand. This started to become more and
+imperative; you write a python script to modify every step in the package generation process.</p><p>The downside of this, though, is that it&rsquo;s anything but easy to learn and understand. This started to become more and
 more an issue as Python grew in popularity and we had more and more users who were less proficient in the inner workings
-of Python.</p>
-<figure><img src=smart_pug.webp>
-</figure>
-<h3 id=build-requirements>
-build requirements
-<a class=heading-link href=#build-requirements>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h3>
-<p>For installing a source distribution pip mostly <strong>did</strong> the following:</p>
-<ol>
-<li>discover the package</li>
-<li>download the source distribution and extract it</li>
-<li>run <code>python setup.py install</code> on the extracted folder (does a build + install).</li>
-</ol>
-<p>Developers did <code>python setup.py sdist</code> to generate the distribution and <code>python setup.py upload</code> to upload it to a
+of Python.</p><figure><img src=smart_pug.webp></figure><h3 id=build-requirements>build requirements
+<a class=heading-link href=#build-requirements><i class="fa fa-link" aria-hidden=true></i></a></h3><p>For installing a source distribution pip mostly <strong>did</strong> the following:</p><ol><li>discover the package</li><li>download the source distribution and extract it</li><li>run <code>python setup.py install</code> on the extracted folder (does a build + install).</li></ol><p>Developers did <code>python setup.py sdist</code> to generate the distribution and <code>python setup.py upload</code> to upload it to a
 central repository (the upload command has been deprecated with 2013 in favor of the
 <a href=https://pypi.org/project/twine/>twine</a> tool most notably due to the upload using a non-secure HTTP connection, and
 upload command also did a fresh build, not allowing the end-user to inspect the generated package before the actual
-upload).</p>
-<p>When pip ran the <code>python setup.py install</code>, it did so with the python interpreter for which it was installing the
+upload).</p><p>When pip ran the <code>python setup.py install</code>, it did so with the python interpreter for which it was installing the
 package. As such the build operation had access to all third-party packages already available inside that interpreter.
 Most notably, it used exactly the <em>setuptools</em> version that was installed on the host python interpreter. If a package
 used a <em>setuptools</em> feature available on a newer release than currently installed, the only way one could complete the
-installation was to update first the installed <em>setuptools.</em></p>
-<p>This potentially can cause problems if a new release contained a bug that broke other packages. It is especially
+installation was to update first the installed <em>setuptools.</em></p><p>This potentially can cause problems if a new release contained a bug that broke other packages. It is especially
 troublesome on systems where the users can&rsquo;t alter installed packages. Then there was also the problem of what happens
-when the builder (e.g., setuptools) wants to use other helper packages, such as cython.</p>
-<p>If any of these helpers were missing the build usually just broke with a failed to import package error:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-Python data-lang=Python>      <span class=n>File</span> <span class=s2>&#34;setup_build.py&#34;</span><span class=p>,</span> <span class=n>line</span> <span class=mi>99</span><span class=p>,</span> <span class=ow>in</span> <span class=n>run</span>
-        <span class=kn>from</span> <span class=nn>Cython.Build</span> <span class=kn>import</span> <span class=n>cythonize</span>
-    <span class=ne>ImportError</span><span class=p>:</span> <span class=n>No</span> <span class=n>module</span> <span class=n>named</span> <span class=n>Cython</span><span class=o>.</span><span class=n>Build</span>
-</code></pre></div><p>There was no way to provide such build dependencies from the developers' side. It also meant that users needed to
+when the builder (e.g., setuptools) wants to use other helper packages, such as cython.</p><p>If any of these helpers were missing the build usually just broke with a failed to import package error:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-Python data-lang=Python><span class=line><span class=cl>      <span class=n>File</span> <span class=s2>&#34;setup_build.py&#34;</span><span class=p>,</span> <span class=n>line</span> <span class=mi>99</span><span class=p>,</span> <span class=ow>in</span> <span class=n>run</span>
+</span></span><span class=line><span class=cl>        <span class=kn>from</span> <span class=nn>Cython.Build</span> <span class=kn>import</span> <span class=n>cythonize</span>
+</span></span><span class=line><span class=cl>    <span class=ne>ImportError</span><span class=p>:</span> <span class=n>No</span> <span class=n>module</span> <span class=n>named</span> <span class=n>Cython</span><span class=o>.</span><span class=n>Build</span>
+</span></span></code></pre></div><p>There was no way to provide such build dependencies from the developers&rsquo; side. It also meant that users needed to
 install all packaging build dependencies even if they did not want to use that at runtime. To solve this issue
-<a href=https://www.python.org/dev/peps/pep-0518/>PEP-518</a> was created.</p>
-<p>The idea is that instead of using the host python with its currently installed packages for the build, the package
+<a href=https://www.python.org/dev/peps/pep-0518/>PEP-518</a> was created.</p><p>The idea is that instead of using the host python with its currently installed packages for the build, the package
 provides the ability to be explicit about what they need for their build operation. Instead of making this available on
-the host python, we create an isolated python (think of a virtual environment) to run the packaging command.</p>
-<p><code>python setup.py install</code> now becomes:</p>
-<ol>
-<li>create a temporary folder</li>
-<li>create an isolated (from the third-party <code>site-packages</code>) python environment <code>python -m virtualenv our_build_env</code>,
-let&rsquo;s refer to this python executable as <code>python_isolated</code></li>
-<li>install the build dependencies</li>
-<li>generate a wheel we can install via <code>python_isolated setup.py bdist_wheel</code></li>
-<li>extract wheel to site packages of <code>python</code>.</li>
-</ol>
-<p>With this we can install packages that depend on <code>cython</code> without actually installing <code>cython</code> inside the runtime python
-environment. The file and method of specifying the build dependencies is the <code>pyproject.toml</code> metadata file:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-toml data-lang=toml><span class=p>[</span><span class=nx>build-system</span><span class=p>]</span>
-<span class=nx>requires</span> <span class=p>=</span> <span class=p>[</span>
-  <span class=s2>&#34;setuptools&gt;=44&#34;</span><span class=p>,</span>
-  <span class=s2>&#34;wheel&gt;=0.30.0&#34;</span><span class=p>,</span>
-  <span class=s2>&#34;cython&gt;=0.29.4&#34;</span><span class=p>,</span>
-<span class=p>]</span>
-</code></pre></div><p>Furthermore, this also allows for whoever does the packaging to be explicit about what minimum versions they require for
-the packaging and these can be quickly provisioned via pip transparently on the user machines.</p>
-<p>The same mechanism can also be used when generating the source distribution or the wheel on the developers' machine.
+the host python, we create an isolated python (think of a virtual environment) to run the packaging command.</p><p><code>python setup.py install</code> now becomes:</p><ol><li>create a temporary folder</li><li>create an isolated (from the third-party <code>site-packages</code>) python environment <code>python -m virtualenv our_build_env</code>,
+let&rsquo;s refer to this python executable as <code>python_isolated</code></li><li>install the build dependencies</li><li>generate a wheel we can install via <code>python_isolated setup.py bdist_wheel</code></li><li>extract wheel to site packages of <code>python</code>.</li></ol><p>With this we can install packages that depend on <code>cython</code> without actually installing <code>cython</code> inside the runtime python
+environment. The file and method of specifying the build dependencies is the <code>pyproject.toml</code> metadata file:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-toml data-lang=toml><span class=line><span class=cl><span class=p>[</span><span class=nx>build-system</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=nx>requires</span> <span class=p>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;setuptools&gt;=44&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;wheel&gt;=0.30.0&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;cython&gt;=0.29.4&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl><span class=p>]</span>
+</span></span></code></pre></div><p>Furthermore, this also allows for whoever does the packaging to be explicit about what minimum versions they require for
+the packaging and these can be quickly provisioned via pip transparently on the user machines.</p><p>The same mechanism can also be used when generating the source distribution or the wheel on the developers&rsquo; machine.
 When one invokes the <code>pip wheel . --no-deps</code> command that will automatically create in the background an isolated python
 that satisfies the build systems dependencies, and then call inside that environment the <code>python setup.py bdist_wheel</code>
-or <code>python setup.py sdist</code> command.</p>
-<figure><img src=jump_pug.webp>
-</figure>
-<h3 id=packaging-tool-diversity>
-packaging tool diversity
-<a class=heading-link href=#packaging-tool-diversity>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h3>
-<p>Now there&rsquo;s one more problem here, though. Note all these operations still go through the mechanism introduced twenty
+or <code>python setup.py sdist</code> command.</p><figure><img src=jump_pug.webp></figure><h3 id=packaging-tool-diversity>packaging tool diversity
+<a class=heading-link href=#packaging-tool-diversity><i class="fa fa-link" aria-hidden=true></i></a></h3><p>Now there&rsquo;s one more problem here, though. Note all these operations still go through the mechanism introduced twenty
 years ago, aka executing <code>setup.py</code>. The whole ecosystem still builds on the top of the <em>distutils</em> and <em>setuptools</em>
-interface that cannot change much due to trying to preserving backward compatibility.</p>
-<p>Also, executing arbitrary user-side Python code during packaging though is dangerous, leading to subtle errors hard to
+interface that cannot change much due to trying to preserving backward compatibility.</p><p>Also, executing arbitrary user-side Python code during packaging though is dangerous, leading to subtle errors hard to
 debug by less experienced users. Imperative build systems were great for flexibility twenty years ago when we were not
 aware of all the use cases. Still, now that we have a good understanding, we can probably make very robust and easy
-package builders for various use cases.</p>
-<p>To quote <a href=https://twitter.com/pganssle>Paul Ganssle</a> (maintainer of <code>setuptools</code>and <code>dateutil</code> on this):</p>
-<blockquote>
-<p>Ideally, the default option would be a declarative build configuration that works well for the 99% case, with an
+package builders for various use cases.</p><p>To quote <a href=https://twitter.com/pganssle>Paul Ganssle</a> (maintainer of <code>setuptools</code>and <code>dateutil</code> on this):</p><blockquote><p>Ideally, the default option would be a declarative build configuration that works well for the 99% case, with an
 option to fall back to an imperative system when you need the flexibility. At this point, it&rsquo;s feasible for us to move
-to a world where it&rsquo;s considered a code smell if you find you need to reach for the imperative build options.</p>
-</blockquote>
-<blockquote>
-<p>The biggest problem with <code>setup.py</code> is that most people use it declaratively, and when they use it imperatively, they
+to a world where it&rsquo;s considered a code smell if you find you need to reach for the imperative build options.</p></blockquote><blockquote><p>The biggest problem with <code>setup.py</code> is that most people use it declaratively, and when they use it imperatively, they
 tend to introduce bugs into the build system. One example of this: if you have a Python 2.7-only dependency, you may
 be tempted to specify it conditionally with <code>sys.version</code> in your <code>setup.py</code>, but <code>sys.version</code> only refers to the
 interpreter that <em>executed</em> the build; instead, you should be using the declarative environment markers for your
-install requirements.</p>
-</blockquote>
-<p><a href=https://pypi.org/project/flit/>flit</a> proved this assumption correct already with its introduction in 2015. It has
+install requirements.</p></blockquote><p><a href=https://pypi.org/project/flit/>flit</a> proved this assumption correct already with its introduction in 2015. It has
 become the favorite packaging tool for many newcomers to Python, making sure new users avoid many foot guns. However, to
 get to this point, <code>flit</code> had to again build on top of <em>distutils</em>/<em>setuptools,</em> which makes its implementation
 non-trivial, and the codebase quite a few shim layers (it still generates the <code>setup.py</code> file, for example, for its
-source distributions).</p>
-<p>It&rsquo;s time to free it from these shackles and encourage other people to build their packaging tools that make packaging
+source distributions).</p><p>It&rsquo;s time to free it from these shackles and encourage other people to build their packaging tools that make packaging
 easy for their use cases, making <code>setup.py</code> the exception rather than the default.
 <a href=https://github.com/pypa/setuptools/pull/1675><code>setuptools</code> plans to offer a <code>setup.cfg</code></a> the only user interface to
 lead the way, and when a PEP-517 system is in place, you should prefer that overusing the <code>setup.py</code> for most cases. To
 not tie everything back to <code>setuptools</code> and <code>distutils</code> and facilitate the creation of new-build backends
 <a href=https://www.python.org/dev/peps/pep-0517/>PEP-517</a> was created. It separates builders into a backend and frontend. The
 frontend provides an isolated python environment satisfying all the declared build dependencies; the backend provides
-hooks that the frontend can call from its isolated environment to generate either a source distribution or wheel.</p>
-<p>Furthermore, instead of talking with the backend via the <code>setup.py</code> file and its commands, we move to python modules and
+hooks that the frontend can call from its isolated environment to generate either a source distribution or wheel.</p><p>Furthermore, instead of talking with the backend via the <code>setup.py</code> file and its commands, we move to python modules and
 functions. All packaging backends must provide a python object API that implements two methods
 <a href=https://www.python.org/dev/peps/pep-0517/#build-wheel>build_wheel</a> and
 <a href=https://www.python.org/dev/peps/pep-0517/#id9>build_sdist</a> at the minimum. The API object point is specified via the
-<code>pyproject.toml</code> file under the <code>build-backend</code> key:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-toml data-lang=toml><span class=p>[</span><span class=nx>build-system</span><span class=p>]</span>
-<span class=nx>requires</span> <span class=p>=</span> <span class=p>[</span><span class=s2>&#34;flit&#34;</span><span class=p>]</span>
-<span class=nx>build-backend</span> <span class=p>=</span> <span class=s2>&#34;flit.api:main&#34;</span>
-</code></pre></div><p>The above code effectively means for the frontend that you can get hold of the backend by running the above code inside
-the isolated python environment:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=kn>import</span> <span class=nn>flit.api</span>
-<span class=n>backend</span> <span class=o>=</span> <span class=n>flit</span><span class=o>.</span><span class=n>api</span><span class=o>.</span><span class=n>main</span>
-
-<span class=c1># build wheel via</span>
-<span class=n>backend</span><span class=o>.</span><span class=n>build_wheel</span><span class=p>()</span>
-
-<span class=c1># build source distribution via</span>
-<span class=n>backend</span><span class=o>.</span><span class=n>build_sdist</span><span class=p>()</span>
-</code></pre></div><p>It&rsquo;s up to the backend where and how they want to expose their official API:</p>
-<ol>
-<li><a href=https://flit.readthedocs.io/en/latest/>flit</a> does it via <code>flit.buildapi</code></li>
-<li><a href=https://setuptools.readthedocs.io/en/latest/history.html#v40-8-0>setuptools</a> provides two variants:
-<code>setuptools.build_meta</code> (on why read on later)</li>
-<li><a href=https://poetry.eustace.io/docs/pyproject/#poetry-and-pep-517>poetry</a> does it via <code>poetry.masonry.api</code></li>
-</ol>
-<p>With this, we can start having packaging tools that are no longer bound to the legacy decisions of the <code>distutils</code> in
-the frontend.</p>
-<figure><img src=curious_pug.webp>
-</figure>
-<h1 id=tox-and-packaging>
-tox and packaging
-<a class=heading-link href=#tox-and-packaging>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h1>
-<p><a href=https://tox.readthedocs.io/en/latest/>tox is testing tool</a> and used by most projects to ensure compatibility against
+<code>pyproject.toml</code> file under the <code>build-backend</code> key:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-toml data-lang=toml><span class=line><span class=cl><span class=p>[</span><span class=nx>build-system</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=nx>requires</span> <span class=p>=</span> <span class=p>[</span><span class=s2>&#34;flit&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=nx>build-backend</span> <span class=p>=</span> <span class=s2>&#34;flit.api:main&#34;</span>
+</span></span></code></pre></div><p>The above code effectively means for the frontend that you can get hold of the backend by running the above code inside
+the isolated python environment:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>flit.api</span>
+</span></span><span class=line><span class=cl><span class=n>backend</span> <span class=o>=</span> <span class=n>flit</span><span class=o>.</span><span class=n>api</span><span class=o>.</span><span class=n>main</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># build wheel via</span>
+</span></span><span class=line><span class=cl><span class=n>backend</span><span class=o>.</span><span class=n>build_wheel</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># build source distribution via</span>
+</span></span><span class=line><span class=cl><span class=n>backend</span><span class=o>.</span><span class=n>build_sdist</span><span class=p>()</span>
+</span></span></code></pre></div><p>It&rsquo;s up to the backend where and how they want to expose their official API:</p><ol><li><a href=https://flit.readthedocs.io/en/latest/>flit</a> does it via <code>flit.buildapi</code></li><li><a href=https://setuptools.readthedocs.io/en/latest/history.html#v40-8-0>setuptools</a> provides two variants:
+<code>setuptools.build_meta</code> (on why read on later)</li><li><a href=https://poetry.eustace.io/docs/pyproject/#poetry-and-pep-517>poetry</a> does it via <code>poetry.masonry.api</code></li></ol><p>With this, we can start having packaging tools that are no longer bound to the legacy decisions of the <code>distutils</code> in
+the frontend.</p><figure><img src=curious_pug.webp></figure><h1 id=tox-and-packaging>tox and packaging
+<a class=heading-link href=#tox-and-packaging><i class="fa fa-link" aria-hidden=true></i></a></h1><p><a href=https://tox.readthedocs.io/en/latest/>tox is testing tool</a> and used by most projects to ensure compatibility against
 multiple Python interpreter versions of a given package. It also allows the quick creation of Python environments with
-the package under inspection installed in it, making reproducing failures faster.</p>
-<p>To be able to test a package, it first needs to build a source distribution, though. While both PEP-518 and PEP-517
+the package under inspection installed in it, making reproducing failures faster.</p><p>To be able to test a package, it first needs to build a source distribution, though. While both PEP-518 and PEP-517
 should make things better, turning them on can break packaging under some use cases. Therefore when
 <a href=https://tox.readthedocs.io/en/latest/><code>tox</code></a> added isolated build in version
 <a href=https://tox.readthedocs.io/en/latest/><code>3.3.0</code></a> decided not to enable it by default, for now. You need to enable it
-manually (it will be turned on by default in version <code>4</code> sometime later this year - 2021).</p>
-<p>Once you&rsquo;ve specified a <code>pyproject.toml</code> with appropriate <code>requires</code> and <code>build-backend</code>, you need to turn on the
-<code>isolated_build</code> flag inside <code>tox.ini</code>:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-ini data-lang=ini><span class=k>[tox]</span>
-<span class=na>isolated_build</span> <span class=o>=</span> <span class=s>True</span>
-</code></pre></div><p>After this, tox in the <a href=https://tox.readthedocs.io/en/latest/#system-overview>packaging phase</a> will build the source
+manually (it will be turned on by default in version <code>4</code> sometime later this year - 2021).</p><p>Once you&rsquo;ve specified a <code>pyproject.toml</code> with appropriate <code>requires</code> and <code>build-backend</code>, you need to turn on the
+<code>isolated_build</code> flag inside <code>tox.ini</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-ini data-lang=ini><span class=line><span class=cl><span class=k>[tox]</span>
+</span></span><span class=line><span class=cl><span class=na>isolated_build</span> <span class=o>=</span> <span class=s>True</span>
+</span></span></code></pre></div><p>After this, tox in the <a href=https://tox.readthedocs.io/en/latest/#system-overview>packaging phase</a> will build the source
 distribution (by providing the build dependencies into an isolated python environment as per PEP-518). Afterward will
 call the build backend as stated in PEP-517. Otherwise, tox will use the old way of building source distributions,
-invoking the <code>python setup.py sdist</code> command with the same interpreter tox is installed into.</p>
-<figure><img src=moody_pug.webp>
-</figure>
-<h2 id=conclusion>
-Conclusion
-<a class=heading-link href=#conclusion>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h2>
-<p>The Python Packaging Authority hopes that all this makes sense and will have more user-friendly, error-proof and stable
+invoking the <code>python setup.py sdist</code> command with the same interpreter tox is installed into.</p><figure><img src=moody_pug.webp></figure><h2 id=conclusion>Conclusion
+<a class=heading-link href=#conclusion><i class="fa fa-link" aria-hidden=true></i></a></h2><p>The Python Packaging Authority hopes that all this makes sense and will have more user-friendly, error-proof and stable
 builds. The specifications for these standards were written up and debated in long threads between 2015 and 2017. The
-proposals were deemed good enough to benefit the most, but some less mainstream use cases could have been overlooked.</p>
-<p>If your use case is such, don&rsquo;t worry the PEPs are open to enhancement at any point if we deem required. <a href=https://bernat.tech/posts/growing-pain/>In my next
+proposals were deemed good enough to benefit the most, but some less mainstream use cases could have been overlooked.</p><p>If your use case is such, don&rsquo;t worry the PEPs are open to enhancement at any point if we deem required. <a href=https://bernat.tech/posts/growing-pain/>In my next
 post of this series here</a> I&rsquo;ll go over some of the pain points the community bumped into
 while releasing these two PEPs. These should serve as lessons learned and show that there&rsquo;s still some work to be done.
 It&rsquo;s not everything perfect yet. However, we&rsquo;re getting better. Join the packaging community if you can help out, and
-let&rsquo;s make things better together!</p>
-</div>
-<footer>
-</footer>
-</article>
-</section>
-</div>
-<footer class=footer>
-<section class=container>
-<b>Opinions are my own</b> - Bernát Gábor software engineer.
+let&rsquo;s make things better together!</p></div><footer></footer></article></section></div><footer class=footer><section class=container><b>Opinions are my own</b> - Bernát Gábor software engineer.
 Updated&nbsp;2021-09-16
 via <a href=https://github.com/gaborbernat/bernat-tech/commit/fe09f9d3440d485b2adbef4e5fca35ece2f89806>fe09f9d</a>
 .
-© 2018-2022
-</section>
-</footer>
-</main>
-<script src=/js/coder.min.03b17769f4f91ae35667e1f2a1ca8c16f50562576cf90ff32b3179926914daa5.js integrity="sha256-A7F3afT5GuNWZ+HyocqMFvUFYlds+Q/zKzF5kmkU2qU="></script>
-<script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "3ead932f454449a799915b1721c18874"}'></script>
-</body>
-</html>
+© 2018-2022</section></footer></main><script src=/js/coder.min.236049395dc3682fb2719640872958e12f1f24067bb09c327b233e6290c7edac.js integrity="sha256-I2BJOV3DaC+ycZZAhylY4S8fJAZ7sJwyeyM+YpDH7aw="></script>
+<script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "3ead932f454449a799915b1721c18874"}'></script></body></html>
