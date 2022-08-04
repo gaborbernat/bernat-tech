@@ -3,7 +3,7 @@ title = "About bernat.tech"
 slug = "about"
 +++
 
-# Hi I'm Bernát Gábor (from 🇭🇺+🇷🇴+🇬🇧), living in Los Angeles 🇺🇸
+# Bernát Gábor (from 🇭🇺🇷🇴🇬🇧), living in Los Angeles 🇺🇸
 
 [![Github Sponsor](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&link=https://github.com/sponsors/gaborbernat&style=flat-square)](https://github.com/sponsors/gaborbernat)
 [![Twitch Status](https://img.shields.io/twitch/status/gaborbernat?style=flat-square)](https://www.twitch.tv/gaborbernat)
@@ -13,8 +13,8 @@ slug = "about"
 [![MAIL Badge](https://img.shields.io/badge/-gaborjbernat@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:gaborjbernat@gmail.com)](mailto:gaborjbernat@gmail.com)
 [![Instagram Badge](https://img.shields.io/badge/-@gabor__bernat-845EC2?style=flat-square&labelColor=white&logo=Instagram&link=https://instagram.com/gabor_bernat/)](https://instagram.com/gabor_bernat)
 
-I work at [Bloomberg US - Los Angeles](https://www.techatbloomberg.com/) on the data ingestion pipeline. I am the
-primary maintainer of the following [Python](https://www.python.org/)
+I work at [Bloomberg US - Los Angeles](https://www.techatbloomberg.com/) on the data ingestion pipelines quality control
+segment. I am the primary maintainer (author) for the following [Python](https://www.python.org/)
 [open-source](https://en.wikipedia.org/wiki/Open_source) projects:
 
 1. [platformdirs](https://github.com/platformdirs/platformdirs) --
@@ -82,7 +82,7 @@ primary maintainer of the following [Python](https://www.python.org/)
    ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/devpi-process?logo=python&style=flat-square)
    [![PyPI - Downloads](https://img.shields.io/pypi/dm/devpi-process?style=flat-square)](https://pypistats.org/packages/devpi-process)
 
-For the following projects (while I do hold the write commit bit) I only help with maintainership when needed:
+For the following projects, while I do hold the write commit bit, I only help with maintainership when needed:
 
 1. [build](https://github.com/pypa/build) --
    [![PyPI](https://img.shields.io/pypi/v/build?style=flat-square)](https://pypi.org/project/build)
