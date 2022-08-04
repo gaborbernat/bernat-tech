@@ -69,6 +69,10 @@ primary maintainer of the following [Python](https://www.python.org/)
    [![PyPI](https://img.shields.io/pypi/v/tox-ini-fmt?style=flat-square)](https://pypi.org/project/tox-ini-fmt)
    ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/tox-ini-fmt?logo=python&style=flat-square)
    [![PyPI - Downloads](https://img.shields.io/pypi/dm/tox-ini-fmt?style=flat-square)](https://pypistats.org/packages/tox-ini-fmt)
+1. [bump-deps-index](https://github.com/gaborbernat/bump-deps-index) --
+   [![PyPI](https://img.shields.io/pypi/v/bump-deps-index?style=flat-square)](https://pypi.org/project/bump-deps-index)
+   ![GitHub last commit](https://img.shields.io/github/last-commit/gaborbernat/bump-deps-index?logo=python&style=flat-square)
+   [![PyPI - Downloads](https://img.shields.io/pypi/dm/bump-deps-index?style=flat-square)](https://pypistats.org/packages/bump-deps-index)
 1. [pypi-changes](https://github.com/gaborbernat/pypi_changes) --
    [![PyPI](https://img.shields.io/pypi/v/pypi-changes?style=flat-square)](https://pypi.org/project/pypi-changes)
    ![GitHub last commit](https://img.shields.io/github/last-commit/gaborbernat/pypi_changes?logo=python&style=flat-square)
