@@ -61,10 +61,10 @@ segment. I am the primary maintainer (author) for the following [Python](https:/
    [![PyPI](https://img.shields.io/pypi/v/tox-gh?style=flat-square)](https://pypi.org/project/tox-gh)
    ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/tox-gh?logo=python&style=flat-square)
    [![PyPI - Downloads](https://img.shields.io/pypi/dm/tox-gh?style=flat-square)](https://pypistats.org/packages/tox-gh)
-1. [retype](https://github.com/ambv/retype) --
-   [![PyPI](https://img.shields.io/pypi/v/retype?style=flat-square)](https://pypi.org/project/retype)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/ambv/retype?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/retype?style=flat-square)](https://pypistats.org/packages/retype)
+1. [pyproject-fmt](https://github.com/tox-dev/pyproject-fmt) --
+   [![PyPI](https://img.shields.io/pypi/v/pyproject-fmt?style=flat-square)](https://pypi.org/project/pyproject-fmt)
+   ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/pyproject-fmt?logo=python&style=flat-square)
+   [![PyPI - Downloads](https://img.shields.io/pypi/dm/pyproject-fmt?style=flat-square)](https://pypistats.org/packages/pyproject-fmt)
 1. [tox-ini-fmt](https://github.com/tox-dev/tox-ini-fmt) --
    [![PyPI](https://img.shields.io/pypi/v/tox-ini-fmt?style=flat-square)](https://pypi.org/project/tox-ini-fmt)
    ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/tox-ini-fmt?logo=python&style=flat-square)
