@@ -37,6 +37,10 @@ segment. I am the primary maintainer (author) for the following [Python](https:/
    [![PyPI](https://img.shields.io/pypi/v/pipdeptree?style=flat-square)](https://pypi.org/project/pipdeptree)
    ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/pipdeptree?logo=python&style=flat-square)
    [![PyPI - Downloads](https://img.shields.io/pypi/dm/pipdeptree?style=flat-square)](https://pypistats.org/packages/pipdeptree)
+1. [pytest-env](https://github.com/tox-dev/pytest-env) --
+   [![PyPI](https://img.shields.io/pypi/v/pytest-env?style=flat-square)](https://pypi.org/project/pytest-env)
+   ![GitHub last commit](https://img.shields.io/github/last-commit/pytest-dev/pytest-env?logo=python&style=flat-square)
+   [![Downloads](https://pepy.tech/badge/pytest-env/month)](https://pepy.tech/project/pytest-env)
 1. [sphinx-autodoc-typehints](https://github.com/tox-dev/sphinx-autodoc-typehints) --
    [![PyPI](https://img.shields.io/pypi/v/sphinx-autodoc-typehints?style=flat-square)](https://pypi.org/project/sphinx-autodoc-typehints)
    ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/sphinx-autodoc-typehints?logo=python&style=flat-square)
