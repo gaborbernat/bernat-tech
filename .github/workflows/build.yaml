@@ -23,7 +23,7 @@ jobs:
         with:
           hugo-version: "latest"
           extended: true
-      - uses: actions/cache@v3.3.0
+      - uses: actions/cache@v3.3.1
         with:
           path: /tmp/hugo_cache
           key: ${{ runner.os }}-hugomod-${{ hashFiles('**/go.sum') }}
