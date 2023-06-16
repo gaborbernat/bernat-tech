@@ -65,10 +65,6 @@ segment. I am the primary maintainer (author) for the following [Python](https:/
    [![PyPI](https://img.shields.io/pypi/v/sphinx-argparse-cli?style=flat-square)](https://pypi.org/project/sphinx-argparse-cli)
    ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/sphinx-argparse-cli?logo=python&style=flat-square)
    [![PyPI - Downloads](https://img.shields.io/pypi/dm/sphinx-argparse-cli?style=flat-square)](https://pypistats.org/packages/sphinx-argparse-cli)
-1. [attrs-strict](https://github.com/bloomberg/attrs-strict) --
-   [![PyPI](https://img.shields.io/pypi/v/attrs-strict?style=flat-square)](https://pypi.org/project/attrs-strict)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/bloomberg/attrs-strict?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/attrs-strict?style=flat-square)](https://pypistats.org/packages/attrs-strict)
 1. [devpi-process](https://github.com/tox-dev/devpi-process) --
    [![PyPI](https://img.shields.io/pypi/v/devpi-process?style=flat-square)](https://pypi.org/project/devpi-process)
    ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/devpi-process?logo=python&style=flat-square)
@@ -104,6 +100,10 @@ For the following projects, while I do hold the write commit bit, I only help wi
    [![PyPI](https://img.shields.io/pypi/v/tox-conda?style=flat-square)](https://pypi.org/project/tox-conda)
    ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/tox-conda?logo=python&style=flat-square)
    [![PyPI - Downloads](https://img.shields.io/pypi/dm/tox-conda?style=flat-square)](https://pypistats.org/packages/tox-conda)
+1. [attrs-strict](https://github.com/bloomberg/attrs-strict) --
+   [![PyPI](https://img.shields.io/pypi/v/attrs-strict?style=flat-square)](https://pypi.org/project/attrs-strict)
+   ![GitHub last commit](https://img.shields.io/github/last-commit/bloomberg/attrs-strict?logo=python&style=flat-square)
+   [![PyPI - Downloads](https://img.shields.io/pypi/dm/attrs-strict?style=flat-square)](https://pypistats.org/packages/attrs-strict)
 1. [ipydatagrid](https://github.com/bloomberg/ipydatagrid) --
    [![PyPI](https://img.shields.io/pypi/v/ipydatagrid?style=flat-square)](https://pypi.org/project/ipydatagrid)
    ![GitHub last commit](https://img.shields.io/github/last-commit/bloomberg/ipydatagrid?logo=python&style=flat-square)
