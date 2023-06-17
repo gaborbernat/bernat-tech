@@ -53,10 +53,6 @@ segment. I am the primary maintainer (author) for the following [Python](https:/
    [![PyPI](https://img.shields.io/pypi/v/pytest-print?style=flat-square)](https://pypi.org/project/pytest-print)
    ![GitHub last commit](https://img.shields.io/github/last-commit/pytest-dev/pytest-print?logo=python&style=flat-square)
    [![PyPI - Downloads](https://img.shields.io/pypi/dm/pytest-print?style=flat-square)](https://pypistats.org/packages/pytest-print)
-1. [pytest-memray](https://github.com/bloomberg/pytest-memray) --
-   [![PyPI](https://img.shields.io/pypi/v/pytest-memray?style=flat-square)](https://pypi.org/project/pytest-memray)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/bloomberg/pytest-memray?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/pytest-memray?style=flat-square)](https://pypistats.org/packages/pytest-memray)
 1. [tox-gh](https://github.com/tox-dev/tox-gh) --
    [![PyPI](https://img.shields.io/pypi/v/tox-gh?style=flat-square)](https://pypi.org/project/tox-gh)
    ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/tox-gh?logo=python&style=flat-square)
@@ -96,6 +92,10 @@ For the following projects, while I do hold the write commit bit, I only help wi
    [![PyPI](https://img.shields.io/pypi/v/pipx?style=flat-square)](https://pypi.org/project/pipx)
    ![GitHub last commit](https://img.shields.io/github/last-commit/pypa/pipx?logo=python&style=flat-square)
    [![PyPI - Downloads](https://img.shields.io/pypi/dm/pipx?style=flat-square)](https://pypistats.org/packages/pipx)
+1. [pytest-memray](https://github.com/bloomberg/pytest-memray) --
+   [![PyPI](https://img.shields.io/pypi/v/pytest-memray?style=flat-square)](https://pypi.org/project/pytest-memray)
+   ![GitHub last commit](https://img.shields.io/github/last-commit/bloomberg/pytest-memray?logo=python&style=flat-square)
+   [![PyPI - Downloads](https://img.shields.io/pypi/dm/pytest-memray?style=flat-square)](https://pypistats.org/packages/pytest-memray)
 1. [tox-conda](https://github.com/tox-dev/tox-conda) --
    [![PyPI](https://img.shields.io/pypi/v/tox-conda?style=flat-square)](https://pypi.org/project/tox-conda)
    ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/tox-conda?logo=python&style=flat-square)
