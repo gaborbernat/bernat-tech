@@ -3,7 +3,7 @@ title = "About bernat.tech"
 slug = "about"
 +++
 
-# Bernát Gábor (from 🇭🇺🇷🇴🇬🇧), living in Los Angeles 🇺🇸
+## Bernát Gábor (from 🇭🇺🇷🇴🇬🇧), living in Los Angeles 🇺🇸
 
 [![Github Sponsor](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&link=https://github.com/sponsors/gaborbernat&style=flat-square)](https://github.com/sponsors/gaborbernat)
 [![Twitch Status](https://img.shields.io/twitch/status/gaborbernat?style=flat-square)](https://www.twitch.tv/gaborbernat)
@@ -17,113 +17,31 @@ I work at [Bloomberg US - Los Angeles](https://www.techatbloomberg.com/) on the 
 segment. I am the primary maintainer (author) for the following [Python](https://www.python.org/)
 [open-source](https://en.wikipedia.org/wiki/Open_source) projects:
 
-1. [platformdirs](https://github.com/platformdirs/platformdirs) --
-   [![PyPI](https://img.shields.io/pypi/v/platformdirs?style=flat-square)](https://pypi.org/project/platformdirs)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/platformdirs/platformdirs?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/platformdirs?style=flat-square)](https://pypistats.org/packages/platformdirs)
-   [![check](https://github.com/platformdirs/platformdirs/actions/workflows/check.yml/badge.svg)](https://github.com/platformdirs/platformdirs/actions/workflows/check.yml)
-1. [filelock](https://github.com/tox-dev/py-filelock) --
-   [![PyPI](https://img.shields.io/pypi/v/filelock?style=flat-square)](https://pypi.org/project/filelock)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/py-filelock?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/filelock?style=flat-square)](https://pypistats.org/packages/filelock)
-   [![check](https://github.com/tox-dev/py-filelock/actions/workflows/check.yml/badge.svg)](https://github.com/tox-dev/py-filelock/actions/workflows/check.yml)
-1. [virtualenv](https://github.com/pypa/virtualenv) --
-   [![PyPI](https://img.shields.io/pypi/v/virtualenv?style=flat-square)](https://pypi.org/project/virtualenv)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/pypa/virtualenv?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/virtualenv?style=flat-square)](https://pypistats.org/packages/virtualenv)
-   [![check](https://github.com/pypa/virtualenv/actions/workflows/check.yml/badge.svg)](https://github.com/pypa/virtualenv/actions/workflows/check.yml)
-1. [tox](https://github.com/tox-dev/tox) --
-   [![PyPI](https://img.shields.io/pypi/v/tox?style=flat-square)](https://pypi.org/project/tox)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/tox?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/tox?style=flat-square)](https://pypistats.org/packages/tox)
-   [![check](https://github.com/tox-dev/tox/actions/workflows/check.yml/badge.svg)](https://github.com/tox-dev/tox/actions/workflows/check.yml)
-1. [pyproject-api](https://github.com/tox-dev/pyproject-api) --
-   [![PyPI](https://img.shields.io/pypi/v/pyproject-api?style=flat-square)](https://pypi.org/project/pyproject-api)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/pyproject-api?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/pyproject-api?style=flat-square)](https://pypistats.org/packages/pyproject-api)
-   [![check](https://github.com/tox-dev/pyproject-api/actions/workflows/check.yml/badge.svg)](https://github.com/tox-dev/pyproject-api/actions/workflows/check.yml)
-1. [sphinx-autodoc-typehints](https://github.com/tox-dev/sphinx-autodoc-typehints) --
-   [![PyPI](https://img.shields.io/pypi/v/sphinx-autodoc-typehints?style=flat-square)](https://pypi.org/project/sphinx-autodoc-typehints)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/sphinx-autodoc-typehints?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/sphinx-autodoc-typehints?style=flat-square)](https://pypistats.org/packages/sphinx-autodoc-typehints)
-   [![check](https://github.com/tox-dev/sphinx-autodoc-typehints/actions/workflows/check.yml/badge.svg)](https://github.com/tox-dev/sphinx-autodoc-typehints/actions/workflows/check.yml)
-1. [pipdeptree](https://github.com/tox-dev/pipdeptree) --
-   [![PyPI](https://img.shields.io/pypi/v/pipdeptree?style=flat-square)](https://pypi.org/project/pipdeptree)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/pipdeptree?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/pipdeptree?style=flat-square)](https://pypistats.org/packages/pipdeptree)
-   [![check](https://github.com/tox-dev/pipdeptree/actions/workflows/check.yml/badge.svg)](https://github.com/tox-dev/pipdeptree/actions/workflows/check.yml)
-1. [pytest-env](https://github.com/pytest-dev/pytest-env) --
-   [![PyPI](https://img.shields.io/pypi/v/pytest-env?style=flat-square)](https://pypi.org/project/pytest-env)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/pytest-dev/pytest-env?logo=python&style=flat-square)
-   [![Downloads](https://pepy.tech/badge/pytest-env/month)](https://pepy.tech/project/pytest-env)
-   [![check](https://github.com/pytest-dev/pytest-env/actions/workflows/check.yml/badge.svg)](https://github.com/pytest-dev/pytest-env/actions/workflows/check.yml)
-1. [pytest-print](https://github.com/pytest-dev/pytest-print) --
-   [![PyPI](https://img.shields.io/pypi/v/pytest-print?style=flat-square)](https://pypi.org/project/pytest-print)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/pytest-dev/pytest-print?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/pytest-print?style=flat-square)](https://pypistats.org/packages/pytest-print)
-   [![check](https://github.com/pytest-dev/pytest-print/actions/workflows/check.yml/badge.svg)](https://github.com/pytest-dev/pytest-print/actions/workflows/check.yml)
-1. [tox-gh](https://github.com/tox-dev/tox-gh) --
-   [![PyPI](https://img.shields.io/pypi/v/tox-gh?style=flat-square)](https://pypi.org/project/tox-gh)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/tox-gh?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/tox-gh?style=flat-square)](https://pypistats.org/packages/tox-gh)
-   [![check](https://github.com/tox-dev/tox-gh/actions/workflows/check.yml/badge.svg)](https://github.com/tox-dev/tox-gh/actions/workflows/check.yml)
-1. [sphinx-argparse-cli](https://github.com/tox-dev/sphinx-argparse-cli) --
-   [![PyPI](https://img.shields.io/pypi/v/sphinx-argparse-cli?style=flat-square)](https://pypi.org/project/sphinx-argparse-cli)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/sphinx-argparse-cli?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/sphinx-argparse-cli?style=flat-square)](https://pypistats.org/packages/sphinx-argparse-cli)
-   [![check](https://github.com/tox-dev/sphinx-argparse-cli/actions/workflows/check.yml/badge.svg)](https://github.com/tox-dev/sphinx-argparse-cli/actions/workflows/check.yml)
-1. [devpi-process](https://github.com/tox-dev/devpi-process) --
-   [![PyPI](https://img.shields.io/pypi/v/devpi-process?style=flat-square)](https://pypi.org/project/devpi-process)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/devpi-process?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/devpi-process?style=flat-square)](https://pypistats.org/packages/devpi-process)
-   [![check](https://github.com/tox-dev/devpi-process/actions/workflows/check.yml/badge.svg)](https://github.com/tox-dev/devpi-process/actions/workflows/check.yml)
-1. [pyproject-fmt](https://github.com/tox-dev/pyproject-fmt) --
-   [![PyPI](https://img.shields.io/pypi/v/pyproject-fmt?style=flat-square)](https://pypi.org/project/pyproject-fmt)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/pyproject-fmt?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/pyproject-fmt?style=flat-square)](https://pypistats.org/packages/pyproject-fmt)
-   [![check](https://github.com/tox-dev/devpi-process/actions/workflows/check.yml/badge.svg)](https://github.com/tox-dev/devpi-process/actions/workflows/check.yml)
-1. [tox-ini-fmt](https://github.com/tox-dev/tox-ini-fmt) --
-   [![PyPI](https://img.shields.io/pypi/v/tox-ini-fmt?style=flat-square)](https://pypi.org/project/tox-ini-fmt)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/tox-ini-fmt?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/tox-ini-fmt?style=flat-square)](https://pypistats.org/packages/tox-ini-fmt)
-   [![check](https://github.com/tox-dev/tox-ini-fmt/actions/workflows/check.yml/badge.svg)](https://github.com/tox-dev/tox-ini-fmt/actions/workflows/check.yml)
-1. [bump-deps-index](https://github.com/gaborbernat/bump-deps-index) --
-   [![PyPI](https://img.shields.io/pypi/v/bump-deps-index?style=flat-square)](https://pypi.org/project/bump-deps-index)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/gaborbernat/bump-deps-index?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/bump-deps-index?style=flat-square)](https://pypistats.org/packages/bump-deps-index)
-   [![check](https://github.com/gaborbernat/bump-deps-index/actions/workflows/check.yml/badge.svg)](https://github.com/gaborbernat/bump-deps-index/actions/workflows/check.yml)
-1. [pypi-changes](https://github.com/gaborbernat/pypi_changes) --
-   [![PyPI](https://img.shields.io/pypi/v/pypi-changes?style=flat-square)](https://pypi.org/project/pypi-changes)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/gaborbernat/pypi_changes?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/pypi-changes?style=flat-square)](https://pypistats.org/packages/pypi-changes)
-   [![check](https://github.com/gaborbernat/pypi_changes/actions/workflows/check.yml/badge.svg)](https://github.com/gaborbernat/pypi_changes/actions/workflows/check.yml)
+1. {{< project name="platformdirs" org="platformdirs" ci="check">}}
+1. {{< project name="filelock" org="tox-dev" ci="check">}}
+1. {{< project name="virtualenv" org="pypa" ci="check">}}
+1. {{< project name="tox" org="tox-dev" ci="check">}}
+1. {{< project name="pyproject-api" org="tox-dev" ci="check">}}
+1. {{< project name="sphinx-autodoc-typehints" org="tox-dev" ci="check">}}
+1. {{< project name="pipdeptree" org="tox-dev" ci="check">}}
+1. {{< project name="pytest-env" org="pytest-dev" ci="check">}}
+1. {{< project name="pytest-print" org="pytest-dev" ci="check">}}
+1. {{< project name="tox-gh" org="tox-dev" ci="check">}}
+1. {{< project name="sphinx-argparse-cli" org="tox-dev" ci="check">}}
+1. {{< project name="devpi-process" org="tox-dev" ci="check">}}
+1. {{< project name="pyproject-fmt" org="tox-dev" ci="check">}}
+1. {{< project name="tox-ini-fmt" org="tox-dev" ci="check">}}
+1. {{< project name="bump-deps-index" org="gaborbernat" ci="check">}}
+1. {{< project name="pypi-changes" org="gaborbernat" ci="check">}}
 
 For the following projects, while I do hold the write commit bit, I only help with maintainership when needed:
 
-1. [build](https://github.com/pypa/build) --
-   [![PyPI](https://img.shields.io/pypi/v/build?style=flat-square)](https://pypi.org/project/build)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/pypa/build?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/build?style=flat-square)](https://pypistats.org/packages/build)
-1. [pipx](https://github.com/pypa/pipx) --
-   [![PyPI](https://img.shields.io/pypi/v/pipx?style=flat-square)](https://pypi.org/project/pipx)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/pypa/pipx?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/pipx?style=flat-square)](https://pypistats.org/packages/pipx)
-1. [pytest-memray](https://github.com/bloomberg/pytest-memray) --
-   [![PyPI](https://img.shields.io/pypi/v/pytest-memray?style=flat-square)](https://pypi.org/project/pytest-memray)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/bloomberg/pytest-memray?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/pytest-memray?style=flat-square)](https://pypistats.org/packages/pytest-memray)
-1. [tox-conda](https://github.com/tox-dev/tox-conda) --
-   [![PyPI](https://img.shields.io/pypi/v/tox-conda?style=flat-square)](https://pypi.org/project/tox-conda)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/tox-dev/tox-conda?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/tox-conda?style=flat-square)](https://pypistats.org/packages/tox-conda)
-1. [attrs-strict](https://github.com/bloomberg/attrs-strict) --
-   [![PyPI](https://img.shields.io/pypi/v/attrs-strict?style=flat-square)](https://pypi.org/project/attrs-strict)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/bloomberg/attrs-strict?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/attrs-strict?style=flat-square)](https://pypistats.org/packages/attrs-strict)
-1. [ipydatagrid](https://github.com/bloomberg/ipydatagrid) --
-   [![PyPI](https://img.shields.io/pypi/v/ipydatagrid?style=flat-square)](https://pypi.org/project/ipydatagrid)
-   ![GitHub last commit](https://img.shields.io/github/last-commit/bloomberg/ipydatagrid?logo=python&style=flat-square)
-   [![PyPI - Downloads](https://img.shields.io/pypi/dm/ipydatagrid?style=flat-square)](https://pypistats.org/packages/ipydatagrid)
+1. {{< project name="build" org="pypa" ci="test">}}
+1. {{< project name="pipx" org="pypa" ci="tests">}}
+1. {{< project name="pytest-memray" org="bloomberg" ci="build">}}
+1. {{< project name="tox-conda" org="tox-dev" ci="check">}}
+1. {{< project name="attrs-strict" org="bloomberg" ci="check">}}
+1. {{< project name="ipydatagrid" org="bloomberg" ci="check">}}
 
 You can find my Curriculum Vitae (or résumé) on the following link
 [![View PDF](https://img.shields.io/badge/View%20as%20PDF-latest%20CV-blue?style=flat-square&logo=docusign)](https://gaborbernat.github.io/cv/main.pdf).
