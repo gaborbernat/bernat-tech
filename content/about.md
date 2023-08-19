@@ -18,13 +18,13 @@ segment. I am the primary maintainer (author) for the following [Python](https:/
 [open-source](https://en.wikipedia.org/wiki/Open_source) projects:
 
 1. {{< project name="platformdirs" org="platformdirs" ci="check">}}
-1. {{< project name="filelock" org="tox-dev" ci="check">}}
 1. {{< project name="virtualenv" org="pypa" ci="check">}}
+1. {{< project name="filelock" org="tox-dev" ci="check">}}
 1. {{< project name="tox" org="tox-dev" ci="check">}}
 1. {{< project name="pyproject-api" org="tox-dev" ci="check">}}
 1. {{< project name="sphinx-autodoc-typehints" org="tox-dev" ci="check">}}
-1. {{< project name="pipdeptree" org="tox-dev" ci="check">}}
 1. {{< project name="pytest-env" org="pytest-dev" ci="check">}}
+1. {{< project name="pipdeptree" org="tox-dev" ci="check">}}
 1. {{< project name="pytest-print" org="pytest-dev" ci="check">}}
 1. {{< project name="tox-gh" org="tox-dev" ci="check">}}
 1. {{< project name="sphinx-argparse-cli" org="tox-dev" ci="check">}}
