@@ -21,14 +21,14 @@ segment. I am the primary maintainer (author) for the following [Python](https:/
 1. {{< project name="tox" org="tox-dev" ci="check">}}
 1. {{< project name="pyproject-api" org="tox-dev" ci="check">}}
 1. {{< project name="pipx" org="pypa" ci="tests">}}
-1. {{< project name="sphinx-autodoc-typehints" org="tox-dev" ci="check">}}
 1. {{< project name="pytest-env" org="pytest-dev" ci="check">}}
+1. {{< project name="sphinx-autodoc-typehints" org="tox-dev" ci="check">}}
 1. {{< project name="pipdeptree" org="tox-dev" ci="check">}}
 1. {{< project name="pytest-print" org="pytest-dev" ci="check">}}
 1. {{< project name="tox-gh" org="tox-dev" ci="check">}}
 1. {{< project name="sphinx-argparse-cli" org="tox-dev" ci="check">}}
-1. {{< project name="devpi-process" org="tox-dev" ci="check">}}
 1. {{< project name="pyproject-fmt" org="tox-dev" ci="check">}}
+1. {{< project name="devpi-process" org="tox-dev" ci="check">}}
 1. {{< project name="tox-ini-fmt" org="tox-dev" ci="check">}}
 1. {{< project name="bump-deps-index" org="gaborbernat" ci="check">}}
 1. {{< project name="pypi-changes" org="gaborbernat" ci="check">}}
@@ -38,8 +38,8 @@ For the following projects, while I do hold the write commit bit, I only help wi
 1. {{< project name="build" org="pypa" ci="test">}}
 1. {{< project name="pytest-memray" org="bloomberg" ci="build">}}
 1. {{< project name="tox-conda" org="tox-dev" ci="check">}}
-1. {{< project name="attrs-strict" org="bloomberg" ci="check">}}
 1. {{< project name="ipydatagrid" org="bloomberg" ci="check">}}
+1. {{< project name="attrs-strict" org="bloomberg" ci="check">}}
 
 You can find my Curriculum Vitae (or résumé) on the following link
 [![View PDF](https://img.shields.io/badge/View%20as%20PDF-latest%20CV-blue?style=flat-square&logo=docusign)](https://gaborbernat.github.io/cv/main.pdf).
