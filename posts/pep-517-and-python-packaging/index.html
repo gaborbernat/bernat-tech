@@ -34,7 +34,7 @@ up into three posts. In this first post, I will give a broad overview of how Pyt
 packages it has. In a subsequent post, I will present in detail how the installation of packages works and how
 PEP-517/518 tries to improve on it. Finally, I dedicate a whole other post to explain some of the painful lessons we
 learned while introducing these improvements. A heads up, I will focus mainly on the Python Packaging Authorities
-systems (<code>pip</code>, <code>setuptools</code>, so no <code>conda</code> or operating system-specific packagers).</p><figure><img src=sad_pug.webp></figure><h1 id=an-example-project>An example project
+systems (<code>pip</code>, <code>setuptools</code>, so no <code>conda</code> or operating system-specific packagers).</p><figure><img src=/posts/pep-517-and-python-packaging/sad_pug.webp></figure><h1 id=an-example-project>An example project
 <a class=heading-link href=#an-example-project><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>To tell this story, I&rsquo;ll need to tell how to distribute python packages; more specifically, explain how to package
 installation worked in the past and how we hope it will work in the future. To have a concrete example of what to
@@ -63,7 +63,7 @@ facto standard packaging tool <a href=https://pypi.org/project/setuptools class=
 </span></span><span class=line><span class=cl><span class=o>&gt;&gt;&gt;</span> <span class=kn>import</span> <span class=nn>pugs</span>
 </span></span><span class=line><span class=cl><span class=o>&gt;&gt;&gt;</span> <span class=n>pugs</span><span class=o>.</span><span class=n>do_tell</span><span class=p>()</span>
 </span></span><span class=line><span class=cl><span class=s2>&#34;An enlightened pug knows how to make the best of whatever he has to work with - A Pug&#39;s Guide to Dating -  Gemma Correll&#34;</span>
-</span></span></code></pre></div><figure><img src=enlightened_pug.webp></figure><h1 id=python-package-availability>Python package availability
+</span></span></code></pre></div><figure><img src=/posts/pep-517-and-python-packaging/enlightened_pug.webp></figure><h1 id=python-package-availability>Python package availability
 <a class=heading-link href=#python-package-availability><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>How does Python knows what&rsquo;s available or not? The short answer is it does not. Not upfront, at least, that is. Instead,
 it will try to load and see if it succeeds dynamically. From where does it load it? There are many possible locations,
@@ -81,10 +81,10 @@ the <code>sys.path</code> variables content, for example, on my macOS:</p><div c
 </span></span><span class=line><span class=cl><span class=o>/</span><span class=n>Library</span><span class=o>/</span><span class=n>Frameworks</span><span class=o>/</span><span class=n>Python</span><span class=o>.</span><span class=n>framework</span><span class=o>/</span><span class=n>Versions</span><span class=o>/</span><span class=mf>3.7</span><span class=o>/</span><span class=n>lib</span><span class=o>/</span><span class=n>python3</span><span class=mf>.7</span><span class=o>/</span><span class=n>site</span><span class=o>-</span><span class=n>packages</span>
 </span></span></code></pre></div><p>For third-party packages, it&rsquo;s going to be some <code>site-packages</code> folder. Note in the above example how there&rsquo;s a
 system-wide and a user-specific instance of this. How do packages end up inside this folder? It must be put there by
-some installer.</p><p>The following diagram displays how most of the time things go:</p><figure><img src=diagram.webp></figure><ol><li>The developer writes some python code inside a folder (referred to as the source tree).</li><li>Some tool (such as <code>setuptools</code>) then takes the source tree and packages it up for redistribution.</li><li>The generated package is uploaded via another tool (twine) to a central repository (usually
+some installer.</p><p>The following diagram displays how most of the time things go:</p><figure><img src=/posts/pep-517-and-python-packaging/diagram.webp></figure><ol><li>The developer writes some python code inside a folder (referred to as the source tree).</li><li>Some tool (such as <code>setuptools</code>) then takes the source tree and packages it up for redistribution.</li><li>The generated package is uploaded via another tool (twine) to a central repository (usually
 <a href=https://pypi.org class=external-link target=_blank rel=noopener>https://pypi.org</a>) the end-user machine has access to.</li><li>The end-user machine uses some installer that discovers, downloads, and installs the package in question. The
 installation operation boils down by creating the correct directory structure and metadata inside the <code>site-packages</code>
-folder.</li></ol><figure><img src=discover_pug.webp></figure><h1 id=python-package-types>Python package types
+folder.</li></ol><figure><img src=/posts/pep-517-and-python-packaging/discover_pug.webp></figure><h1 id=python-package-types>Python package types
 <a class=heading-link href=#python-package-types><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>A package during installation must generate at least two types of content to be put in the site package: a metadata
 folder about the package contents the <code>{package}-{version}.dist-info</code> and the business logic files.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>/Users/bernat/Library/Python/3.7/lib/python/site-packages/pugs
@@ -138,7 +138,7 @@ themselves.</li></ol><h1 id=conclusion>Conclusion
 packaging data, CI files, IDE files, SVC, etc.) - for example, see example project above.</li><li><strong>source distribution</strong> - contains code files required to build a wheel (business logic + packaging data + often also
 the unit tests files to validate the build; notably lacks developer environment content such as CI/IDE/version control
 files) - format: <code>pugs-0.0.1.tar.gz</code>.</li><li><strong>wheel</strong> - contains the package metadata and source files to be put into the <code>site-packages</code> folder - format:
-<code>pugs-0.0.1-py2.py3-none-any.whl</code>.</li></ul><figure><img src=smart_pug.webp></figure><p><a href=https://bernat.tech/posts/pep-517-518/>Read the next post of the series here</a> to determine what happens when we install a package.
+<code>pugs-0.0.1-py2.py3-none-any.whl</code>.</li></ul><figure><img src=/posts/pep-517-and-python-packaging/smart_pug.webp></figure><p><a href=https://bernat.tech/posts/pep-517-518/>Read the next post of the series here</a> to determine what happens when we install a package.
 Thanks for reading!</p></div><footer></footer></article></section></div><footer class=footer><section class=container><b>Opinions are my own</b> - Bernát Gábor software engineer.
 Updated&nbsp;2021-09-16
 via <a href=https://github.com/gaborbernat/bernat-tech/commit/fe09f9d3440d485b2adbef4e5fca35ece2f89806>fe09f9d</a>
