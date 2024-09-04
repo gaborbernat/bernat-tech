@@ -1,5 +1,223 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tech articles by Bernát Gábor</title><link>https://bernat.tech/</link><description>Recent content on Tech articles by Bernát Gábor</description><generator>Hugo</generator><language>en</language><lastBuildDate>Tue, 02 Jul 2024 20:20:21 -0700</lastBuildDate><atom:link href="https://bernat.tech/index.xml" rel="self" type="application/rss+xml"/><item><title>Version numbers: how to use them?</title><link>https://bernat.tech/posts/version-numbers/</link><pubDate>Sat, 16 May 2020 14:15:00 +0000</pubDate><guid>https://bernat.tech/posts/version-numbers/</guid><description>The DRY principle (an acronym for don&amp;rsquo;t repeat yourself) encourages software engineers to abstract code into a separate component and reuse it rather than write it over and over again. If this happens across the system, the best practice is to put it inside a package that lives on its own (a library) and then pull it in from the applications when required.
-As most of us can&amp;rsquo;t think of every feature that the library might offer or what bugs it might contain, these packages tend to evolve.</description></item><item><title>Python packaging - Growing Pains</title><link>https://bernat.tech/posts/growing-pain/</link><pubDate>Thu, 07 Feb 2019 13:41:03 +0000</pubDate><guid>https://bernat.tech/posts/growing-pain/</guid><description>In my previous two posts, I&amp;rsquo;ve gone over what package types python has, and how the package building works, especially with the introduction of the PEP-517/518. Although the changes were primarily to make things more robust, we did run into a few issues while implementing it and releasing it. This post will go over a few, hopefully serving as lessons learned for all of us and presenting some interesting problems to solve in the future.</description></item><item><title>Python packaging - Past, Present, Future</title><link>https://bernat.tech/posts/pep-517-518/</link><pubDate>Thu, 07 Feb 2019 13:40:59 +0000</pubDate><guid>https://bernat.tech/posts/pep-517-518/</guid><description>Have you ever wondered what happens exactly when you run pip install? This post will give you a detailed overview of the steps involved in the past, and how it all changes with the adoption of PEP-517 and PEP-518.
-In my previous post I&amp;rsquo;ve described how it&amp;rsquo;s possible to install three types of content: source tree, source distribution, and wheels. Only the last two types are uploaded to PyPI, the central Python repository.</description></item><item><title>The state of Python Packaging</title><link>https://bernat.tech/posts/pep-517-and-python-packaging/</link><pubDate>Thu, 07 Feb 2019 13:40:54 +0000</pubDate><guid>https://bernat.tech/posts/pep-517-and-python-packaging/</guid><description>pip 19.0 has been released on 22nd January 2019. On the feature list, most notably, it now supports PEP-517, which by default is turned on when that the project has a pyproject.toml at the root folder. The PEP in question has been created in 2015 and accepted in 2017. Even though it took a while until pip implemented it, the release and the issues that followed confirmed that many people are not familiar with it.</description></item><item><title>The state of type hints in Python</title><link>https://bernat.tech/posts/the-state-of-type-hints-in-python/</link><pubDate>Wed, 30 May 2018 09:51:55 +0000</pubDate><guid>https://bernat.tech/posts/the-state-of-type-hints-in-python/</guid><description>One of the main selling points for Python is that it is dynamically-typed. There is no plan to change this. Nevertheless, in September 2014 Guido van Rossum (Python BDFL) created a python enhancement proposal (PEP-484) to add type hints to Python. It has been released for general usage a year later, in September 2015, as part of Python 3.5.0. Twenty-five years into its existence now there was a standard way to add type information to Python code.</description></item><item><title>About bernat.tech</title><link>https://bernat.tech/about/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://bernat.tech/about/</guid><description>Bernát Gábor (from 🇭🇺🇷🇴🇬🇧), living in Los Angeles 🇺🇸 Link to heading I work at Bloomberg US - Los Angeles on the data ingestion pipelines quality control segment. I am the primary maintainer (author) for the following Python open-source projects:
-platformdirs filelock virtualenv tox pyproject-api pipx pytest-env pipdeptree sphinx-autodoc-typehints pytest-print pyproject-fmt pyproject-fmt-rust tox-gh sphinx-argparse-cli devpi-process tox-ini-fmt bump-deps-index pypi-changes For the following projects, while I do hold the write commit bit, I only help with maintainership when needed:</description></item><item><title>Presentations by Bernát Gábor</title><link>https://bernat.tech/presentations/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://bernat.tech/presentations/</guid><description>I&amp;rsquo;m a regular speaker at (Python) conferences. Here you&amp;rsquo;ll find a list of my recorded presentations:
-Lessons learned maintaining open source Python projects - PyTexas 2024 - slides What&amp;rsquo;s new in tox 4? - PyCon US 2023 How we standardized editable installs PEP 660 vs PEP 662 - PyCon US 2022 - slides tox 4 - lightning talk - PyCon US 2021 - slides Python packaging demystified - tutorial - PyCon US 2021 - slides Virtualenv - A Deep Dive - PyCharm Webinar 2021 Lessons from the Trenches: rewriting and re-releasing virtualenv - EuroPython 2020 - slides status quo of virtual environments - EuroPython 2019 - slides How to best package your library?</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tech articles by Bernát Gábor</title><link>https://bernat.tech/</link><description>Recent content on Tech articles by Bernát Gábor</description><generator>Hugo</generator><language>en</language><lastBuildDate>Tue, 02 Jul 2024 20:20:21 -0700</lastBuildDate><atom:link href="https://bernat.tech/index.xml" rel="self" type="application/rss+xml"/><item><title>Version numbers: how to use them?</title><link>https://bernat.tech/posts/version-numbers/</link><pubDate>Sat, 16 May 2020 14:15:00 +0000</pubDate><guid>https://bernat.tech/posts/version-numbers/</guid><description>&lt;p>The &lt;a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" class="external-link" target="_blank" rel="noopener">DRY principle&lt;/a> (an acronym for don&amp;rsquo;t repeat yourself)
+encourages software engineers to abstract code into a separate component and reuse it rather than write it over and over
+again. If this happens across the system, the best practice is to put it inside a package that lives on its own (a
+library) and then pull it in from the applications when required.&lt;/p>
+&lt;p>As most of us can&amp;rsquo;t think of every feature that the library might offer or what bugs it might contain, these packages
+tend to evolve. Therefore, we need some mechanism to encode these evolutions of the library, and most commonly, this is
+a version number.&lt;/p></description></item><item><title>Python packaging - Growing Pains</title><link>https://bernat.tech/posts/growing-pain/</link><pubDate>Thu, 07 Feb 2019 13:41:03 +0000</pubDate><guid>https://bernat.tech/posts/growing-pain/</guid><description>&lt;p>In my previous two posts, I&amp;rsquo;ve gone over &lt;a href="https://bernat.tech/posts/pep-517-and-python-packaging/" >what package types python has&lt;/a>,
+and &lt;a href="https://bernat.tech/posts/pep-517-518/" >how the package building works&lt;/a>, especially with the introduction of the PEP-517/518.
+Although the changes were primarily to make things more robust, we did run into a few issues while implementing it and
+releasing it. This post will go over a few, hopefully serving as lessons learned for all of us and presenting some
+interesting problems to solve in the future.&lt;/p></description></item><item><title>Python packaging - Past, Present, Future</title><link>https://bernat.tech/posts/pep-517-518/</link><pubDate>Thu, 07 Feb 2019 13:40:59 +0000</pubDate><guid>https://bernat.tech/posts/pep-517-518/</guid><description>&lt;p>Have you ever wondered what happens exactly when you run pip install? This post will give you a detailed overview of the
+steps involved in the past, and how it all changes with the adoption of PEP-517 and PEP-518.&lt;/p>
+&lt;p>&lt;a href="https://bernat.tech/posts/pep-517-and-python-packaging/" >In my previous post&lt;/a> I&amp;rsquo;ve described how it&amp;rsquo;s possible to install three
+types of content: source tree, source distribution, and wheels. Only the last two types are uploaded to PyPI, the
+central Python repository. However, one could get its hands on a source tree (by feeding, for example, a git protocol
+for pip). The advantage of wheels over the others is that it does not require any build operation to happen on the user
+machine; it&amp;rsquo;s just downloading and extract.&lt;/p></description></item><item><title>The state of Python Packaging</title><link>https://bernat.tech/posts/pep-517-and-python-packaging/</link><pubDate>Thu, 07 Feb 2019 13:40:54 +0000</pubDate><guid>https://bernat.tech/posts/pep-517-and-python-packaging/</guid><description>&lt;p>pip 19.0 has been released on 22nd January 2019. On the feature list, most notably, it now supports PEP-517, which by
+default is turned &lt;strong>on&lt;/strong> when that the project has a &lt;code>pyproject.toml&lt;/code> at the root folder. The PEP in question has been
+created in 2015 and accepted in 2017. Even though it took a while until pip implemented it, the release and the issues
+that followed confirmed that many people are not familiar with it. Read on if you want to get a picture of how the
+Python packaging ecosystem evolved today and where we hope to see it down the line. We expect that even though the
+introduction of the aforementioned python enhancement proposal may cause some discomfort, we will benefit from it in the
+long term.&lt;/p></description></item><item><title>The state of type hints in Python</title><link>https://bernat.tech/posts/the-state-of-type-hints-in-python/</link><pubDate>Wed, 30 May 2018 09:51:55 +0000</pubDate><guid>https://bernat.tech/posts/the-state-of-type-hints-in-python/</guid><description>&lt;p>One of the main selling points for Python is that it is dynamically-typed. There is no plan to change this.
+Nevertheless, in September 2014 &lt;a href="https://twitter.com/gvanrossum" class="external-link" target="_blank" rel="noopener">Guido van Rossum&lt;/a> (Python
+&lt;a href="https://en.wikipedia.org/wiki/Benevolent_dictator_for_life" class="external-link" target="_blank" rel="noopener">BDFL&lt;/a>) created a python enhancement proposal
+(&lt;a href="https://www.python.org/dev/peps/pep-0484" class="external-link" target="_blank" rel="noopener">PEP-484&lt;/a>) to add type hints to Python. It has been released for general
+usage a year later, in September 2015, as part of Python &lt;code>3.5.0&lt;/code>.
+&lt;a href="http://python-history.blogspot.com/2009/01/brief-timeline-of-python.html" class="external-link" target="_blank" rel="noopener">Twenty-five years into its existence&lt;/a> now
+there was a standard way to add type information to Python code. In this blog post, I&amp;rsquo;ll explore how the system matured,
+how you can use it, and what&amp;rsquo;s next for type hints.&lt;/p></description></item><item><title>About bernat.tech</title><link>https://bernat.tech/about/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://bernat.tech/about/</guid><description>&lt;h2 id="bernát-gábor-from--living-in-los-angeles-">
+ Bernát Gábor (from 🇭🇺🇷🇴🇬🇧), living in Los Angeles 🇺🇸
+ &lt;a class="heading-link" href="#bern%c3%a1t-g%c3%a1bor-from--living-in-los-angeles-">
+ &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
+ &lt;span class="sr-only">Link to heading&lt;/span>
+ &lt;/a>
+&lt;/h2>
+&lt;p>&lt;a href="https://github.com/sponsors/gaborbernat" class="external-link" target="_blank" rel="noopener">&lt;img alt="Github Sponsor" src="https://img.shields.io/static/v1?label=Sponsor&amp;message=%E2%9D%A4&amp;logo=GitHub&amp;link=https://github.com/sponsors/gaborbernat&amp;style=flat-square">&lt;/a>
+&lt;a href="https://twitter.com/gjbernat" class="external-link" target="_blank" rel="noopener">&lt;img alt="Twitter Badge" src="https://img.shields.io/badge/-@gjbernat-1ca0f1?style=flat-square&amp;labelColor=1ca0f1&amp;logo=twitter&amp;logoColor=white&amp;link=https://twitter.com/gjbernat">&lt;/a>
+&lt;a href="https://pypi.org/user/gaborbernat/" class="external-link" target="_blank" rel="noopener">&lt;img alt="PyPI" src="https://img.shields.io/badge/-gaborbernat-0073b7?style=flat-square&amp;logo=Python&amp;logoColor=white&amp;link=https://pypi.org/user/gaborbernat/">&lt;/a>
+&lt;a href="https://www.linkedin.com/in/gaborbernat/" class="external-link" target="_blank" rel="noopener">&lt;img alt="Linkedin Badge" src="https://img.shields.io/badge/-gaborbernat-blue?style=flat-square&amp;logo=Linkedin&amp;logoColor=white&amp;link=https://www.linkedin.com/in/gaborbernat/">&lt;/a>
+&lt;a href="mailto:gaborjbernat@gmail.com" >&lt;img alt="MAIL Badge" src="https://img.shields.io/badge/-gaborjbernat@gmail.com-c14438?style=flat-square&amp;logo=Gmail&amp;logoColor=white&amp;link=mailto:gaborjbernat@gmail.com">&lt;/a>&lt;/p></description></item><item><title>Presentations by Bernát Gábor</title><link>https://bernat.tech/presentations/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://bernat.tech/presentations/</guid><description>&lt;p>I&amp;rsquo;m a regular speaker at (Python) conferences. Here you&amp;rsquo;ll find a list of my recorded presentations:&lt;/p>
+&lt;div class="toc">
+ &lt;nav id="TableOfContents">
+ &lt;ol>
+ &lt;li>&lt;a href="#lessons-learned-py-texas-24">Lessons learned maintaining open source Python projects - PyTexas 2024 - &lt;a href="https://gaborbernat.github.io/py-texas-24/">slides&lt;/a>&lt;/a>&lt;/li>
+ &lt;li>&lt;a href="#lessons-learned-py-con-us-23">What&amp;rsquo;s new in tox 4? - PyCon US 2023&lt;/a>&lt;/li>
+ &lt;li>&lt;a href="#editables-us-22">How we standardized editable installs PEP 660 vs PEP 662 - PyCon US 2022 - &lt;a href="https://gaborbernat.github.io/pep-660-662-2022/#/">slides&lt;/a>&lt;/a>&lt;/li>
+ &lt;li>&lt;a href="#tox-4-us-21">tox 4 - lightning talk - PyCon US 2021 - &lt;a href="https://gaborbernat.github.io/pycon-us-21-lighting/#/">slides&lt;/a>&lt;/a>&lt;/li>
+ &lt;li>&lt;a href="#py-packaging-us-21">Python packaging demystified - tutorial - PyCon US 2021 - &lt;a href="https://gaborbernat.github.io/packaging-tutorial-pycon-us-21/#/">slides&lt;/a>&lt;/a>&lt;/li>
+ &lt;li>&lt;a href="#virtualenv---a-deep-dive---pycharm-webinar-2021">Virtualenv - A Deep Dive - PyCharm Webinar 2021&lt;/a>&lt;/li>
+ &lt;li>&lt;a href="#virtualenv-rewrite-eu-19">Lessons from the Trenches: rewriting and re-releasing virtualenv - EuroPython 2020 - &lt;a href="https://gaborbernat.github.io/virtualenv-rewrite-eupy20/">slides&lt;/a>&lt;/a>&lt;/li>
+ &lt;li>&lt;a href="#status-quo-of-virtual-environments-eu-19">status quo of virtual environments - EuroPython 2019 - &lt;a href="https://gaborbernat.github.io/euro_python_2019/#/">slides&lt;/a>&lt;/a>&lt;/li>
+ &lt;li>&lt;a href="#best-package-library-lon-19">How to best package your library? - PyLondinium 2019 - &lt;a href="https://gaborbernat.github.io/pylondinium2019/#/">slides&lt;/a>&lt;/a>&lt;/li>
+ &lt;li>&lt;a href="#type-hinting-and-mypy-us-19">Type hinting (and mypy) - PyCon US 2019 - &lt;a href="https://gaborbernat.github.io/pycon-us-2019/#/">slides&lt;/a>&lt;/a>&lt;/li>
+ &lt;li>&lt;a href="#standardize-testing-eu-19">Standardize Testing in Python - EuroPython 2018 - &lt;a href="https://gaborbernat.github.io/pycon-eu-2018/#/">slides&lt;/a>&lt;/a>&lt;/li>
+ &lt;/ol>
+&lt;/nav>
+&lt;/div>
+
+&lt;h2 id="lessons-learned-py-texas-24">
+ Lessons learned maintaining open source Python projects - PyTexas 2024 - &lt;a href="https://gaborbernat.github.io/py-texas-24/" class="external-link" target="_blank" rel="noopener">slides&lt;/a>
+ &lt;a class="heading-link" href="#lessons-learned-py-texas-24">
+ &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
+ &lt;span class="sr-only">Link to heading&lt;/span>
+ &lt;/a>
+&lt;/h2>
+
+
+ 
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/rcSLOqwpJk8?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
+ >&lt;/iframe>
+ &lt;/div>
+
+&lt;h2 id="lessons-learned-py-con-us-23">
+ What&amp;rsquo;s new in tox 4? - PyCon US 2023
+ &lt;a class="heading-link" href="#lessons-learned-py-con-us-23">
+ &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
+ &lt;span class="sr-only">Link to heading&lt;/span>
+ &lt;/a>
+&lt;/h2>
+
+
+ 
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/95tjPYvbJc0?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=480" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
+ >&lt;/iframe>
+ &lt;/div>
+
+&lt;h2 id="editables-us-22">
+ How we standardized editable installs PEP 660 vs PEP 662 - PyCon US 2022 - &lt;a href="https://gaborbernat.github.io/pep-660-662-2022/#/" class="external-link" target="_blank" rel="noopener">slides&lt;/a>
+ &lt;a class="heading-link" href="#editables-us-22">
+ &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
+ &lt;span class="sr-only">Link to heading&lt;/span>
+ &lt;/a>
+&lt;/h2>
+
+
+ 
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/Z_-PuPwN6ZI?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=5" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
+ >&lt;/iframe>
+ &lt;/div>
+
+&lt;h2 id="tox-4-us-21">
+ tox 4 - lightning talk - PyCon US 2021 - &lt;a href="https://gaborbernat.github.io/pycon-us-21-lighting/#/" class="external-link" target="_blank" rel="noopener">slides&lt;/a>
+ &lt;a class="heading-link" href="#tox-4-us-21">
+ &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
+ &lt;span class="sr-only">Link to heading&lt;/span>
+ &lt;/a>
+&lt;/h2>
+
+
+ 
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/5zEn3Jta2Dg?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=389" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
+ >&lt;/iframe>
+ &lt;/div>
+
+&lt;h2 id="py-packaging-us-21">
+ Python packaging demystified - tutorial - PyCon US 2021 - &lt;a href="https://gaborbernat.github.io/packaging-tutorial-pycon-us-21/#/" class="external-link" target="_blank" rel="noopener">slides&lt;/a>
+ &lt;a class="heading-link" href="#py-packaging-us-21">
+ &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
+ &lt;span class="sr-only">Link to heading&lt;/span>
+ &lt;/a>
+&lt;/h2>
+
+
+ 
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/ApDThpsr2Fw?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=5" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
+ >&lt;/iframe>
+ &lt;/div>
+
+&lt;h2 id="virtualenv---a-deep-dive---pycharm-webinar-2021">
+ Virtualenv - A Deep Dive - PyCharm Webinar 2021
+ &lt;a class="heading-link" href="#virtualenv---a-deep-dive---pycharm-webinar-2021">
+ &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
+ &lt;span class="sr-only">Link to heading&lt;/span>
+ &lt;/a>
+&lt;/h2>
+
+
+ 
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/O9_MJHDkej8?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=7" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
+ >&lt;/iframe>
+ &lt;/div>
+
+&lt;h2 id="virtualenv-rewrite-eu-19">
+ Lessons from the Trenches: rewriting and re-releasing virtualenv - EuroPython 2020 - &lt;a href="https://gaborbernat.github.io/virtualenv-rewrite-eupy20/" class="external-link" target="_blank" rel="noopener">slides&lt;/a>
+ &lt;a class="heading-link" href="#virtualenv-rewrite-eu-19">
+ &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
+ &lt;span class="sr-only">Link to heading&lt;/span>
+ &lt;/a>
+&lt;/h2>
+
+
+ 
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/l9A0a8qZgOs?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=27" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
+ >&lt;/iframe>
+ &lt;/div>
+
+&lt;h2 id="status-quo-of-virtual-environments-eu-19">
+ status quo of virtual environments - EuroPython 2019 - &lt;a href="https://gaborbernat.github.io/euro_python_2019/#/" class="external-link" target="_blank" rel="noopener">slides&lt;/a>
+ &lt;a class="heading-link" href="#status-quo-of-virtual-environments-eu-19">
+ &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
+ &lt;span class="sr-only">Link to heading&lt;/span>
+ &lt;/a>
+&lt;/h2>
+
+
+ 
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/o1Vue9CWRxU?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
+ >&lt;/iframe>
+ &lt;/div>
+
+&lt;h2 id="best-package-library-lon-19">
+ How to best package your library? - PyLondinium 2019 - &lt;a href="https://gaborbernat.github.io/pylondinium2019/#/" class="external-link" target="_blank" rel="noopener">slides&lt;/a>
+ &lt;a class="heading-link" href="#best-package-library-lon-19">
+ &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
+ &lt;span class="sr-only">Link to heading&lt;/span>
+ &lt;/a>
+&lt;/h2>
+
+
+ 
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/OSnRl8yF9a4?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=17" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
+ >&lt;/iframe>
+ &lt;/div>
+
+&lt;h2 id="type-hinting-and-mypy-us-19">
+ Type hinting (and mypy) - PyCon US 2019 - &lt;a href="https://gaborbernat.github.io/pycon-us-2019/#/" class="external-link" target="_blank" rel="noopener">slides&lt;/a>
+ &lt;a class="heading-link" href="#type-hinting-and-mypy-us-19">
+ &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
+ &lt;span class="sr-only">Link to heading&lt;/span>
+ &lt;/a>
+&lt;/h2>
+
+
+ 
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/hTrjTAPnA_k?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=47" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
+ >&lt;/iframe>
+ &lt;/div>
+
+&lt;h2 id="standardize-testing-eu-19">
+ Standardize Testing in Python - EuroPython 2018 - &lt;a href="https://gaborbernat.github.io/pycon-eu-2018/#/" class="external-link" target="_blank" rel="noopener">slides&lt;/a>
+ &lt;a class="heading-link" href="#standardize-testing-eu-19">
+ &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
+ &lt;span class="sr-only">Link to heading&lt;/span>
+ &lt;/a>
+&lt;/h2>
+
+
+ 
+ &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/SFqna5ilqig?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=8" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
+ >&lt;/iframe>
+ &lt;/div></description></item></channel></rss>
