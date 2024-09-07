@@ -39,8 +39,8 @@ For the following projects, while I do hold the write commit bit, I only help wi
 
 1. {{< project name="build" org="pypa" ci="test">}}
 1. {{< project name="pytest-memray" org="bloomberg" ci="build">}}
-1. {{< project name="tox-conda" org="tox-dev" ci="check">}}
 1. {{< project name="ipydatagrid" org="jupyter-widgets" ci="check">}}
+1. {{< project name="tox-conda" org="tox-dev" ci="check">}}
 1. {{< project name="attrs-strict" org="bloomberg" ci="check">}}
 
 You can find my Curriculum Vitae (or résumé) on the following link
