@@ -423,12 +423,16 @@ The upside of this is that:
 Now there are also some hefty penalties to pay:
 
 <div class='cross'>
-    
-- You just duplicated your codebase, as every function now has two definitions (note you don't need to replicate your body or default arguments, the ``...`` - ellipsis - is used as a placeholder for these). 
-- Now, you have some extra files that need to be packaged and shipped with your code. 
-- It's impossible to annotate contents inside functions (this means both methods inside methods and local variables).  
-- There is no check that your implementation file matches your stub's signature (furthermore, IDEs always use the stub definition). 
-- However, the heaviest penalty is that you cannot type check the code you're type hinting via a stub. Stub file type hints were designed to be used to type-check code that uses the library. But not too type check the codebase itself what your type hinting. 
+
+- You just duplicated your codebase, as every function now has two definitions (note you don't need to replicate your
+  body or default arguments, the `...` - ellipsis - is used as a placeholder for these).
+- Now, you have some extra files that need to be packaged and shipped with your code.
+- It's impossible to annotate contents inside functions (this means both methods inside methods and local variables).
+- There is no check that your implementation file matches your stub's signature (furthermore, IDEs always use the stub
+  definition).
+- However, the heaviest penalty is that you cannot type check the code you're type hinting via a stub. Stub file type
+hints were designed to be used to type-check code that uses the library. But not too type check the codebase itself what
+your type hinting.
 </div>
 
 The last two drawback makes it incredibly hard to check that the type hinted codebase via a stub file is in sync or not.
@@ -912,10 +916,10 @@ things:
 - finally, appending to the correct parameter into the docstring.
 
 For example `Any` maps to `` py:data:`~typing.Any` ``. Things can get even more complicated for compound types such as
-`Mapping[str, bool]` needs to be translated for example too
-`` :class:`~typing.Mapping`\\[:class:`str`, :class:`bool`] ``. Getting the translation here right (e.g. having `class`
-or `data` namespace) is essential so that the `intersphinx` plugin will work correctly (a plugin that links types
-directly to their respective Python standard library documentation link).
+`Mapping[str, bool]` needs to be translated for example too ``:class:`~typing.Mapping`\\[:class:`str`, :class:`bool`]``.
+Getting the translation here right (e.g. having `class` or `data` namespace) is essential so that the `intersphinx`
+plugin will work correctly (a plugin that links types directly to their respective Python standard library documentation
+link).
 
 In order to use it one needs to install it via `pip install sphinx-autodoc-types>=2.1.1` and then enable in inside the
 `conf.py` file:
