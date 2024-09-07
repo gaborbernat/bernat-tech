@@ -24,9 +24,10 @@ segment. I am the primary maintainer (author) for the following [Python](https:/
 1. {{< project name="pytest-env" org="pytest-dev" ci="check">}}
 1. {{< project name="pipdeptree" org="tox-dev" ci="check">}}
 1. {{< project name="sphinx-autodoc-typehints" org="tox-dev" ci="check">}}
+1. {{< project name="tox-uv" org="tox-dev" ci="check">}}
+1. {{< project name="pyproject-fmt-rust" org="tox-dev" ci="check">}}
 1. {{< project name="pytest-print" org="pytest-dev" ci="check">}}
 1. {{< project name="pyproject-fmt" org="tox-dev" ci="check">}}
-1. {{< project name="pyproject-fmt-rust" org="tox-dev" ci="check">}}
 1. {{< project name="tox-gh" org="tox-dev" ci="check">}}
 1. {{< project name="sphinx-argparse-cli" org="tox-dev" ci="check">}}
 1. {{< project name="devpi-process" org="tox-dev" ci="check">}}
@@ -39,7 +40,7 @@ For the following projects, while I do hold the write commit bit, I only help wi
 1. {{< project name="build" org="pypa" ci="test">}}
 1. {{< project name="pytest-memray" org="bloomberg" ci="build">}}
 1. {{< project name="tox-conda" org="tox-dev" ci="check">}}
-1. {{< project name="ipydatagrid" org="bloomberg" ci="check">}}
+1. {{< project name="ipydatagrid" org="jupyter-widgets" ci="check">}}
 1. {{< project name="attrs-strict" org="bloomberg" ci="check">}}
 
 You can find my Curriculum Vitae (or résumé) on the following link
