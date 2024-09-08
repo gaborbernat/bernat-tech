@@ -28,7 +28,6 @@ I am the primary maintainer (and author) for the following
   1. {{< project name="pipdeptree" org="tox-dev" ci="check">}}
   1. {{< project name="sphinx-autodoc-typehints" org="tox-dev" ci="check">}}
   1. {{< project name="tox-uv" org="tox-dev" ci="check">}}
-  1. {{< project name="pyproject-fmt-rust" org="tox-dev" ci="check">}}
   1. {{< project name="pytest-print" org="pytest-dev" ci="check">}}
   1. {{< project name="pyproject-fmt" org="tox-dev" ci="check">}}
   1. {{< project name="tox-gh" org="tox-dev" ci="check">}}
@@ -39,7 +38,11 @@ I am the primary maintainer (and author) for the following
   1. {{< project name="bump-deps-index" org="gaborbernat" ci="check">}}
   1. {{< project name="pypi-changes" org="gaborbernat" ci="check">}}
 
-- Java (IntelliJ Plugin):
+- Rust (Python c-extension):
+
+  1. {{< project name="pyproject-fmt-rust" org="tox-dev" ci="check">}}
+
+- Kotlin (IntelliJ Plugin):
 
   1. [![Build](https://github.com/tox-dev/PyVenvManage/actions/workflows/check.yml/badge.svg)](https://github.com/tox-dev/PyVenvManage/actions/workflows/check.yml)
      [![Version](https://img.shields.io/jetbrains/plugin/v/20536)](https://plugins.jetbrains.com/plugin/20536/versions)
