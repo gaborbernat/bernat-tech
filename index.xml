@@ -245,28 +245,6 @@ tox-uv
 
 
 &lt;/li>
-&lt;li>&lt;a href="https://github.com/pytest-dev/pytest-print/actions/workflows/check.yaml" target="_blank" rel="noopener">
- &lt;img src="https://github.com/pytest-dev/pytest-print/actions/workflows/check.yaml/badge.svg" alt="check">
-&lt;/a>
-
-&lt;a href="https://pypi.org/project/pytest-print" target="_blank" rel="noopener">
- &lt;img src="https://img.shields.io/pypi/v/pytest-print?style=flat-square" alt="PyPI">
-&lt;/a>
-
-&lt;a href="https://pepy.tech/project/pytest-print" target="_blank" rel="noopener">
- &lt;img src="https://static.pepy.tech/badge/pytest-print/month" alt="PyPI - Downloads">
-&lt;/a>
-
-&lt;a href="https://github.com/pytest-dev/pytest-print/commits">
-&lt;img src="https://img.shields.io/github/last-commit/pytest-dev/pytest-print?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
-&lt;/a>
-
-&lt;a href="https://github.com/pytest-dev/pytest-print">
-pytest-print
-&lt;/a>
-
-
-&lt;/li>
 &lt;li>&lt;a href="https://github.com/tox-dev/pyproject-fmt/actions/workflows/check.yaml" target="_blank" rel="noopener">
  &lt;img src="https://github.com/tox-dev/pyproject-fmt/actions/workflows/check.yaml/badge.svg" alt="check">
 &lt;/a>
@@ -285,6 +263,28 @@ pytest-print
 
 &lt;a href="https://github.com/tox-dev/pyproject-fmt">
 pyproject-fmt
+&lt;/a>
+
+
+&lt;/li>
+&lt;li>&lt;a href="https://github.com/pytest-dev/pytest-print/actions/workflows/check.yaml" target="_blank" rel="noopener">
+ &lt;img src="https://github.com/pytest-dev/pytest-print/actions/workflows/check.yaml/badge.svg" alt="check">
+&lt;/a>
+
+&lt;a href="https://pypi.org/project/pytest-print" target="_blank" rel="noopener">
+ &lt;img src="https://img.shields.io/pypi/v/pytest-print?style=flat-square" alt="PyPI">
+&lt;/a>
+
+&lt;a href="https://pepy.tech/project/pytest-print" target="_blank" rel="noopener">
+ &lt;img src="https://static.pepy.tech/badge/pytest-print/month" alt="PyPI - Downloads">
+&lt;/a>
+
+&lt;a href="https://github.com/pytest-dev/pytest-print/commits">
+&lt;img src="https://img.shields.io/github/last-commit/pytest-dev/pytest-print?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
+&lt;/a>
+
+&lt;a href="https://github.com/pytest-dev/pytest-print">
+pytest-print
 &lt;/a>
 
 
