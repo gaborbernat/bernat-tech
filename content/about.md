@@ -53,7 +53,7 @@ I am the primary maintainer (and author) for the following
 - Repositories helping maintaining and self:
 
   1. [all-repos-self](https://github.com/gaborbernat/all-repos-self)<p>
-     [![check](https://github.com/gaborbernat/all-repos-self/actions/workflows/check.yml/badge.svg)](https://github.com/gaborbernat/all-repos-self/actions/workflows/check.yml)</p>
+     [![check](https://github.com/gaborbernat/all-repos-self/actions/workflows/check.yaml/badge.svg)](https://github.com/gaborbernat/all-repos-self/actions/workflows/check.yaml)</p>
   1. [bernat.tech](https://github.com/gaborbernat/bernat-tech/)<p>
      [![github pages](https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml/badge.svg)](https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml)
      [![pages-build-deployment](https://github.com/gaborbernat/bernat-tech/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/gaborbernat/bernat-tech/actions/workflows/pages/pages-build-deployment)</p>
