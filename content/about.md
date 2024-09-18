@@ -28,8 +28,8 @@ I am the primary maintainer (and author) for the following
   1. {{< project name="pipdeptree" org="tox-dev" ci="check">}}
   1. {{< project name="sphinx-autodoc-typehints" org="tox-dev" ci="check">}}
   1. {{< project name="tox-uv" org="tox-dev" ci="check">}}
-  1. {{< project name="pytest-print" org="pytest-dev" ci="check">}}
   1. {{< project name="pyproject-fmt" org="tox-dev" ci="check">}}
+  1. {{< project name="pytest-print" org="pytest-dev" ci="check">}}
   1. {{< project name="tox-gh" org="tox-dev" ci="check">}}
   1. {{< project name="sphinx-argparse-cli" org="tox-dev" ci="check">}}
   1. {{< project name="devpi-process" org="tox-dev" ci="check">}}
@@ -49,6 +49,19 @@ I am the primary maintainer (and author) for the following
      [![Rating](https://img.shields.io/jetbrains/plugin/r/rating/20536)](https://plugins.jetbrains.com/plugin/20536)
      [![Downloads](https://img.shields.io/jetbrains/plugin/d/20536)](https://plugins.jetbrains.com/plugin/20536)
      [PyVenv Manage 2](https://plugins.jetbrains.com/plugin/20536-pyvenv-manage-2)
+
+- Repositories helping maintaining and self:
+
+  1. [all-repos-self](https://github.com/gaborbernat/all-repos-self)<p>
+     [![check](https://github.com/gaborbernat/all-repos-self/actions/workflows/check.yml/badge.svg)](https://github.com/gaborbernat/all-repos-self/actions/workflows/check.yml)</p>
+  1. [bernat.tech](https://github.com/gaborbernat/bernat-tech/)<p>
+     [![github pages](https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml/badge.svg)](https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml)
+     [![pages-build-deployment](https://github.com/gaborbernat/bernat-tech/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/gaborbernat/bernat-tech/actions/workflows/pages/pages-build-deployment)</p>
+  1. [cv](https://github.com/gaborbernat/cv)<p>
+     [![Build LaTeX document](https://github.com/gaborbernat/cv/actions/workflows/build.yaml/badge.svg)](https://github.com/gaborbernat/cv/actions/workflows/build.yaml)
+     [![Build LaTeX document](https://github.com/gaborbernat/cv/actions/workflows/build.yaml/badge.svg)](https://github.com/gaborbernat/cv/actions/workflows/build.yaml)</p>
+  1. [gaborbernat](https://github.com/gaborbernat/gaborbernat)<p>
+     [![Update README](https://github.com/gaborbernat/gaborbernat/actions/workflows/update-readme.yml/badge.svg)](https://github.com/gaborbernat/gaborbernat/actions/workflows/update-readme.yml)</p>
 
 For the following projects, while I do hold the write commit bit, I only help with maintainership when needed:
 
