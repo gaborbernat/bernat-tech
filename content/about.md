@@ -44,7 +44,7 @@ I am the primary maintainer (and author) for the following
 
 - Kotlin (IntelliJ Plugin):
 
-  1. [![Build](https://github.com/tox-dev/PyVenvManage/actions/workflows/check.yml/badge.svg)](https://github.com/tox-dev/PyVenvManage/actions/workflows/check.yml)
+  1. [![Build](https://github.com/tox-dev/PyVenvManage/actions/workflows/check.yaml/badge.svg)](https://github.com/tox-dev/PyVenvManage/actions/workflows/check.yaml)
      [![Version](https://img.shields.io/jetbrains/plugin/v/20536)](https://plugins.jetbrains.com/plugin/20536/versions)
      [![Rating](https://img.shields.io/jetbrains/plugin/r/rating/20536)](https://plugins.jetbrains.com/plugin/20536)
      [![Downloads](https://img.shields.io/jetbrains/plugin/d/20536)](https://plugins.jetbrains.com/plugin/20536)
@@ -59,7 +59,7 @@ I am the primary maintainer (and author) for the following
   1. [cv](https://github.com/gaborbernat/cv)<p>
      [![Build LaTeX document](https://github.com/gaborbernat/cv/actions/workflows/build.yaml/badge.svg)](https://github.com/gaborbernat/cv/actions/workflows/build.yaml)</p>
   1. [gaborbernat](https://github.com/gaborbernat/gaborbernat)<p>
-     [![Update README](https://github.com/gaborbernat/gaborbernat/actions/workflows/update-readme.yml/badge.svg)](https://github.com/gaborbernat/gaborbernat/actions/workflows/update-readme.yml)</p>
+     [![Update README](https://github.com/gaborbernat/gaborbernat/actions/workflows/update-readme.yaml/badge.svg)](https://github.com/gaborbernat/gaborbernat/actions/workflows/update-readme.yaml)</p>
 
 For the following projects, while I do hold the write commit bit, I only help with maintainership when needed:
 
