@@ -1,8 +1,9 @@
-name: github pages
+name: Build and deploy
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: ["main"]
+  pull_request:
   schedule:
     - cron: "0 8 * * *"
 
@@ -11,19 +12,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build_and_deploy:
-    runs-on: ubuntu-22.04
+  build:
+    runs-on: ubuntu-latest
+    env:
+      HUGO_CACHEDIR: /tmp/hugo_cache
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: true
           fetch-depth: 0
       - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
+        uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: "latest"
           extended: true
-      - uses: actions/cache@v4.0.1
+      - uses: actions/cache@v4
         with:
           path: /tmp/hugo_cache
           key: ${{ runner.os }}-hugomod-${{ hashFiles('**/go.sum') }}
@@ -31,6 +34,27 @@ jobs:
             ${{ runner.os }}-hugomod-
       - name: Build
         run: hugo --minify
+      - uses: actions/upload-artifact@v4
+        with:
+          name: website
+          path: public
+
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    needs:
+      - build
+    environment:
+      name: release
+      url: https://bernat.tech/about/
+    permissions:
+      id-token: write
+    steps:
+      - name: Download all the dists
+        uses: actions/download-artifact@v4
+        with:
+          name: website
+          path: public
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
