@@ -14,12 +14,19 @@ enableGitInfo = true
 author = "Bernát Gábor"
 description = "Bernát Gábor's personal website"
 keywords = "blog,developer,personal,python,packaging"
-info = ["Python open-source", "Bloomberg", "software engineer"]
+info = [
+    "Bloomberg",
+    "Python open-source",
+    "software engineer",
+]
 avatarurl = "img/avatar.jpg"
 dateFormat = "2006-01-01"
 colorScheme = "auto"
 hidecolorschemetoggle = false
-customCSS = ["css/custom.css", "css/syntax.css"]
+customCSS = [
+    "css/custom.css",
+    "css/syntax.css",
+]
 favicon_16 = "img/android-chrome-192x192.png"
 favicon_32 = "img/android-chrome-192x192.png"
 touchIcon = "img/android-chrome-192x192.png"
@@ -46,28 +53,34 @@ url = "https://twitter.com/gjbernat/"
 weight = 3
 
 [[params.social]]
-icon = "fa fa-python fa-2x"
+icon = "fa-brands fa-mastodon fa-2x"
+name = "Mastodon"
+url = "https://fosstodon.org/@gaborbernat"
+weight = 4
+
+[[params.social]]
+icon = "fa-brands fa-python fa-2x"
 name = "PyPI"
 url = "https://pypi.org/user/gaborbernat/"
-weight = 4
+weight = 5
 
 [[params.social]]
 icon = "fa fa-linkedin fa-2x"
 name = "LindkedIn"
 url = "https://www.linkedin.com/in/gaborbernat/"
-weight = 5
+weight = 6
 
 [[params.social]]
 icon = "fa fa-envelope fa-2x"
 name = "GMail"
 url = "mailto:gaborjbernat@gmail.com"
-weight = 6
+weight = 7
 
 [[params.social]]
 icon = "fa fa-instagram fa-2x"
 name = "Instagram"
 url = "https://instagram.com/gabor_bernat"
-weight = 7
+weight = 8
 
 [taxonomies]
 author = "authors"
