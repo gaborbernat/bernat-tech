@@ -11,3 +11,6 @@
 .post {
   max-width: 1024px;
 }
+p {
+  white-space: inherit !important;
+}
