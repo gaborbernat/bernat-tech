@@ -1,6 +1,8 @@
+{{ if (isset .Params "ci") }}
 <a href="https://github.com/{{.Get "org"}}/{{.Get "name"}}/actions/workflows/{{.Get "ci"}}.yaml" target="_blank" rel="noopener">
     <img src="https://github.com/{{.Get "org"}}/{{.Get "name"}}/actions/workflows/{{.Get "ci"}}.yaml/badge.svg" alt="check">
 </a>
+{{ end }}
 
 <a href="https://pypi.org/project/{{.Get "name"}}" target="_blank" rel="noopener">
     <img src="https://img.shields.io/pypi/v/{{.Get "name"}}?style=flat-square" alt="PyPI">
