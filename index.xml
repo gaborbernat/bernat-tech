@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tech articles by Bernát Gábor</title><link>https://bernat.tech/</link><description>Recent content on Tech articles by Bernát Gábor</description><generator>Hugo</generator><language>en</language><lastBuildDate>Tue, 24 Sep 2024 10:46:28 -0700</lastBuildDate><atom:link href="https://bernat.tech/index.xml" rel="self" type="application/rss+xml"/><item><title>Version numbers: how to use them?</title><link>https://bernat.tech/posts/version-numbers/</link><pubDate>Sat, 16 May 2020 14:15:00 +0000</pubDate><guid>https://bernat.tech/posts/version-numbers/</guid><description>&lt;p>The &lt;a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" class="external-link" target="_blank" rel="noopener">DRY principle&lt;/a> (an acronym for don&amp;rsquo;t repeat yourself)
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tech articles by Bernát Gábor</title><link>https://bernat.tech/</link><description>Recent content on Tech articles by Bernát Gábor</description><generator>Hugo</generator><language>en</language><lastBuildDate>Thu, 07 Nov 2024 18:40:08 -0800</lastBuildDate><atom:link href="https://bernat.tech/index.xml" rel="self" type="application/rss+xml"/><item><title>Version numbers: how to use them?</title><link>https://bernat.tech/posts/version-numbers/</link><pubDate>Sat, 16 May 2020 14:15:00 +0000</pubDate><guid>https://bernat.tech/posts/version-numbers/</guid><description>&lt;p>The &lt;a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" class="external-link" target="_blank" rel="noopener">DRY principle&lt;/a> (an acronym for don&amp;rsquo;t repeat yourself)
 encourages software engineers to abstract code into a separate component and reuse it rather than write it over and over
 again. If this happens across the system, the best practice is to put it inside a package that lives on its own (a
 library) and then pull it in from the applications when required.&lt;/p>
@@ -47,9 +47,11 @@ segment.&lt;/p>
 &lt;li>
 &lt;p>&lt;a href="https://www.python.org/" class="external-link" target="_blank" rel="noopener">Python&lt;/a>:&lt;/p>
 &lt;ol>
-&lt;li>&lt;a href="https://github.com/platformdirs/platformdirs/actions/workflows/check.yaml" target="_blank" rel="noopener">
+&lt;li>
+&lt;a href="https://github.com/platformdirs/platformdirs/actions/workflows/check.yaml" target="_blank" rel="noopener">
  &lt;img src="https://github.com/platformdirs/platformdirs/actions/workflows/check.yaml/badge.svg" alt="check">
 &lt;/a>
+
 
 &lt;a href="https://pypi.org/project/platformdirs" target="_blank" rel="noopener">
  &lt;img src="https://img.shields.io/pypi/v/platformdirs?style=flat-square" alt="PyPI">
@@ -69,9 +71,11 @@ platformdirs
 
 
 &lt;/li>
-&lt;li>&lt;a href="https://github.com/tox-dev/filelock/actions/workflows/check.yaml" target="_blank" rel="noopener">
+&lt;li>
+&lt;a href="https://github.com/tox-dev/filelock/actions/workflows/check.yaml" target="_blank" rel="noopener">
  &lt;img src="https://github.com/tox-dev/filelock/actions/workflows/check.yaml/badge.svg" alt="check">
 &lt;/a>
+
 
 &lt;a href="https://pypi.org/project/filelock" target="_blank" rel="noopener">
  &lt;img src="https://img.shields.io/pypi/v/filelock?style=flat-square" alt="PyPI">
@@ -91,9 +95,11 @@ filelock
 
 
 &lt;/li>
-&lt;li>&lt;a href="https://github.com/pypa/virtualenv/actions/workflows/check.yaml" target="_blank" rel="noopener">
+&lt;li>
+&lt;a href="https://github.com/pypa/virtualenv/actions/workflows/check.yaml" target="_blank" rel="noopener">
  &lt;img src="https://github.com/pypa/virtualenv/actions/workflows/check.yaml/badge.svg" alt="check">
 &lt;/a>
+
 
 &lt;a href="https://pypi.org/project/virtualenv" target="_blank" rel="noopener">
  &lt;img src="https://img.shields.io/pypi/v/virtualenv?style=flat-square" alt="PyPI">
@@ -113,9 +119,11 @@ virtualenv
 
 
 &lt;/li>
-&lt;li>&lt;a href="https://github.com/tox-dev/tox/actions/workflows/check.yaml" target="_blank" rel="noopener">
+&lt;li>
+&lt;a href="https://github.com/tox-dev/tox/actions/workflows/check.yaml" target="_blank" rel="noopener">
  &lt;img src="https://github.com/tox-dev/tox/actions/workflows/check.yaml/badge.svg" alt="check">
 &lt;/a>
+
 
 &lt;a href="https://pypi.org/project/tox" target="_blank" rel="noopener">
  &lt;img src="https://img.shields.io/pypi/v/tox?style=flat-square" alt="PyPI">
@@ -135,9 +143,11 @@ tox
 
 
 &lt;/li>
-&lt;li>&lt;a href="https://github.com/tox-dev/pyproject-api/actions/workflows/check.yaml" target="_blank" rel="noopener">
+&lt;li>
+&lt;a href="https://github.com/tox-dev/pyproject-api/actions/workflows/check.yaml" target="_blank" rel="noopener">
  &lt;img src="https://github.com/tox-dev/pyproject-api/actions/workflows/check.yaml/badge.svg" alt="check">
 &lt;/a>
+
 
 &lt;a href="https://pypi.org/project/pyproject-api" target="_blank" rel="noopener">
  &lt;img src="https://img.shields.io/pypi/v/pyproject-api?style=flat-square" alt="PyPI">
@@ -157,9 +167,11 @@ pyproject-api
 
 
 &lt;/li>
-&lt;li>&lt;a href="https://github.com/pytest-dev/pytest-env/actions/workflows/check.yaml" target="_blank" rel="noopener">
+&lt;li>
+&lt;a href="https://github.com/pytest-dev/pytest-env/actions/workflows/check.yaml" target="_blank" rel="noopener">
  &lt;img src="https://github.com/pytest-dev/pytest-env/actions/workflows/check.yaml/badge.svg" alt="check">
 &lt;/a>
+
 
 &lt;a href="https://pypi.org/project/pytest-env" target="_blank" rel="noopener">
  &lt;img src="https://img.shields.io/pypi/v/pytest-env?style=flat-square" alt="PyPI">
@@ -179,9 +191,11 @@ pytest-env
 
 
 &lt;/li>
-&lt;li>&lt;a href="https://github.com/tox-dev/pipdeptree/actions/workflows/check.yaml" target="_blank" rel="noopener">
+&lt;li>
+&lt;a href="https://github.com/tox-dev/pipdeptree/actions/workflows/check.yaml" target="_blank" rel="noopener">
  &lt;img src="https://github.com/tox-dev/pipdeptree/actions/workflows/check.yaml/badge.svg" alt="check">
 &lt;/a>
+
 
 &lt;a href="https://pypi.org/project/pipdeptree" target="_blank" rel="noopener">
  &lt;img src="https://img.shields.io/pypi/v/pipdeptree?style=flat-square" alt="PyPI">
@@ -201,9 +215,11 @@ pipdeptree
 
 
 &lt;/li>
-&lt;li>&lt;a href="https://github.com/tox-dev/sphinx-autodoc-typehints/actions/workflows/check.yaml" target="_blank" rel="noopener">
+&lt;li>
+&lt;a href="https://github.com/tox-dev/sphinx-autodoc-typehints/actions/workflows/check.yaml" target="_blank" rel="noopener">
  &lt;img src="https://github.com/tox-dev/sphinx-autodoc-typehints/actions/workflows/check.yaml/badge.svg" alt="check">
 &lt;/a>
+
 
 &lt;a href="https://pypi.org/project/sphinx-autodoc-typehints" target="_blank" rel="noopener">
  &lt;img src="https://img.shields.io/pypi/v/sphinx-autodoc-typehints?style=flat-square" alt="PyPI">
@@ -223,9 +239,11 @@ sphinx-autodoc-typehints
 
 
 &lt;/li>
-&lt;li>&lt;a href="https://github.com/tox-dev/tox-uv/actions/workflows/check.yaml" target="_blank" rel="noopener">
+&lt;li>
+&lt;a href="https://github.com/tox-dev/tox-uv/actions/workflows/check.yaml" target="_blank" rel="noopener">
  &lt;img src="https://github.com/tox-dev/tox-uv/actions/workflows/check.yaml/badge.svg" alt="check">
 &lt;/a>
+
 
 &lt;a href="https://pypi.org/project/tox-uv" target="_blank" rel="noopener">
  &lt;img src="https://img.shields.io/pypi/v/tox-uv?style=flat-square" alt="PyPI">
@@ -245,141 +263,11 @@ tox-uv
 
 
 &lt;/li>
-&lt;li>&lt;a href="https://github.com/tox-dev/pyproject-fmt/actions/workflows/check.yaml" target="_blank" rel="noopener">
- &lt;img src="https://github.com/tox-dev/pyproject-fmt/actions/workflows/check.yaml/badge.svg" alt="check">
-&lt;/a>
-
-&lt;a href="https://pypi.org/project/pyproject-fmt" target="_blank" rel="noopener">
- &lt;img src="https://img.shields.io/pypi/v/pyproject-fmt?style=flat-square" alt="PyPI">
-&lt;/a>
-
-&lt;a href="https://pepy.tech/project/pyproject-fmt" target="_blank" rel="noopener">
- &lt;img src="https://static.pepy.tech/badge/pyproject-fmt/month" alt="PyPI - Downloads">
-&lt;/a>
-
-&lt;a href="https://github.com/tox-dev/pyproject-fmt/commits">
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/pyproject-fmt?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
-&lt;/a>
-
-&lt;a href="https://github.com/tox-dev/pyproject-fmt">
-pyproject-fmt
-&lt;/a>
-
-
-&lt;/li>
-&lt;li>&lt;a href="https://github.com/pytest-dev/pytest-print/actions/workflows/check.yaml" target="_blank" rel="noopener">
- &lt;img src="https://github.com/pytest-dev/pytest-print/actions/workflows/check.yaml/badge.svg" alt="check">
-&lt;/a>
-
-&lt;a href="https://pypi.org/project/pytest-print" target="_blank" rel="noopener">
- &lt;img src="https://img.shields.io/pypi/v/pytest-print?style=flat-square" alt="PyPI">
-&lt;/a>
-
-&lt;a href="https://pepy.tech/project/pytest-print" target="_blank" rel="noopener">
- &lt;img src="https://static.pepy.tech/badge/pytest-print/month" alt="PyPI - Downloads">
-&lt;/a>
-
-&lt;a href="https://github.com/pytest-dev/pytest-print/commits">
-&lt;img src="https://img.shields.io/github/last-commit/pytest-dev/pytest-print?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
-&lt;/a>
-
-&lt;a href="https://github.com/pytest-dev/pytest-print">
-pytest-print
-&lt;/a>
-
-
-&lt;/li>
-&lt;li>&lt;a href="https://github.com/tox-dev/tox-gh/actions/workflows/check.yaml" target="_blank" rel="noopener">
- &lt;img src="https://github.com/tox-dev/tox-gh/actions/workflows/check.yaml/badge.svg" alt="check">
-&lt;/a>
-
-&lt;a href="https://pypi.org/project/tox-gh" target="_blank" rel="noopener">
- &lt;img src="https://img.shields.io/pypi/v/tox-gh?style=flat-square" alt="PyPI">
-&lt;/a>
-
-&lt;a href="https://pepy.tech/project/tox-gh" target="_blank" rel="noopener">
- &lt;img src="https://static.pepy.tech/badge/tox-gh/month" alt="PyPI - Downloads">
-&lt;/a>
-
-&lt;a href="https://github.com/tox-dev/tox-gh/commits">
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-gh?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
-&lt;/a>
-
-&lt;a href="https://github.com/tox-dev/tox-gh">
-tox-gh
-&lt;/a>
-
-
-&lt;/li>
-&lt;li>&lt;a href="https://github.com/tox-dev/sphinx-argparse-cli/actions/workflows/check.yaml" target="_blank" rel="noopener">
- &lt;img src="https://github.com/tox-dev/sphinx-argparse-cli/actions/workflows/check.yaml/badge.svg" alt="check">
-&lt;/a>
-
-&lt;a href="https://pypi.org/project/sphinx-argparse-cli" target="_blank" rel="noopener">
- &lt;img src="https://img.shields.io/pypi/v/sphinx-argparse-cli?style=flat-square" alt="PyPI">
-&lt;/a>
-
-&lt;a href="https://pepy.tech/project/sphinx-argparse-cli" target="_blank" rel="noopener">
- &lt;img src="https://static.pepy.tech/badge/sphinx-argparse-cli/month" alt="PyPI - Downloads">
-&lt;/a>
-
-&lt;a href="https://github.com/tox-dev/sphinx-argparse-cli/commits">
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/sphinx-argparse-cli?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
-&lt;/a>
-
-&lt;a href="https://github.com/tox-dev/sphinx-argparse-cli">
-sphinx-argparse-cli
-&lt;/a>
-
-
-&lt;/li>
-&lt;li>&lt;a href="https://github.com/tox-dev/devpi-process/actions/workflows/check.yaml" target="_blank" rel="noopener">
- &lt;img src="https://github.com/tox-dev/devpi-process/actions/workflows/check.yaml/badge.svg" alt="check">
-&lt;/a>
-
-&lt;a href="https://pypi.org/project/devpi-process" target="_blank" rel="noopener">
- &lt;img src="https://img.shields.io/pypi/v/devpi-process?style=flat-square" alt="PyPI">
-&lt;/a>
-
-&lt;a href="https://pepy.tech/project/devpi-process" target="_blank" rel="noopener">
- &lt;img src="https://static.pepy.tech/badge/devpi-process/month" alt="PyPI - Downloads">
-&lt;/a>
-
-&lt;a href="https://github.com/tox-dev/devpi-process/commits">
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/devpi-process?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
-&lt;/a>
-
-&lt;a href="https://github.com/tox-dev/devpi-process">
-devpi-process
-&lt;/a>
-
-
-&lt;/li>
-&lt;li>&lt;a href="https://github.com/tox-dev/tox-ini-fmt/actions/workflows/check.yaml" target="_blank" rel="noopener">
- &lt;img src="https://github.com/tox-dev/tox-ini-fmt/actions/workflows/check.yaml/badge.svg" alt="check">
-&lt;/a>
-
-&lt;a href="https://pypi.org/project/tox-ini-fmt" target="_blank" rel="noopener">
- &lt;img src="https://img.shields.io/pypi/v/tox-ini-fmt?style=flat-square" alt="PyPI">
-&lt;/a>
-
-&lt;a href="https://pepy.tech/project/tox-ini-fmt" target="_blank" rel="noopener">
- &lt;img src="https://static.pepy.tech/badge/tox-ini-fmt/month" alt="PyPI - Downloads">
-&lt;/a>
-
-&lt;a href="https://github.com/tox-dev/tox-ini-fmt/commits">
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-ini-fmt?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
-&lt;/a>
-
-&lt;a href="https://github.com/tox-dev/tox-ini-fmt">
-tox-ini-fmt
-&lt;/a>
-
-
-&lt;/li>
-&lt;li>&lt;a href="https://github.com/tox-dev/pre-commit-uv/actions/workflows/check.yaml" target="_blank" rel="noopener">
+&lt;li>
+&lt;a href="https://github.com/tox-dev/pre-commit-uv/actions/workflows/check.yaml" target="_blank" rel="noopener">
  &lt;img src="https://github.com/tox-dev/pre-commit-uv/actions/workflows/check.yaml/badge.svg" alt="check">
 &lt;/a>
+
 
 &lt;a href="https://pypi.org/project/pre-commit-uv" target="_blank" rel="noopener">
  &lt;img src="https://img.shields.io/pypi/v/pre-commit-uv?style=flat-square" alt="PyPI">
@@ -399,9 +287,155 @@ pre-commit-uv
 
 
 &lt;/li>
-&lt;li>&lt;a href="https://github.com/gaborbernat/bump-deps-index/actions/workflows/check.yaml" target="_blank" rel="noopener">
+&lt;li>
+&lt;a href="https://github.com/tox-dev/pyproject-fmt/actions/workflows/main.yaml" target="_blank" rel="noopener">
+ &lt;img src="https://github.com/tox-dev/pyproject-fmt/actions/workflows/main.yaml/badge.svg" alt="check">
+&lt;/a>
+
+
+&lt;a href="https://pypi.org/project/pyproject-fmt" target="_blank" rel="noopener">
+ &lt;img src="https://img.shields.io/pypi/v/pyproject-fmt?style=flat-square" alt="PyPI">
+&lt;/a>
+
+&lt;a href="https://pepy.tech/project/pyproject-fmt" target="_blank" rel="noopener">
+ &lt;img src="https://static.pepy.tech/badge/pyproject-fmt/month" alt="PyPI - Downloads">
+&lt;/a>
+
+&lt;a href="https://github.com/tox-dev/pyproject-fmt/commits">
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/pyproject-fmt?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
+&lt;/a>
+
+&lt;a href="https://github.com/tox-dev/pyproject-fmt">
+pyproject-fmt
+&lt;/a>
+
+
+&lt;/li>
+&lt;li>
+&lt;a href="https://github.com/tox-dev/tox-gh/actions/workflows/check.yaml" target="_blank" rel="noopener">
+ &lt;img src="https://github.com/tox-dev/tox-gh/actions/workflows/check.yaml/badge.svg" alt="check">
+&lt;/a>
+
+
+&lt;a href="https://pypi.org/project/tox-gh" target="_blank" rel="noopener">
+ &lt;img src="https://img.shields.io/pypi/v/tox-gh?style=flat-square" alt="PyPI">
+&lt;/a>
+
+&lt;a href="https://pepy.tech/project/tox-gh" target="_blank" rel="noopener">
+ &lt;img src="https://static.pepy.tech/badge/tox-gh/month" alt="PyPI - Downloads">
+&lt;/a>
+
+&lt;a href="https://github.com/tox-dev/tox-gh/commits">
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-gh?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
+&lt;/a>
+
+&lt;a href="https://github.com/tox-dev/tox-gh">
+tox-gh
+&lt;/a>
+
+
+&lt;/li>
+&lt;li>
+&lt;a href="https://github.com/tox-dev/sphinx-argparse-cli/actions/workflows/check.yaml" target="_blank" rel="noopener">
+ &lt;img src="https://github.com/tox-dev/sphinx-argparse-cli/actions/workflows/check.yaml/badge.svg" alt="check">
+&lt;/a>
+
+
+&lt;a href="https://pypi.org/project/sphinx-argparse-cli" target="_blank" rel="noopener">
+ &lt;img src="https://img.shields.io/pypi/v/sphinx-argparse-cli?style=flat-square" alt="PyPI">
+&lt;/a>
+
+&lt;a href="https://pepy.tech/project/sphinx-argparse-cli" target="_blank" rel="noopener">
+ &lt;img src="https://static.pepy.tech/badge/sphinx-argparse-cli/month" alt="PyPI - Downloads">
+&lt;/a>
+
+&lt;a href="https://github.com/tox-dev/sphinx-argparse-cli/commits">
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/sphinx-argparse-cli?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
+&lt;/a>
+
+&lt;a href="https://github.com/tox-dev/sphinx-argparse-cli">
+sphinx-argparse-cli
+&lt;/a>
+
+
+&lt;/li>
+&lt;li>
+&lt;a href="https://github.com/pytest-dev/pytest-print/actions/workflows/check.yaml" target="_blank" rel="noopener">
+ &lt;img src="https://github.com/pytest-dev/pytest-print/actions/workflows/check.yaml/badge.svg" alt="check">
+&lt;/a>
+
+
+&lt;a href="https://pypi.org/project/pytest-print" target="_blank" rel="noopener">
+ &lt;img src="https://img.shields.io/pypi/v/pytest-print?style=flat-square" alt="PyPI">
+&lt;/a>
+
+&lt;a href="https://pepy.tech/project/pytest-print" target="_blank" rel="noopener">
+ &lt;img src="https://static.pepy.tech/badge/pytest-print/month" alt="PyPI - Downloads">
+&lt;/a>
+
+&lt;a href="https://github.com/pytest-dev/pytest-print/commits">
+&lt;img src="https://img.shields.io/github/last-commit/pytest-dev/pytest-print?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
+&lt;/a>
+
+&lt;a href="https://github.com/pytest-dev/pytest-print">
+pytest-print
+&lt;/a>
+
+
+&lt;/li>
+&lt;li>
+&lt;a href="https://github.com/tox-dev/devpi-process/actions/workflows/check.yaml" target="_blank" rel="noopener">
+ &lt;img src="https://github.com/tox-dev/devpi-process/actions/workflows/check.yaml/badge.svg" alt="check">
+&lt;/a>
+
+
+&lt;a href="https://pypi.org/project/devpi-process" target="_blank" rel="noopener">
+ &lt;img src="https://img.shields.io/pypi/v/devpi-process?style=flat-square" alt="PyPI">
+&lt;/a>
+
+&lt;a href="https://pepy.tech/project/devpi-process" target="_blank" rel="noopener">
+ &lt;img src="https://static.pepy.tech/badge/devpi-process/month" alt="PyPI - Downloads">
+&lt;/a>
+
+&lt;a href="https://github.com/tox-dev/devpi-process/commits">
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/devpi-process?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
+&lt;/a>
+
+&lt;a href="https://github.com/tox-dev/devpi-process">
+devpi-process
+&lt;/a>
+
+
+&lt;/li>
+&lt;li>
+&lt;a href="https://github.com/tox-dev/tox-ini-fmt/actions/workflows/check.yaml" target="_blank" rel="noopener">
+ &lt;img src="https://github.com/tox-dev/tox-ini-fmt/actions/workflows/check.yaml/badge.svg" alt="check">
+&lt;/a>
+
+
+&lt;a href="https://pypi.org/project/tox-ini-fmt" target="_blank" rel="noopener">
+ &lt;img src="https://img.shields.io/pypi/v/tox-ini-fmt?style=flat-square" alt="PyPI">
+&lt;/a>
+
+&lt;a href="https://pepy.tech/project/tox-ini-fmt" target="_blank" rel="noopener">
+ &lt;img src="https://static.pepy.tech/badge/tox-ini-fmt/month" alt="PyPI - Downloads">
+&lt;/a>
+
+&lt;a href="https://github.com/tox-dev/tox-ini-fmt/commits">
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-ini-fmt?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
+&lt;/a>
+
+&lt;a href="https://github.com/tox-dev/tox-ini-fmt">
+tox-ini-fmt
+&lt;/a>
+
+
+&lt;/li>
+&lt;li>
+&lt;a href="https://github.com/gaborbernat/bump-deps-index/actions/workflows/check.yaml" target="_blank" rel="noopener">
  &lt;img src="https://github.com/gaborbernat/bump-deps-index/actions/workflows/check.yaml/badge.svg" alt="check">
 &lt;/a>
+
 
 &lt;a href="https://pypi.org/project/bump-deps-index" target="_blank" rel="noopener">
  &lt;img src="https://img.shields.io/pypi/v/bump-deps-index?style=flat-square" alt="PyPI">
@@ -421,9 +455,35 @@ bump-deps-index
 
 
 &lt;/li>
-&lt;li>&lt;a href="https://github.com/gaborbernat/pypi-changes/actions/workflows/check.yaml" target="_blank" rel="noopener">
+&lt;li>
+&lt;a href="https://github.com/tox-dev/tox-toml-fmt/actions/workflows/main.yaml" target="_blank" rel="noopener">
+ &lt;img src="https://github.com/tox-dev/tox-toml-fmt/actions/workflows/main.yaml/badge.svg" alt="check">
+&lt;/a>
+
+
+&lt;a href="https://pypi.org/project/tox-toml-fmt" target="_blank" rel="noopener">
+ &lt;img src="https://img.shields.io/pypi/v/tox-toml-fmt?style=flat-square" alt="PyPI">
+&lt;/a>
+
+&lt;a href="https://pepy.tech/project/tox-toml-fmt" target="_blank" rel="noopener">
+ &lt;img src="https://static.pepy.tech/badge/tox-toml-fmt/month" alt="PyPI - Downloads">
+&lt;/a>
+
+&lt;a href="https://github.com/tox-dev/tox-toml-fmt/commits">
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-toml-fmt?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
+&lt;/a>
+
+&lt;a href="https://github.com/tox-dev/tox-toml-fmt">
+tox-toml-fmt
+&lt;/a>
+
+
+&lt;/li>
+&lt;li>
+&lt;a href="https://github.com/gaborbernat/pypi-changes/actions/workflows/check.yaml" target="_blank" rel="noopener">
  &lt;img src="https://github.com/gaborbernat/pypi-changes/actions/workflows/check.yaml/badge.svg" alt="check">
 &lt;/a>
+
 
 &lt;a href="https://pypi.org/project/pypi-changes" target="_blank" rel="noopener">
  &lt;img src="https://img.shields.io/pypi/v/pypi-changes?style=flat-square" alt="PyPI">
@@ -446,7 +506,7 @@ pypi-changes
 &lt;/ol>
 &lt;/li>
 &lt;li>
-&lt;p>Rust (Python c-extension):&lt;/p></description></item><item><title>Presentations by Bernát Gábor</title><link>https://bernat.tech/presentations/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://bernat.tech/presentations/</guid><description>&lt;p>I&amp;rsquo;m a regular speaker at (Python) conferences. Here you&amp;rsquo;ll find a list of my recorded presentations:&lt;/p>
+&lt;p>Kotlin (IntelliJ Plugin):&lt;/p></description></item><item><title>Presentations by Bernát Gábor</title><link>https://bernat.tech/presentations/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://bernat.tech/presentations/</guid><description>&lt;p>I&amp;rsquo;m a regular speaker at (Python) conferences. Here you&amp;rsquo;ll find a list of my recorded presentations:&lt;/p>
 &lt;div class="toc">&lt;nav id="TableOfContents">
  &lt;ol>
  &lt;li>&lt;a href="#lessons-learned-py-texas-24">Lessons learned maintaining open source Python projects - PyTexas 2024 - &lt;a href="https://gaborbernat.github.io/py-texas-24/">slides&lt;/a>&lt;/a>&lt;/li>
