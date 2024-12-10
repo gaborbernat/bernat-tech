@@ -34,11 +34,11 @@ how you can use it, and what&amp;rsquo;s next for type hints.&lt;/p></descriptio
  &lt;span class="sr-only">Link to heading&lt;/span>
  &lt;/a>
 &lt;/h2>
-&lt;p>&lt;a href="https://github.com/sponsors/gaborbernat" class="external-link" target="_blank" rel="noopener">&lt;img alt="Github Sponsor" src="https://img.shields.io/static/v1?label=Sponsor&amp;message=%E2%9D%A4&amp;logo=GitHub&amp;link=https://github.com/sponsors/gaborbernat&amp;style=flat-square">&lt;/a>
-&lt;a href="https://twitter.com/gjbernat" class="external-link" target="_blank" rel="noopener">&lt;img alt="Twitter Badge" src="https://img.shields.io/badge/-@gjbernat-1ca0f1?style=flat-square&amp;labelColor=1ca0f1&amp;logo=twitter&amp;logoColor=white&amp;link=https://twitter.com/gjbernat">&lt;/a>
-&lt;a href="https://pypi.org/user/gaborbernat/" class="external-link" target="_blank" rel="noopener">&lt;img alt="PyPI" src="https://img.shields.io/badge/-gaborbernat-0073b7?style=flat-square&amp;logo=Python&amp;logoColor=white&amp;link=https://pypi.org/user/gaborbernat/">&lt;/a>
-&lt;a href="https://www.linkedin.com/in/gaborbernat/" class="external-link" target="_blank" rel="noopener">&lt;img alt="Linkedin Badge" src="https://img.shields.io/badge/-gaborbernat-blue?style=flat-square&amp;logo=Linkedin&amp;logoColor=white&amp;link=https://www.linkedin.com/in/gaborbernat/">&lt;/a>
-&lt;a href="mailto:gaborjbernat@gmail.com" >&lt;img alt="MAIL Badge" src="https://img.shields.io/badge/-gaborjbernat@gmail.com-c14438?style=flat-square&amp;logo=Gmail&amp;logoColor=white&amp;link=mailto:gaborjbernat@gmail.com">&lt;/a>&lt;/p>
+&lt;p>&lt;a href="https://github.com/sponsors/gaborbernat" class="external-link" target="_blank" rel="noopener">&lt;img src="https://img.shields.io/static/v1?label=Sponsor&amp;amp;message=%E2%9D%A4&amp;amp;logo=GitHub&amp;amp;link=https://github.com/sponsors/gaborbernat&amp;amp;style=flat-square" alt="Github Sponsor">&lt;/a>
+&lt;a href="https://twitter.com/gjbernat" class="external-link" target="_blank" rel="noopener">&lt;img src="https://img.shields.io/badge/-@gjbernat-1ca0f1?style=flat-square&amp;amp;labelColor=1ca0f1&amp;amp;logo=twitter&amp;amp;logoColor=white&amp;amp;link=https://twitter.com/gjbernat" alt="Twitter Badge">&lt;/a>
+&lt;a href="https://pypi.org/user/gaborbernat/" class="external-link" target="_blank" rel="noopener">&lt;img src="https://img.shields.io/badge/-gaborbernat-0073b7?style=flat-square&amp;amp;logo=Python&amp;amp;logoColor=white&amp;amp;link=https://pypi.org/user/gaborbernat/" alt="PyPI">&lt;/a>
+&lt;a href="https://www.linkedin.com/in/gaborbernat/" class="external-link" target="_blank" rel="noopener">&lt;img src="https://img.shields.io/badge/-gaborbernat-blue?style=flat-square&amp;amp;logo=Linkedin&amp;amp;logoColor=white&amp;amp;link=https://www.linkedin.com/in/gaborbernat/" alt="Linkedin Badge">&lt;/a>
+&lt;a href="mailto:gaborjbernat@gmail.com" >&lt;img src="https://img.shields.io/badge/-gaborjbernat@gmail.com-c14438?style=flat-square&amp;amp;logo=Gmail&amp;amp;logoColor=white&amp;amp;link=mailto:gaborjbernat@gmail.com" alt="MAIL Badge">&lt;/a>&lt;/p>
 &lt;p>I work at &lt;a href="https://www.techatbloomberg.com/" class="external-link" target="_blank" rel="noopener">Bloomberg US - Los Angeles&lt;/a> on the data ingestion pipelines quality control
 segment.&lt;/p>
 &lt;p>I am the primary maintainer (and author) for the following
@@ -531,11 +531,8 @@ pypi-changes
  &lt;/a>
 &lt;/h2>
 
-
- 
  &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/rcSLOqwpJk8?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
- >&lt;/iframe>
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/rcSLOqwpJk8?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;h2 id="lessons-learned-py-con-us-23">
@@ -546,11 +543,8 @@ pypi-changes
  &lt;/a>
 &lt;/h2>
 
-
- 
  &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/95tjPYvbJc0?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=480" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
- >&lt;/iframe>
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/95tjPYvbJc0?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=480" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;h2 id="editables-us-22">
@@ -561,11 +555,8 @@ pypi-changes
  &lt;/a>
 &lt;/h2>
 
-
- 
  &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/Z_-PuPwN6ZI?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=5" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
- >&lt;/iframe>
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/Z_-PuPwN6ZI?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=5" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;h2 id="tox-4-us-21">
@@ -576,11 +567,8 @@ pypi-changes
  &lt;/a>
 &lt;/h2>
 
-
- 
  &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/5zEn3Jta2Dg?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=389" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
- >&lt;/iframe>
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/5zEn3Jta2Dg?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=389" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;h2 id="py-packaging-us-21">
@@ -591,11 +579,8 @@ pypi-changes
  &lt;/a>
 &lt;/h2>
 
-
- 
  &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/ApDThpsr2Fw?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=5" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
- >&lt;/iframe>
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/ApDThpsr2Fw?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=5" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;h2 id="virtualenv---a-deep-dive---pycharm-webinar-2021">
@@ -606,11 +591,8 @@ pypi-changes
  &lt;/a>
 &lt;/h2>
 
-
- 
  &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/O9_MJHDkej8?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=7" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
- >&lt;/iframe>
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/O9_MJHDkej8?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=7" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;h2 id="virtualenv-rewrite-eu-19">
@@ -621,11 +603,8 @@ pypi-changes
  &lt;/a>
 &lt;/h2>
 
-
- 
  &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/l9A0a8qZgOs?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=27" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
- >&lt;/iframe>
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/l9A0a8qZgOs?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=27" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;h2 id="status-quo-of-virtual-environments-eu-19">
@@ -636,11 +615,8 @@ pypi-changes
  &lt;/a>
 &lt;/h2>
 
-
- 
  &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/o1Vue9CWRxU?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
- >&lt;/iframe>
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/o1Vue9CWRxU?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;h2 id="best-package-library-lon-19">
@@ -651,11 +627,8 @@ pypi-changes
  &lt;/a>
 &lt;/h2>
 
-
- 
  &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/OSnRl8yF9a4?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=17" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
- >&lt;/iframe>
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/OSnRl8yF9a4?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=17" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;h2 id="type-hinting-and-mypy-us-19">
@@ -666,11 +639,8 @@ pypi-changes
  &lt;/a>
 &lt;/h2>
 
-
- 
  &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/hTrjTAPnA_k?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=47" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
- >&lt;/iframe>
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/hTrjTAPnA_k?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=47" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
 &lt;h2 id="standardize-testing-eu-19">
@@ -681,9 +651,6 @@ pypi-changes
  &lt;/a>
 &lt;/h2>
 
-
- 
  &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
- &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/SFqna5ilqig?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=8" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
- >&lt;/iframe>
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/SFqna5ilqig?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=8" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div></description></item></channel></rss>
