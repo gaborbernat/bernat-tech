@@ -27,8 +27,9 @@ I am the primary maintainer (and author) for the following
   1. {{< project name="pytest-env" org="pytest-dev" ci="check">}}
   1. {{< project name="pipdeptree" org="tox-dev" ci="check">}}
   1. {{< project name="sphinx-autodoc-typehints" org="tox-dev" ci="check">}}
-  1. {{< project name="tox-uv" org="tox-dev" ci="check">}}
   1. {{< project name="pre-commit-uv" org="tox-dev" ci="check">}}
+  1. {{< project name="datamodel-code-generator" org="koxudaxi" ci="test">}}
+  1. {{< project name="tox-uv" org="tox-dev" ci="check">}}
   1. {{< project name="pyproject-fmt" org="tox-dev" ci="main">}}
   1. {{< project name="tox-gh" org="tox-dev" ci="check">}}
   1. {{< project name="sphinx-argparse-cli" org="tox-dev" ci="check">}}
