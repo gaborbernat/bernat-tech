@@ -3,7 +3,7 @@ title = "Tech articles by Bernát Gábor"
 theme = "hugo-coder"
 languageCode = "en"
 defaultContentLanguage = "en"
-paginate = 20
+pagination.pagerSize = 20
 pygmentsStyle = "bw"
 pygmentsCodeFences = true
 pygmentsCodeFencesGuessSyntax = true
@@ -30,6 +30,9 @@ customCSS = [
 favicon_16 = "img/android-chrome-192x192.png"
 favicon_32 = "img/android-chrome-192x192.png"
 touchIcon = "img/android-chrome-192x192.png"
+
+[markup.goldmark]
+renderer.unsafe = true
 
 [params.cloudflare]
 token = "3ead932f454449a799915b1721c18874"
