@@ -3,15 +3,30 @@ title = "Presentations by Bernát Gábor"
 slug = "presentations"
 +++
 
-I'm a regular speaker at (Python) conferences. Here you'll find a list of my recorded presentations:
+I'm a regular speaker at (Python) conferences. Here you'll find a list of my recorded presentations.
+
+Here you can find a [YouTube playlist](https://youtube.com/playlist?list=PLYWe9Aw9Owsod3Orf-pDqABD--r7mlho7) with all of
+them.
 
 {{< table_of_contents >}}
+
+## 🐍 Python meets the crab 🦀 - Friendship at first sight? - PyCon US 2025 - [slides](https://gaborbernat.github.io/python-meets-crab/1) {#python-meets-crab-py-us-25}
+
+{{< youtube id=CqOZdTFb4io >}}
+
+## Python meets the crab - Friendship at first sight? - PyTexas 2025 {#python-meets-crab-pytexas-25}
+
+{{< youtube id=krJZmNvUqK4 >}}
+
+## Lessons learned maintaining open source Python projects - EuroPython 2024 - [slides](https://gaborbernat.github.io/europython-24/) {#lessons-learned-europython-24}
+
+{{< youtube id=4qmuZQYxdrU >}}
 
 ## Lessons learned maintaining open source Python projects - PyTexas 2024 - [slides](https://gaborbernat.github.io/py-texas-24/) {#lessons-learned-py-texas-24}
 
 {{< youtube id=rcSLOqwpJk8 >}}
 
-## What's new in tox 4? - PyCon US 2023 {#lessons-learned-py-con-us-23}
+## What's new in tox 4? - lighting talk - PyCon US 2023 {#lessons-learned-py-con-us-23}
 
 {{< youtube id=95tjPYvbJc0 start="480" >}}
 
@@ -50,3 +65,7 @@ I'm a regular speaker at (Python) conferences. Here you'll find a list of my rec
 ## Standardize Testing in Python - EuroPython 2018 - [slides](https://gaborbernat.github.io/pycon-eu-2018/#/) {#standardize-testing-eu-19}
 
 {{< youtube id=SFqna5ilqig start="8" >}}
+
+## Type hints inside the snake pit - PyLondinium 2018 {#type-hints-snake-pit-lon-18}
+
+{{< youtube id=DzRlR3BFCko >}}
