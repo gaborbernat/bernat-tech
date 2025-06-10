@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tech articles by Bernát Gábor</title><link>https://bernat.tech/</link><description>Recent content on Tech articles by Bernát Gábor</description><generator>Hugo</generator><language>en</language><lastBuildDate>Mon, 10 Feb 2025 11:32:39 -0800</lastBuildDate><atom:link href="https://bernat.tech/index.xml" rel="self" type="application/rss+xml"/><item><title>Version numbers: how to use them?</title><link>https://bernat.tech/posts/version-numbers/</link><pubDate>Sat, 16 May 2020 14:15:00 +0000</pubDate><guid>https://bernat.tech/posts/version-numbers/</guid><description>&lt;p>The &lt;a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" class="external-link" target="_blank" rel="noopener">DRY principle&lt;/a> (an acronym for don&amp;rsquo;t repeat yourself)
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tech articles by Bernát Gábor</title><link>https://bernat.tech/</link><description>Recent content on Tech articles by Bernát Gábor</description><generator>Hugo</generator><language>en</language><lastBuildDate>Mon, 09 Jun 2025 21:27:47 -0700</lastBuildDate><atom:link href="https://bernat.tech/index.xml" rel="self" type="application/rss+xml"/><item><title>Version numbers: how to use them?</title><link>https://bernat.tech/posts/version-numbers/</link><pubDate>Sat, 16 May 2020 14:15:00 +0000</pubDate><guid>https://bernat.tech/posts/version-numbers/</guid><description>&lt;p>The &lt;a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" class="external-link" target="_blank" rel="noopener">DRY principle&lt;/a> (an acronym for don&amp;rsquo;t repeat yourself)
 encourages software engineers to abstract code into a separate component and reuse it rather than write it over and over
 again. If this happens across the system, the best practice is to put it inside a package that lives on its own (a
 library) and then pull it in from the applications when required.&lt;/p>
@@ -65,7 +65,7 @@ segment.&lt;/p>
 &lt;img src="https://img.shields.io/github/last-commit/platformdirs/platformdirs?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
 &lt;/a>
 
-&lt;a href="https://github.com/platformdirs/platformdirs">
+&lt;a class="external-link" href="https://github.com/platformdirs/platformdirs">
 platformdirs
 &lt;/a>
 
@@ -89,7 +89,7 @@ platformdirs
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/filelock?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
 &lt;/a>
 
-&lt;a href="https://github.com/tox-dev/filelock">
+&lt;a class="external-link" href="https://github.com/tox-dev/filelock">
 filelock
 &lt;/a>
 
@@ -113,7 +113,7 @@ filelock
 &lt;img src="https://img.shields.io/github/last-commit/pypa/virtualenv?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
 &lt;/a>
 
-&lt;a href="https://github.com/pypa/virtualenv">
+&lt;a class="external-link" href="https://github.com/pypa/virtualenv">
 virtualenv
 &lt;/a>
 
@@ -137,7 +137,7 @@ virtualenv
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
 &lt;/a>
 
-&lt;a href="https://github.com/tox-dev/tox">
+&lt;a class="external-link" href="https://github.com/tox-dev/tox">
 tox
 &lt;/a>
 
@@ -161,7 +161,7 @@ tox
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/pyproject-api?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
 &lt;/a>
 
-&lt;a href="https://github.com/tox-dev/pyproject-api">
+&lt;a class="external-link" href="https://github.com/tox-dev/pyproject-api">
 pyproject-api
 &lt;/a>
 
@@ -185,7 +185,7 @@ pyproject-api
 &lt;img src="https://img.shields.io/github/last-commit/pytest-dev/pytest-env?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
 &lt;/a>
 
-&lt;a href="https://github.com/pytest-dev/pytest-env">
+&lt;a class="external-link" href="https://github.com/pytest-dev/pytest-env">
 pytest-env
 &lt;/a>
 
@@ -209,7 +209,7 @@ pytest-env
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/pipdeptree?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
 &lt;/a>
 
-&lt;a href="https://github.com/tox-dev/pipdeptree">
+&lt;a class="external-link" href="https://github.com/tox-dev/pipdeptree">
 pipdeptree
 &lt;/a>
 
@@ -233,7 +233,7 @@ pipdeptree
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/sphinx-autodoc-typehints?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
 &lt;/a>
 
-&lt;a href="https://github.com/tox-dev/sphinx-autodoc-typehints">
+&lt;a class="external-link" href="https://github.com/tox-dev/sphinx-autodoc-typehints">
 sphinx-autodoc-typehints
 &lt;/a>
 
@@ -257,7 +257,7 @@ sphinx-autodoc-typehints
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/pre-commit-uv?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
 &lt;/a>
 
-&lt;a href="https://github.com/tox-dev/pre-commit-uv">
+&lt;a class="external-link" href="https://github.com/tox-dev/pre-commit-uv">
 pre-commit-uv
 &lt;/a>
 
@@ -281,7 +281,7 @@ pre-commit-uv
 &lt;img src="https://img.shields.io/github/last-commit/koxudaxi/datamodel-code-generator?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
 &lt;/a>
 
-&lt;a href="https://github.com/koxudaxi/datamodel-code-generator">
+&lt;a class="external-link" href="https://github.com/koxudaxi/datamodel-code-generator">
 datamodel-code-generator
 &lt;/a>
 
@@ -305,7 +305,7 @@ datamodel-code-generator
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-uv?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
 &lt;/a>
 
-&lt;a href="https://github.com/tox-dev/tox-uv">
+&lt;a class="external-link" href="https://github.com/tox-dev/tox-uv">
 tox-uv
 &lt;/a>
 
@@ -329,7 +329,7 @@ tox-uv
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/pyproject-fmt?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
 &lt;/a>
 
-&lt;a href="https://github.com/tox-dev/pyproject-fmt">
+&lt;a class="external-link" href="https://github.com/tox-dev/pyproject-fmt">
 pyproject-fmt
 &lt;/a>
 
@@ -353,7 +353,7 @@ pyproject-fmt
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-gh?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
 &lt;/a>
 
-&lt;a href="https://github.com/tox-dev/tox-gh">
+&lt;a class="external-link" href="https://github.com/tox-dev/tox-gh">
 tox-gh
 &lt;/a>
 
@@ -377,7 +377,7 @@ tox-gh
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/sphinx-argparse-cli?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
 &lt;/a>
 
-&lt;a href="https://github.com/tox-dev/sphinx-argparse-cli">
+&lt;a class="external-link" href="https://github.com/tox-dev/sphinx-argparse-cli">
 sphinx-argparse-cli
 &lt;/a>
 
@@ -401,7 +401,7 @@ sphinx-argparse-cli
 &lt;img src="https://img.shields.io/github/last-commit/pytest-dev/pytest-print?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
 &lt;/a>
 
-&lt;a href="https://github.com/pytest-dev/pytest-print">
+&lt;a class="external-link" href="https://github.com/pytest-dev/pytest-print">
 pytest-print
 &lt;/a>
 
@@ -425,7 +425,7 @@ pytest-print
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/devpi-process?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
 &lt;/a>
 
-&lt;a href="https://github.com/tox-dev/devpi-process">
+&lt;a class="external-link" href="https://github.com/tox-dev/devpi-process">
 devpi-process
 &lt;/a>
 
@@ -449,7 +449,7 @@ devpi-process
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-ini-fmt?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
 &lt;/a>
 
-&lt;a href="https://github.com/tox-dev/tox-ini-fmt">
+&lt;a class="external-link" href="https://github.com/tox-dev/tox-ini-fmt">
 tox-ini-fmt
 &lt;/a>
 
@@ -473,7 +473,7 @@ tox-ini-fmt
 &lt;img src="https://img.shields.io/github/last-commit/gaborbernat/bump-deps-index?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
 &lt;/a>
 
-&lt;a href="https://github.com/gaborbernat/bump-deps-index">
+&lt;a class="external-link" href="https://github.com/gaborbernat/bump-deps-index">
 bump-deps-index
 &lt;/a>
 
@@ -497,7 +497,7 @@ bump-deps-index
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-toml-fmt?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
 &lt;/a>
 
-&lt;a href="https://github.com/tox-dev/tox-toml-fmt">
+&lt;a class="external-link" href="https://github.com/tox-dev/tox-toml-fmt">
 tox-toml-fmt
 &lt;/a>
 
@@ -521,7 +521,7 @@ tox-toml-fmt
 &lt;img src="https://img.shields.io/github/last-commit/gaborbernat/pypi-changes?logo=python&amp;amp;style=flat-square" alt="GitHub last commit">
 &lt;/a>
 
-&lt;a href="https://github.com/gaborbernat/pypi-changes">
+&lt;a class="external-link" href="https://github.com/gaborbernat/pypi-changes">
 pypi-changes
 &lt;/a>
 
@@ -530,9 +530,15 @@ pypi-changes
 &lt;/ol>
 &lt;/li>
 &lt;li>
-&lt;p>Kotlin (IntelliJ Plugin):&lt;/p></description></item><item><title>Presentations by Bernát Gábor</title><link>https://bernat.tech/presentations/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://bernat.tech/presentations/</guid><description>&lt;p>I&amp;rsquo;m a regular speaker at (Python) conferences. Here you&amp;rsquo;ll find a list of my recorded presentations:&lt;/p>
+&lt;p>Kotlin (IntelliJ Plugin):&lt;/p></description></item><item><title>Presentations by Bernát Gábor</title><link>https://bernat.tech/presentations/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://bernat.tech/presentations/</guid><description>&lt;p>I&amp;rsquo;m a regular speaker at (Python) conferences. Here you&amp;rsquo;ll find a list of my recorded presentations.&lt;/p>
+&lt;p>Here you can find a
+&lt;a href="https://youtube.com/playlist?list=PLYWe9Aw9Owsod3Orf-pDqABD--r7mlho7&amp;amp;si=49AMAvacy9EWIVWr" class="external-link" target="_blank" rel="noopener">YouTube playlist&lt;/a> with all of
+them.&lt;/p>
 &lt;div class="toc">&lt;nav id="TableOfContents">
  &lt;ol>
+ &lt;li>&lt;a href="#python-meets-crab-py-us-25">🐍 Python meets the crab 🦀 - Friendship at first sight? - PyCon US 2025 - &lt;a href="https://gaborbernat.github.io/python-meets-crab/1">slides&lt;/a>&lt;/a>&lt;/li>
+ &lt;li>&lt;a href="#python-meets-the-crab---friendship-at-first-sight---pytexas-2025">Python meets the crab - Friendship at first sight? - PyTexas 2025&lt;/a>&lt;/li>
+ &lt;li>&lt;a href="#lessons-learned-py-texas-24">Lessons learned maintaining open source Python projects - EuroPython 2024 - &lt;a href="https://gaborbernat.github.io/europython-24/">slides&lt;/a>&lt;/a>&lt;/li>
  &lt;li>&lt;a href="#lessons-learned-py-texas-24">Lessons learned maintaining open source Python projects - PyTexas 2024 - &lt;a href="https://gaborbernat.github.io/py-texas-24/">slides&lt;/a>&lt;/a>&lt;/li>
  &lt;li>&lt;a href="#lessons-learned-py-con-us-23">What&amp;rsquo;s new in tox 4? - PyCon US 2023&lt;/a>&lt;/li>
  &lt;li>&lt;a href="#editables-us-22">How we standardized editable installs PEP 660 vs PEP 662 - PyCon US 2022 - &lt;a href="https://gaborbernat.github.io/pep-660-662-2022/#/">slides&lt;/a>&lt;/a>&lt;/li>
@@ -546,6 +552,39 @@ pypi-changes
  &lt;li>&lt;a href="#standardize-testing-eu-19">Standardize Testing in Python - EuroPython 2018 - &lt;a href="https://gaborbernat.github.io/pycon-eu-2018/#/">slides&lt;/a>&lt;/a>&lt;/li>
  &lt;/ol>
 &lt;/nav>&lt;/div>
+
+&lt;h2 id="python-meets-crab-py-us-25">
+ 🐍 Python meets the crab 🦀 - Friendship at first sight? - PyCon US 2025 - &lt;a href="https://gaborbernat.github.io/python-meets-crab/1" class="external-link" target="_blank" rel="noopener">slides&lt;/a>
+ &lt;a class="heading-link" href="#python-meets-crab-py-us-25">
+ &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
+ &lt;span class="sr-only">Link to heading&lt;/span>
+ &lt;/a>
+&lt;/h2>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/CqOZdTFb4io?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+ &lt;/div>
+
+&lt;h2 id="python-meets-the-crab---friendship-at-first-sight---pytexas-2025">
+ Python meets the crab - Friendship at first sight? - PyTexas 2025
+ &lt;a class="heading-link" href="#python-meets-the-crab---friendship-at-first-sight---pytexas-2025">
+ &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
+ &lt;span class="sr-only">Link to heading&lt;/span>
+ &lt;/a>
+&lt;/h2>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/krJZmNvUqK4?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+ &lt;/div>
+
+&lt;h2 id="lessons-learned-py-texas-24">
+ Lessons learned maintaining open source Python projects - EuroPython 2024 - &lt;a href="https://gaborbernat.github.io/europython-24/" class="external-link" target="_blank" rel="noopener">slides&lt;/a>
+ &lt;a class="heading-link" href="#lessons-learned-py-texas-24">
+ &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
+ &lt;span class="sr-only">Link to heading&lt;/span>
+ &lt;/a>
+&lt;/h2>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/4qmuZQYxdrU?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+ &lt;/div>
 
 &lt;h2 id="lessons-learned-py-texas-24">
  Lessons learned maintaining open source Python projects - PyTexas 2024 - &lt;a href="https://gaborbernat.github.io/py-texas-24/" class="external-link" target="_blank" rel="noopener">slides&lt;/a>
