@@ -531,8 +531,7 @@ pypi-changes
 &lt;/li>
 &lt;li>
 &lt;p>Kotlin (IntelliJ Plugin):&lt;/p></description></item><item><title>Presentations by Bernát Gábor</title><link>https://bernat.tech/presentations/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://bernat.tech/presentations/</guid><description>&lt;p>I&amp;rsquo;m a regular speaker at (Python) conferences. Here you&amp;rsquo;ll find a list of my recorded presentations.&lt;/p>
-&lt;p>Here you can find a
-&lt;a href="https://youtube.com/playlist?list=PLYWe9Aw9Owsod3Orf-pDqABD--r7mlho7" class="external-link" target="_blank" rel="noopener">YouTube playlist&lt;/a> with all of
+&lt;p>Here you can find a &lt;a href="https://youtube.com/playlist?list=PLYWe9Aw9Owsod3Orf-pDqABD--r7mlho7" class="external-link" target="_blank" rel="noopener">YouTube playlist&lt;/a> with all of
 them.&lt;/p>
 &lt;div class="toc">&lt;nav id="TableOfContents">
  &lt;ol>
@@ -550,6 +549,7 @@ them.&lt;/p>
  &lt;li>&lt;a href="#best-package-library-lon-19">How to best package your library? - PyLondinium 2019 - &lt;a href="https://gaborbernat.github.io/pylondinium2019/#/">slides&lt;/a>&lt;/a>&lt;/li>
  &lt;li>&lt;a href="#type-hinting-and-mypy-us-19">Type hinting (and mypy) - PyCon US 2019 - &lt;a href="https://gaborbernat.github.io/pycon-us-2019/#/">slides&lt;/a>&lt;/a>&lt;/li>
  &lt;li>&lt;a href="#standardize-testing-eu-19">Standardize Testing in Python - EuroPython 2018 - &lt;a href="https://gaborbernat.github.io/pycon-eu-2018/#/">slides&lt;/a>&lt;/a>&lt;/li>
+ &lt;li>&lt;a href="#type-hints-snake-pit-lon-18">Type hints inside the snake pit - PyLondinium 2018&lt;/a>&lt;/li>
  &lt;/ol>
 &lt;/nav>&lt;/div>
 
@@ -705,4 +705,15 @@ them.&lt;/p>
 &lt;/h2>
 &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
  &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/SFqna5ilqig?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=8" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
+ &lt;/div>
+
+&lt;h2 id="type-hints-snake-pit-lon-18">
+ Type hints inside the snake pit - PyLondinium 2018
+ &lt;a class="heading-link" href="#type-hints-snake-pit-lon-18">
+ &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
+ &lt;span class="sr-only">Link to heading&lt;/span>
+ &lt;/a>
+&lt;/h2>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+ &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/DzRlR3BFCko?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div></description></item></channel></rss>
