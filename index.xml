@@ -537,8 +537,8 @@ them.&lt;/p>
 &lt;div class="toc">&lt;nav id="TableOfContents">
  &lt;ol>
  &lt;li>&lt;a href="#python-meets-crab-py-us-25">🐍 Python meets the crab 🦀 - Friendship at first sight? - PyCon US 2025 - &lt;a href="https://gaborbernat.github.io/python-meets-crab/1">slides&lt;/a>&lt;/a>&lt;/li>
- &lt;li>&lt;a href="#python-meets-the-crab---friendship-at-first-sight---pytexas-2025">Python meets the crab - Friendship at first sight? - PyTexas 2025&lt;/a>&lt;/li>
- &lt;li>&lt;a href="#lessons-learned-py-texas-24">Lessons learned maintaining open source Python projects - EuroPython 2024 - &lt;a href="https://gaborbernat.github.io/europython-24/">slides&lt;/a>&lt;/a>&lt;/li>
+ &lt;li>&lt;a href="#python-meets-crab-pytexas-25">Python meets the crab - Friendship at first sight? - PyTexas 2025&lt;/a>&lt;/li>
+ &lt;li>&lt;a href="#lessons-learned-europython-24">Lessons learned maintaining open source Python projects - EuroPython 2024 - &lt;a href="https://gaborbernat.github.io/europython-24/">slides&lt;/a>&lt;/a>&lt;/li>
  &lt;li>&lt;a href="#lessons-learned-py-texas-24">Lessons learned maintaining open source Python projects - PyTexas 2024 - &lt;a href="https://gaborbernat.github.io/py-texas-24/">slides&lt;/a>&lt;/a>&lt;/li>
  &lt;li>&lt;a href="#lessons-learned-py-con-us-23">What&amp;rsquo;s new in tox 4? - lighting talk - PyCon US 2023&lt;/a>&lt;/li>
  &lt;li>&lt;a href="#editables-us-22">How we standardized editable installs PEP 660 vs PEP 662 - PyCon US 2022 - &lt;a href="https://gaborbernat.github.io/pep-660-662-2022/#/">slides&lt;/a>&lt;/a>&lt;/li>
@@ -564,9 +564,9 @@ them.&lt;/p>
  &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/CqOZdTFb4io?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
-&lt;h2 id="python-meets-the-crab---friendship-at-first-sight---pytexas-2025">
+&lt;h2 id="python-meets-crab-pytexas-25">
  Python meets the crab - Friendship at first sight? - PyTexas 2025
- &lt;a class="heading-link" href="#python-meets-the-crab---friendship-at-first-sight---pytexas-2025">
+ &lt;a class="heading-link" href="#python-meets-crab-pytexas-25">
  &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
  &lt;span class="sr-only">Link to heading&lt;/span>
  &lt;/a>
@@ -575,9 +575,9 @@ them.&lt;/p>
  &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/krJZmNvUqK4?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video">&lt;/iframe>
  &lt;/div>
 
-&lt;h2 id="lessons-learned-py-texas-24">
+&lt;h2 id="lessons-learned-europython-24">
  Lessons learned maintaining open source Python projects - EuroPython 2024 - &lt;a href="https://gaborbernat.github.io/europython-24/" class="external-link" target="_blank" rel="noopener">slides&lt;/a>
- &lt;a class="heading-link" href="#lessons-learned-py-texas-24">
+ &lt;a class="heading-link" href="#lessons-learned-europython-24">
  &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
  &lt;span class="sr-only">Link to heading&lt;/span>
  &lt;/a>
