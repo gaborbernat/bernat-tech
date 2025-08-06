@@ -25,19 +25,20 @@ I am the primary maintainer (and author) for the following
   1. {{< project name="tox" org="tox-dev" ci="check">}}
   1. {{< project name="pyproject-api" org="tox-dev" ci="check">}}
   1. {{< project name="pytest-env" org="pytest-dev" ci="check">}}
+  1. {{< project name="datamodel-code-generator" org="koxudaxi" ci="test">}}
   1. {{< project name="pipdeptree" org="tox-dev" ci="check">}}
   1. {{< project name="sphinx-autodoc-typehints" org="tox-dev" ci="check">}}
   1. {{< project name="pre-commit-uv" org="tox-dev" ci="check">}}
-  1. {{< project name="datamodel-code-generator" org="koxudaxi" ci="test">}}
   1. {{< project name="tox-uv" org="tox-dev" ci="check">}}
   1. {{< project name="pyproject-fmt" org="tox-dev" ci="main">}}
+  1. {{< project name="toml-fmt-common" org="tox-dev" ci="check">}}
+  1. {{< project name="pytest-print" org="pytest-dev" ci="check">}}
   1. {{< project name="tox-gh" org="tox-dev" ci="check">}}
   1. {{< project name="sphinx-argparse-cli" org="tox-dev" ci="check">}}
-  1. {{< project name="pytest-print" org="pytest-dev" ci="check">}}
   1. {{< project name="devpi-process" org="tox-dev" ci="check">}}
   1. {{< project name="tox-ini-fmt" org="tox-dev" ci="check">}}
-  1. {{< project name="bump-deps-index" org="gaborbernat" ci="check">}}
   1. {{< project name="tox-toml-fmt" org="tox-dev" ci="main">}}
+  1. {{< project name="bump-deps-index" org="gaborbernat" ci="check">}}
   1. {{< project name="pypi-changes" org="gaborbernat" ci="check">}}
 
 - Kotlin (IntelliJ Plugin):
@@ -65,8 +66,8 @@ For the following projects, while I do hold the write commit bit, I only help wi
 1. {{< project name="pipx" org="pypa">}}
 1. {{< project name="pytest-memray" org="bloomberg">}}
 1. {{< project name="ipydatagrid" org="jupyter-widgets">}}
-1. {{< project name="tox-conda" org="tox-dev">}}
 1. {{< project name="attrs-strict" org="bloomberg">}}
+1. {{< project name="tox-conda" org="tox-dev">}}
 
 You can find my Curriculum Vitae (or résumé) on the following link
 [![View PDF](https://img.shields.io/badge/View%20as%20PDF-latest%20CV-blue?style=flat-square&logo=docusign)](https://gaborbernat.github.io/cv/main.pdf).
