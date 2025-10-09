@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tech articles by Bernát Gábor</title><link>https://bernat.tech/</link><description>Recent content on Tech articles by Bernát Gábor</description><generator>Hugo</generator><language>en</language><lastBuildDate>Mon, 09 Jun 2025 21:27:47 -0700</lastBuildDate><atom:link href="https://bernat.tech/index.xml" rel="self" type="application/rss+xml"/><item><title>Version numbers: how to use them?</title><link>https://bernat.tech/posts/version-numbers/</link><pubDate>Sat, 16 May 2020 14:15:00 +0000</pubDate><guid>https://bernat.tech/posts/version-numbers/</guid><description>&lt;p&gt;The &lt;a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" class="external-link" target="_blank" rel="noopener"&gt;DRY principle&lt;/a&gt; (an acronym for don&amp;rsquo;t repeat yourself)
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tech articles by Bernát Gábor</title><link>https://bernat.tech/</link><description>Recent content on Tech articles by Bernát Gábor</description><generator>Hugo</generator><language>en</language><lastBuildDate>Wed, 06 Aug 2025 13:48:16 -0700</lastBuildDate><atom:link href="https://bernat.tech/index.xml" rel="self" type="application/rss+xml"/><item><title>Version numbers: how to use them?</title><link>https://bernat.tech/posts/version-numbers/</link><pubDate>Sat, 16 May 2020 14:15:00 +0000</pubDate><guid>https://bernat.tech/posts/version-numbers/</guid><description>&lt;p&gt;The &lt;a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" class="external-link" target="_blank" rel="noopener"&gt;DRY principle&lt;/a&gt; (an acronym for don&amp;rsquo;t repeat yourself)
 encourages software engineers to abstract code into a separate component and reuse it rather than write it over and over
 again. If this happens across the system, the best practice is to put it inside a package that lives on its own (a
 library) and then pull it in from the applications when required.&lt;/p&gt;
@@ -192,6 +192,30 @@ pytest-env
 
 &lt;/li&gt;
 &lt;li&gt;
+&lt;a href="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/test.yaml" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/test.yaml/badge.svg" alt="check"&gt;
+&lt;/a&gt;
+
+
+&lt;a href="https://pypi.org/project/datamodel-code-generator" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://img.shields.io/pypi/v/datamodel-code-generator?style=flat-square" alt="PyPI"&gt;
+&lt;/a&gt;
+
+&lt;a href="https://pepy.tech/project/datamodel-code-generator" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://static.pepy.tech/badge/datamodel-code-generator/month" alt="PyPI - Downloads"&gt;
+&lt;/a&gt;
+
+&lt;a href="https://github.com/koxudaxi/datamodel-code-generator/commits"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/koxudaxi/datamodel-code-generator?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;/a&gt;
+
+&lt;a class="external-link" href="https://github.com/koxudaxi/datamodel-code-generator"&gt;
+datamodel-code-generator
+&lt;/a&gt;
+
+
+&lt;/li&gt;
+&lt;li&gt;
 &lt;a href="https://github.com/tox-dev/pipdeptree/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/tox-dev/pipdeptree/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
@@ -264,30 +288,6 @@ pre-commit-uv
 
 &lt;/li&gt;
 &lt;li&gt;
-&lt;a href="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/test.yaml" target="_blank" rel="noopener"&gt;
- &lt;img src="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/test.yaml/badge.svg" alt="check"&gt;
-&lt;/a&gt;
-
-
-&lt;a href="https://pypi.org/project/datamodel-code-generator" target="_blank" rel="noopener"&gt;
- &lt;img src="https://img.shields.io/pypi/v/datamodel-code-generator?style=flat-square" alt="PyPI"&gt;
-&lt;/a&gt;
-
-&lt;a href="https://pepy.tech/project/datamodel-code-generator" target="_blank" rel="noopener"&gt;
- &lt;img src="https://static.pepy.tech/badge/datamodel-code-generator/month" alt="PyPI - Downloads"&gt;
-&lt;/a&gt;
-
-&lt;a href="https://github.com/koxudaxi/datamodel-code-generator/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/koxudaxi/datamodel-code-generator?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
-&lt;/a&gt;
-
-&lt;a class="external-link" href="https://github.com/koxudaxi/datamodel-code-generator"&gt;
-datamodel-code-generator
-&lt;/a&gt;
-
-
-&lt;/li&gt;
-&lt;li&gt;
 &lt;a href="https://github.com/tox-dev/tox-uv/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/tox-dev/tox-uv/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
@@ -331,6 +331,54 @@ tox-uv
 
 &lt;a class="external-link" href="https://github.com/tox-dev/pyproject-fmt"&gt;
 pyproject-fmt
+&lt;/a&gt;
+
+
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="https://github.com/tox-dev/toml-fmt-common/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://github.com/tox-dev/toml-fmt-common/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
+&lt;/a&gt;
+
+
+&lt;a href="https://pypi.org/project/toml-fmt-common" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://img.shields.io/pypi/v/toml-fmt-common?style=flat-square" alt="PyPI"&gt;
+&lt;/a&gt;
+
+&lt;a href="https://pepy.tech/project/toml-fmt-common" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://static.pepy.tech/badge/toml-fmt-common/month" alt="PyPI - Downloads"&gt;
+&lt;/a&gt;
+
+&lt;a href="https://github.com/tox-dev/toml-fmt-common/commits"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/toml-fmt-common?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;/a&gt;
+
+&lt;a class="external-link" href="https://github.com/tox-dev/toml-fmt-common"&gt;
+toml-fmt-common
+&lt;/a&gt;
+
+
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="https://github.com/pytest-dev/pytest-print/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://github.com/pytest-dev/pytest-print/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
+&lt;/a&gt;
+
+
+&lt;a href="https://pypi.org/project/pytest-print" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://img.shields.io/pypi/v/pytest-print?style=flat-square" alt="PyPI"&gt;
+&lt;/a&gt;
+
+&lt;a href="https://pepy.tech/project/pytest-print" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://static.pepy.tech/badge/pytest-print/month" alt="PyPI - Downloads"&gt;
+&lt;/a&gt;
+
+&lt;a href="https://github.com/pytest-dev/pytest-print/commits"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/pytest-dev/pytest-print?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;/a&gt;
+
+&lt;a class="external-link" href="https://github.com/pytest-dev/pytest-print"&gt;
+pytest-print
 &lt;/a&gt;
 
 
@@ -384,30 +432,6 @@ sphinx-argparse-cli
 
 &lt;/li&gt;
 &lt;li&gt;
-&lt;a href="https://github.com/pytest-dev/pytest-print/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
- &lt;img src="https://github.com/pytest-dev/pytest-print/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
-&lt;/a&gt;
-
-
-&lt;a href="https://pypi.org/project/pytest-print" target="_blank" rel="noopener"&gt;
- &lt;img src="https://img.shields.io/pypi/v/pytest-print?style=flat-square" alt="PyPI"&gt;
-&lt;/a&gt;
-
-&lt;a href="https://pepy.tech/project/pytest-print" target="_blank" rel="noopener"&gt;
- &lt;img src="https://static.pepy.tech/badge/pytest-print/month" alt="PyPI - Downloads"&gt;
-&lt;/a&gt;
-
-&lt;a href="https://github.com/pytest-dev/pytest-print/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/pytest-dev/pytest-print?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
-&lt;/a&gt;
-
-&lt;a class="external-link" href="https://github.com/pytest-dev/pytest-print"&gt;
-pytest-print
-&lt;/a&gt;
-
-
-&lt;/li&gt;
-&lt;li&gt;
 &lt;a href="https://github.com/tox-dev/devpi-process/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/tox-dev/devpi-process/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
@@ -456,30 +480,6 @@ tox-ini-fmt
 
 &lt;/li&gt;
 &lt;li&gt;
-&lt;a href="https://github.com/gaborbernat/bump-deps-index/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
- &lt;img src="https://github.com/gaborbernat/bump-deps-index/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
-&lt;/a&gt;
-
-
-&lt;a href="https://pypi.org/project/bump-deps-index" target="_blank" rel="noopener"&gt;
- &lt;img src="https://img.shields.io/pypi/v/bump-deps-index?style=flat-square" alt="PyPI"&gt;
-&lt;/a&gt;
-
-&lt;a href="https://pepy.tech/project/bump-deps-index" target="_blank" rel="noopener"&gt;
- &lt;img src="https://static.pepy.tech/badge/bump-deps-index/month" alt="PyPI - Downloads"&gt;
-&lt;/a&gt;
-
-&lt;a href="https://github.com/gaborbernat/bump-deps-index/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/gaborbernat/bump-deps-index?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
-&lt;/a&gt;
-
-&lt;a class="external-link" href="https://github.com/gaborbernat/bump-deps-index"&gt;
-bump-deps-index
-&lt;/a&gt;
-
-
-&lt;/li&gt;
-&lt;li&gt;
 &lt;a href="https://github.com/tox-dev/tox-toml-fmt/actions/workflows/main.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/tox-dev/tox-toml-fmt/actions/workflows/main.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
@@ -499,6 +499,30 @@ bump-deps-index
 
 &lt;a class="external-link" href="https://github.com/tox-dev/tox-toml-fmt"&gt;
 tox-toml-fmt
+&lt;/a&gt;
+
+
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="https://github.com/gaborbernat/bump-deps-index/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://github.com/gaborbernat/bump-deps-index/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
+&lt;/a&gt;
+
+
+&lt;a href="https://pypi.org/project/bump-deps-index" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://img.shields.io/pypi/v/bump-deps-index?style=flat-square" alt="PyPI"&gt;
+&lt;/a&gt;
+
+&lt;a href="https://pepy.tech/project/bump-deps-index" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://static.pepy.tech/badge/bump-deps-index/month" alt="PyPI - Downloads"&gt;
+&lt;/a&gt;
+
+&lt;a href="https://github.com/gaborbernat/bump-deps-index/commits"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/gaborbernat/bump-deps-index?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;/a&gt;
+
+&lt;a class="external-link" href="https://github.com/gaborbernat/bump-deps-index"&gt;
+bump-deps-index
 &lt;/a&gt;
 
 
