@@ -11,14 +11,13 @@ slug = "about"
 [![Linkedin Badge](https://img.shields.io/badge/-gaborbernat-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/gaborbernat/)](https://www.linkedin.com/in/gaborbernat/)
 [![MAIL Badge](https://img.shields.io/badge/-gaborjbernat@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:gaborjbernat@gmail.com)](mailto:gaborjbernat@gmail.com)
 
-I work at [Bloomberg US - Los Angeles](https://www.techatbloomberg.com/) on the data ingestion pipelines quality control
-segment.
+I work at [Bloomberg US - Los Angeles](https://www.techatbloomberg.com/) within the Developer Experience organizations
+Artifact Repository Hosting team.
 
 I am the primary maintainer (and author) for the following
 [open-source projects](https://en.wikipedia.org/wiki/Open_source):
 
 - [Python](https://www.python.org/):
-
   1. {{< project name="platformdirs" org="platformdirs" ci="check">}}
   1. {{< project name="filelock" org="tox-dev" ci="check">}}
   1. {{< project name="virtualenv" org="pypa" ci="check">}}
@@ -42,7 +41,6 @@ I am the primary maintainer (and author) for the following
   1. {{< project name="pypi-changes" org="gaborbernat" ci="check">}}
 
 - Kotlin (IntelliJ Plugin):
-
   1. [![Build](https://github.com/tox-dev/PyVenvManage/actions/workflows/check.yaml/badge.svg)](https://github.com/tox-dev/PyVenvManage/actions/workflows/check.yaml)
      [![Version](https://img.shields.io/jetbrains/plugin/v/20536)](https://plugins.jetbrains.com/plugin/20536/versions)
      [![Rating](https://img.shields.io/jetbrains/plugin/r/rating/20536)](https://plugins.jetbrains.com/plugin/20536)
@@ -50,7 +48,6 @@ I am the primary maintainer (and author) for the following
      [PyVenv Manage 2](https://plugins.jetbrains.com/plugin/20536-pyvenv-manage-2)
 
 - Repositories helping maintaining and self:
-
   1. [all-repos-self](https://github.com/gaborbernat/all-repos-self)<p>
      [![check](https://github.com/gaborbernat/all-repos-self/actions/workflows/check.yaml/badge.svg)](https://github.com/gaborbernat/all-repos-self/actions/workflows/check.yaml)</p>
   1. [bernat.tech](https://github.com/gaborbernat/bernat-tech/)<p>
