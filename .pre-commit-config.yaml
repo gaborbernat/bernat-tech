@@ -1,11 +1,11 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: end-of-file-fixer
       - id: trailing-whitespace
   - repo: https://github.com/rbubley/mirrors-prettier
-    rev: "v3.5.3"
+    rev: "v3.6.2"
     hooks:
       - id: prettier
         exclude: layouts/shortcodes/project.html|layouts/shortcodes/img.html
