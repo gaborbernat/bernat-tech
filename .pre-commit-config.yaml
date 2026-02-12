@@ -23,10 +23,10 @@ repos:
     hooks:
       - id: mdformat
         args: ["--wrap", "120", "--number"]
+        exclude: "^content/"
         additional_dependencies:
           - mdformat-gfm
           - mdformat-tables
-          - mdformat-frontmatter
           - mdformat-ruff
           - mdformat-config
           - mdformat-beautysh
