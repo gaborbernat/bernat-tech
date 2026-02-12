@@ -34,6 +34,9 @@ favicon_16 = "img/android-chrome-192x192.png"
 favicon_32 = "img/android-chrome-192x192.png"
 touchIcon = "img/android-chrome-192x192.png"
 
+[params.cloudflare]
+token = "3ead932f454449a799915b1721c18874"
+
 [[params.social]]
 icon = "fa fa-github fa-2x"
 name = "Github"

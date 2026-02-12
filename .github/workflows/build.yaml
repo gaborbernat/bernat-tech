@@ -35,8 +35,6 @@ jobs:
             ${{ runner.os }}-hugomod-
       - name: Build
         run: hugo --minify
-        env:
-          CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
       - name: Validate HTML
         uses: Cyb3r-Jak3/html5validator-action@v7.2.0
         with:
