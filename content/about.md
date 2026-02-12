@@ -65,7 +65,6 @@ For the following projects, while I do hold the write commit bit, I only help wi
 1. {{< project name="pytest-memray" org="bloomberg">}}
 1. {{< project name="ipydatagrid" org="jupyter-widgets">}}
 1. {{< project name="attrs-strict" org="bloomberg">}}
-1. {{< project name="tox-conda" org="tox-dev">}}
 
 You can find my Curriculum Vitae (or résumé) on the following link
 [![View PDF](https://img.shields.io/badge/View%20as%20PDF-latest%20CV-blue?style=flat-square&logo=docusign)](https://gaborbernat.github.io/cv/main.pdf).
