@@ -1,0 +1,14 @@
+/* TEAM */
+Developer: Bernát Gábor
+Contact: gaborjbernat@gmail.com
+Twitter: @gjbernat
+From: Bloomberg
+
+/* THANKS */
+Hugo static site generator: https://gohugo.io/
+Hugo Coder theme: https://github.com/luizdepra/hugo-coder
+
+/* SITE */
+Last update: 2026-02-12
+Standards: HTML5, CSS3
+Components: Hugo, GitHub Actions, GitHub Pages

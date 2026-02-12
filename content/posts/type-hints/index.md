@@ -42,11 +42,12 @@ extend/modify the function tells you about the type of data you get both as inpu
 following the send request function,
 
 ```python
-def send_request(request_data : Any,
-                 headers: Optional[Dict[str, str]],
-                 user_id: Optional[UserId] = None,
-                 as_json: bool = True):
-    ...
+def send_request(
+    request_data: Any,
+    headers: Optional[Dict[str, str]],
+    user_id: Optional[UserId] = None,
+    as_json: bool = True,
+): ...
 ```
 
 Just looking at the signature of this, I know that while the `request_data` could be anything, the `headers` content is
@@ -86,7 +87,9 @@ the example that follows, the input must be of type `str`, passing in `None` thr
 
 ```python
 def transform(arg):
-    return 'transformed value {}'.format(arg.upper())
+    return "transformed value {}".format(arg.upper())
+
+
 # if arg would be type hinted as str the type linter could warn that this is an invalid call
 transform(None)
 ```
@@ -96,12 +99,14 @@ cases too, where such mismatches get harder and harder to see; such as nested fu
 
 ```python
 def construct(param=None):
-    return None if param is None else ''
+    return None if param is None else ""
+
 
 def append(arg):
-    return arg + ' appended'
+    return arg + " appended"
 
-transform( append( construct() ) )
+
+transform(append(construct()))
 ```
 
 While there are more and more linters out there, the reference implementation of the Python type checking is
@@ -120,18 +125,19 @@ from datetime import datetime
 from typing import List
 from pydantic import BaseModel, ValidationError
 
+
 class User(BaseModel):
     id: int
-    name = 'John Doe'
+    name = "John Doe"
     signup_ts: datetime = None
     friends: List[int] = []
 
-external_data = {'id': '123', 'signup_ts': '2017-06-01 12:22',
-                 'friends': [1, 2, 3]}
+
+external_data = {"id": "123", "signup_ts": "2017-06-01 12:22", "friends": [1, 2, 3]}
 user = User(**external_data)
 
 try:
-    User(signup_ts='broken', friends=[1, 2, 'not number'])
+    User(signup_ts="broken", friends=[1, 2, "not number"])
 except ValidationError as e:
     print(e.json())
 ```
@@ -182,7 +188,7 @@ This code will generate the following output:
 ```bash
 bernat@uvm ~/python-magic (master●)$ mypy --ignore-missing-imports tests/test_magic_field.py
 tests/test_magic_field.py:21: error: Argument 1 to "MagicField" has incompatible type "int";
-    expected "Union[str, bytes]"
+expected "Union[str, bytes]"
 tests/test_magic_field.py:22: error: "MagicField" has no attribute "names"; maybe "name" or "_name"?
 ```
 
@@ -299,8 +305,9 @@ To avoid having long lines of code as type hint, it's possible to type hint argu
 then put in the line after only the return type annotation:
 
 ```python
-def add(element # type: List[int]
-       ):
+def add(
+    element,  # type: List[int]
+):
     # type: (...) -> None
     self.elements.append(element)
 ```
@@ -321,11 +328,12 @@ First, you must add type hints. Because the type hint would be long-winded, you 
 
 ```python
 @contextmanager
-def swap_in_state(state,  # type: State
-                  config,  # type: HasGetSetMutable
-                  overrides  # type: Optional[HasGetSetMutable]
-                 ):
-# type: (...) -> Generator[Tuple[HasGetSetMutable, Optional[HasGetSetMutable]], None, None]
+def swap_in_state(
+    state,  # type: State
+    config,  # type: HasGetSetMutable
+    overrides,  # type: Optional[HasGetSetMutable]
+):
+    # type: (...) -> Generator[Tuple[HasGetSetMutable, Optional[HasGetSetMutable]], None, None]
     old_config, old_overrides = state.config, state.overrides
     state.config, state.overrides = config, overrides
     yield old_config, old_overrides
@@ -340,11 +348,13 @@ from magic import RunSate
 
 HasGetSetMutable = Union[Dict, List]
 
+
 @contextmanager
-def swap_in_state(state,  # type: State
-                  config,  # type: HasGetSetMutable
-                  overrides  # type: Optional[HasGetSetMutable]
-                  ):
+def swap_in_state(
+    state,  # type: State
+    config,  # type: HasGetSetMutable
+    overrides,  # type: Optional[HasGetSetMutable]
+):
     # type: (...) -> Generator[Tuple[HasGetSetMutable, Optional[HasGetSetMutable]], None, None]
     old_config, old_overrides = state.config, state.overrides
     state.config, state.overrides = config, overrides
@@ -361,11 +371,13 @@ from magic import RunSate
 
 HasGetSetMutable = Union[Dict, List]  # pylint: disable=invalid-name
 
+
 @contextmanager
-def swap_in_state(state,  # type: State
-                   config,  # type: HasGetSetMutable
-                   overrides  # type: Optional[HasGetSetMutable]
-                   ):  # pylint: disable=bad-continuation
+def swap_in_state(
+    state,  # type: State
+    config,  # type: HasGetSetMutable
+    overrides,  # type: Optional[HasGetSetMutable]
+):  # pylint: disable=bad-continuation
     # type: (...) -> Generator[Tuple[HasGetSetMutable, Optional[HasGetSetMutable]], None, None]
     old_config, old_overrides = state.config, state.overrides
     state.config, state.overrides = config, overrides
@@ -383,11 +395,11 @@ This option allows you to keep your code as it is:
 
 ```python
 class A(object):
-  def __init__() -> None:
-      self.elements = []
+    def __init__() -> None:
+        self.elements = []
 
-  def add(element):
-      self.elements.append(element)
+    def add(element):
+        self.elements.append(element)
 ```
 
 and instead, add another file with `pyi` extension right beside it:
@@ -396,10 +408,12 @@ and instead, add another file with `pyi` extension right beside it:
 # a.pyi alongside a.py
 from typing import List
 
+
 class A(object):
-  elements = ... # type: List[int]
-  def __init__() -> None: ...
-  def add(element: int) -> None: ...
+    elements = ...  # type: List[int]
+
+    def __init__() -> None: ...
+    def add(element: int) -> None: ...
 ```
 
 Interface files are not a new thing; C/C++ had it for decades now. Because Python is an interpreted language, it does
@@ -431,8 +445,9 @@ Now there are also some hefty penalties to pay:
 - There is no check that your implementation file matches your stub's signature (furthermore, IDEs always use the stub
   definition).
 - However, the heaviest penalty is that you cannot type check the code you're type hinting via a stub. Stub file type
-hints were designed to be used to type-check code that uses the library. But not too type check the codebase itself what
-your type hinting.
+  hints were designed to be used to type-check code that uses the library. But not too type check the codebase itself
+  what your type hinting.
+
 </div>
 
 The last two drawback makes it incredibly hard to check that the type hinted codebase via a stub file is in sync or not.
@@ -483,11 +498,11 @@ Nominal types are types that have a name to it within the Python interpreter. Fo
 containers:
 
 ```python
-t : Tuple[int, float] = 0, 1.2
-d : Dict[str, int] = {"a": 1, "b": 2}
-d : MutableMapping[str, int] = {"a": 1, "b": 2}
-l : List[int] = [1, 2, 3]
-i : Iterable[Text] = [ u'1', u'2', u'3']
+t: Tuple[int, float] = 0, 1.2
+d: Dict[str, int] = {"a": 1, "b": 2}
+d: MutableMapping[str, int] = {"a": 1, "b": 2}
+l: List[int] = [1, 2, 3]
+i: Iterable[Text] = ["1", "2", "3"]
 ```
 
 For compound types, it can become cumbersome to keep writing it again and again, so the system allows you to alias
@@ -501,7 +516,7 @@ One can even elevate builtin types to represent their own type, which can be use
 you pass in two arguments with the same type in the wrong order to a function:
 
 ```python
-UserId = NewType('UserId', int)
+UserId = NewType("UserId", int)
 user_id = UserId(524313)
 count = 1
 call_with_user_id_n_times(user_id, count)
@@ -513,15 +528,15 @@ For `namedtuple` you can attach your type information directly (note the strong 
 
 ```python
 class Employee(NamedTuple):
-     name: str
-     id: int
+    name: str
+    id: int
 ```
 
 You have the composing types of _one of_ and _optional of_:
 
 ```python
-Union[None, int, str] # one of
-Optional[float] # either None or float
+Union[None, int, str]  # one of
+Optional[float]  # either None or float
 ```
 
 You can even type hint your callback functions:
@@ -547,7 +562,7 @@ Finally, disable type checking wherever it's not needed by using the `Any` type 
 
 ```python
 def foo(item: Any) -> int:
-     item.bar()
+    item.bar()
 ```
 
 ### 2. Duck types - protocols
@@ -558,19 +573,23 @@ what operations and attributes you expect on objects instead of explicitly stati
 laid down in [PEP-544 ~ Protocols](https://www.python.org/dev/peps/pep-0544/).
 
 ```python
-KEY = TypeVar('KEY', contravariant=true)
+KEY = TypeVar("KEY", contravariant=true)
+
 
 # this is a protocol having a generic type as an argument
 # it has a class variable of type var, and a getter with the same key type
 class MagicGetter(Protocol[KEY], Sized):
-    var : KEY
+    var: KEY
+
     def __getitem__(self, item: KEY) -> int: ...
 
+
 def func_int(param: MagicGetter[int]) -> int:
-    return param['a'] * 2
+    return param["a"] * 2
+
 
 def func_str(param: MagicGetter[str]) -> str:
-    return '{}'.format(param['a'])
+    return "{}".format(param["a"])
 ```
 
 # Gotchas
@@ -590,9 +609,10 @@ Here's a quick implementation of the `repr` dunder method for a class:
 ```python
 from __future__ import unicode_literals
 
+
 class A(object):
     def __repr__(self) -> str:
-        return 'A({})'.format(self.full_name)
+        return "A({})".format(self.full_name)
 ```
 
 This code has a bug in it. While this is correct under Python 3, it is not under Python 2 (because Python 2 expects to
@@ -603,14 +623,15 @@ Python 2 and 3. You need to add runtime logic to do the right thing:
 ```python
 from __future__ import unicode_literals
 
+
 class A(object):
     def __repr__(self) -> str:
-        res = 'A({})'.format(self.full_name)
+        res = "A({})".format(self.full_name)
         if sys.version_info > (3, 0):
             # noinspection PyTypeChecker
             return res
         # noinspection PyTypeChecker
-        return res.encode('utf-8')
+        return res.encode("utf-8")
 ```
 
 To fight the IDE to accept this form, you need to add a few linter comments, making this code ever so complicated to
@@ -643,16 +664,20 @@ type, and only a given output type is returned. So, in this case:
 ```python
 from typing import overload
 
+
 @overload
 def magic(i: int) -> int:
     pass
+
 
 @overload
 def magic(i: str) -> str:
     pass
 
+
 def magic(i: Union[int, str]) -> Union[int, str]:
     return i * 2
+
 
 def other_func() -> int:
     result = magic(2)
@@ -672,8 +697,8 @@ built-in types name:
 ```python
 class A(object):
     def float(self):
-            # type: () -> float
-           return 1.0
+        # type: () -> float
+        return 1.0
 ```
 
 Once you run the linter, you'll see:
@@ -694,10 +719,11 @@ want the `builtin.float`:
 if typing.TYPE_CHECKING:
     import builtins
 
+
 class A(object):
     def float(self):
-            # type: () -> builtins.float
-           return 1.0
+        # type: () -> builtins.float
+        return 1.0
 ```
 
 Note that to do this, you also need to import `builtins`, and to avoid this causing issues at runtime, you can guard it
@@ -713,14 +739,17 @@ correct type is passed, and the base is abstract, so this seems an agreeable des
 from abc import ABCMeta, abstractmethod
 from typing import Union
 
+
 class A(metaclass=ABCMeta):
     @abstractmethod
     def func(self, key):  # type: (Union[int, str]) -> str
         raise NotImplementedError
 
+
 class B(A):
     def func(self, key):  # type: (int) -> str
         return str(key)
+
 
 class C(A):
     def func(self, key):  # type: (str) -> str
@@ -742,14 +771,17 @@ in the function arguments; you can only extend what you cover, but not to constr
 from abc import ABCMeta, abstractmethod
 from typing import Union
 
+
 class A(metaclass=ABCMeta):
     @abstractmethod
     def func(self, key):  # type: (Union[int, str]) -> str
         raise NotImplementedError
 
+
 class B(A):
     def func(self, key):  # type: (Union[int, str, bool]) -> str
         return str(key)
+
 
 class C(A):
     def func(self, key):  # type: (Union[int, str, List]) -> str
@@ -763,12 +795,13 @@ See if you can spot the error in the following code snippet:
 ```python
 class A:
     @classmethod
-    def magic(cls, a: int) -> 'A':
+    def magic(cls, a: int) -> "A":
         return cls()
+
 
 class B(A):
     @classmethod
-    def magic(cls, a: int, b: bool) -> 'B':
+    def magic(cls, a: int, b: bool) -> "B":
         return cls()
 ```
 
@@ -777,8 +810,8 @@ If you did not manage yet, consider what will happen if you write the following 
 ```python
 from typing import List, Type
 
-elements : List[Type[A]] = [A, B]
-print( [e.magic(1) for e in elements])
+elements: List[Type[A]] = [A, B]
+print([e.magic(1) for e in elements])
 ```
 
 Were you to try to run it this would fail with the following runtime error:
@@ -804,6 +837,7 @@ class A:
     def __init__(self, a: int) -> None:
         pass
 
+
 class B(A):
     def __init__(self, a: int, b: bool) -> None:
         super().__init__(a)
@@ -815,14 +849,14 @@ script also needs just a slight modification:
 ```python
 from typing import List, Type
 
-elements : List[Type[A]]= [A, B]
-print( [e(1) for e in elements])
+elements: List[Type[A]] = [A, B]
+print([e(1) for e in elements])
 ```
 
 Here's the runtime error, being mostly the same, just now complaining about `__init__` instead of `magic`:
 
 ```bash
-    print( [e(1) for e in elements])
+print( [e(1) for e in elements])
 TypeError: __init__() missing 1 required positional argument: 'b'
 ```
 
@@ -842,19 +876,20 @@ Remember you have some tools at hand that help you discover, understand and perh
 - use `reveal_type` to see inferred type
   ```python
   a = [4]
-  reveal_type(a)         # -> error: Revealed type is 'builtins.list[builtins.int*]'
+  reveal_type(a)  # -> error: Revealed type is 'builtins.list[builtins.int*]'
   ```
 - use `cast` to force a given type:
   ```python
   from typing import List, cast
+
   a = [4]
-  b = cast(List[int], a) # passes fine
-  c = cast(List[str], a) # type: List[str] # passes fine (no runtime check)
-  reveal_type(c)         # -> error: Revealed type is 'builtins.list[builtins.str]'
+  b = cast(List[int], a)  # passes fine
+  c = cast(List[str], a)  # type: List[str] # passes fine (no runtime check)
+  reveal_type(c)  # -> error: Revealed type is 'builtins.list[builtins.str]'
   ```
 - use the type ignore marker to disable an error in a line:
   ```python
-  x = confusing_function() # type: ignore # see mypy/issues/1167
+  x = confusing_function()  # type: ignore # see mypy/issues/1167
   ```
 - ask the community; expose a minimal reproducible version of the problem under the
   [python/typing](https://gitter.im/python/typing) `Gitter` chat.
@@ -916,17 +951,17 @@ things:
 - finally, appending to the correct parameter into the docstring.
 
 For example `Any` maps to `` py:data:`~typing.Any` ``. Things can get even more complicated for compound types such as
-`Mapping[str, bool]` needs to be translated for example too ``:class:`~typing.Mapping`\\[:class:`str`, :class:`bool`]``.
-Getting the translation here right (e.g. having `class` or `data` namespace) is essential so that the `intersphinx`
-plugin will work correctly (a plugin that links types directly to their respective Python standard library documentation
-link).
+`Mapping[str, bool]` needs to be translated for example too
+`` :class:`~typing.Mapping`\\[:class:`str`, :class:`bool`] ``. Getting the translation here right (e.g. having `class`
+or `data` namespace) is essential so that the `intersphinx` plugin will work correctly (a plugin that links types
+directly to their respective Python standard library documentation link).
 
 In order to use it one needs to install it via `pip install sphinx-autodoc-types>=2.1.1` and then enable in inside the
 `conf.py` file:
 
 ```python
 # conf.py
-extensions = ['sphinx_autodoc_typehints']
+extensions = ["sphinx_autodoc_typehints"]
 ```
 
 That's it all. An example use case of this is [RookieGameDevs/revived](https://github.com/RookieGameDevs/revived)

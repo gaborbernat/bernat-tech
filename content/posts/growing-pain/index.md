@@ -9,8 +9,8 @@ tags = ["python", "packaging", "pip", "setuptools", "pep517", "pep518"]
 title = "Python packaging - Growing Pains"
 +++
 
-In my previous two posts, I've gone over [what package types python has]({{< ref "pep-517-and-python-packaging" >}}),
-and [how the package building works]({{< ref "pep-517-518" >}}), especially with the introduction of the PEP-517/518.
+In my previous two posts, I've gone over \[what package types python has\]({{< ref "pep-517-and-python-packaging" >}}),
+and \[how the package building works\]({{< ref "pep-517-518" >}}), especially with the introduction of the PEP-517/518.
 Although the changes were primarily to make things more robust, we did run into a few issues while implementing it and
 releasing it. This post will go over a few, hopefully serving as lessons learned for all of us and presenting some
 interesting problems to solve in the future.
