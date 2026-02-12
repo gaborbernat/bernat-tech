@@ -13,7 +13,7 @@
 <span class=tag><a href=/tags/type-hint/>Type-Hint</a></span></div></div></header><div class=post-content><p>One of the main selling points for Python is that it is dynamically-typed. There is no plan to change this.
 Nevertheless, in September 2014 <a href=https://twitter.com/gvanrossum class=external-link target=_blank rel=noopener>Guido van Rossum</a> (Python
 <a href=https://en.wikipedia.org/wiki/Benevolent_dictator_for_life class=external-link target=_blank rel=noopener>BDFL</a>) created a python enhancement proposal
-(<a href=https://www.python.org/dev/peps/pep-0484 class=external-link target=_blank rel=noopener>PEP-484</a>) to add type hints to Python. It has been released for general
+(<a href=https://peps.python.org/pep-0484 class=external-link target=_blank rel=noopener>PEP-484</a>) to add type hints to Python. It has been released for general
 usage a year later, in September 2015, as part of Python <code>3.5.0</code>.
 <a href=http://python-history.blogspot.com/2009/01/brief-timeline-of-python.html class=external-link target=_blank rel=noopener>Twenty-five years into its existence</a> now
 there was a standard way to add type information to Python code. In this blog post, I&rsquo;ll explore how the system matured,
@@ -140,14 +140,14 @@ Let&rsquo;s see what your options are.</p><figure><img src=/posts/the-state-of-t
 </span></span><span class=line><span class=cl>         <span class=bp>self</span><span class=o>.</span><span class=n>elements</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>element</span><span class=p>)</span>
 </span></span></code></pre></div><p><em>Type annotations</em> is the straightforward way and is the one you&rsquo;ll find mostly mentioned on the
 <a href=https://docs.python.org/3/library/typing.html class=external-link target=_blank rel=noopener>typing</a> documentation. It uses function annotations added to language
-via <a href=https://www.python.org/dev/peps/pep-3107/ class=external-link target=_blank rel=noopener>PEP-3107</a> (Python <code>3.0+</code>) and variable annotations via
-<a href=https://www.python.org/dev/peps/pep-0526/ class=external-link target=_blank rel=noopener>PEP-526</a> (Python <code>3.6+</code>). These allow you to use the <code>:</code> syntax to attach
+via <a href=https://peps.python.org/pep-3107/ class=external-link target=_blank rel=noopener>PEP-3107</a> (Python <code>3.0+</code>) and variable annotations via
+<a href=https://peps.python.org/pep-0526/ class=external-link target=_blank rel=noopener>PEP-526</a> (Python <code>3.6+</code>). These allow you to use the <code>:</code> syntax to attach
 information to variables and function arguments. The <code>-></code> operator is used to attach information to the return value of
 a function/method.</p><p>The <strong>upside</strong> of this method is that:</p><ul><li>It is the canonical way of doing this, which means it is the cleanest out of them all.</li><li>Because the type of information is attached right alongside the code means you&rsquo;ll have packaged this data out of the
 box.</li></ul><p>The <strong>downside</strong> of it is that:</p><ul><li>It isn&rsquo;t backward compatible. You need Python <code>3.6</code> at least to use it.</li><li>It also forces you to import <strong>all</strong> of your type dependencies, even though they are not used at runtime at all.</li><li>In the type hints, you can have compound types, for example, <code>List[int]</code>. To construct these complex types, the
 interpreter does need to do some operations when first loading this file.</li></ul><p>The last two points contradict the initial goal of the type system we enlisted before: handling all type information
 basically as a comment during runtime. To resolve some of this contradiction <code>Python 3.7</code> introduces
-<a href=https://www.python.org/dev/peps/pep-0563/ class=external-link target=_blank rel=noopener>PEP-563 ~ postponed evaluation of annotations</a>. Once you add the import of:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>__future__</span> <span class=kn>import</span> <span class=n>annotations</span>
+<a href=https://peps.python.org/pep-0563/ class=external-link target=_blank rel=noopener>PEP-563 ~ postponed evaluation of annotations</a>. Once you add the import of:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>__future__</span> <span class=kn>import</span> <span class=n>annotations</span>
 </span></span></code></pre></div><p>The interpreter will no longer construct these compound types. Once the interpreter parses the scripts syntax tree, it
 identifies type hints and bypasses evaluating it, keeping it as raw strings. This mechanism allows for type hint
 interpretation to happen where they need to: by the linter when it runs type checks. Once the mythical <code>Python 4</code> comes
@@ -272,7 +272,7 @@ fix both problems - you can follow on its progress under
 <a href=https://github.com/python/mypy/issues/5028 class=external-link target=_blank rel=noopener>python/mypy ~ issue 5208</a>.</p><h3 id=4-docstrings>4. Docstrings
 <a class=heading-link href=#4-docstrings><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h3><p>It is possible to add type information into docstrings too. Even though this is not part of Python&rsquo;s type-hint
-framework, it is supported by most mainstream IDEs. They are mostly the legacy way of doing this.</p><p>On the plus side:</p><ul><li>Works under any Python version. It was defined back in <a href=https://www.python.org/dev/peps/pep-0257/ class=external-link target=_blank rel=noopener>PEP-257</a>. It does
+framework, it is supported by most mainstream IDEs. They are mostly the legacy way of doing this.</p><p>On the plus side:</p><ul><li>Works under any Python version. It was defined back in <a href=https://peps.python.org/pep-0257/ class=external-link target=_blank rel=noopener>PEP-257</a>. It does
 not clash with other linter tools, as most of these do not check the docstrings but usually resume just inspecting the
 other code sections instead.</li></ul><p>However, it has serious flaws in the form of:</p><ul><li>There is no standard way to specify complex type hints (for example, either <code>int</code> or <code>bool</code>). PyCharm has
 <a href=https://www.jetbrains.com/help/pycharm/type-hinting-in-product.html#legacy class=external-link target=_blank rel=noopener>it&rsquo;s the proprietary way</a> but Sphinx, for
@@ -299,7 +299,7 @@ you pass in two arguments with the same type in the wrong order to a function:</
 </span></span><span class=line><span class=cl><span class=n>count</span> <span class=o>=</span> <span class=mi>1</span>
 </span></span><span class=line><span class=cl><span class=n>call_with_user_id_n_times</span><span class=p>(</span><span class=n>user_id</span><span class=p>,</span> <span class=n>count</span><span class=p>)</span>
 </span></span></code></pre></div><p>For <code>namedtuple</code> you can attach your type information directly (note the strong resemblance to a
-<a href=https://www.python.org/dev/peps/pep-0557/ class=external-link target=_blank rel=noopener>data class</a> from Python <code>3.7+</code> or the great
+<a href=https://peps.python.org/pep-0557/ class=external-link target=_blank rel=noopener>data class</a> from Python <code>3.7+</code> or the great
 <a href=https://github.com/python-attrs/attrs class=external-link target=_blank rel=noopener><code>attrs</code> library</a>):</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>class</span> <span class=nc>Employee</span><span class=p>(</span><span class=n>NamedTuple</span><span class=p>):</span>
 </span></span><span class=line><span class=cl>    <span class=n>name</span><span class=p>:</span> <span class=nb>str</span>
 </span></span><span class=line><span class=cl>    <span class=nb>id</span><span class=p>:</span> <span class=nb>int</span>
@@ -321,7 +321,7 @@ you pass in two arguments with the same type in the wrong order to a function:</
 <span class=sr-only>Link to heading</span></a></h3><p>In this case, instead of having an actual type, one can be more Pythonic and go with the theorem that if it quacks like
 a duck, and acts like a duck, then most definitely for all intended purposes, it is a duck. In this case, you define
 what operations and attributes you expect on objects instead of explicitly stating their types. The grounds of this were
-laid down in <a href=https://www.python.org/dev/peps/pep-0544/ class=external-link target=_blank rel=noopener>PEP-544 ~ Protocols</a>.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>KEY</span> <span class=o>=</span> <span class=n>TypeVar</span><span class=p>(</span><span class=s2>&#34;KEY&#34;</span><span class=p>,</span> <span class=n>contravariant</span><span class=o>=</span><span class=n>true</span><span class=p>)</span>
+laid down in <a href=https://peps.python.org/pep-0544/ class=external-link target=_blank rel=noopener>PEP-544 ~ Protocols</a>.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>KEY</span> <span class=o>=</span> <span class=n>TypeVar</span><span class=p>(</span><span class=s2>&#34;KEY&#34;</span><span class=p>,</span> <span class=n>contravariant</span><span class=o>=</span><span class=n>true</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># this is a protocol having a generic type as an argument</span>
@@ -560,6 +560,6 @@ one-time usage scripts.</p><p>Remember that, similar to unit tests, while it doe
 the day, all the code you add is code that is automatically checked and enforced to be correct. It acts as a safety net
 to ensure that things keep working when you change things around later on, so probably worth paying this extra cost.</p><figure><img src=/posts/the-state-of-type-hints-in-python/thats_all_folks.webp alt="Seal waving goodbye" width=700></figure></div><footer></footer></article></section></div><footer class=footer><section class=container><b>Opinions are my own</b> - Bernát Gábor software engineer.
 Updated&nbsp;2026-02-12
-via <a href=https://github.com/gaborbernat/bernat-tech/commit/0e3918d3cdbb4ed9ba3201b46d6b07bbde34af92>0e3918d</a>
+via <a href=https://github.com/gaborbernat/bernat-tech/commit/94a989b3935ce68b9d38dc8de3c8ceb8e33792ad>94a989b</a>
 .
 © 2018-2026</section></footer></main><script src=/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "3ead932f454449a799915b1721c18874"}'></script></body></html>

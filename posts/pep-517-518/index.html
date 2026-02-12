@@ -59,7 +59,7 @@ when the builder (e.g., setuptools) wants to use other helper packages, such as 
 </span></span><span class=line><span class=cl>    <span class=ne>ImportError</span><span class=p>:</span> <span class=n>No</span> <span class=n>module</span> <span class=n>named</span> <span class=n>Cython</span><span class=o>.</span><span class=n>Build</span>
 </span></span></code></pre></div><p>There was no way to provide such build dependencies from the developers&rsquo; side. It also meant that users needed to
 install all packaging build dependencies even if they did not want to use that at runtime. To solve this issue
-<a href=https://www.python.org/dev/peps/pep-0518/ class=external-link target=_blank rel=noopener>PEP-518</a> was created.</p><p>The idea is that instead of using the host python with its currently installed packages for the build, the package
+<a href=https://peps.python.org/pep-0518/ class=external-link target=_blank rel=noopener>PEP-518</a> was created.</p><p>The idea is that instead of using the host python with its currently installed packages for the build, the package
 provides the ability to be explicit about what they need for their build operation. Instead of making this available on
 the host python, we create an isolated python (think of a virtual environment) to run the packaging command.</p><p><code>python setup.py install</code> now becomes:</p><ol><li>create a temporary folder</li><li>create an isolated (from the third-party <code>site-packages</code>) python environment <code>python -m virtualenv our_build_env</code>,
 let&rsquo;s refer to this python executable as <code>python_isolated</code></li><li>install the build dependencies</li><li>generate a wheel we can install via <code>python_isolated setup.py bdist_wheel</code></li><li>extract wheel to site packages of <code>python</code>.</li></ol><p>With this we can install packages that depend on <code>cython</code> without actually installing <code>cython</code> inside the runtime python
@@ -95,12 +95,12 @@ easy for their use cases, making <code>setup.py</code> the exception rather than
 <a href=https://github.com/pypa/setuptools/pull/1675 class=external-link target=_blank rel=noopener><code>setuptools</code> plans to offer a <code>setup.cfg</code></a> the only user interface to
 lead the way, and when a PEP-517 system is in place, you should prefer that overusing the <code>setup.py</code> for most cases. To
 not tie everything back to <code>setuptools</code> and <code>distutils</code> and facilitate the creation of new-build backends
-<a href=https://www.python.org/dev/peps/pep-0517/ class=external-link target=_blank rel=noopener>PEP-517</a> was created. It separates builders into a backend and frontend. The
+<a href=https://peps.python.org/pep-0517/ class=external-link target=_blank rel=noopener>PEP-517</a> was created. It separates builders into a backend and frontend. The
 frontend provides an isolated python environment satisfying all the declared build dependencies; the backend provides
 hooks that the frontend can call from its isolated environment to generate either a source distribution or wheel.</p><p>Furthermore, instead of talking with the backend via the <code>setup.py</code> file and its commands, we move to python modules and
 functions. All packaging backends must provide a python object API that implements two methods
-<a href=https://www.python.org/dev/peps/pep-0517/#build-wheel class=external-link target=_blank rel=noopener>build_wheel</a> and
-<a href=https://www.python.org/dev/peps/pep-0517/#id9 class=external-link target=_blank rel=noopener>build_sdist</a> at the minimum. The API object point is specified via the
+<a href=https://peps.python.org/pep-0517/#build-wheel class=external-link target=_blank rel=noopener>build_wheel</a> and
+<a href=https://peps.python.org/pep-0517/#id9 class=external-link target=_blank rel=noopener>build_sdist</a> at the minimum. The API object point is specified via the
 <code>pyproject.toml</code> file under the <code>build-backend</code> key:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-toml data-lang=toml><span class=line><span class=cl><span class=p>[</span><span class=nx>build-system</span><span class=p>]</span>
 </span></span><span class=line><span class=cl><span class=nx>requires</span> <span class=p>=</span> <span class=p>[</span><span class=s2>&#34;flit&#34;</span><span class=p>]</span>
 </span></span><span class=line><span class=cl><span class=nx>build-backend</span> <span class=p>=</span> <span class=s2>&#34;flit.api:main&#34;</span>
@@ -140,6 +140,6 @@ while releasing these two PEPs. These should serve as lessons learned and show t
 It&rsquo;s not everything perfect yet. However, we&rsquo;re getting better. Join the packaging community if you can help out, and
 let&rsquo;s make things better together!</p></div><footer></footer></article></section></div><footer class=footer><section class=container><b>Opinions are my own</b> - Bernát Gábor software engineer.
 Updated&nbsp;2026-02-12
-via <a href=https://github.com/gaborbernat/bernat-tech/commit/0e3918d3cdbb4ed9ba3201b46d6b07bbde34af92>0e3918d</a>
+via <a href=https://github.com/gaborbernat/bernat-tech/commit/94a989b3935ce68b9d38dc8de3c8ceb8e33792ad>94a989b</a>
 .
 © 2018-2026</section></footer></main><script src=/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "3ead932f454449a799915b1721c18874"}'></script></body></html>

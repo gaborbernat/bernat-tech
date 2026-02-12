@@ -85,7 +85,7 @@ so the build frontend will need to build a wheel to satisfy it. The wheel build 
 isolated environment, which has build dependency again <code>setuptools</code>.</p><p>How to break this loop? Mandate all build backends must be exposed as wheels? Allow backends that can build themselves?
 Should these self-build backends allow to take on dependencies? There&rsquo;s a long discussion with various options, pros and
 cons, so if you&rsquo;re interested, make sure to head over the
-<a href=https://discuss.python.org/t/pep-517-backend-bootstrapping class=external-link target=_blank rel=noopener>python Discourse board</a> and give your opinion.</p><figure><img src=/posts/growing-pain/many_pug.webp alt="Many pugs"></figure><h2 id=conclusion>Conclusion
+<a href=https://discuss.python.org/t/pep-517-backend-bootstrapping/789 class=external-link target=_blank rel=noopener>python Discourse board</a> and give your opinion.</p><figure><img src=/posts/growing-pain/many_pug.webp alt="Many pugs"></figure><h2 id=conclusion>Conclusion
 <a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h2><p>Packaging is hard. Improving a packaging system without any breakage where users can write and run arbitrary code during
 the packaging in their free time is probably impossible. With PEP-518, though now build dependencies are explicit and
@@ -97,12 +97,12 @@ what went wrong, how you tried to use it, and what is your use case.</p><p>We&rs
 <a href=https://github.com/pypa/integration-test class=external-link target=_blank rel=noopener>integration-test</a> repository, as an effort to ensure that in the future, we
 can catch at least some of these edge cases before they land on your machine. If you have any suggestion or requirements
 for any part of the packaging feel free to start a discussion on the
-<a href=https://discuss.python.org/c/packaging class=external-link target=_blank rel=noopener>Discuss Python forums</a> packaging section, or open an issue for the relevant
+<a href=https://discuss.python.org/c/packaging/14 class=external-link target=_blank rel=noopener>Discuss Python forums</a> packaging section, or open an issue for the relevant
 tool at hand.</p><figure><img src=/posts/growing-pain/final_pug.webp alt="Pug saying goodbye"></figure><p>That&rsquo;s all for now. Thanks for reading through it all! I would like to thank
 <a href=https://twitter.com/pganssle class=external-link target=_blank rel=noopener>Paul Ganssle</a> for reviewing the packaging series post, and
 <a href=https://twitter.com/techatbloomberg class=external-link target=_blank rel=noopener>Tech At Bloomberg</a> for allowing me to do open source contributions during my
 working hours.</p></div><footer></footer></article></section></div><footer class=footer><section class=container><b>Opinions are my own</b> - Bernát Gábor software engineer.
 Updated&nbsp;2026-02-12
-via <a href=https://github.com/gaborbernat/bernat-tech/commit/0e3918d3cdbb4ed9ba3201b46d6b07bbde34af92>0e3918d</a>
+via <a href=https://github.com/gaborbernat/bernat-tech/commit/94a989b3935ce68b9d38dc8de3c8ceb8e33792ad>94a989b</a>
 .
 © 2018-2026</section></footer></main><script src=/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "3ead932f454449a799915b1721c18874"}'></script></body></html>
