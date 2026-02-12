@@ -9,8 +9,8 @@ tags = ["python", "packaging", "pip", "setuptools", "pep517", "pep518"]
 title = "Python packaging - Growing Pains"
 +++
 
-In my previous two posts, I've gone over [what package types python has]({{< ref "pep-517-and-python-packaging" >}}),
-and [how the package building works]({{< ref "pep-517-518" >}}), especially with the introduction of the PEP-517/518.
+In my previous two posts, I've gone over \[what package types python has\]({{< ref "pep-517-and-python-packaging" >}}),
+and \[how the package building works\]({{< ref "pep-517-518" >}}), especially with the introduction of the PEP-517/518.
 Although the changes were primarily to make things more robust, we did run into a few issues while implementing it and
 releasing it. This post will go over a few, hopefully serving as lessons learned for all of us and presenting some
 interesting problems to solve in the future.
@@ -29,7 +29,7 @@ Against all the preparations, though, inevitably, the first release did break a 
 performed some operations that caught the maintainers by surprise. Let's try to understand a few of these examples and
 how did they get addressed.
 
-{{< figure src="stand_pug.webp">}}
+{{< figure src="stand_pug.webp" alt="Standing pug">}}
 
 ## PEP-518
 
@@ -68,7 +68,7 @@ needs to ensure that `pyproject.toml` is attached to the built source package. O
 machine will not be able to use it. [setuptools 1650](https://github.com/pypa/setuptools/pull/1650) will fix this for
 setuptools. One can include `pyproject.toml` by specifying it inside `MANIFEST.in` on earlier versions.
 
-{{< figure src="chair_pug.webp">}}
+{{< figure src="chair_pug.webp" alt="Pug on chair">}}
 
 ### Importing the built package from within `setup.py`
 
@@ -116,9 +116,9 @@ isolated environment, which has build dependency again `setuptools`.
 How to break this loop? Mandate all build backends must be exposed as wheels? Allow backends that can build themselves?
 Should these self-build backends allow to take on dependencies? There's a long discussion with various options, pros and
 cons, so if you're interested, make sure to head over the
-[python Discourse board](https://discuss.python.org/t/pep-517-backend-bootstrapping) and give your opinion.
+[python Discourse board](https://discuss.python.org/t/pep-517-backend-bootstrapping/789) and give your opinion.
 
-{{< figure src="many_pug.webp">}}
+{{< figure src="many_pug.webp" alt="Many pugs">}}
 
 ## Conclusion
 
@@ -134,10 +134,10 @@ We're trying to improve the packaging ecosystem genuinely. As such, we've create
 [integration-test](https://github.com/pypa/integration-test) repository, as an effort to ensure that in the future, we
 can catch at least some of these edge cases before they land on your machine. If you have any suggestion or requirements
 for any part of the packaging feel free to start a discussion on the
-[Discuss Python forums](https://discuss.python.org/c/packaging) packaging section, or open an issue for the relevant
+[Discuss Python forums](https://discuss.python.org/c/packaging/14) packaging section, or open an issue for the relevant
 tool at hand.
 
-{{< figure src="final_pug.webp">}}
+{{< figure src="final_pug.webp" alt="Pug saying goodbye">}}
 
 That's all for now. Thanks for reading through it all! I would like to thank
 [Paul Ganssle](https://twitter.com/pganssle) for reviewing the packaging series post, and

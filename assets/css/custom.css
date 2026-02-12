@@ -15,3 +15,6 @@ li p {
   margin: 0;
   display: inline;
 }
+.mastodon-comment .comment {
+  flex-wrap: wrap;
+}

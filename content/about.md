@@ -11,26 +11,26 @@ slug = "about"
 [![Linkedin Badge](https://img.shields.io/badge/-gaborbernat-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/gaborbernat/)](https://www.linkedin.com/in/gaborbernat/)
 [![MAIL Badge](https://img.shields.io/badge/-gaborjbernat@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:gaborjbernat@gmail.com)](mailto:gaborjbernat@gmail.com)
 
-I work at [Bloomberg US - Los Angeles](https://www.techatbloomberg.com/) within the Developer Experience organizations
+I work at [Bloomberg US - Los Angeles](https://www.bloomberg.com/company/values/tech-at-bloomberg/) within the Developer Experience organizations
 Artifact Repository Hosting team.
 
 I am the primary maintainer (and author) for the following
 [open-source projects](https://en.wikipedia.org/wiki/Open_source):
 
 - [Python](https://www.python.org/):
-  1. {{< project name="platformdirs" org="platformdirs" ci="check">}}
+  1. {{< project name="platformdirs" org="tox-dev" ci="check">}}
   1. {{< project name="filelock" org="tox-dev" ci="check">}}
   1. {{< project name="virtualenv" org="pypa" ci="check">}}
   1. {{< project name="tox" org="tox-dev" ci="check">}}
   1. {{< project name="pyproject-api" org="tox-dev" ci="check">}}
   1. {{< project name="pytest-env" org="pytest-dev" ci="check">}}
-  1. {{< project name="datamodel-code-generator" org="koxudaxi" ci="test">}}
+  1. {{< project name="datamodel-code-generator" org="koxudaxi" ci="cli-docs,codeql,codespell,lint,llms-txt,readme,schema-docs,test">}}
   1. {{< project name="pipdeptree" org="tox-dev" ci="check">}}
   1. {{< project name="sphinx-autodoc-typehints" org="tox-dev" ci="check">}}
   1. {{< project name="pre-commit-uv" org="tox-dev" ci="check">}}
   1. {{< project name="tox-uv" org="tox-dev" ci="check">}}
   1. {{< project name="pyproject-fmt" org="tox-dev" ci="main">}}
-  1. {{< project name="toml-fmt-common" org="tox-dev" ci="check">}}
+  1. {{< project name="toml-fmt" org="tox-dev" ci="common,pyproject_fmt_build,pyproject_fmt_test,toml_fmt_common_build,toml_fmt_common_test,tox_toml_fmt_build,tox_toml_fmt_test" pypi="false">}}
   1. {{< project name="pytest-print" org="pytest-dev" ci="check">}}
   1. {{< project name="tox-gh" org="tox-dev" ci="check">}}
   1. {{< project name="sphinx-argparse-cli" org="tox-dev" ci="check">}}
@@ -42,20 +42,21 @@ I am the primary maintainer (and author) for the following
 
 - Kotlin (IntelliJ Plugin):
   1. [![Build](https://github.com/tox-dev/PyVenvManage/actions/workflows/check.yaml/badge.svg)](https://github.com/tox-dev/PyVenvManage/actions/workflows/check.yaml)
-     [![Version](https://img.shields.io/jetbrains/plugin/v/20536)](https://plugins.jetbrains.com/plugin/20536/versions)
-     [![Rating](https://img.shields.io/jetbrains/plugin/r/rating/20536)](https://plugins.jetbrains.com/plugin/20536)
-     [![Downloads](https://img.shields.io/jetbrains/plugin/d/20536)](https://plugins.jetbrains.com/plugin/20536)
+     [![Version](https://img.shields.io/jetbrains/plugin/v/20536)](https://plugins.jetbrains.com/plugin/20536-pyvenv-manage-2/versions)
+     [![Rating](https://img.shields.io/jetbrains/plugin/r/rating/20536)](https://plugins.jetbrains.com/plugin/20536-pyvenv-manage-2)
+     [![Downloads](https://img.shields.io/jetbrains/plugin/d/20536)](https://plugins.jetbrains.com/plugin/20536-pyvenv-manage-2)
      [PyVenv Manage 2](https://plugins.jetbrains.com/plugin/20536-pyvenv-manage-2)
+  1. [![Build](https://github.com/tox-dev/jetbrains-fish/actions/workflows/check.yaml/badge.svg)](https://github.com/tox-dev/jetbrains-fish/actions/workflows/check.yaml)
+     [![Version](https://img.shields.io/jetbrains/plugin/v/29973)](https://plugins.jetbrains.com/plugin/29973-fish-shell/versions)
+     [![Rating](https://img.shields.io/jetbrains/plugin/r/rating/29973)](https://plugins.jetbrains.com/plugin/29973-fish-shell)
+     [![Downloads](https://img.shields.io/jetbrains/plugin/d/29973)](https://plugins.jetbrains.com/plugin/29973-fish-shell)
+     [Fish Shell](https://plugins.jetbrains.com/plugin/29973-fish-shell)
 
 - Repositories helping maintaining and self:
-  1. [all-repos-self](https://github.com/gaborbernat/all-repos-self)<p>
-     [![check](https://github.com/gaborbernat/all-repos-self/actions/workflows/check.yaml/badge.svg)](https://github.com/gaborbernat/all-repos-self/actions/workflows/check.yaml)</p>
-  1. [bernat.tech](https://github.com/gaborbernat/bernat-tech/)<p>
-     [![Build and deploy](https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml/badge.svg)](https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml)</p>
-  1. [cv](https://github.com/gaborbernat/cv)<p>
-     [![Build LaTeX document](https://github.com/gaborbernat/cv/actions/workflows/build.yaml/badge.svg)](https://github.com/gaborbernat/cv/actions/workflows/build.yaml)</p>
-  1. [gaborbernat](https://github.com/gaborbernat/gaborbernat)<p>
-     [![Update README](https://github.com/gaborbernat/gaborbernat/actions/workflows/update-readme.yaml/badge.svg)](https://github.com/gaborbernat/gaborbernat/actions/workflows/update-readme.yaml)</p>
+  1. {{< project name="all-repos-self" org="gaborbernat" ci="check" pypi="false">}}
+  1. {{< project name="bernat-tech" org="gaborbernat" ci="build" pypi="false">}}
+  1. {{< project name="cv" org="gaborbernat" ci="build" pypi="false">}}
+  1. {{< project name="gaborbernat" org="gaborbernat" ci="update-readme" pypi="false">}}
 
 For the following projects, while I do hold the write commit bit, I only help with maintainership when needed:
 

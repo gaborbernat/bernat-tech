@@ -5,12 +5,12 @@ slug = "presentations"
 
 I'm a regular speaker at (Python) conferences. Here you'll find a list of my recorded presentations.
 
-Here you can find a [YouTube playlist](https://youtube.com/playlist?list=PLYWe9Aw9Owsod3Orf-pDqABD--r7mlho7) with all of
+Here you can find a [YouTube playlist](https://www.youtube.com/playlist?list=PLYWe9Aw9Owsod3Orf-pDqABD--r7mlho7) with all of
 them.
 
 {{< table_of_contents >}}
 
-## 🐍 Python meets the crab 🦀 - Friendship at first sight? - PyCon US 2025 - [slides](https://gaborbernat.github.io/python-meets-crab/1) {#python-meets-crab-py-us-25}
+## 🐍 Python meets the crab 🦀 - Friendship at first sight? - PyCon US 2025 - [slides](https://gaborbernat.github.io/python-meets-crab/) {#python-meets-crab-py-us-25}
 
 {{< youtube id=CqOZdTFb4io >}}
 

@@ -4,9 +4,35 @@ repos:
     hooks:
       - id: end-of-file-fixer
       - id: trailing-whitespace
+      - id: check-yaml
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ["--maxkb=1000"]
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+      - id: check-case-conflict
   - repo: https://github.com/rbubley/mirrors-prettier
     rev: "v3.6.2"
     hooks:
       - id: prettier
-        exclude: layouts/shortcodes/project.html|layouts/shortcodes/img.html
+        exclude: layouts/shortcodes/project.html|layouts/shortcodes/img.html|.*\.md$|.*\.ya?ml$
         args: ["--print-width=120", "--prose-wrap=always"]
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.21
+    hooks:
+      - id: mdformat
+        args: ["--wrap", "120", "--number"]
+        exclude: "^content/"
+        additional_dependencies:
+          - mdformat-gfm
+          - mdformat-tables
+          - mdformat-ruff
+          - mdformat-config
+          - mdformat-beautysh
+          - mdformat-simple-breaks
+  - repo: https://github.com/google/yamlfmt
+    rev: v0.15.0
+    hooks:
+      - id: yamlfmt
+        args: ["--formatter", "max_line_length=120,retain_line_breaks=true"]

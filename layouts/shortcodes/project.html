@@ -1,19 +1,30 @@
 {{ if (isset .Params "ci") }}
-<a href="https://github.com/{{.Get "org"}}/{{.Get "name"}}/actions/workflows/{{.Get "ci"}}.yaml" target="_blank" rel="noopener">
-    <img src="https://github.com/{{.Get "org"}}/{{.Get "name"}}/actions/workflows/{{.Get "ci"}}.yaml/badge.svg" alt="check">
+  {{ $workflows := split (.Get "ci") "," }}
+  {{ range $workflows }}
+    {{ $workflow := trim . " " }}
+<a href="https://github.com/{{$.Get "org"}}/{{$.Get "name"}}/actions/workflows/{{$workflow}}.yaml" target="_blank" rel="noopener">
+    <img src="https://github.com/{{$.Get "org"}}/{{$.Get "name"}}/actions/workflows/{{$workflow}}.yaml/badge.svg" alt="{{$workflow}}">
 </a>
+  {{ end }}
 {{ end }}
 
+{{ $showPypi := "true" }}
+{{ if (isset .Params "pypi") }}
+  {{ $showPypi = .Get "pypi" }}
+{{ end }}
+
+{{ if eq $showPypi "true" }}
 <a href="https://pypi.org/project/{{.Get "name"}}" target="_blank" rel="noopener">
     <img src="https://img.shields.io/pypi/v/{{.Get "name"}}?style=flat-square" alt="PyPI">
 </a>
 
-<a href="https://pepy.tech/project/{{.Get "name"}}" target="_blank" rel="noopener">
+<a href="https://pepy.tech/projects/{{.Get "name"}}" target="_blank" rel="noopener">
     <img src="https://static.pepy.tech/badge/{{.Get "name"}}/month" alt="PyPI - Downloads">
 </a>
+{{ end }}
 
 <a href="https://github.com/{{.Get "org"}}/{{.Get "name"}}/commits">
-<img src="https://img.shields.io/github/last-commit/{{.Get "org"}}/{{.Get "name"}}?logo=python&amp;style=flat-square" alt="GitHub last commit">
+<img src="https://img.shields.io/github/last-commit/{{.Get "org"}}/{{.Get "name"}}" alt="GitHub last commit">
 </a>
 
 <a class="external-link" href="https://github.com/{{.Get "org"}}/{{.Get "name"}}">

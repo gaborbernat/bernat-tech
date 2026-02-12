@@ -12,7 +12,7 @@ title = "Python packaging - Past, Present, Future"
 Have you ever wondered what happens exactly when you run pip install? This post will give you a detailed overview of the
 steps involved in the past, and how it all changes with the adoption of PEP-517 and PEP-518.
 
-[In my previous post]({{< ref "pep-517-and-python-packaging" >}}) I've described how it's possible to install three
+\[In my previous post\]({{< ref "pep-517-and-python-packaging" >}}) I've described how it's possible to install three
 types of content: source tree, source distribution, and wheels. Only the last two types are uploaded to PyPI, the
 central Python repository. However, one could get its hands on a source tree (by feeding, for example, a git protocol
 for pip). The advantage of wheels over the others is that it does not require any build operation to happen on the user
@@ -39,7 +39,7 @@ The downside of this, though, is that it's anything but easy to learn and unders
 more an issue as Python grew in popularity and we had more and more users who were less proficient in the inner workings
 of Python.
 
-{{< figure src="smart_pug.webp">}}
+{{< figure src="smart_pug.webp" alt="Smart pug">}}
 
 ### build requirements
 
@@ -75,7 +75,7 @@ If any of these helpers were missing the build usually just broke with a failed 
 
 There was no way to provide such build dependencies from the developers' side. It also meant that users needed to
 install all packaging build dependencies even if they did not want to use that at runtime. To solve this issue
-[PEP-518](https://www.python.org/dev/peps/pep-0518/) was created.
+[PEP-518](https://peps.python.org/pep-0518/) was created.
 
 The idea is that instead of using the host python with its currently installed packages for the build, the package
 provides the ability to be explicit about what they need for their build operation. Instead of making this available on
@@ -110,7 +110,7 @@ When one invokes the `pip wheel . --no-deps` command that will automatically cre
 that satisfies the build systems dependencies, and then call inside that environment the `python setup.py bdist_wheel`
 or `python setup.py sdist` command.
 
-{{< figure src="jump_pug.webp">}}
+{{< figure src="jump_pug.webp" alt="Jumping pug">}}
 
 ### packaging tool diversity
 
@@ -146,14 +146,14 @@ easy for their use cases, making `setup.py` the exception rather than the defaul
 [`setuptools` plans to offer a `setup.cfg`](https://github.com/pypa/setuptools/pull/1675) the only user interface to
 lead the way, and when a PEP-517 system is in place, you should prefer that overusing the `setup.py` for most cases. To
 not tie everything back to `setuptools` and `distutils` and facilitate the creation of new-build backends
-[PEP-517](https://www.python.org/dev/peps/pep-0517/) was created. It separates builders into a backend and frontend. The
+[PEP-517](https://peps.python.org/pep-0517/) was created. It separates builders into a backend and frontend. The
 frontend provides an isolated python environment satisfying all the declared build dependencies; the backend provides
 hooks that the frontend can call from its isolated environment to generate either a source distribution or wheel.
 
 Furthermore, instead of talking with the backend via the `setup.py` file and its commands, we move to python modules and
 functions. All packaging backends must provide a python object API that implements two methods
-[build_wheel](https://www.python.org/dev/peps/pep-0517/#build-wheel) and
-[build_sdist](https://www.python.org/dev/peps/pep-0517/#id9) at the minimum. The API object point is specified via the
+[build_wheel](https://peps.python.org/pep-0517/#build-wheel) and
+[build_sdist](https://peps.python.org/pep-0517/#id9) at the minimum. The API object point is specified via the
 `pyproject.toml` file under the `build-backend` key:
 
 ```toml
@@ -167,6 +167,7 @@ the isolated python environment:
 
 ```python
 import flit.api
+
 backend = flit.api.main
 
 # build wheel via
@@ -186,7 +187,7 @@ It's up to the backend where and how they want to expose their official API:
 With this, we can start having packaging tools that are no longer bound to the legacy decisions of the `distutils` in
 the frontend.
 
-{{< figure src="curious_pug.webp">}}
+{{< figure src="curious_pug.webp" alt="Curious pug">}}
 
 # tox and packaging
 
@@ -213,7 +214,7 @@ distribution (by providing the build dependencies into an isolated python enviro
 call the build backend as stated in PEP-517. Otherwise, tox will use the old way of building source distributions,
 invoking the `python setup.py sdist` command with the same interpreter tox is installed into.
 
-{{< figure src="moody_pug.webp">}}
+{{< figure src="moody_pug.webp" alt="Moody pug">}}
 
 ## Conclusion
 
@@ -221,8 +222,8 @@ The Python Packaging Authority hopes that all this makes sense and will have mor
 builds. The specifications for these standards were written up and debated in long threads between 2015 and 2017. The
 proposals were deemed good enough to benefit the most, but some less mainstream use cases could have been overlooked.
 
-If your use case is such, don't worry the PEPs are open to enhancement at any point if we deem required. [In my next
-post of this series here]({{< ref "growing-pain" >}}) I'll go over some of the pain points the community bumped into
+If your use case is such, don't worry the PEPs are open to enhancement at any point if we deem required. \[In my next
+post of this series here\]({{< ref "growing-pain" >}}) I'll go over some of the pain points the community bumped into
 while releasing these two PEPs. These should serve as lessons learned and show that there's still some work to be done.
 It's not everything perfect yet. However, we're getting better. Join the packaging community if you can help out, and
 let's make things better together!

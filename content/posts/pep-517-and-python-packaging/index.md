@@ -30,7 +30,7 @@ PEP-517/518 tries to improve on it. Finally, I dedicate a whole other post to ex
 learned while introducing these improvements. A heads up, I will focus mainly on the Python Packaging Authorities
 systems (`pip`, `setuptools`, so no `conda` or operating system-specific packagers).
 
-{{< figure src="sad_pug.webp">}}
+{{< figure src="sad_pug.webp" alt="Sad pug">}}
 
 # An example project
 
@@ -81,7 +81,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 "An enlightened pug knows how to make the best of whatever he has to work with - A Pug's Guide to Dating -  Gemma Correll"
 ```
 
-{{< figure src="enlightened_pug.webp">}}
+{{< figure src="enlightened_pug.webp" alt="Enlightened pug">}}
 
 # Python package availability
 
@@ -99,7 +99,7 @@ module, one can print out the representation of the module to find out:
 The folder under you'll find it depends on:
 
 - the type of the package it is (third-party or built-in/aka part of the standard library)
-- if it's globally or just for the current user available (see [PEP-370](https://www.python.org/dev/peps/pep-0370/)),
+- if it's globally or just for the current user available (see [PEP-370](https://peps.python.org/pep-0370/)),
 - and if it's a system python or a virtual environment.
 
 Generally speaking, though, for a given python interpreter, one can find a list of possible directories by printing out
@@ -121,7 +121,7 @@ some installer.
 
 The following diagram displays how most of the time things go:
 
-{{< figure src="diagram.webp">}}
+{{< figure src="diagram.webp" alt="Python packaging diagram">}}
 
 1. The developer writes some python code inside a folder (referred to as the source tree).
 2. Some tool (such as `setuptools`) then takes the source tree and packages it up for redistribution.
@@ -131,7 +131,7 @@ The following diagram displays how most of the time things go:
    installation operation boils down by creating the correct directory structure and metadata inside the `site-packages`
    folder.
 
-{{< figure src="discover_pug.webp">}}
+{{< figure src="discover_pug.webp" alt="Pug discovering something">}}
 
 # Python package types
 
@@ -161,7 +161,7 @@ folder about the package contents the `{package}-{version}.dist-info` and the bu
 The distribution info folder describes the package: what installer was used to put it there, what license the package
 has attached to it, what files were created as part of the installation process, what is the top-level python package,
 what entry points the package exposes and so on. A good description of each file can be found inside
-[PEP-427](https://www.python.org/dev/peps/pep-0427/#id14).
+[PEP-427](https://peps.python.org/pep-0427/#id14).
 
 How do we get from our source tree to these two content types? We have two distinct paths in front of us:
 
@@ -225,7 +225,7 @@ The difference between a source tree, a source distribution, and a wheel:
 - **wheel** - contains the package metadata and source files to be put into the `site-packages` folder - format:
   `pugs-0.0.1-py2.py3-none-any.whl`.
 
-{{< figure src="smart_pug.webp">}}
+{{< figure src="smart_pug.webp" alt="Smart pug">}}
 
-[Read the next post of the series here]({{< ref "pep-517-518" >}}) to determine what happens when we install a package.
-Thanks for reading!
+\[Read the next post of the series here\]({{< ref "pep-517-518" >}}) to determine what happens when we install a
+package. Thanks for reading!
