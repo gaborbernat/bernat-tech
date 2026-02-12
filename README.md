@@ -87,12 +87,12 @@ Reference in markdown:
 
 ## Theme
 
-This site uses the [Congo](https://github.com/jpanther/congo) theme, managed as a git submodule.
+This site uses the [Hugo Coder](https://github.com/luizdepra/hugo-coder) theme, managed as a git submodule.
 
 ### Updating the Theme
 
 ```bash
-git submodule update --remote themes/congo
+git submodule update --remote themes/hugo-coder
 ```
 
 ## Deployment

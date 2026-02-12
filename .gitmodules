@@ -1,4 +1,4 @@
-[submodule "themes/congo"]
-	path = themes/congo
-	url = https://github.com/jpanther/congo.git
-	branch = stable
+[submodule "themes/hugo-coder"]
+	path = themes/hugo-coder
+	url = https://github.com/luizdepra/hugo-coder.git
+	branch = main

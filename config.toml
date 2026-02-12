@@ -1,6 +1,6 @@
 baseURL = "https://bernat.tech"
 title = "Tech articles by Bernát Gábor"
-theme = "congo"
+theme = "hugo-coder"
 languageCode = "en"
 defaultContentLanguage = "en"
 enableRobotsTXT = true
@@ -8,48 +8,79 @@ enableEmoji = true
 enableGitInfo = true
 ignoreLogs = ["warning-goldmark-raw-html"]
 
+pagination.pagerSize = 20
+pygmentsStyle = "bw"
+pygmentsCodeFences = true
+pygmentsCodeFencesGuessSyntax = true
+
 [params]
+author = "Bernát Gábor"
 description = "Bernát Gábor's personal website"
-mainSections = ["posts"]
-showAuthor = true
-showDate = true
-showReadingTime = true
-showWordCount = false
-
-[params.author]
-name = "Bernát Gábor"
-image = "img/avatar.jpg"
-headline = "Bloomberg | Python open-source | software engineer"
-bio = "Software engineer passionate about Python packaging and open-source development."
-links = [
-  { github = "https://github.com/gaborbernat/" },
-  { twitter = "https://twitter.com/gjbernat/" },
-  { mastodon = "https://fosstodon.org/@gaborbernat" },
-  { linkedin = "https://www.linkedin.com/in/gaborbernat/" },
-  { email = "mailto:gaborjbernat@gmail.com" },
+keywords = "blog,developer,personal,python,packaging"
+info = [
+    "Bloomberg",
+    "Python open-source",
+    "software engineer",
 ]
+avatarurl = "img/avatar.jpg"
+dateFormat = "2006-01-01"
+colorScheme = "auto"
+hidecolorschemetoggle = false
+customCSS = [
+    "css/custom.css",
+    "css/syntax.css",
+]
+favicon_16 = "img/android-chrome-192x192.png"
+favicon_32 = "img/android-chrome-192x192.png"
+touchIcon = "img/android-chrome-192x192.png"
 
-[params.homepage]
-layout = "profile"
-showRecent = true
+[[params.social]]
+icon = "fa fa-github fa-2x"
+name = "Github"
+url = "https://github.com/gaborbernat/"
+weight = 1
 
-[params.article]
-showDate = true
-showDateUpdated = true
-showAuthor = true
-showReadingTime = true
-showTableOfContents = true
-showTaxonomies = true
-showWordCount = false
-showComments = false
+[[params.social]]
+icon = "fa fa-twitch fa-2x"
+name = "Twitch"
+url = "https://www.twitch.tv/gaborbernat"
+weight = 2
 
-[params.list]
-showTableOfContents = false
-groupByYear = true
+[[params.social]]
+icon = "fa fa-twitter fa-2x"
+name = "Twitter"
+url = "https://twitter.com/gjbernat/"
+weight = 3
 
-[params.footer]
-showCopyright = true
-showThemeAttribution = true
+[[params.social]]
+icon = "fa-brands fa-mastodon fa-2x"
+name = "Mastodon"
+url = "https://fosstodon.org/@gaborbernat"
+weight = 4
+
+[[params.social]]
+icon = "fa-brands fa-python fa-2x"
+name = "PyPI"
+url = "https://pypi.org/user/gaborbernat/"
+weight = 5
+
+[[params.social]]
+icon = "fa fa-linkedin fa-2x"
+name = "LinkedIn"
+url = "https://www.linkedin.com/in/gaborbernat/"
+weight = 6
+
+[[params.social]]
+icon = "fa fa-envelope fa-2x"
+name = "GMail"
+url = "mailto:gaborjbernat@gmail.com"
+weight = 7
+
+[[params.social]]
+icon = "fa fa-instagram fa-2x"
+name = "Instagram"
+url = "https://instagram.com/gabor_bernat"
+weight = 8
 
 [taxonomies]
 author = "authors"
@@ -59,22 +90,21 @@ tag = "tags"
 
 [[menu.main]]
 name = "Blog"
-pageRef = "posts"
+url = "posts"
 weight = 1
 
 [[menu.main]]
 name = "About"
-pageRef = "about"
+url = "about"
 weight = 2
 
 [[menu.main]]
 name = "Presentations"
-pageRef = "presentations"
+url = "presentations"
 weight = 3
 
 [languages.en]
-languageName = "English"
-weight = 1
+languageName = ":uk:"
 
 [markup.goldmark.renderer]
 unsafe = false
