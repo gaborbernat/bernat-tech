@@ -7,7 +7,6 @@ on:
 permissions:
   contents: write
   pull-requests: write
-  workflows: write
 
 jobs:
   update-hugo:
@@ -19,21 +18,21 @@ jobs:
         id: current
         run: |
           CURRENT_VERSION=$(grep -oP 'HUGO_VERSION: "\K[^"]+' .github/workflows/build.yaml)
-          echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          echo "version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Get latest Hugo version
         id: latest
         run: |
           LATEST_VERSION=$(curl -s https://api.github.com/repos/gohugoio/hugo/releases/latest | jq -r '.tag_name' | sed 's/^v//')
-          echo "version=$LATEST_VERSION" >> $GITHUB_OUTPUT
+          echo "version=$LATEST_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Check if update needed
         id: check
         run: |
           if [ "${{ steps.current.outputs.version }}" != "${{ steps.latest.outputs.version }}" ]; then
-            echo "needed=true" >> $GITHUB_OUTPUT
+            echo "needed=true" >> "$GITHUB_OUTPUT"
           else
-            echo "needed=false" >> $GITHUB_OUTPUT
+            echo "needed=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Update Hugo version

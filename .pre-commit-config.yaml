@@ -28,6 +28,10 @@ repos:
           - mdformat-beautysh
           - mdformat-simple-breaks
           - mdformat-hugo
+  - repo: https://github.com/rhysd/actionlint
+    rev: "v1.7.10"
+    hooks:
+      - id: actionlint
   - repo: https://github.com/google/yamlfmt
     rev: v0.15.0
     hooks:
