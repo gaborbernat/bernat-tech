@@ -249,6 +249,41 @@ pytest-env
  
  
  
+&lt;a href="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/cli-docs.yaml" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/cli-docs.yaml/badge.svg" alt="cli-docs"&gt;
+&lt;/a&gt;
+ 
+ 
+&lt;a href="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/codeql.yaml" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/codeql.yaml/badge.svg" alt="codeql"&gt;
+&lt;/a&gt;
+ 
+ 
+&lt;a href="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/codespell.yaml" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/codespell.yaml/badge.svg" alt="codespell"&gt;
+&lt;/a&gt;
+ 
+ 
+&lt;a href="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/lint.yaml" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/lint.yaml/badge.svg" alt="lint"&gt;
+&lt;/a&gt;
+ 
+ 
+&lt;a href="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/llms-txt.yaml" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/llms-txt.yaml/badge.svg" alt="llms-txt"&gt;
+&lt;/a&gt;
+ 
+ 
+&lt;a href="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/readme.yaml" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/readme.yaml/badge.svg" alt="readme"&gt;
+&lt;/a&gt;
+ 
+ 
+&lt;a href="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/schema-docs.yaml" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/schema-docs.yaml/badge.svg" alt="schema-docs"&gt;
+&lt;/a&gt;
+ 
+ 
 &lt;a href="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/test.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/test.yaml/badge.svg" alt="test"&gt;
 &lt;/a&gt;
@@ -449,6 +484,36 @@ pyproject-fmt
  
 &lt;a href="https://github.com/tox-dev/toml-fmt/actions/workflows/common.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/tox-dev/toml-fmt/actions/workflows/common.yaml/badge.svg" alt="common"&gt;
+&lt;/a&gt;
+ 
+ 
+&lt;a href="https://github.com/tox-dev/toml-fmt/actions/workflows/pyproject_fmt_build.yaml" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://github.com/tox-dev/toml-fmt/actions/workflows/pyproject_fmt_build.yaml/badge.svg" alt="pyproject_fmt_build"&gt;
+&lt;/a&gt;
+ 
+ 
+&lt;a href="https://github.com/tox-dev/toml-fmt/actions/workflows/pyproject_fmt_test.yaml" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://github.com/tox-dev/toml-fmt/actions/workflows/pyproject_fmt_test.yaml/badge.svg" alt="pyproject_fmt_test"&gt;
+&lt;/a&gt;
+ 
+ 
+&lt;a href="https://github.com/tox-dev/toml-fmt/actions/workflows/toml_fmt_common_build.yaml" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://github.com/tox-dev/toml-fmt/actions/workflows/toml_fmt_common_build.yaml/badge.svg" alt="toml_fmt_common_build"&gt;
+&lt;/a&gt;
+ 
+ 
+&lt;a href="https://github.com/tox-dev/toml-fmt/actions/workflows/toml_fmt_common_test.yaml" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://github.com/tox-dev/toml-fmt/actions/workflows/toml_fmt_common_test.yaml/badge.svg" alt="toml_fmt_common_test"&gt;
+&lt;/a&gt;
+ 
+ 
+&lt;a href="https://github.com/tox-dev/toml-fmt/actions/workflows/tox_toml_fmt_build.yaml" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://github.com/tox-dev/toml-fmt/actions/workflows/tox_toml_fmt_build.yaml/badge.svg" alt="tox_toml_fmt_build"&gt;
+&lt;/a&gt;
+ 
+ 
+&lt;a href="https://github.com/tox-dev/toml-fmt/actions/workflows/tox_toml_fmt_test.yaml" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://github.com/tox-dev/toml-fmt/actions/workflows/tox_toml_fmt_test.yaml/badge.svg" alt="tox_toml_fmt_test"&gt;
 &lt;/a&gt;
  
 
