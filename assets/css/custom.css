@@ -8,8 +8,11 @@
 .content article footer {
   margin: 0;
 }
+.container {
+  max-width: 108rem;
+}
 .post {
-  max-width: 1024px;
+  max-width: 1229px;
 }
 li p {
   margin: 0;
