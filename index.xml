@@ -71,7 +71,7 @@ Artifact Repository Hosting team.&lt;/p&gt;
 
 
 &lt;a href="https://github.com/tox-dev/platformdirs/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/platformdirs?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/platformdirs" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/tox-dev/platformdirs"&gt;
@@ -104,7 +104,7 @@ platformdirs
 
 
 &lt;a href="https://github.com/tox-dev/filelock/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/filelock?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/filelock" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/tox-dev/filelock"&gt;
@@ -137,7 +137,7 @@ filelock
 
 
 &lt;a href="https://github.com/pypa/virtualenv/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/pypa/virtualenv?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/pypa/virtualenv" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/pypa/virtualenv"&gt;
@@ -170,7 +170,7 @@ virtualenv
 
 
 &lt;a href="https://github.com/tox-dev/tox/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/tox-dev/tox"&gt;
@@ -203,7 +203,7 @@ tox
 
 
 &lt;a href="https://github.com/tox-dev/pyproject-api/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/pyproject-api?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/pyproject-api" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/tox-dev/pyproject-api"&gt;
@@ -236,7 +236,7 @@ pyproject-api
 
 
 &lt;a href="https://github.com/pytest-dev/pytest-env/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/pytest-dev/pytest-env?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/pytest-dev/pytest-env" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/pytest-dev/pytest-env"&gt;
@@ -304,7 +304,7 @@ pytest-env
 
 
 &lt;a href="https://github.com/koxudaxi/datamodel-code-generator/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/koxudaxi/datamodel-code-generator?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/koxudaxi/datamodel-code-generator" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/koxudaxi/datamodel-code-generator"&gt;
@@ -337,7 +337,7 @@ datamodel-code-generator
 
 
 &lt;a href="https://github.com/tox-dev/pipdeptree/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/pipdeptree?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/pipdeptree" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/tox-dev/pipdeptree"&gt;
@@ -370,7 +370,7 @@ pipdeptree
 
 
 &lt;a href="https://github.com/tox-dev/sphinx-autodoc-typehints/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/sphinx-autodoc-typehints?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/sphinx-autodoc-typehints" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/tox-dev/sphinx-autodoc-typehints"&gt;
@@ -403,7 +403,7 @@ sphinx-autodoc-typehints
 
 
 &lt;a href="https://github.com/tox-dev/pre-commit-uv/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/pre-commit-uv?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/pre-commit-uv" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/tox-dev/pre-commit-uv"&gt;
@@ -436,7 +436,7 @@ pre-commit-uv
 
 
 &lt;a href="https://github.com/tox-dev/tox-uv/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-uv?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-uv" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/tox-dev/tox-uv"&gt;
@@ -469,7 +469,7 @@ tox-uv
 
 
 &lt;a href="https://github.com/tox-dev/pyproject-fmt/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/pyproject-fmt?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/pyproject-fmt" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/tox-dev/pyproject-fmt"&gt;
@@ -526,7 +526,7 @@ pyproject-fmt
 
 
 &lt;a href="https://github.com/tox-dev/toml-fmt/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/toml-fmt?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/toml-fmt" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/tox-dev/toml-fmt"&gt;
@@ -559,7 +559,7 @@ toml-fmt
 
 
 &lt;a href="https://github.com/pytest-dev/pytest-print/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/pytest-dev/pytest-print?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/pytest-dev/pytest-print" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/pytest-dev/pytest-print"&gt;
@@ -592,7 +592,7 @@ pytest-print
 
 
 &lt;a href="https://github.com/tox-dev/tox-gh/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-gh?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-gh" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/tox-dev/tox-gh"&gt;
@@ -625,7 +625,7 @@ tox-gh
 
 
 &lt;a href="https://github.com/tox-dev/sphinx-argparse-cli/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/sphinx-argparse-cli?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/sphinx-argparse-cli" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/tox-dev/sphinx-argparse-cli"&gt;
@@ -658,7 +658,7 @@ sphinx-argparse-cli
 
 
 &lt;a href="https://github.com/tox-dev/devpi-process/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/devpi-process?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/devpi-process" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/tox-dev/devpi-process"&gt;
@@ -691,7 +691,7 @@ devpi-process
 
 
 &lt;a href="https://github.com/tox-dev/tox-ini-fmt/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-ini-fmt?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-ini-fmt" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/tox-dev/tox-ini-fmt"&gt;
@@ -724,7 +724,7 @@ tox-ini-fmt
 
 
 &lt;a href="https://github.com/tox-dev/tox-toml-fmt/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-toml-fmt?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-toml-fmt" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/tox-dev/tox-toml-fmt"&gt;
@@ -757,7 +757,7 @@ tox-toml-fmt
 
 
 &lt;a href="https://github.com/gaborbernat/bump-deps-index/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/gaborbernat/bump-deps-index?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/gaborbernat/bump-deps-index" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/gaborbernat/bump-deps-index"&gt;
@@ -790,7 +790,7 @@ bump-deps-index
 
 
 &lt;a href="https://github.com/gaborbernat/pypi-changes/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/gaborbernat/pypi-changes?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/gaborbernat/pypi-changes" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
 &lt;a class="external-link" href="https://github.com/gaborbernat/pypi-changes"&gt;
