@@ -5,8 +5,8 @@ slug = "presentations"
 
 I'm a regular speaker at (Python) conferences. Here you'll find a list of my recorded presentations.
 
-Here you can find a [YouTube playlist](https://www.youtube.com/playlist?list=PLYWe9Aw9Owsod3Orf-pDqABD--r7mlho7) with all of
-them.
+Here you can find a [YouTube playlist](https://www.youtube.com/playlist?list=PLYWe9Aw9Owsod3Orf-pDqABD--r7mlho7) with
+all of them.
 
 {{< table_of_contents >}}
 
@@ -54,7 +54,7 @@ them.
 
 {{< youtube id=o1Vue9CWRxU start="4" >}}
 
-## How to best package your library? - PyLondinium 2019 - [slides](https://gaborbernat.github.io/pylondinium2019/#/){#best-package-library-lon-19}
+## How to best package your library? - PyLondinium 2019 - [slides](https://gaborbernat.github.io/pylondinium2019/#/) {#best-package-library-lon-19}
 
 {{< youtube id=OSnRl8yF9a4 start="17" >}}
 

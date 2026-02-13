@@ -23,14 +23,11 @@ repos:
     hooks:
       - id: mdformat
         args: ["--wrap", "120", "--number"]
-        exclude: "^content/"
+        exclude: "^themes/"
         additional_dependencies:
-          - mdformat-gfm
-          - mdformat-tables
-          - mdformat-ruff
-          - mdformat-config
           - mdformat-beautysh
           - mdformat-simple-breaks
+          - mdformat-hugo
   - repo: https://github.com/google/yamlfmt
     rev: v0.15.0
     hooks:

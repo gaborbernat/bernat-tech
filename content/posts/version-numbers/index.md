@@ -2,7 +2,7 @@
 author = "Bernat Gabor"
 title = "Version numbers: how to use them?"
 description = ""
-tags = ["python", "version", "semver", "calver", "0ver"]
+tags = [ "python", "version", "semver", "calver", "0ver"]
 draft = false
 slug = "version-numbers"
 date = 2020-05-16T14:15:00Z
@@ -32,7 +32,7 @@ For those who read my articles, you'll know I like to sprinkle my otherwise tech
 cute animal photos to give you at least some moments of relief while you're going through it. In this one, I'll use
 pictures from my Yorkshire Terrier puppy, Silky. Without further ado (#ToT!!!)
 
-{{< figure src="silky_tot.webp" width="700" alt="Silky the Yorkshire Terrier puppy">}}
+{{< figure src="silky_tot.webp" width="700" alt="Silky the Yorkshire Terrier puppy" >}}
 
 ## Semantic and ZeroVer
 
@@ -70,7 +70,7 @@ Initially, in some [tweets](https://twitter.com/llanga/status/125396201584612147
 talk held at a [Remote Python Pizza](https://remote.python.pizza/) conference. Looking back at my experience with this,
 I tend to agree.
 
-{{< figure src="silky_sit.webp" alt="Silky sitting">}}
+{{< figure src="silky_sit.webp" alt="Silky sitting" >}}
 
 ## What's the problem with semantic versioning?
 
@@ -103,7 +103,7 @@ abandoned:
 You get the idea. Unless you're thrilled with your current version, to pull in any change you will need to move to the
 last released version (be that security improvement, bugfix, or feature). Otherwise, you'll not get it.
 
-{{< figure src="silky_wind.webp" width="700" alt="Silky in the wind">}}
+{{< figure src="silky_wind.webp" width="700" alt="Silky in the wind" >}}
 
 ### Will a major version bump always break you?
 
@@ -120,7 +120,7 @@ part of the public interface. You change it to solve what seems like a bug to yo
 find that you have angry hordes at the gate who, thanks to [Hyrum's Law](https://www.hyrumslaw.com/), depend on the old
 behavior.
 
-{{< figure src="https://imgs.xkcd.com/comics/workflow.png" alt="XKCD workflow comic">}}
+{{< figure src="https://imgs.xkcd.com/comics/workflow.png" alt="XKCD workflow comic" >}}
 
 While every maintainer would like to believe they've thought of every use case up-front and created the best API for
 everything, in practice, hindsight is our best teacher. As we run into more use cases, issues, and users, we get smarter
@@ -139,7 +139,7 @@ their code, and you might not have the time to do this for every one of your pro
 In my experience, this happens a lot. A lot more at least than when a major version bump breaks you. And then there's
 another aspect version pinning will introduce: version conflicts.
 
-{{< figure src="silky_tot_2.webp" width="700" alt="Silky the puppy running">}}
+{{< figure src="silky_tot_2.webp" width="700" alt="Silky the puppy running" >}}
 
 ### Version conflicts
 
@@ -183,7 +183,7 @@ A mildly complex application will easily have close to (or possibly more than) 1
 experience start to appear every few months. You need only 5-6 of such cases for every 100 libraries for this issue to
 pop up every two months on your plate. And potentially for a multiple of your applications.
 
-{{< figure src="silky_yes.webp" width="700" alt="Silky looking up">}}
+{{< figure src="silky_yes.webp" width="700" alt="Silky looking up" >}}
 
 ## Calendar Versioning
 
@@ -201,7 +201,7 @@ indicate the release date to signify just how old of a version you're using. You
 can make calendar-based promises. For example, Ubuntu offers five years of support, therefore given version `20.04` you
 can quickly determine that it will be supported up to April 2025.
 
-{{< figure src="silky_jump.webp" width="700" alt="Silky jumping">}}
+{{< figure src="silky_jump.webp" width="700" alt="Silky jumping" >}}
 
 ## A better way to handle API evolution?
 
@@ -240,7 +240,7 @@ Lessons from the trenches suggest that **the only way to ensure an upgrade of an
 have a comprehensive test suite.** Ideally, your test framework can collect and report whenever and where your code is
 calling deprecated functions ([for example pytest](https://docs.pytest.org/en/latest/warnings.html#warnings-capture)).
 
-{{< figure src="silky_wise.webp" alt="Silky looking wise">}}
+{{< figure src="silky_wise.webp" alt="Silky looking wise" >}}
 
 ## Summary
 
@@ -275,4 +275,4 @@ I want to thank [Anthony Sottile](https://twitter.com/codewithanthony), [Paul Ga
 [Hynek Schlawack](https://twitter.com/hynek), and [Lisa McCord](https://twitter.com/LisaMcString) for reviewing this
 article in its draft versions and suggesting changes that made it a thousand times better.
 
-{{< figure src="silky_run_happy.webp" width="700" alt="Silky running happily">}}
+{{< figure src="silky_run_happy.webp" width="700" alt="Silky running happily" >}}

@@ -5,7 +5,7 @@ description = ""
 draft = false
 image = "header.webp"
 slug = "pep-517-518"
-tags = ["python", "pip", "install", "packaging", "setuptools", "pep517", "pep518"]
+tags = [ "python", "pip", "install", "packaging", "setuptools", "pep517", "pep518"]
 title = "Python packaging - Past, Present, Future"
 +++
 
@@ -39,7 +39,7 @@ The downside of this, though, is that it's anything but easy to learn and unders
 more an issue as Python grew in popularity and we had more and more users who were less proficient in the inner workings
 of Python.
 
-{{< figure src="smart_pug.webp" alt="Smart pug">}}
+{{< figure src="smart_pug.webp" alt="Smart pug" >}}
 
 ### build requirements
 
@@ -110,7 +110,7 @@ When one invokes the `pip wheel . --no-deps` command that will automatically cre
 that satisfies the build systems dependencies, and then call inside that environment the `python setup.py bdist_wheel`
 or `python setup.py sdist` command.
 
-{{< figure src="jump_pug.webp" alt="Jumping pug">}}
+{{< figure src="jump_pug.webp" alt="Jumping pug" >}}
 
 ### packaging tool diversity
 
@@ -152,9 +152,8 @@ hooks that the frontend can call from its isolated environment to generate eithe
 
 Furthermore, instead of talking with the backend via the `setup.py` file and its commands, we move to python modules and
 functions. All packaging backends must provide a python object API that implements two methods
-[build_wheel](https://peps.python.org/pep-0517/#build-wheel) and
-[build_sdist](https://peps.python.org/pep-0517/#id9) at the minimum. The API object point is specified via the
-`pyproject.toml` file under the `build-backend` key:
+[build_wheel](https://peps.python.org/pep-0517/#build-wheel) and [build_sdist](https://peps.python.org/pep-0517/#id9) at
+the minimum. The API object point is specified via the `pyproject.toml` file under the `build-backend` key:
 
 ```toml
 [build-system]
@@ -187,7 +186,7 @@ It's up to the backend where and how they want to expose their official API:
 With this, we can start having packaging tools that are no longer bound to the legacy decisions of the `distutils` in
 the frontend.
 
-{{< figure src="curious_pug.webp" alt="Curious pug">}}
+{{< figure src="curious_pug.webp" alt="Curious pug" >}}
 
 # tox and packaging
 
@@ -214,7 +213,7 @@ distribution (by providing the build dependencies into an isolated python enviro
 call the build backend as stated in PEP-517. Otherwise, tox will use the old way of building source distributions,
 invoking the `python setup.py sdist` command with the same interpreter tox is installed into.
 
-{{< figure src="moody_pug.webp" alt="Moody pug">}}
+{{< figure src="moody_pug.webp" alt="Moody pug" >}}
 
 ## Conclusion
 

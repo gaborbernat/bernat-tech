@@ -5,7 +5,7 @@ description = ""
 draft = false
 image = "cold_pug.webp"
 slug = "growing-pain"
-tags = ["python", "packaging", "pip", "setuptools", "pep517", "pep518"]
+tags = [ "python", "packaging", "pip", "setuptools", "pep517", "pep518"]
 title = "Python packaging - Growing Pains"
 +++
 
@@ -29,7 +29,7 @@ Against all the preparations, though, inevitably, the first release did break a 
 performed some operations that caught the maintainers by surprise. Let's try to understand a few of these examples and
 how did they get addressed.
 
-{{< figure src="stand_pug.webp" alt="Standing pug">}}
+{{< figure src="stand_pug.webp" alt="Standing pug" >}}
 
 ## PEP-518
 
@@ -68,7 +68,7 @@ needs to ensure that `pyproject.toml` is attached to the built source package. O
 machine will not be able to use it. [setuptools 1650](https://github.com/pypa/setuptools/pull/1650) will fix this for
 setuptools. One can include `pyproject.toml` by specifying it inside `MANIFEST.in` on earlier versions.
 
-{{< figure src="chair_pug.webp" alt="Pug on chair">}}
+{{< figure src="chair_pug.webp" alt="Pug on chair" >}}
 
 ### Importing the built package from within `setup.py`
 
@@ -118,7 +118,7 @@ Should these self-build backends allow to take on dependencies? There's a long d
 cons, so if you're interested, make sure to head over the
 [python Discourse board](https://discuss.python.org/t/pep-517-backend-bootstrapping/789) and give your opinion.
 
-{{< figure src="many_pug.webp" alt="Many pugs">}}
+{{< figure src="many_pug.webp" alt="Many pugs" >}}
 
 ## Conclusion
 
@@ -137,7 +137,7 @@ for any part of the packaging feel free to start a discussion on the
 [Discuss Python forums](https://discuss.python.org/c/packaging/14) packaging section, or open an issue for the relevant
 tool at hand.
 
-{{< figure src="final_pug.webp" alt="Pug saying goodbye">}}
+{{< figure src="final_pug.webp" alt="Pug saying goodbye" >}}
 
 That's all for now. Thanks for reading through it all! I would like to thank
 [Paul Ganssle](https://twitter.com/pganssle) for reviewing the packaging series post, and
