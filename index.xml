@@ -48,9 +48,17 @@ Artifact Repository Hosting team.&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://www.python.org/" class="external-link" target="_blank" rel="noopener"&gt;Python&lt;/a&gt;:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
+ 
+ 
+ 
 &lt;a href="https://github.com/tox-dev/platformdirs/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/tox-dev/platformdirs/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
+ 
+
+
+
+
 
 
 &lt;a href="https://pypi.org/project/platformdirs" target="_blank" rel="noopener"&gt;
@@ -60,6 +68,7 @@ Artifact Repository Hosting team.&lt;/p&gt;
 &lt;a href="https://pepy.tech/projects/platformdirs" target="_blank" rel="noopener"&gt;
  &lt;img src="https://static.pepy.tech/badge/platformdirs/month" alt="PyPI - Downloads"&gt;
 &lt;/a&gt;
+
 
 &lt;a href="https://github.com/tox-dev/platformdirs/commits"&gt;
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/platformdirs?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
@@ -72,9 +81,17 @@ platformdirs
 
 &lt;/li&gt;
 &lt;li&gt;
+ 
+ 
+ 
 &lt;a href="https://github.com/tox-dev/filelock/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/tox-dev/filelock/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
+ 
+
+
+
+
 
 
 &lt;a href="https://pypi.org/project/filelock" target="_blank" rel="noopener"&gt;
@@ -84,6 +101,7 @@ platformdirs
 &lt;a href="https://pepy.tech/projects/filelock" target="_blank" rel="noopener"&gt;
  &lt;img src="https://static.pepy.tech/badge/filelock/month" alt="PyPI - Downloads"&gt;
 &lt;/a&gt;
+
 
 &lt;a href="https://github.com/tox-dev/filelock/commits"&gt;
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/filelock?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
@@ -96,9 +114,17 @@ filelock
 
 &lt;/li&gt;
 &lt;li&gt;
+ 
+ 
+ 
 &lt;a href="https://github.com/pypa/virtualenv/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/pypa/virtualenv/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
+ 
+
+
+
+
 
 
 &lt;a href="https://pypi.org/project/virtualenv" target="_blank" rel="noopener"&gt;
@@ -108,6 +134,7 @@ filelock
 &lt;a href="https://pepy.tech/projects/virtualenv" target="_blank" rel="noopener"&gt;
  &lt;img src="https://static.pepy.tech/badge/virtualenv/month" alt="PyPI - Downloads"&gt;
 &lt;/a&gt;
+
 
 &lt;a href="https://github.com/pypa/virtualenv/commits"&gt;
 &lt;img src="https://img.shields.io/github/last-commit/pypa/virtualenv?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
@@ -120,9 +147,17 @@ virtualenv
 
 &lt;/li&gt;
 &lt;li&gt;
+ 
+ 
+ 
 &lt;a href="https://github.com/tox-dev/tox/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/tox-dev/tox/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
+ 
+
+
+
+
 
 
 &lt;a href="https://pypi.org/project/tox" target="_blank" rel="noopener"&gt;
@@ -132,6 +167,7 @@ virtualenv
 &lt;a href="https://pepy.tech/projects/tox" target="_blank" rel="noopener"&gt;
  &lt;img src="https://static.pepy.tech/badge/tox/month" alt="PyPI - Downloads"&gt;
 &lt;/a&gt;
+
 
 &lt;a href="https://github.com/tox-dev/tox/commits"&gt;
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
@@ -144,9 +180,17 @@ tox
 
 &lt;/li&gt;
 &lt;li&gt;
+ 
+ 
+ 
 &lt;a href="https://github.com/tox-dev/pyproject-api/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/tox-dev/pyproject-api/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
+ 
+
+
+
+
 
 
 &lt;a href="https://pypi.org/project/pyproject-api" target="_blank" rel="noopener"&gt;
@@ -156,6 +200,7 @@ tox
 &lt;a href="https://pepy.tech/projects/pyproject-api" target="_blank" rel="noopener"&gt;
  &lt;img src="https://static.pepy.tech/badge/pyproject-api/month" alt="PyPI - Downloads"&gt;
 &lt;/a&gt;
+
 
 &lt;a href="https://github.com/tox-dev/pyproject-api/commits"&gt;
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/pyproject-api?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
@@ -168,9 +213,17 @@ pyproject-api
 
 &lt;/li&gt;
 &lt;li&gt;
+ 
+ 
+ 
 &lt;a href="https://github.com/pytest-dev/pytest-env/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/pytest-dev/pytest-env/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
+ 
+
+
+
+
 
 
 &lt;a href="https://pypi.org/project/pytest-env" target="_blank" rel="noopener"&gt;
@@ -180,6 +233,7 @@ pyproject-api
 &lt;a href="https://pepy.tech/projects/pytest-env" target="_blank" rel="noopener"&gt;
  &lt;img src="https://static.pepy.tech/badge/pytest-env/month" alt="PyPI - Downloads"&gt;
 &lt;/a&gt;
+
 
 &lt;a href="https://github.com/pytest-dev/pytest-env/commits"&gt;
 &lt;img src="https://img.shields.io/github/last-commit/pytest-dev/pytest-env?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
@@ -192,9 +246,17 @@ pytest-env
 
 &lt;/li&gt;
 &lt;li&gt;
+ 
+ 
+ 
 &lt;a href="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/test.yaml" target="_blank" rel="noopener"&gt;
- &lt;img src="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/test.yaml/badge.svg" alt="check"&gt;
+ &lt;img src="https://github.com/koxudaxi/datamodel-code-generator/actions/workflows/test.yaml/badge.svg" alt="test"&gt;
 &lt;/a&gt;
+ 
+
+
+
+
 
 
 &lt;a href="https://pypi.org/project/datamodel-code-generator" target="_blank" rel="noopener"&gt;
@@ -204,6 +266,7 @@ pytest-env
 &lt;a href="https://pepy.tech/projects/datamodel-code-generator" target="_blank" rel="noopener"&gt;
  &lt;img src="https://static.pepy.tech/badge/datamodel-code-generator/month" alt="PyPI - Downloads"&gt;
 &lt;/a&gt;
+
 
 &lt;a href="https://github.com/koxudaxi/datamodel-code-generator/commits"&gt;
 &lt;img src="https://img.shields.io/github/last-commit/koxudaxi/datamodel-code-generator?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
@@ -216,9 +279,17 @@ datamodel-code-generator
 
 &lt;/li&gt;
 &lt;li&gt;
+ 
+ 
+ 
 &lt;a href="https://github.com/tox-dev/pipdeptree/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/tox-dev/pipdeptree/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
+ 
+
+
+
+
 
 
 &lt;a href="https://pypi.org/project/pipdeptree" target="_blank" rel="noopener"&gt;
@@ -228,6 +299,7 @@ datamodel-code-generator
 &lt;a href="https://pepy.tech/projects/pipdeptree" target="_blank" rel="noopener"&gt;
  &lt;img src="https://static.pepy.tech/badge/pipdeptree/month" alt="PyPI - Downloads"&gt;
 &lt;/a&gt;
+
 
 &lt;a href="https://github.com/tox-dev/pipdeptree/commits"&gt;
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/pipdeptree?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
@@ -240,9 +312,17 @@ pipdeptree
 
 &lt;/li&gt;
 &lt;li&gt;
+ 
+ 
+ 
 &lt;a href="https://github.com/tox-dev/sphinx-autodoc-typehints/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/tox-dev/sphinx-autodoc-typehints/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
+ 
+
+
+
+
 
 
 &lt;a href="https://pypi.org/project/sphinx-autodoc-typehints" target="_blank" rel="noopener"&gt;
@@ -252,6 +332,7 @@ pipdeptree
 &lt;a href="https://pepy.tech/projects/sphinx-autodoc-typehints" target="_blank" rel="noopener"&gt;
  &lt;img src="https://static.pepy.tech/badge/sphinx-autodoc-typehints/month" alt="PyPI - Downloads"&gt;
 &lt;/a&gt;
+
 
 &lt;a href="https://github.com/tox-dev/sphinx-autodoc-typehints/commits"&gt;
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/sphinx-autodoc-typehints?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
@@ -264,9 +345,17 @@ sphinx-autodoc-typehints
 
 &lt;/li&gt;
 &lt;li&gt;
+ 
+ 
+ 
 &lt;a href="https://github.com/tox-dev/pre-commit-uv/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/tox-dev/pre-commit-uv/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
+ 
+
+
+
+
 
 
 &lt;a href="https://pypi.org/project/pre-commit-uv" target="_blank" rel="noopener"&gt;
@@ -276,6 +365,7 @@ sphinx-autodoc-typehints
 &lt;a href="https://pepy.tech/projects/pre-commit-uv" target="_blank" rel="noopener"&gt;
  &lt;img src="https://static.pepy.tech/badge/pre-commit-uv/month" alt="PyPI - Downloads"&gt;
 &lt;/a&gt;
+
 
 &lt;a href="https://github.com/tox-dev/pre-commit-uv/commits"&gt;
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/pre-commit-uv?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
@@ -288,9 +378,17 @@ pre-commit-uv
 
 &lt;/li&gt;
 &lt;li&gt;
+ 
+ 
+ 
 &lt;a href="https://github.com/tox-dev/tox-uv/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/tox-dev/tox-uv/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
+ 
+
+
+
+
 
 
 &lt;a href="https://pypi.org/project/tox-uv" target="_blank" rel="noopener"&gt;
@@ -300,6 +398,7 @@ pre-commit-uv
 &lt;a href="https://pepy.tech/projects/tox-uv" target="_blank" rel="noopener"&gt;
  &lt;img src="https://static.pepy.tech/badge/tox-uv/month" alt="PyPI - Downloads"&gt;
 &lt;/a&gt;
+
 
 &lt;a href="https://github.com/tox-dev/tox-uv/commits"&gt;
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-uv?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
@@ -312,9 +411,17 @@ tox-uv
 
 &lt;/li&gt;
 &lt;li&gt;
+ 
+ 
+ 
 &lt;a href="https://github.com/tox-dev/pyproject-fmt/actions/workflows/main.yaml" target="_blank" rel="noopener"&gt;
- &lt;img src="https://github.com/tox-dev/pyproject-fmt/actions/workflows/main.yaml/badge.svg" alt="check"&gt;
+ &lt;img src="https://github.com/tox-dev/pyproject-fmt/actions/workflows/main.yaml/badge.svg" alt="main"&gt;
 &lt;/a&gt;
+ 
+
+
+
+
 
 
 &lt;a href="https://pypi.org/project/pyproject-fmt" target="_blank" rel="noopener"&gt;
@@ -324,6 +431,7 @@ tox-uv
 &lt;a href="https://pepy.tech/projects/pyproject-fmt" target="_blank" rel="noopener"&gt;
  &lt;img src="https://static.pepy.tech/badge/pyproject-fmt/month" alt="PyPI - Downloads"&gt;
 &lt;/a&gt;
+
 
 &lt;a href="https://github.com/tox-dev/pyproject-fmt/commits"&gt;
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/pyproject-fmt?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
@@ -336,33 +444,44 @@ pyproject-fmt
 
 &lt;/li&gt;
 &lt;li&gt;
-&lt;a href="https://github.com/tox-dev/toml-fmt-common/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
- &lt;img src="https://github.com/tox-dev/toml-fmt-common/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
+ 
+ 
+ 
+&lt;a href="https://github.com/tox-dev/toml-fmt/actions/workflows/common.yaml" target="_blank" rel="noopener"&gt;
+ &lt;img src="https://github.com/tox-dev/toml-fmt/actions/workflows/common.yaml/badge.svg" alt="common"&gt;
+&lt;/a&gt;
+ 
+
+
+
+
+ 
+
+
+
+
+&lt;a href="https://github.com/tox-dev/toml-fmt/commits"&gt;
+&lt;img src="https://img.shields.io/github/last-commit/tox-dev/toml-fmt?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
 &lt;/a&gt;
 
-
-&lt;a href="https://pypi.org/project/toml-fmt-common" target="_blank" rel="noopener"&gt;
- &lt;img src="https://img.shields.io/pypi/v/toml-fmt-common?style=flat-square" alt="PyPI"&gt;
-&lt;/a&gt;
-
-&lt;a href="https://pepy.tech/projects/toml-fmt-common" target="_blank" rel="noopener"&gt;
- &lt;img src="https://static.pepy.tech/badge/toml-fmt-common/month" alt="PyPI - Downloads"&gt;
-&lt;/a&gt;
-
-&lt;a href="https://github.com/tox-dev/toml-fmt-common/commits"&gt;
-&lt;img src="https://img.shields.io/github/last-commit/tox-dev/toml-fmt-common?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
-&lt;/a&gt;
-
-&lt;a class="external-link" href="https://github.com/tox-dev/toml-fmt-common"&gt;
-toml-fmt-common
+&lt;a class="external-link" href="https://github.com/tox-dev/toml-fmt"&gt;
+toml-fmt
 &lt;/a&gt;
 
 
 &lt;/li&gt;
 &lt;li&gt;
+ 
+ 
+ 
 &lt;a href="https://github.com/pytest-dev/pytest-print/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/pytest-dev/pytest-print/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
+ 
+
+
+
+
 
 
 &lt;a href="https://pypi.org/project/pytest-print" target="_blank" rel="noopener"&gt;
@@ -372,6 +491,7 @@ toml-fmt-common
 &lt;a href="https://pepy.tech/projects/pytest-print" target="_blank" rel="noopener"&gt;
  &lt;img src="https://static.pepy.tech/badge/pytest-print/month" alt="PyPI - Downloads"&gt;
 &lt;/a&gt;
+
 
 &lt;a href="https://github.com/pytest-dev/pytest-print/commits"&gt;
 &lt;img src="https://img.shields.io/github/last-commit/pytest-dev/pytest-print?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
@@ -384,9 +504,17 @@ pytest-print
 
 &lt;/li&gt;
 &lt;li&gt;
+ 
+ 
+ 
 &lt;a href="https://github.com/tox-dev/tox-gh/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/tox-dev/tox-gh/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
+ 
+
+
+
+
 
 
 &lt;a href="https://pypi.org/project/tox-gh" target="_blank" rel="noopener"&gt;
@@ -396,6 +524,7 @@ pytest-print
 &lt;a href="https://pepy.tech/projects/tox-gh" target="_blank" rel="noopener"&gt;
  &lt;img src="https://static.pepy.tech/badge/tox-gh/month" alt="PyPI - Downloads"&gt;
 &lt;/a&gt;
+
 
 &lt;a href="https://github.com/tox-dev/tox-gh/commits"&gt;
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-gh?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
@@ -408,9 +537,17 @@ tox-gh
 
 &lt;/li&gt;
 &lt;li&gt;
+ 
+ 
+ 
 &lt;a href="https://github.com/tox-dev/sphinx-argparse-cli/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/tox-dev/sphinx-argparse-cli/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
+ 
+
+
+
+
 
 
 &lt;a href="https://pypi.org/project/sphinx-argparse-cli" target="_blank" rel="noopener"&gt;
@@ -420,6 +557,7 @@ tox-gh
 &lt;a href="https://pepy.tech/projects/sphinx-argparse-cli" target="_blank" rel="noopener"&gt;
  &lt;img src="https://static.pepy.tech/badge/sphinx-argparse-cli/month" alt="PyPI - Downloads"&gt;
 &lt;/a&gt;
+
 
 &lt;a href="https://github.com/tox-dev/sphinx-argparse-cli/commits"&gt;
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/sphinx-argparse-cli?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
@@ -432,9 +570,17 @@ sphinx-argparse-cli
 
 &lt;/li&gt;
 &lt;li&gt;
+ 
+ 
+ 
 &lt;a href="https://github.com/tox-dev/devpi-process/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/tox-dev/devpi-process/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
+ 
+
+
+
+
 
 
 &lt;a href="https://pypi.org/project/devpi-process" target="_blank" rel="noopener"&gt;
@@ -444,6 +590,7 @@ sphinx-argparse-cli
 &lt;a href="https://pepy.tech/projects/devpi-process" target="_blank" rel="noopener"&gt;
  &lt;img src="https://static.pepy.tech/badge/devpi-process/month" alt="PyPI - Downloads"&gt;
 &lt;/a&gt;
+
 
 &lt;a href="https://github.com/tox-dev/devpi-process/commits"&gt;
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/devpi-process?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
@@ -456,9 +603,17 @@ devpi-process
 
 &lt;/li&gt;
 &lt;li&gt;
+ 
+ 
+ 
 &lt;a href="https://github.com/tox-dev/tox-ini-fmt/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/tox-dev/tox-ini-fmt/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
+ 
+
+
+
+
 
 
 &lt;a href="https://pypi.org/project/tox-ini-fmt" target="_blank" rel="noopener"&gt;
@@ -468,6 +623,7 @@ devpi-process
 &lt;a href="https://pepy.tech/projects/tox-ini-fmt" target="_blank" rel="noopener"&gt;
  &lt;img src="https://static.pepy.tech/badge/tox-ini-fmt/month" alt="PyPI - Downloads"&gt;
 &lt;/a&gt;
+
 
 &lt;a href="https://github.com/tox-dev/tox-ini-fmt/commits"&gt;
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-ini-fmt?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
@@ -480,9 +636,17 @@ tox-ini-fmt
 
 &lt;/li&gt;
 &lt;li&gt;
+ 
+ 
+ 
 &lt;a href="https://github.com/tox-dev/tox-toml-fmt/actions/workflows/main.yaml" target="_blank" rel="noopener"&gt;
- &lt;img src="https://github.com/tox-dev/tox-toml-fmt/actions/workflows/main.yaml/badge.svg" alt="check"&gt;
+ &lt;img src="https://github.com/tox-dev/tox-toml-fmt/actions/workflows/main.yaml/badge.svg" alt="main"&gt;
 &lt;/a&gt;
+ 
+
+
+
+
 
 
 &lt;a href="https://pypi.org/project/tox-toml-fmt" target="_blank" rel="noopener"&gt;
@@ -492,6 +656,7 @@ tox-ini-fmt
 &lt;a href="https://pepy.tech/projects/tox-toml-fmt" target="_blank" rel="noopener"&gt;
  &lt;img src="https://static.pepy.tech/badge/tox-toml-fmt/month" alt="PyPI - Downloads"&gt;
 &lt;/a&gt;
+
 
 &lt;a href="https://github.com/tox-dev/tox-toml-fmt/commits"&gt;
 &lt;img src="https://img.shields.io/github/last-commit/tox-dev/tox-toml-fmt?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
@@ -504,9 +669,17 @@ tox-toml-fmt
 
 &lt;/li&gt;
 &lt;li&gt;
+ 
+ 
+ 
 &lt;a href="https://github.com/gaborbernat/bump-deps-index/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/gaborbernat/bump-deps-index/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
+ 
+
+
+
+
 
 
 &lt;a href="https://pypi.org/project/bump-deps-index" target="_blank" rel="noopener"&gt;
@@ -516,6 +689,7 @@ tox-toml-fmt
 &lt;a href="https://pepy.tech/projects/bump-deps-index" target="_blank" rel="noopener"&gt;
  &lt;img src="https://static.pepy.tech/badge/bump-deps-index/month" alt="PyPI - Downloads"&gt;
 &lt;/a&gt;
+
 
 &lt;a href="https://github.com/gaborbernat/bump-deps-index/commits"&gt;
 &lt;img src="https://img.shields.io/github/last-commit/gaborbernat/bump-deps-index?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
@@ -528,9 +702,17 @@ bump-deps-index
 
 &lt;/li&gt;
 &lt;li&gt;
+ 
+ 
+ 
 &lt;a href="https://github.com/gaborbernat/pypi-changes/actions/workflows/check.yaml" target="_blank" rel="noopener"&gt;
  &lt;img src="https://github.com/gaborbernat/pypi-changes/actions/workflows/check.yaml/badge.svg" alt="check"&gt;
 &lt;/a&gt;
+ 
+
+
+
+
 
 
 &lt;a href="https://pypi.org/project/pypi-changes" target="_blank" rel="noopener"&gt;
@@ -540,6 +722,7 @@ bump-deps-index
 &lt;a href="https://pepy.tech/projects/pypi-changes" target="_blank" rel="noopener"&gt;
  &lt;img src="https://static.pepy.tech/badge/pypi-changes/month" alt="PyPI - Downloads"&gt;
 &lt;/a&gt;
+
 
 &lt;a href="https://github.com/gaborbernat/pypi-changes/commits"&gt;
 &lt;img src="https://img.shields.io/github/last-commit/gaborbernat/pypi-changes?logo=python&amp;amp;style=flat-square" alt="GitHub last commit"&gt;
