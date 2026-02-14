@@ -1,7 +1,9 @@
 {{- with .Site.Params.social -}}
 <p class="social-badges">
-{{- range sort . "weight" -}}
-  <a href="{{ .url | safeURL }}" aria-label="{{ .name }}">{{ if .icon }}<i class="{{ .icon }}"></i> {{ end }}{{ .name }}</a>
-{{- end -}}
+  {{- range sort . "weight" -}}
+  <a href="{{ .url | safeURL }}" aria-label="{{ .name }}"
+    >{{ if .icon }}<i class="{{ .icon }}"></i> {{ end }}{{ .name }}</a
+  >
+  {{- end -}}
 </p>
 {{- end -}}

@@ -78,11 +78,21 @@ table.project-table td.row-num::before {
   color: #212529;
   white-space: nowrap;
 }
-.badge-blue { background: #007ec6; }
-.badge-green { background: #3b1; }
-.badge-red { background: #e05d44; }
-.badge-yellow { background: #dfb317; }
-.badge-gray { background: #9f9f9f; }
+.badge-blue {
+  background: #007ec6;
+}
+.badge-green {
+  background: #3b1;
+}
+.badge-red {
+  background: #e05d44;
+}
+.badge-yellow {
+  background: #dfb317;
+}
+.badge-gray {
+  background: #9f9f9f;
+}
 a .badge {
   color: #212529;
   text-decoration: none;

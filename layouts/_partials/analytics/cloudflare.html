@@ -1,6 +1,9 @@
 {{ if not hugo.IsServer }}
 <!-- Cloudflare Web Analytics -->
-<script defer src='https://static.cloudflareinsights.com/beacon.min.js'
-        data-cf-beacon='{"token": "{{ $.Site.Params.cloudflare.token }}"}'></script>
+<script
+  defer
+  src="https://static.cloudflareinsights.com/beacon.min.js"
+  data-cf-beacon='{"token": "{{ $.Site.Params.cloudflare.token }}"}'
+></script>
 <!-- End Cloudflare Web Analytics -->
 {{ end }}
