@@ -16,7 +16,7 @@ repos:
     rev: "v3.6.2"
     hooks:
       - id: prettier
-        exclude: layouts/shortcodes/project.html|layouts/shortcodes/img.html|.*\.md$|.*\.ya?ml$
+        exclude: layouts/shortcodes/project.html|layouts/shortcodes/project-table.html|layouts/shortcodes/img.html|.*\.md$|.*\.ya?ml$
         args: ["--print-width=120", "--prose-wrap=always"]
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.21

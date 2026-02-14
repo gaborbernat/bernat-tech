@@ -1,34 +1,245 @@
-{{ if (isset .Params "ci") }}
-  {{ $workflows := split (.Get "ci") "," }}
-  {{ range $workflows }}
-    {{ $workflow := trim . " " }}
-<a href="https://github.com/{{$.Get "org"}}/{{$.Get "name"}}/actions/workflows/{{$workflow}}.yaml" target="_blank" rel="noopener">
-    <img src="https://github.com/{{$.Get "org"}}/{{$.Get "name"}}/actions/workflows/{{$workflow}}.yaml/badge.svg" alt="{{$workflow}}">
-</a>
+{{ $name := .Get "name" }}
+{{ $org := .Get "org" }}
+{{ $repo := or (.Get "repo") $name }}
+{{ $label := or (.Get "label") $name }}
+{{ $showPypi := ne (.Get "pypi") "false" }}
+{{ $jetbrainsId := .Get "jetbrains-id" }}
+{{ $jetbrainsSlug := .Get "jetbrains-slug" }}
+{{ $cols := split (or (.Parent.Get "cols") "downloads,version,release,last-commit,ci") "," }}
+{{ $ghOpts := dict }}{{ with getenv "HUGO_GITHUB_TOKEN" }}{{ $ghOpts = dict "headers" (dict "Authorization" (printf "Bearer %s" .)) }}{{ end }}
+
+{{/* Fetch all API data upfront */}}
+{{ $repoData := dict }}
+{{ $result := try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s" $org $repo) $ghOpts) }}
+{{ with $result.Value }}{{ $repoData = . | transform.Unmarshal }}{{ end }}
+{{ $defaultBranch := or $repoData.default_branch "main" }}
+
+{{ $releaseData := dict }}
+{{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/releases/latest" $org $repo) $ghOpts) }}
+{{ with $result.Value }}{{ $releaseData = . | transform.Unmarshal }}{{ end }}
+
+{{ $pypiVersion := "" }}
+{{ if $showPypi }}
+  {{ $result = try (resources.GetRemote (printf "https://pypi.org/pypi/%s/json" $name)) }}
+  {{ with $result.Value }}{{ $pypiVersion = (. | transform.Unmarshal).info.version }}{{ end }}
+{{ end }}
+
+{{ $pypiDownloads := 0 }}
+{{ if $showPypi }}
+  {{ $result = try (resources.GetRemote (printf "https://pypistats.org/api/packages/%s/recent" $name)) }}
+  {{ with $result.Value }}
+    {{ $parsed := (. | transform.Unmarshal).data.last_month }}
+    {{ $pypiDownloads = int $parsed }}
   {{ end }}
 {{ end }}
 
-{{ $showPypi := "true" }}
-{{ if (isset .Params "pypi") }}
-  {{ $showPypi = .Get "pypi" }}
+{{ $ghDownloads := 0 }}
+{{ $ghDownloadLabel := "total" }}
+{{ if and (not $showPypi) (not $jetbrainsId) }}
+  {{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/releases?per_page=100" $org $repo) $ghOpts) }}
+  {{ with $result.Value }}
+    {{ range (. | transform.Unmarshal) }}
+      {{ range .assets }}
+        {{ $ghDownloads = add $ghDownloads (int .download_count) }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+  {{ if eq $ghDownloads 0 }}
+    {{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/traffic/clones" $org $repo) $ghOpts) }}
+    {{ with $result.Value }}
+      {{ $ghDownloads = int (. | transform.Unmarshal).count }}
+      {{ $ghDownloadLabel = "clones/14d" }}
+    {{ end }}
+  {{ end }}
 {{ end }}
 
-{{ if eq $showPypi "true" }}
-<a href="https://pypi.org/project/{{.Get "name"}}" target="_blank" rel="noopener">
-    <img src="https://img.shields.io/pypi/v/{{.Get "name"}}?style=flat-square" alt="PyPI">
-</a>
-
-<a href="https://pepy.tech/projects/{{.Get "name"}}" target="_blank" rel="noopener">
-    <img src="https://static.pepy.tech/badge/{{.Get "name"}}/month" alt="PyPI - Downloads">
-</a>
+{{ $jbDownloads := 0 }}
+{{ $jbVersion := "" }}
+{{ if $jetbrainsId }}
+  {{ $result = try (resources.GetRemote (printf "https://plugins.jetbrains.com/api/plugins/%s" $jetbrainsId)) }}
+  {{ with $result.Value }}
+    {{ $jbDownloads = int (. | transform.Unmarshal).downloads }}
+  {{ end }}
+  {{ $result = try (resources.GetRemote (printf "https://plugins.jetbrains.com/api/plugins/%s/updates?channel=&size=1" $jetbrainsId)) }}
+  {{ with $result.Value }}
+    {{ $updates := . | transform.Unmarshal }}
+    {{ with index $updates 0 }}{{ $jbVersion = .version }}{{ end }}
+  {{ end }}
 {{ end }}
 
-<a href="https://github.com/{{.Get "org"}}/{{.Get "name"}}/commits">
-<img src="https://img.shields.io/github/last-commit/{{.Get "org"}}/{{.Get "name"}}" alt="GitHub last commit">
-</a>
+{{ $nowUnix := now.Unix }}
 
-<a class="external-link" href="https://github.com/{{.Get "org"}}/{{.Get "name"}}">
-{{.Get "name"}}
-</a>
+{{ $type := "other" }}
+{{ if $.Get "monorepo" }}{{ $type = "monorepo" }}
+{{ else if $jetbrainsId }}{{ $type = "jetbrains" }}
+{{ else if $showPypi }}{{ $type = "python" }}
+{{ end }}
+{{ with $.Get "type" }}{{ $type = . }}{{ end }}
 
-<!-- <img src="https://img.shields.io/pypi/pyversions/{{.Get "name"}}?style=flat-square" alt="PyPI"> -->
+{{ $typeIcons := dict "python" "fab fa-python" "rust" "fab fa-rust" "jetbrains" "fas fa-plug" "monorepo" "fas fa-layer-group" "pre-commit" "fab fa-git-alt" "other" "fab fa-github" }}
+{{ $typeLabels := dict "python" "Python" "rust" "Rust" "jetbrains" "JetBrains plugin" "monorepo" "Monorepo" "pre-commit" "Pre-commit hook" "other" "Repository" }}
+
+{{ $types := split $type "," }}
+
+<tr{{ with $.Get "role" }} class="{{ . }}"{{ end }}>
+  <td class="row-num"></td>
+  <td>
+    {{- $tipText := "" -}}
+    {{- with $.Get "monorepo" }}{{ $tipText = . }}{{ else }}{{ $labels := slice }}{{ range $types }}{{ $labels = $labels | append (index $typeLabels (trim . " ")) }}{{ end }}{{ $tipText = delimit $labels " + " }}{{ end -}}
+    {{- range $types -}}<span class="pkg-type has-tip"><i class="{{ index $typeIcons (trim . " ") }}"></i><span class="tip">{{ $tipText }}</span></span>{{- end -}}
+    {{- if ne $repo $name -}}
+      <a href="https://github.com/{{ $org }}/{{ $repo }}/tree/{{ $defaultBranch }}/{{ $name }}">{{ $label }}</a>
+    {{- else -}}
+      <a href="https://github.com/{{ $org }}/{{ $repo }}">{{ $label }}</a>
+    {{- end -}}
+  </td>
+  {{- range $cols -}}
+    {{- $col := trim . " " -}}
+    {{- if eq $col "version" -}}
+  <td>
+      {{- if $showPypi -}}
+        {{- if $pypiVersion -}}
+          <a href="https://pypi.org/project/{{ $name }}"><span class="badge badge-blue">{{ $pypiVersion }}</span></a>
+        {{- end -}}
+      {{- else if $jetbrainsId -}}
+        {{- if $jbVersion -}}
+          <a href="https://plugins.jetbrains.com/plugin/{{ $jetbrainsId }}-{{ $jetbrainsSlug }}/versions"><span class="badge badge-blue">{{ $jbVersion }}</span></a>
+        {{- end -}}
+      {{- else if ne ($.Get "no-release") "true" -}}
+        {{- with $releaseData.tag_name -}}
+          <a href="https://github.com/{{ $org }}/{{ $repo }}/releases"><span class="badge badge-blue">{{ strings.TrimPrefix "v" . }}</span></a>
+        {{- end -}}
+      {{- end -}}
+  </td>
+    {{- else if eq $col "downloads" -}}
+      {{- if eq ($.Get "no-release") "true" -}}
+  <td></td>
+      {{- else -}}
+      {{- $downloads := 0 -}}
+      {{- $sortValue := 0 -}}
+      {{- if $showPypi -}}
+        {{- $downloads = $pypiDownloads -}}
+        {{- $sortValue = div $pypiDownloads 30 -}}
+      {{- else if $jetbrainsId -}}
+        {{- $downloads = $jbDownloads -}}
+      {{- else if gt $ghDownloads 0 -}}
+        {{- $downloads = $ghDownloads -}}
+        {{- if eq $ghDownloadLabel "clones/14d" -}}
+          {{- $sortValue = div $ghDownloads 14 -}}
+        {{- end -}}
+      {{- end -}}
+      {{- $formatted := replace (lang.FormatNumber 0 $downloads) "," "_" -}}
+  <td class="dl-cell" data-value="{{ $sortValue }}">
+      {{- if $showPypi -}}
+        <a href="https://pepy.tech/projects/{{ $name }}"><span class="badge badge-green">{{ $formatted }}/mo</span></a>
+      {{- else if $jetbrainsId -}}
+        <a href="https://plugins.jetbrains.com/plugin/{{ $jetbrainsId }}-{{ $jetbrainsSlug }}"><span class="badge badge-green">{{ $formatted }} total</span></a>
+      {{- else if gt $ghDownloads 0 -}}
+        <a href="https://github.com/{{ $org }}/{{ $repo }}"><span class="badge badge-green">{{ $formatted }} {{ $ghDownloadLabel }}</span></a>
+      {{- end -}}
+  </td>
+      {{- end -}}
+    {{- else if eq $col "release" -}}
+      {{- $noRelease := eq ($.Get "no-release") "true" -}}
+      {{- $sortVal := 0 -}}
+      {{- if not $noRelease -}}
+        {{- with $releaseData.published_at }}{{ $sortVal = (time .).Unix }}{{ end -}}
+      {{- end -}}
+      {{- $days := 0 -}}
+      {{- $label := "" -}}
+      {{- $color := "gray" -}}
+      {{- if gt $sortVal 0 -}}
+        {{- $days = div (sub $nowUnix $sortVal) 86400 -}}
+        {{- if eq $days 0 -}}
+          {{- $label = "today" -}}
+        {{- else if eq $days 1 -}}
+          {{- $label = "yesterday" -}}
+        {{- else if lt $days 30 -}}
+          {{- $label = printf "%d days ago" $days -}}
+        {{- else if lt $days 365 -}}
+          {{- $months := div $days 30 -}}
+          {{- if eq $months 1 -}}
+            {{- $label = "1 month ago" -}}
+          {{- else -}}
+            {{- $label = printf "%d months ago" $months -}}
+          {{- end -}}
+        {{- else -}}
+          {{- $years := div $days 365 -}}
+          {{- if eq $years 1 -}}
+            {{- $label = "1 year ago" -}}
+          {{- else -}}
+            {{- $label = printf "%d years ago" $years -}}
+          {{- end -}}
+        {{- end -}}
+        {{- if lt $days 30 -}}
+          {{- $color = "green" -}}
+        {{- else if le $days 180 -}}
+          {{- $color = "yellow" -}}
+        {{- else -}}
+          {{- $color = "red" -}}
+        {{- end -}}
+      {{- end -}}
+  <td data-value="{{ $sortVal }}">
+      {{- if $label -}}
+        {{- $isoDate := "" -}}
+        {{- with $releaseData.published_at }}{{ $isoDate = (time .).Format "2006-01-02T15:04:05Z" }}{{ end -}}
+        <a href="https://github.com/{{ $org }}/{{ $repo }}/releases"><span class="badge badge-{{ $color }} has-tip">{{ $label }}<span class="tip">{{ $isoDate }}</span></span></a>
+      {{- end -}}
+  </td>
+    {{- else if eq $col "last-commit" -}}
+      {{- $sortVal := 0 -}}
+      {{- with $repoData.pushed_at }}{{ $sortVal = (time .).Unix }}{{ end -}}
+      {{- $days := 0 -}}
+      {{- $label := "" -}}
+      {{- $color := "gray" -}}
+      {{- if gt $sortVal 0 -}}
+        {{- $days = div (sub $nowUnix $sortVal) 86400 -}}
+        {{- if eq $days 0 -}}
+          {{- $label = "today" -}}
+        {{- else if eq $days 1 -}}
+          {{- $label = "yesterday" -}}
+        {{- else if lt $days 30 -}}
+          {{- $label = printf "%d days ago" $days -}}
+        {{- else if lt $days 365 -}}
+          {{- $months := div $days 30 -}}
+          {{- if eq $months 1 -}}
+            {{- $label = "1 month ago" -}}
+          {{- else -}}
+            {{- $label = printf "%d months ago" $months -}}
+          {{- end -}}
+        {{- else -}}
+          {{- $years := div $days 365 -}}
+          {{- if eq $years 1 -}}
+            {{- $label = "1 year ago" -}}
+          {{- else -}}
+            {{- $label = printf "%d years ago" $years -}}
+          {{- end -}}
+        {{- end -}}
+        {{- if lt $days 30 -}}
+          {{- $color = "green" -}}
+        {{- else if le $days 180 -}}
+          {{- $color = "yellow" -}}
+        {{- else -}}
+          {{- $color = "red" -}}
+        {{- end -}}
+      {{- end -}}
+  <td data-value="{{ $sortVal }}">
+        {{- $isoDate := "" -}}
+        {{- with $repoData.pushed_at }}{{ $isoDate = (time .).Format "2006-01-02T15:04:05Z" }}{{ end -}}
+        <a href="https://github.com/{{ $org }}/{{ $repo }}/commits"><span class="badge badge-{{ $color }} has-tip">{{ $label }}<span class="tip">{{ $isoDate }}</span></span></a>
+  </td>
+    {{- else if eq $col "ci" -}}
+  <td>
+      {{- if isset $.Params "ci" -}}
+        {{- $workflows := split ($.Get "ci") "," -}}
+        {{- range $workflows -}}
+          {{- $workflow := trim . " " -}}
+          {{- $file := $workflow -}}
+          {{- if not (or (strings.HasSuffix $workflow ".yaml") (strings.HasSuffix $workflow ".yml")) }}{{ $file = printf "%s.yaml" $workflow }}{{ end -}}
+          <a href="https://github.com/{{ $org }}/{{ $repo }}/actions/workflows/{{ $file }}"><img src="https://github.com/{{ $org }}/{{ $repo }}/actions/workflows/{{ $file }}/badge.svg" alt="{{ $workflow }}"></a>
+        {{- end -}}
+      {{- end -}}
+  </td>
+    {{- end -}}
+  {{- end -}}
+</tr>

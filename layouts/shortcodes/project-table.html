@@ -1,0 +1,25 @@
+{{ $cols := split (or (.Get "cols") "downloads,version,release,last-commit,ci") "," }}
+{{ $headerRow := slice (printf `<th>#</th><th data-sort="name">%s</th>` (or (.Get "name") "Name")) }}
+{{- range $cols -}}
+  {{- $col := trim . " " -}}
+  {{- if eq $col "downloads" -}}{{ $headerRow = $headerRow | append `<th data-sort="downloads">Downloads</th>` }}
+  {{- else if eq $col "version" -}}{{ $headerRow = $headerRow | append `<th>Version</th>` }}
+  {{- else if eq $col "release" -}}{{ $headerRow = $headerRow | append `<th data-sort="date">Release</th>` }}
+  {{- else if eq $col "last-commit" -}}{{ $headerRow = $headerRow | append `<th data-sort="date">Last Commit</th>` }}
+  {{- else if eq $col "ci" -}}{{ $headerRow = $headerRow | append `<th>CI</th>` }}
+  {{- end -}}
+{{- end -}}
+{{ $cells := delimit $headerRow "" }}
+<table class="project-table">
+  <thead>
+    <tr>{{ $cells | safeHTML }}</tr>
+  </thead>
+  <tbody>
+    {{ .Inner }}
+  </tbody>
+  {{- if eq (.Get "footer") "true" }}
+  <tfoot>
+    <tr>{{ $cells | safeHTML }}</tr>
+  </tfoot>
+  {{- end }}
+</table>

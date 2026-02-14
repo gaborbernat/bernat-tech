@@ -38,52 +38,64 @@ touchIcon = "img/android-chrome-192x192.png"
 token = "3ead932f454449a799915b1721c18874"
 
 [[params.social]]
+icon = "fa fa-heart fa-2x"
+name = "Sponsor"
+url = "https://github.com/sponsors/gaborbernat"
+weight = 1
+
+[[params.social]]
 icon = "fa fa-github fa-2x"
 name = "Github"
 url = "https://github.com/gaborbernat/"
-weight = 1
+weight = 2
 
 [[params.social]]
 icon = "fa fa-twitch fa-2x"
 name = "Twitch"
 url = "https://www.twitch.tv/gaborbernat"
-weight = 2
+weight = 3
 
 [[params.social]]
 icon = "fa fa-twitter fa-2x"
 name = "Twitter"
 url = "https://twitter.com/gjbernat/"
-weight = 3
+weight = 4
+
+[[params.social]]
+icon = "fa-brands fa-bluesky fa-2x"
+name = "Bluesky"
+url = "https://bsky.app/profile/gjbernat.bsky.social"
+weight = 5
 
 [[params.social]]
 icon = "fa-brands fa-mastodon fa-2x"
 name = "Mastodon"
 url = "https://fosstodon.org/@gaborbernat"
-weight = 4
+weight = 6
 
 [[params.social]]
 icon = "fa-brands fa-python fa-2x"
 name = "PyPI"
 url = "https://pypi.org/user/gaborbernat/"
-weight = 5
+weight = 7
 
 [[params.social]]
 icon = "fa fa-linkedin fa-2x"
 name = "LinkedIn"
 url = "https://www.linkedin.com/in/gaborbernat/"
-weight = 6
+weight = 8
 
 [[params.social]]
 icon = "fa fa-envelope fa-2x"
 name = "GMail"
 url = "mailto:gaborjbernat@gmail.com"
-weight = 7
+weight = 9
 
 [[params.social]]
 icon = "fa fa-instagram fa-2x"
 name = "Instagram"
 url = "https://instagram.com/gabor_bernat"
-weight = 8
+weight = 10
 
 [taxonomies]
 author = "authors"
@@ -128,6 +140,9 @@ tabWidth = 4
 endLevel = 3
 ordered = true
 startLevel = 2
+
+[caches.getresource]
+maxAge = "30m"
 
 [sitemap]
 changefreq = "weekly"
