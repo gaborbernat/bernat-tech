@@ -1,7 +1,214 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Wheel on Tech articles by Bernát Gábor</title><link>https://bernat.tech/tags/wheel/</link><description>Recent content in Wheel on Tech articles by Bernát Gábor</description><generator>Hugo</generator><language>en</language><lastBuildDate>Fri, 13 Feb 2026 10:08:52 -0800</lastBuildDate><atom:link href="https://bernat.tech/tags/wheel/index.xml" rel="self" type="application/rss+xml"/><item><title>The state of Python Packaging</title><link>https://bernat.tech/posts/pep-517-and-python-packaging/</link><pubDate>Thu, 07 Feb 2019 13:40:54 +0000</pubDate><guid>https://bernat.tech/posts/pep-517-and-python-packaging/</guid><description>&lt;p&gt;pip 19.0 has been released on 22nd January 2019. On the feature list, most notably, it now supports PEP-517, which by
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Wheel on Tech articles by Bernát Gábor</title><link>https://bernat.tech/tags/wheel/</link><description>Bernát Gábor's personal website</description><generator>Hugo 0.155.3</generator><language>en</language><lastBuildDate>Thu, 07 Feb 2019 13:40:54 +0000</lastBuildDate><atom:link href="https://bernat.tech/tags/wheel/index.xml" rel="self" type="application/rss+xml"/><item><title>The state of Python Packaging</title><link>https://bernat.tech/posts/pep-517-and-python-packaging/</link><pubDate>Thu, 07 Feb 2019 13:40:54 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pep-517-and-python-packaging/</guid><description>&lt;p&gt;pip 19.0 has been released on 22nd January 2019. On the feature list, most notably, it now supports PEP-517, which by
 default is turned &lt;strong&gt;on&lt;/strong&gt; when that the project has a &lt;code&gt;pyproject.toml&lt;/code&gt; at the root folder. The PEP in question has been
 created in 2015 and accepted in 2017. Even though it took a while until pip implemented it, the release and the issues
 that followed confirmed that many people are not familiar with it. Read on if you want to get a picture of how the
 Python packaging ecosystem evolved today and where we hope to see it down the line. We expect that even though the
 introduction of the aforementioned python enhancement proposal may cause some discomfort, we will benefit from it in the
-long term.&lt;/p&gt;</description></item></channel></rss>
+long term.&lt;/p&gt;
+&lt;p&gt;I joined the Python open-source community around three years ago (though I have used it for more than 8 years). I&amp;rsquo;ve
+remarked that the Python packaging has a reputation of a somewhat black box from the early days. There are many unknown
+parts, and people mostly get by with just copying other projects, build configurations, and roll with them. On my path
+to better understanding this black box and improving it, I&amp;rsquo;ve become the maintainer of both the virtualenv and tox
+project, occasionally contributing to both &lt;code&gt;setuptools&lt;/code&gt; and &lt;code&gt;pip&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;As I hope to give an exhausting (hopefully still a relatively high level) overview of the subject, I decided to split it
+up into three posts. In this first post, I will give a broad overview of how Python packaging works and the type of
+packages it has. In a subsequent post, I will present in detail how the installation of packages works and how
+PEP-517/518 tries to improve on it. Finally, I dedicate a whole other post to explain some of the painful lessons we
+learned while introducing these improvements. A heads up, I will focus mainly on the Python Packaging Authorities
+systems (&lt;code&gt;pip&lt;/code&gt;, &lt;code&gt;setuptools&lt;/code&gt;, so no &lt;code&gt;conda&lt;/code&gt; or operating system-specific packagers).&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug.webp"
+alt="Sad pug"&gt;
+&lt;/figure&gt;
+&lt;h1 id="an-example-project"&gt;
+An example project
+&lt;a class="heading-link" href="#an-example-project"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h1&gt;
+&lt;p&gt;To tell this story, I&amp;rsquo;ll need to tell how to distribute python packages; more specifically, explain how to package
+installation worked in the past and how we hope it will work in the future. To have a concrete example of what to
+demonstrate, let me introduce my excellent example library: &lt;code&gt;pugs&lt;/code&gt;. This library reasonably simple: it generates a
+single package called &lt;code&gt;pugs&lt;/code&gt; containing only a single module called &lt;code&gt;logic&lt;/code&gt;. The logic is to generate random quotes, you
+guessed right, about &lt;em&gt;pugs&lt;/em&gt;. Here&amp;rsquo;s a simple example structure of it viewed as a source tree (also available under
+&lt;a href="https://github.com/gaborbernat/pugs" class="external-link" target="_blank" rel="noopener"&gt;gaborbernat/pugs&lt;/a&gt;):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pugs-project
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── README.rst
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── setup.cfg
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── setup.py
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── LICENSE.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── src
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│   └── pugs
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│   ├── __init__.py
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│   └── logic.py
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── tests
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│   ├── test_init.py
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│   └── test_logic.py
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── tox.ini
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;└── azure-pipelines.yml
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We have four distinct content type here:&lt;/p&gt;
+&lt;p&gt;What would it mean for our &lt;code&gt;pugs&lt;/code&gt; package to be available on a user machine&amp;rsquo;s interpreter? Ideally, the user should be
+able to import it and call functions from it once it starts up the interpreter:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;the business logic code (what&amp;rsquo;s inside the &lt;code&gt;src&lt;/code&gt; folder),&lt;/li&gt;
+&lt;li&gt;the test code (&lt;code&gt;tests&lt;/code&gt; folder and &lt;code&gt;tox.ini&lt;/code&gt;),&lt;/li&gt;
+&lt;li&gt;the packaging code and metadata (&lt;code&gt;setup.py&lt;/code&gt;, &lt;code&gt;setup.cfg&lt;/code&gt;, &lt;code&gt;LICENSE.txt&lt;/code&gt;, &lt;code&gt;README.rst&lt;/code&gt; - note we use nowadays the de
+facto standard packaging tool &lt;a href="https://pypi.org/project/setuptools" class="external-link" target="_blank" rel="noopener"&gt;setuptools&lt;/a&gt;),&lt;/li&gt;
+&lt;li&gt;files helping with project management and maintenance:
+&lt;ul&gt;
+&lt;li&gt;continuous-integration (&lt;code&gt;azure-pipelines.yml&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;version control (&lt;code&gt;.git&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;project management (for example, a potential &lt;code&gt;.github&lt;/code&gt; folder).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;Python&lt;/span&gt; &lt;span class="mf"&gt;3.7.2&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;v3&lt;/span&gt;&lt;span class="mf"&gt;.7.2&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;9&lt;/span&gt;&lt;span class="n"&gt;a3ffc0492&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Dec&lt;/span&gt; &lt;span class="mi"&gt;24&lt;/span&gt; &lt;span class="mi"&gt;2018&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;02&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;44&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;43&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Clang&lt;/span&gt; &lt;span class="mf"&gt;6.0&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;clang&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;600.0.57&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt; &lt;span class="n"&gt;on&lt;/span&gt; &lt;span class="n"&gt;darwin&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;Type&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;help&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;copyright&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;credits&amp;#34;&lt;/span&gt; &lt;span class="ow"&gt;or&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;license&amp;#34;&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;more&lt;/span&gt; &lt;span class="n"&gt;information&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pugs&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;pugs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;do_tell&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt;&amp;#34;An enlightened pug knows how to make the best of whatever he has to work with - A Pug&amp;#39;s Guide to Dating - Gemma Correll&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug.webp"
+alt="Enlightened pug"&gt;
+&lt;/figure&gt;
+&lt;h1 id="python-package-availability"&gt;
+Python package availability
+&lt;a class="heading-link" href="#python-package-availability"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h1&gt;
+&lt;p&gt;How does Python knows what&amp;rsquo;s available or not? The short answer is it does not. Not upfront, at least, that is. Instead,
+it will try to load and see if it succeeds dynamically. From where does it load it? There are many possible locations,
+but in most cases, we are talking about loading it from a folder on the file system. Where is this folder? For a given
+module, one can print out the representation of the module to find out:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pugs&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;pugs&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;module&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;pugs&amp;#39;&lt;/span&gt; &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;/Users/bernat/Library/Python/3.7/lib/python/site-packages/pugs/__init__.py&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The folder under you&amp;rsquo;ll find it depends on:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;the type of the package it is (third-party or built-in/aka part of the standard library)&lt;/li&gt;
+&lt;li&gt;if it&amp;rsquo;s globally or just for the current user available (see &lt;a href="https://peps.python.org/pep-0370/" class="external-link" target="_blank" rel="noopener"&gt;PEP-370&lt;/a&gt;),&lt;/li&gt;
+&lt;li&gt;and if it&amp;rsquo;s a system python or a virtual environment.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Generally speaking, though, for a given python interpreter, one can find a list of possible directories by printing out
+the &lt;code&gt;sys.path&lt;/code&gt; variables content, for example, on my macOS:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;sys&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sys&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Library&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Frameworks&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Python&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;framework&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Versions&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mf"&gt;3.7&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;lib&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;python37&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;zip&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Library&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Frameworks&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Python&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;framework&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Versions&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mf"&gt;3.7&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;lib&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;python3&lt;/span&gt;&lt;span class="mf"&gt;.7&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Library&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Frameworks&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Python&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;framework&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Versions&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mf"&gt;3.7&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;lib&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;python3&lt;/span&gt;&lt;span class="mf"&gt;.7&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;lib&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;dynload&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Users&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;bernat&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Library&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Python&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mf"&gt;3.7&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;lib&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;python&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;site&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;packages&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Library&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Frameworks&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Python&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;framework&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Versions&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mf"&gt;3.7&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;lib&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;python3&lt;/span&gt;&lt;span class="mf"&gt;.7&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;site&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;packages&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;For third-party packages, it&amp;rsquo;s going to be some &lt;code&gt;site-packages&lt;/code&gt; folder. Note in the above example how there&amp;rsquo;s a
+system-wide and a user-specific instance of this. How do packages end up inside this folder? It must be put there by
+some installer.&lt;/p&gt;
+&lt;p&gt;The following diagram displays how most of the time things go:&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/diagram.webp"
+alt="Python packaging diagram"&gt;
+&lt;/figure&gt;
+&lt;ol&gt;
+&lt;li&gt;The developer writes some python code inside a folder (referred to as the source tree).&lt;/li&gt;
+&lt;li&gt;Some tool (such as &lt;code&gt;setuptools&lt;/code&gt;) then takes the source tree and packages it up for redistribution.&lt;/li&gt;
+&lt;li&gt;The generated package is uploaded via another tool (twine) to a central repository (usually
+&lt;a href="https://pypi.org" class="external-link" target="_blank" rel="noopener"&gt;https://pypi.org&lt;/a&gt;) the end-user machine has access to.&lt;/li&gt;
+&lt;li&gt;The end-user machine uses some installer that discovers, downloads, and installs the package in question. The
+installation operation boils down by creating the correct directory structure and metadata inside the &lt;code&gt;site-packages&lt;/code&gt;
+folder.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug.webp"
+alt="Pug discovering something"&gt;
+&lt;/figure&gt;
+&lt;h1 id="python-package-types"&gt;
+Python package types
+&lt;a class="heading-link" href="#python-package-types"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h1&gt;
+&lt;p&gt;A package during installation must generate at least two types of content to be put in the site package: a metadata
+folder about the package contents the &lt;code&gt;{package}-{version}.dist-info&lt;/code&gt; and the business logic files.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;/Users/bernat/Library/Python/3.7/lib/python/site-packages/pugs
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── __init__.py
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── __pycache__
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ ├── __init__.cpython-37.pyc
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ └── logic.cpython-37.pyc
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;└── logic.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;/Users/bernat/Library/Python/3.7/lib/python/site-packages/pugs-0.0.1.dist-info
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── INSTALLER
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── LICENSE.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── METADATA
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── RECORD
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── WHEEL
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── top_level.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;└── zip-safe
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The distribution info folder describes the package: what installer was used to put it there, what license the package
+has attached to it, what files were created as part of the installation process, what is the top-level python package,
+what entry points the package exposes and so on. A good description of each file can be found inside
+&lt;a href="https://peps.python.org/pep-0427/#id14" class="external-link" target="_blank" rel="noopener"&gt;PEP-427&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;How do we get from our source tree to these two content types? We have two distinct paths in front of us:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Generate this directory structure and metadata from our source tree, compress it into a single file, and publish it
+to the central package repository. In this case, the installer has to download the package and extract it to the
+&lt;code&gt;site-packages&lt;/code&gt; folder. We refer to this type of package as a &lt;code&gt;wheel&lt;/code&gt; package.&lt;/li&gt;
+&lt;li&gt;Alternatively, you can create an archive containing the package source, build scripts and metadata required to
+generate the installable directory structure, then upload that to the central repository. This is called a source
+distribution or &lt;code&gt;sdist&lt;/code&gt;. In this case, the installer has a lot more work to do, extracts the archive, runs the
+builder, and only then copies it over.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The difference between the two options is mainly about where the package &lt;em&gt;compile/build&lt;/em&gt; operation happens: the
+developers&amp;rsquo; machine or the end-users machine. If it occurs on the developers&amp;rsquo; side (such as wheels), the installation
+process is very lightweight. Everything has already been done on the developer machine side. The user machine side
+operation is just a simple download and decompress.&lt;/p&gt;
+&lt;p&gt;In our case, we used &lt;code&gt;setuptools&lt;/code&gt; as our builder (the part that generates from the source tree the content to be put
+inside the site-packages folder). Therefore, to perform the build operation on the user machine, we would need to ensure
+that an &lt;em&gt;appropriate&lt;/em&gt; version of &lt;code&gt;setuptools&lt;/code&gt; is available on the user machine (if you&amp;rsquo;re using a feature from version
+&lt;code&gt;40.6.0&lt;/code&gt; you must guarantee that the user has at least that version).&lt;/p&gt;
+&lt;p&gt;Another use case to consider is that Python offers access to C/C++ libraries from within Python (to get that extra
+performance where you need it). Packages that do so are referred to as C-extension packages, as they take advantage of
+the C-extension API CPython offers.&lt;/p&gt;
+&lt;p&gt;Such extensions to work though, need to C/C++ compile their functionality against both the C/C++ library they interact
+with and the current Python interpreters C-API library. In these cases, the build operation involves calling a binary
+compiler, not just metadata and folder structure generation as was the case with pure python packages (such as our
+&lt;code&gt;pugs&lt;/code&gt; library was).&lt;/p&gt;
+&lt;p&gt;If the build happens on the user machine, one needs to ensure that the correct libraries and compilers are also
+available at build time. This is now a much harder job, as these are platform-specific binaries distributed via the
+platform&amp;rsquo;s packaging tools. The lack or version miss-match of these libraries often triggers cryptic errors during the
+build, which leaves users frustrated and puzzled.&lt;/p&gt;
+&lt;p&gt;Therefore, if possible, always prefer packaging your package as a &lt;strong&gt;&lt;em&gt;wheel&lt;/em&gt;&lt;/strong&gt;. This will altogether avoid the problem of
+users not having all the correct build dependencies (both pure python types such as setuptools or binary ones as is the
+C/C++ compiler). Even if those build dependencies are easy to provision (such as in the case of pure python builders -
+e.g. setuptools) you can save install time by avoiding this step entirely.&lt;/p&gt;
+&lt;p&gt;That being said they are still two use cases that warrant providing source distributions (even when you provide a
+wheel):&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;C-extension source distributions tend to be more auditable, as one can read the source code and thus offer greater
+transparency in what it offers: many big corporate environments prefer using these over wheels for this sole reason
+(they generally extend the rule to pure python wheels, mostly to avoid the need of categorizing what is pure python
+wheel and what is not).&lt;/li&gt;
+&lt;li&gt;You might not be able to provide a wheel for every possible platform out there (especially true in case of
+c-extension packages), in this case, the source distribution may allow these platforms to generate the wheel
+themselves.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id="conclusion"&gt;
+Conclusion
+&lt;a class="heading-link" href="#conclusion"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h1&gt;
+&lt;p&gt;The difference between a source tree, a source distribution, and a wheel:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;source tree &lt;em&gt;-&lt;/em&gt;&lt;/strong&gt; contains all project files available on the developers&amp;rsquo; machine/repository (business logic, tests,
+packaging data, CI files, IDE files, SVC, etc.) - for example, see example project above.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;source distribution&lt;/strong&gt; - contains code files required to build a wheel (business logic + packaging data + often also
+the unit tests files to validate the build; notably lacks developer environment content such as CI/IDE/version control
+files) - format: &lt;code&gt;pugs-0.0.1.tar.gz&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;wheel&lt;/strong&gt; - contains the package metadata and source files to be put into the &lt;code&gt;site-packages&lt;/code&gt; folder - format:
+&lt;code&gt;pugs-0.0.1-py2.py3-none-any.whl&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug.webp"
+alt="Smart pug"&gt;
+&lt;/figure&gt;
+&lt;p&gt;[Read the next post of the series here](https://bernat.tech/posts/pep-517-518/) to determine what happens when we install a
+package. Thanks for reading!&lt;/p&gt;</description><category>python</category><category>packaging</category><category>pip</category><category>setuptools</category><category>pep517</category><category>pep518</category><category>wheel</category><category>sdist</category></item></channel></rss>

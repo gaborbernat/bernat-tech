@@ -1,7 +1,271 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Version on Tech articles by Bernát Gábor</title><link>https://bernat.tech/tags/version/</link><description>Recent content in Version on Tech articles by Bernát Gábor</description><generator>Hugo</generator><language>en</language><lastBuildDate>Fri, 13 Feb 2026 10:08:52 -0800</lastBuildDate><atom:link href="https://bernat.tech/tags/version/index.xml" rel="self" type="application/rss+xml"/><item><title>Version numbers: how to use them?</title><link>https://bernat.tech/posts/version-numbers/</link><pubDate>Sat, 16 May 2020 14:15:00 +0000</pubDate><guid>https://bernat.tech/posts/version-numbers/</guid><description>&lt;p&gt;The &lt;a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" class="external-link" target="_blank" rel="noopener"&gt;DRY principle&lt;/a&gt; (an acronym for don&amp;rsquo;t repeat yourself)
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Version on Tech articles by Bernát Gábor</title><link>https://bernat.tech/tags/version/</link><description>Bernát Gábor's personal website</description><generator>Hugo 0.155.3</generator><language>en</language><lastBuildDate>Sat, 16 May 2020 14:15:00 +0000</lastBuildDate><atom:link href="https://bernat.tech/tags/version/index.xml" rel="self" type="application/rss+xml"/><item><title>Version numbers: how to use them?</title><link>https://bernat.tech/posts/version-numbers/</link><pubDate>Sat, 16 May 2020 14:15:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/version-numbers/</guid><description>&lt;p&gt;The &lt;a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" class="external-link" target="_blank" rel="noopener"&gt;DRY principle&lt;/a&gt; (an acronym for don&amp;rsquo;t repeat yourself)
 encourages software engineers to abstract code into a separate component and reuse it rather than write it over and over
 again. If this happens across the system, the best practice is to put it inside a package that lives on its own (a
 library) and then pull it in from the applications when required.&lt;/p&gt;
 &lt;p&gt;As most of us can&amp;rsquo;t think of every feature that the library might offer or what bugs it might contain, these packages
 tend to evolve. Therefore, we need some mechanism to encode these evolutions of the library, and most commonly, this is
-a version number.&lt;/p&gt;</description></item></channel></rss>
+a version number.&lt;/p&gt;
+&lt;p&gt;Version numbers and their meaning will come up both as a producer or as a consumer of libraries:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;as a producer of libraries, you&amp;rsquo;ll have to decide what versioning system to use,&lt;/li&gt;
+&lt;li&gt;as a consumer, you&amp;rsquo;ll have to express what versions of a given library your application/library is compatible.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;What is a great version number, you might ask? If you do a quick search around, you&amp;rsquo;ll find there are
+&lt;a href="https://en.wikipedia.org/wiki/Software_versioning" class="external-link" target="_blank" rel="noopener"&gt;multiple schools of thought here&lt;/a&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://semver.org/" class="external-link" target="_blank" rel="noopener"&gt;semantic versioning&lt;/a&gt; (of which &lt;a href="https://0ver.org/" class="external-link" target="_blank" rel="noopener"&gt;ZeroVer&lt;/a&gt; is an ever-popular subset)&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://calver.org/" class="external-link" target="_blank" rel="noopener"&gt;calendar versioning&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For those who read my articles, you&amp;rsquo;ll know I like to sprinkle my otherwise technically dry posts with some lovely and
+cute animal photos to give you at least some moments of relief while you&amp;rsquo;re going through it. In this one, I&amp;rsquo;ll use
+pictures from my Yorkshire Terrier puppy, Silky. Without further ado (#ToT!!!)&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/version-numbers/silky_tot.webp"
+alt="Silky the Yorkshire Terrier puppy" width="700"&gt;
+&lt;/figure&gt;
+&lt;h2 id="semantic-and-zerover"&gt;
+Semantic and ZeroVer
+&lt;a class="heading-link" href="#semantic-and-zerover"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;So, which should you use? Historically, the go-to answer has been semantic versioning. This is defined as a three-number
+string (separated with a period) in the format of &lt;code&gt;MAJOR.MINOR.PATCH&lt;/code&gt;. Usually, it starts with &lt;code&gt;0.1.0&lt;/code&gt;. Then depending
+on the type of change you make to the library, you increment one of these and set subsequent numbers to zero:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;MAJOR&lt;/code&gt; version if you make backward-incompatible changes,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MINOR&lt;/code&gt; version if you add a new feature,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;PATCH&lt;/code&gt; version if you fix bugs.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Version two of semantic versioning introduced additional labels to indicate pre-releases and build metadata; these are
+appended after a hyphen at the end, for example, &lt;code&gt;1.0.0-beta+exp.sha.5114f8&lt;/code&gt;. For the point of this blog post, these are
+not important. ZeroVer (a joke versioning system - released on April 1st) is similar to this with the sole difference
+that &lt;code&gt;MAJOR&lt;/code&gt; is always &lt;code&gt;0&lt;/code&gt; and incompatible changes may be introduced at any point. It intended to make fun of people
+who use &amp;ldquo;semantic versioning&amp;rdquo; but never make a &lt;code&gt;1.0&lt;/code&gt; release, thus defeating the purpose of semver.&lt;/p&gt;
+&lt;p&gt;The version number in this context is used as a contract between the library developer and the systems pulling it in
+about how freely they can upgrade. For example, if you wrote your web server against
+&lt;a href="https://pypi.org/project/Django/#history" class="external-link" target="_blank" rel="noopener"&gt;Django 3&lt;/a&gt;, you should be good to go with all Django 3 releases that are at
+least as new as your current one. This allows you to express your Django dependency in the format of
+&lt;code&gt;Django &amp;gt;= 3.0.2, &amp;lt;4&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;By using this format whenever you rebuild your application, you&amp;rsquo;ll automatically pull in any new feature/bugfix/security
+releases of &lt;code&gt;Django&lt;/code&gt;, enabling you to use the latest and best version that is still guaranteed to work with your
+project. This is great because:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;you enable automatic, compatible security fixes,&lt;/li&gt;
+&lt;li&gt;it automatically pulls in bug fixes on the library side,&lt;/li&gt;
+&lt;li&gt;your application will keep building and working in the future as it did today because the significant version pin
+protects you from pulling in versions whose API would not match.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Does this uphold in practice? For me, &lt;a href="https://hynek.me/" class="external-link" target="_blank" rel="noopener"&gt;Hynek Schlawack&lt;/a&gt; pointed out first that it does not.
+Initially, in some &lt;a href="https://twitter.com/llanga/status/1253962015846121472" class="external-link" target="_blank" rel="noopener"&gt;tweets&lt;/a&gt;, and then in more detail within a
+talk held at a &lt;a href="https://remote.python.pizza/" class="external-link" target="_blank" rel="noopener"&gt;Remote Python Pizza&lt;/a&gt; conference. Looking back at my experience with this,
+I tend to agree.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/version-numbers/silky_sit.webp"
+alt="Silky sitting"&gt;
+&lt;/figure&gt;
+&lt;h2 id="whats-the-problem-with-semantic-versioning"&gt;
+What&amp;rsquo;s the problem with semantic versioning?
+&lt;a class="heading-link" href="#whats-the-problem-with-semantic-versioning"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;On paper, semantic versioning seems to be addressing all we need to encode the evolution and state of our library. I
+think the issue is not with the semantic versioning standard itself; indeed, people would like to follow it. However,
+&lt;strong&gt;most library maintainers/developers out there don&amp;rsquo;t have enough resources to follow semantic versioning&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Maintaining a library is very time-consuming. I can attest to that, as I have maintained two myself for a few years now:
+tox (3) and virtualenv (2). My experience is within the Python ecosystem, but I can imagine other languages are similar.
+Most libraries have just a few active maintainers available, for example:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;tox has 2,&lt;/li&gt;
+&lt;li&gt;virtualenv 1,&lt;/li&gt;
+&lt;li&gt;pytest around 4,&lt;/li&gt;
+&lt;li&gt;pip around 4,&lt;/li&gt;
+&lt;li&gt;python-dateutil 1.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;And these are very high-profile libraries. To make things even worse, some of their maintainers overlap (i.e., the same
+person is the maintainer of multiple projects). And to complicate matters even further, for most maintainers this is not
+a full-time job, but something on the side, part of their free time.&lt;/p&gt;
+&lt;p&gt;Given the scarce human resources to maintain a library, in practice, there&amp;rsquo;s a single supported version for any library
+at any given point in time: &lt;strong&gt;the latest one&lt;/strong&gt;. Any version before that (be that major, minor, patch) is in essence
+abandoned:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;if you want security updates, you need to move to the latest version,&lt;/li&gt;
+&lt;li&gt;if you wish to a bugfix you need to move to the newest version,&lt;/li&gt;
+&lt;li&gt;if you want a new feature, it is only going to be available in the latest version.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;You get the idea. Unless you&amp;rsquo;re thrilled with your current version, to pull in any change you will need to move to the
+last released version (be that security improvement, bugfix, or feature). Otherwise, you&amp;rsquo;ll not get it.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/version-numbers/silky_wind.webp"
+alt="Silky in the wind" width="700"&gt;
+&lt;/figure&gt;
+&lt;h3 id="will-a-major-version-bump-always-break-you"&gt;
+Will a major version bump always break you?
+&lt;a class="heading-link" href="#will-a-major-version-bump-always-break-you"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;At this point, you might think, &amp;ldquo;OK, so I need to pin down to the major version&amp;rdquo;. As in, you need to specify the
+dependency in the form of &lt;code&gt;tox&amp;gt;=3, &amp;lt;4&lt;/code&gt;. However, semantic versioning is very strict about changing the API. Any
+backward-incompatible change (no matter how small it is) must be followed with a major number bump.&lt;/p&gt;
+&lt;p&gt;A major version bump &lt;strong&gt;must&lt;/strong&gt; happen not only when you rewrite an entire library with its complete API, but also when
+you&amp;rsquo;re just renaming a single rarely used function (which some may erroneously view as a minor change). Or even worse,
+it&amp;rsquo;s not always clear what&amp;rsquo;s part of the public API and what&amp;rsquo;s not.&lt;/p&gt;
+&lt;p&gt;You have a library with some incidental, undocumented, and unspecified behavior that you consider to be obviously not
+part of the public interface. You change it to solve what seems like a bug to you, and make a patch release, only to
+find that you have angry hordes at the gate who, thanks to &lt;a href="https://www.hyrumslaw.com/" class="external-link" target="_blank" rel="noopener"&gt;Hyrum&amp;rsquo;s Law&lt;/a&gt;, depend on the old
+behavior.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://imgs.xkcd.com/comics/workflow.png"
+alt="XKCD workflow comic"&gt;
+&lt;/figure&gt;
+&lt;p&gt;While every maintainer would like to believe they&amp;rsquo;ve thought of every use case up-front and created the best API for
+everything, in practice, hindsight is our best teacher. As we run into more use cases, issues, and users, we get smarter
+and work out what would be a better interface for that library, and what confuses the users the most.&lt;/p&gt;
+&lt;p&gt;Therefore there will be a lot of moments when, as a maintainer, you would like to change something. Doing a major bump
+change every time will make your project quickly reach double-digit major versions, at which point users tend to
+consider your project too unstable to be trusted. Often these major number changes only affect a low percentage of your
+users (usually those using that one feature you changed in an incompatible fashion).&lt;/p&gt;
+&lt;p&gt;With a major version pinning the majority of other users are effectively opting out of bug fixes and security updates
+(which should be critical), to defend against a change that in practice will rarely impact them. Sure, they can move on
+to the next version by pinning again via something like &lt;code&gt;tox&amp;gt;=4, &amp;lt;5&lt;/code&gt;. However, this involves manual intervention on
+their code, and you might not have the time to do this for every one of your projects.&lt;/p&gt;
+&lt;p&gt;In my experience, this happens a lot. A lot more at least than when a major version bump breaks you. And then there&amp;rsquo;s
+another aspect version pinning will introduce: version conflicts.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/version-numbers/silky_tot_2.webp"
+alt="Silky the puppy running" width="700"&gt;
+&lt;/figure&gt;
+&lt;h3 id="version-conflicts"&gt;
+Version conflicts
+&lt;a class="heading-link" href="#version-conflicts"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;An application or library will have a set of libraries it depends on directly. These are libraries you&amp;rsquo;re directly
+importing within the application/library you&amp;rsquo;re maintaining, but then the libraries themselves may rely on other
+libraries. This is known as a transitive dependency. Very soon, you&amp;rsquo;ll get to a point where two different components use
+the same library, and both of them might express version constraints on it.&lt;/p&gt;
+&lt;p&gt;For example, consider the case of &lt;a href="https://pypi.org/project/tenacity/#history" class="external-link" target="_blank" rel="noopener"&gt;tenacity&lt;/a&gt;: a general-purpose retrying
+library. Imagine you were using this in your application, and being a religious follower of semantic versioning, you&amp;rsquo;ve
+pinned it to the version that was out when you created the app in early 2018: 4.11. The constraint would specify version
+4.11 or later, but less than the next major version 5.&lt;/p&gt;
+&lt;p&gt;At the same time, you also connect to an HTTP service. This connection is handled by another library, and the maintainer
+of that decided to also use tenacity to offer automatic retry functionality. They pinned it similarly following the
+semantic versioning convention. Back in 2018, this caused no issues. But then August comes, and version 5.0 is released.&lt;/p&gt;
+&lt;p&gt;The service and its library maintainers have a lot more time on their hands (perhaps because they are paid to do so), so
+they quickly move to version 5.0. Or perhaps they want to use a feature from the new major version. Now they introduce
+the pin greater than five but less than six on tenacity. Their public interface does not change at all at this point, so
+they do not bump their major version. It&amp;rsquo;s just a patch release.&lt;/p&gt;
+&lt;p&gt;Python can only have one version of a library installed at a given time. At this point, there is a version conflict.
+You&amp;rsquo;re requesting a version between four and five, while the service library is requesting a version between five and
+six. Both constraints cannot be satisfied.&lt;/p&gt;
+&lt;p&gt;If you use a version of &lt;a href="https://pypi.org/project/pip" class="external-link" target="_blank" rel="noopener"&gt;pip&lt;/a&gt; older than 20.2 ­— the release in which it added a
+dependency resolver — it will just install a version matching the first constraint it finds and ignore any subsequent
+constraints. Versions of pip &lt;em&gt;after&lt;/em&gt; 20.2 would fail with an error indicating that the constraint cannot be satisfied.&lt;/p&gt;
+&lt;p&gt;Either way, your application no longer works. The only way to make it work is to either pin the service library down to
+the last working patch number, or upgrade your version pinning of tenacity. This is generating extra work for you with
+minimal benefit. Often it might not be even possible to use two conflicting libraries until one of them relaxes their
+requirements.&lt;/p&gt;
+&lt;p&gt;And for those who might think this doesn&amp;rsquo;t happen often, let me say that tenacity released another major version a year
+later in November 2019. Thus, the cycle starts all over again. In both cases, your code most likely did not need to
+change at all, as just a small part of their public API changed.&lt;/p&gt;
+&lt;p&gt;A mildly complex application will easily have close to (or possibly more than) 100 dependencies, so such issues in my
+experience start to appear every few months. You need only 5-6 of such cases for every 100 libraries for this issue to
+pop up every two months on your plate. And potentially for a multiple of your applications.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/version-numbers/silky_yes.webp"
+alt="Silky looking up" width="700"&gt;
+&lt;/figure&gt;
+&lt;h2 id="calendar-versioning"&gt;
+Calendar Versioning
+&lt;a class="heading-link" href="#calendar-versioning"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/Software_versioning#Date_of_release" class="external-link" target="_blank" rel="noopener"&gt;CalVer&lt;/a&gt;, which was
+&lt;a href="https://sedimental.org/designing_a_version.html#calendar_versioning" class="external-link" target="_blank" rel="noopener"&gt;codified by Mahmoud Hashemi&lt;/a&gt;, suggests version
+number to be in format of: &lt;code&gt;YEAR.MONTH.sequence&lt;/code&gt;. For example, &lt;code&gt;20.1&lt;/code&gt; indicates a release in 2020 January, while
+&lt;code&gt;20.5.2&lt;/code&gt; indicates a release that occurred in 2020 May, while the 2 indicates this is the third release of the month.&lt;/p&gt;
+&lt;p&gt;You can see it looks similar to semantic versioning and has the benefit that a later release qualifies as bigger than an
+earlier one within the semantic versioning world (which mandates that a version number must grow monotonically). This
+makes it easy to use in all places where semantic versioning can be used.&lt;/p&gt;
+&lt;p&gt;The idea here is that if the only maintained version is the latest, then we might as well use the version number to
+indicate the release date to signify just how old of a version you&amp;rsquo;re using. You also have the added benefit that you
+can make calendar-based promises. For example, Ubuntu offers five years of support, therefore given version &lt;code&gt;20.04&lt;/code&gt; you
+can quickly determine that it will be supported up to April 2025.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/version-numbers/silky_jump.webp"
+alt="Silky jumping" width="700"&gt;
+&lt;/figure&gt;
+&lt;h2 id="a-better-way-to-handle-api-evolution"&gt;
+A better way to handle API evolution?
+&lt;a class="heading-link" href="#a-better-way-to-handle-api-evolution"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;Semantic versioning uses the major version to defend against breaking changes, and at the same offers maintainers the
+freedom to evolve the library without breaking users. Nevertheless, as we could see above in practice, this does not
+seem to work that well, as it causes you not to pull in bug fixes/security updates while also introducing version
+conflicts. Do we have a better tool at hand for this?&lt;/p&gt;
+&lt;p&gt;Hynek suggests instead clear, time-window based deprecation policies, and as an optional sprinkle on top, warning
+messages when using deprecated content. When you want to change a public-facing API: release the change under a new
+interface, and in parallel, start emitting warning messages whenever someone invokes the old one. Maintain this state
+for a migration period of a year, and communicate explicitly in the warning message the timeline for when users have to
+migrate (calculate this by adding one year to your release date).&lt;/p&gt;
+&lt;p&gt;This gives everyone a year to move to the new interface without breaking their system, and then the library may remove
+the change and get rid of the old design chains forever. As an added benefit, only people using the old interface will
+ever see the warning, as opposed to affecting everyone (as seen with the semantic versioning major version bump).&lt;/p&gt;
+&lt;p&gt;One caveat for this to work is that one should stop upper-pinning dependencies. You should only specify the minimum
+version you need to pull in newer versions freely if they exist. Lessons learned from version conflicts, though, might
+already prompt you to do so. A major version breaks you a lot less often in practice than semantic versioning leads you
+to believe.&lt;/p&gt;
+&lt;p&gt;Donald Stufft has also taken on this subject in a blog post titled
+&lt;a href="https://caremad.io/posts/2016/02/versioning-software/" class="external-link" target="_blank" rel="noopener"&gt;Versioning Software&lt;/a&gt;. I encourage you to read that too. Besides
+the above points, he argues that by using semantic versioning, you&amp;rsquo;re able to communicate to the end-user the intended
+impact of a new release.&lt;/p&gt;
+&lt;p&gt;A patch version bump indicates no significant change is expected, and users should be able to upgrade quickly. A minor
+or major version bump shows that the upgrade might introduce significant changes, and that users should set aside a
+considerable amount of time when bumping such dependencies.&lt;/p&gt;
+&lt;p&gt;I operate slightly differently in the sense that I don&amp;rsquo;t diff releases. Instead, I tend to &lt;strong&gt;upgrade without version
+constraints&lt;/strong&gt;. If the CI fails, I don&amp;rsquo;t merge it; rather I investigate the failure when I have free time on my hands.
+Lessons from the trenches suggest that &lt;strong&gt;the only way to ensure an upgrade of any magnitude does not break you is to
+have a comprehensive test suite.&lt;/strong&gt; Ideally, your test framework can collect and report whenever and where your code is
+calling deprecated functions (&lt;a href="https://docs.pytest.org/en/latest/warnings.html#warnings-capture" class="external-link" target="_blank" rel="noopener"&gt;for example pytest&lt;/a&gt;).&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/version-numbers/silky_wise.webp"
+alt="Silky looking wise"&gt;
+&lt;/figure&gt;
+&lt;h2 id="summary"&gt;
+Summary
+&lt;a class="heading-link" href="#summary"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;Is semantic versioning irrevocably broken? Should it never be used? I don&amp;rsquo;t think so. It still makes a lot of sense
+where there are ample resources to maintain multiple versions in parallel. A great example of this is Django. However,
+it feels less practical for projects that have just a few maintainers.&lt;/p&gt;
+&lt;p&gt;In this case, it often leads to opting people out of bug fixes and security updates. It also encourages version
+conflicts in environments that can&amp;rsquo;t have multiple versions of the same library, as is the case with Python.
+Furthermore, it makes it a lot harder for developers to learn from their mistakes and evolve the API to a better place.
+Rotten old design decisions will pull down the library for years to come.&lt;/p&gt;
+&lt;p&gt;A better solution at hand can be using CalVer and a time-window based warning system to evolve the API and remove old
+interfaces. Does it solve all problems? Absolutely not.&lt;/p&gt;
+&lt;p&gt;One thing it makes harder is library rewrites. For example, consider
+&lt;a href="https://pypi.org/project/virtualenv/20.0.20/#history" class="external-link" target="_blank" rel="noopener"&gt;virtualenv&amp;rsquo;&lt;/a&gt;s recent rewrite. Version 20 introduced a completely
+new API and changed some behaviours to new defaults. For such use cases in a CalVer world, you would likely need to
+release the rewritten project under a new name, such as virtualenv2. Then again, such complete rewrites are extremely
+rare (in the case of virtualenv, it involved twelve years passing).&lt;/p&gt;
+&lt;p&gt;No version scheme will allow you to predict with any certainty how compatible your software will be with potential
+future versions of your dependencies. The only reasonable choices are for libraries to choose minimum versions/excluded
+versions only, never maximum versions. For applications, do the same thing, but also add in a lock file of known, good
+versions with exact pins (this is the fundamental difference between
+&lt;a href="https://packaging.python.org/en/latest/discussions/install-requires-vs-requirements/" class="external-link" target="_blank" rel="noopener"&gt;install_requires and requirements.txt&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;If you got this far you might want to also check the reasoning of
+&lt;a href="https://snarky.ca/why-i-dont-like-semver/" class="external-link" target="_blank" rel="noopener"&gt;Brett Cannon - Why I don&amp;rsquo;t like SemVer anymore&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I want to thank &lt;a href="https://twitter.com/codewithanthony" class="external-link" target="_blank" rel="noopener"&gt;Anthony Sottile&lt;/a&gt;, &lt;a href="https://twitter.com/pganssle" class="external-link" target="_blank" rel="noopener"&gt;Paul Ganssle&lt;/a&gt;,
+&lt;a href="https://twitter.com/hynek" class="external-link" target="_blank" rel="noopener"&gt;Hynek Schlawack&lt;/a&gt;, and &lt;a href="https://twitter.com/LisaMcString" class="external-link" target="_blank" rel="noopener"&gt;Lisa McCord&lt;/a&gt; for reviewing this
+article in its draft versions and suggesting changes that made it a thousand times better.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/version-numbers/silky_run_happy.webp"
+alt="Silky running happily" width="700"&gt;
+&lt;/figure&gt;</description><category>python</category><category>version</category><category>semver</category><category>calver</category><category>0ver</category></item></channel></rss>

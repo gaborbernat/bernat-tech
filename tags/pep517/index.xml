@@ -1,17 +1,569 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pep517 on Tech articles by Bernát Gábor</title><link>https://bernat.tech/tags/pep517/</link><description>Recent content in Pep517 on Tech articles by Bernát Gábor</description><generator>Hugo</generator><language>en</language><lastBuildDate>Fri, 13 Feb 2026 10:08:52 -0800</lastBuildDate><atom:link href="https://bernat.tech/tags/pep517/index.xml" rel="self" type="application/rss+xml"/><item><title>Python packaging - Growing Pains</title><link>https://bernat.tech/posts/growing-pain/</link><pubDate>Thu, 07 Feb 2019 13:41:03 +0000</pubDate><guid>https://bernat.tech/posts/growing-pain/</guid><description>&lt;p&gt;In my previous two posts, I&amp;rsquo;ve gone over [what package types python has](https://bernat.tech/posts/pep-517-and-python-packaging/),
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pep517 on Tech articles by Bernát Gábor</title><link>https://bernat.tech/tags/pep517/</link><description>Bernát Gábor's personal website</description><generator>Hugo 0.155.3</generator><language>en</language><lastBuildDate>Thu, 07 Feb 2019 13:41:03 +0000</lastBuildDate><atom:link href="https://bernat.tech/tags/pep517/index.xml" rel="self" type="application/rss+xml"/><item><title>Python packaging - Growing Pains</title><link>https://bernat.tech/posts/growing-pain/</link><pubDate>Thu, 07 Feb 2019 13:41:03 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/growing-pain/</guid><description>&lt;p&gt;In my previous two posts, I&amp;rsquo;ve gone over [what package types python has](https://bernat.tech/posts/pep-517-and-python-packaging/),
 and [how the package building works](https://bernat.tech/posts/pep-517-518/), especially with the introduction of the PEP-517/518.
 Although the changes were primarily to make things more robust, we did run into a few issues while implementing it and
 releasing it. This post will go over a few, hopefully serving as lessons learned for all of us and presenting some
-interesting problems to solve in the future.&lt;/p&gt;</description></item><item><title>Python packaging - Past, Present, Future</title><link>https://bernat.tech/posts/pep-517-518/</link><pubDate>Thu, 07 Feb 2019 13:40:59 +0000</pubDate><guid>https://bernat.tech/posts/pep-517-518/</guid><description>&lt;p&gt;Have you ever wondered what happens exactly when you run pip install? This post will give you a detailed overview of the
+interesting problems to solve in the future.&lt;/p&gt;
+&lt;p&gt;Looking at the changes of PEP-517 and PEP-518, one can identify those build backends (aka setuptools, flit) had very
+little to do, only also to expose their functionality via a Python module. Most heavy work is on the build frontend,
+which now needs to generate the isolated Python and then invoke the build backends in a new way. When we&amp;rsquo;re talking
+about build frontends nowadays, our options are mostly pip or poetry (and tox for developers).&lt;/p&gt;
+&lt;p&gt;These projects are maintained by the community, by a handful of active developers, in their free time. They are not
+getting paid for it, and they need to be careful to consider the myriad ways these tools are used. Considering this,
+it&amp;rsquo;s not much of a surprise it took almost two years after the PEP acceptance to come out with a first implementation.
+Planning, testing, and implementation have been going on for over a year in the background.&lt;/p&gt;
+&lt;p&gt;Against all the preparations, though, inevitably, the first release did break a few packages, mostly where people
+performed some operations that caught the maintainers by surprise. Let&amp;rsquo;s try to understand a few of these examples and
+how did they get addressed.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/growing-pain/stand_pug.webp"
+alt="Standing pug"&gt;
+&lt;/figure&gt;
+&lt;h2 id="pep-518"&gt;
+PEP-518
+&lt;a class="heading-link" href="#pep-518"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;The PEP introduces the &lt;a href="https://github.com/toml-lang/toml" class="external-link" target="_blank" rel="noopener"&gt;TOML file format.&lt;/a&gt; A format specially created to be easy to
+read/write configurations. While packaging configuration is exposed under the &lt;code&gt;build-system&lt;/code&gt; section, other tools are
+free to put their configuration under the &lt;code&gt;tool:name&lt;/code&gt; section if they own the PyPi namespace for the name. Various tools
+started to take advantage of this right away (such as &lt;a href="https://pypi.org/project/towncrier/" class="external-link" target="_blank" rel="noopener"&gt;towncrier&lt;/a&gt;,
+&lt;a href="https://pypi.org/project/black/" class="external-link" target="_blank" rel="noopener"&gt;black&lt;/a&gt;, etc.).&lt;/p&gt;
+&lt;p&gt;When &lt;a href="https://pip.pypa.io/en/stable/news/#id61" class="external-link" target="_blank" rel="noopener"&gt;pip 18.0 (released 2018 July 22&lt;/a&gt;) added support for PEP-518 packages
+using the &lt;code&gt;pyproject.toml&lt;/code&gt; initially broke, as the PEP-518 mandated that all packages having the &lt;code&gt;pyproject.toml&lt;/code&gt;
+&lt;strong&gt;must&lt;/strong&gt; specify the &lt;code&gt;build-backend&lt;/code&gt; section. But packages beforehand used it only as a configuration file for these
+other projects since they didn&amp;rsquo;t specify it pre-emptively; when pip ran into these files, it just raised errors
+complaining of invalid &lt;code&gt;pyproject.toml&lt;/code&gt; files.&lt;/p&gt;
+&lt;h2 id="pep-517"&gt;
+PEP-517
+&lt;a class="heading-link" href="#pep-517"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id="the-pip-wheel-cache-issue"&gt;
+The pip wheel cache issue.
+&lt;a class="heading-link" href="#the-pip-wheel-cache-issue"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;The way pip installs in a PEP-517 world is first to generate a wheel and then extract that. To be in PEP-517 world one
+&lt;strong&gt;must&lt;/strong&gt; specify the &lt;code&gt;build-backend&lt;/code&gt; key. Otherwise, all frontends per specification need to fallback to using the
+&lt;code&gt;setup.py&lt;/code&gt; commands.&lt;/p&gt;
+&lt;p&gt;When pip builds wheels, it does it by default via a caching system. This is a speed-up mechanism so that if multiple
+virtual environments need the same wheel, we don&amp;rsquo;t keep rebuilding it but instead re-use it. The PEP-517 wheel build
+operation also takes advantage of this.&lt;/p&gt;
+&lt;p&gt;This becomes troublesome, though, when you disable the cache. Now there&amp;rsquo;s no target folder where to build the wheel. So
+the build itself fails &lt;a href="https://github.com/pypa/pip/issues/6158" class="external-link" target="_blank" rel="noopener"&gt;see the attached issue.&lt;/a&gt; The problem manifested early,
+though, but en masse, as most CI systems run with this option turned on. Just a day later pip 19.0.1 fixed this.&lt;/p&gt;
+&lt;h3 id="pyprojecttoml-not-being-included-into-setuptools"&gt;
+&lt;code&gt;pyproject.toml&lt;/code&gt; not being included into setuptools
+&lt;a class="heading-link" href="#pyprojecttoml-not-being-included-into-setuptools"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;It turns out there&amp;rsquo;s more work on the build backend than just expose their API as described in PEP-517. The backend also
+needs to ensure that &lt;code&gt;pyproject.toml&lt;/code&gt; is attached to the built source package. Otherwise, the build backend on the user
+machine will not be able to use it. &lt;a href="https://github.com/pypa/setuptools/pull/1650" class="external-link" target="_blank" rel="noopener"&gt;setuptools 1650&lt;/a&gt; will fix this for
+setuptools. One can include &lt;code&gt;pyproject.toml&lt;/code&gt; by specifying it inside &lt;code&gt;MANIFEST.in&lt;/code&gt; on earlier versions.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/growing-pain/chair_pug.webp"
+alt="Pug on chair"&gt;
+&lt;/figure&gt;
+&lt;h3 id="importing-the-built-package-from-within-setuppy"&gt;
+Importing the built package from within &lt;code&gt;setup.py&lt;/code&gt;
+&lt;a class="heading-link" href="#importing-the-built-package-from-within-setuppy"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;Another unexpected issue was when a package was importing from within &lt;code&gt;setup.py&lt;/code&gt;. The version of the package by
+convention is exposed both as metadata for the package (in case of setuptools inside the &lt;code&gt;setup.py&lt;/code&gt; as the &lt;code&gt;version&lt;/code&gt;
+argument to the &lt;code&gt;setup&lt;/code&gt; function), but also under the &lt;code&gt;__version__&lt;/code&gt; variable at the root of the package. One could
+specify the content of the variable in both places, but then it becomes troublesome to keep it in sync.&lt;/p&gt;
+&lt;p&gt;As a workaround, many packages started putting it inside a &lt;code&gt;version.py&lt;/code&gt; at the root of the package, and then import it
+as &lt;code&gt;from mypy.version import __version__ as version&lt;/code&gt; from both the &lt;code&gt;setup.py&lt;/code&gt; and the package root. This worked because
+when someone calls a python script, the current working directory is automatically attached to the &lt;code&gt;sys.path&lt;/code&gt; (so you
+can import stuff exposed underneath it).&lt;/p&gt;
+&lt;p&gt;This behavior of adding the current working directory though was never mandated. It was more of a side-effect as calling
+the build via &lt;code&gt;python setup.py sdist&lt;/code&gt;. As this behavior is a side-effect (not a guarantee) all projects that import from
+their &lt;code&gt;setup.py&lt;/code&gt; should explicitly add the scripts folder to the &lt;code&gt;sys.path&lt;/code&gt;, at the start of the build.&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s up for debate if importing the built package during the packaging (when it&amp;rsquo;s not yet built/distributed) is a good
+idea or not (though the Python Packaging group is leaning towards it&amp;rsquo;s not). Nevertheless, the fact of the matter is
+that when &lt;code&gt;setuptools&lt;/code&gt; exposed its interface via the &lt;code&gt;setuptools.build_meta&lt;/code&gt;, it chooses not to add the current working
+directory to the system path.&lt;/p&gt;
+&lt;p&gt;The PEP never mandates for the frontend to do this addition, as most build backend (declarative by nature) will never
+need this. Such functionality was deemed to be under the responsibility of the front end. &lt;code&gt;setuptools&lt;/code&gt; respectively
+think if users want this functionality, they should be explicit in their &lt;code&gt;setup.py&lt;/code&gt; and prepend the respective path to
+the &lt;code&gt;sys.path&lt;/code&gt; manually.&lt;/p&gt;
+&lt;p&gt;To simplify the pip code base pip decided to opt in into PEP-517 all people having a &lt;code&gt;pyproject.toml&lt;/code&gt; into the
+&lt;code&gt;setuptools&lt;/code&gt; backend. Now with this issue even packages that haven&amp;rsquo;t opted in to PEP-517 started to break. To fix this,
+&lt;code&gt;setuptools&lt;/code&gt; added a new build backend (&lt;code&gt;setuptools.build_meta:__legacy__&lt;/code&gt;) designed to be used by frontends as a
+default when the build backend is left unspecified; when projects add the &lt;code&gt;build-backend&lt;/code&gt; key, they will have to also
+change their &lt;code&gt;setup.py&lt;/code&gt; to either add the source root to their &lt;code&gt;sys.path&lt;/code&gt; or avoid importing from the source root.&lt;/p&gt;
+&lt;h3 id="self-bootstrapping-backends"&gt;
+self bootstrapping backends
+&lt;a class="heading-link" href="#self-bootstrapping-backends"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;Another interesting problem was raised that has a much tighter user base but exposes an interesting problem. In case we
+don&amp;rsquo;t want to use wheels, and we provide only via source distribution, how should we resolve the problem of how we
+provide the build backend&amp;rsquo;s build backend? For example, &lt;code&gt;setuptools&lt;/code&gt; packages itself via &lt;code&gt;setuptools&lt;/code&gt;. So were
+&lt;code&gt;setuptools&lt;/code&gt; specify this via PEP-517, the build frontend would be put inside an infinite loop.&lt;/p&gt;
+&lt;p&gt;To install the library &lt;code&gt;pugs&lt;/code&gt; it would first try to create an isolated environment. This environment needs &lt;code&gt;setuptools&lt;/code&gt;,
+so the build frontend will need to build a wheel to satisfy it. The wheel build would itself trigger the creation of an
+isolated environment, which has build dependency again &lt;code&gt;setuptools&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;How to break this loop? Mandate all build backends must be exposed as wheels? Allow backends that can build themselves?
+Should these self-build backends allow to take on dependencies? There&amp;rsquo;s a long discussion with various options, pros and
+cons, so if you&amp;rsquo;re interested, make sure to head over the
+&lt;a href="https://discuss.python.org/t/pep-517-backend-bootstrapping/789" class="external-link" target="_blank" rel="noopener"&gt;python Discourse board&lt;/a&gt; and give your opinion.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/growing-pain/many_pug.webp"
+alt="Many pugs"&gt;
+&lt;/figure&gt;
+&lt;h2 id="conclusion"&gt;
+Conclusion
+&lt;a class="heading-link" href="#conclusion"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;Packaging is hard. Improving a packaging system without any breakage where users can write and run arbitrary code during
+the packaging in their free time is probably impossible. With PEP-518, though now build dependencies are explicit and
+build environments easy to create. With PEP-517, we can start moving into a more declarative packaging namespace that
+allows less space for users to make mistakes and provide better messages when things inevitably go wrong. Granted, as we
+go through these changes, some packages might break, and we might disallow some practices that worked until now. We
+(PyPa maintainers) don&amp;rsquo;t do it in bad faith, so when errors do pop up please do fill in a detailed error report with
+what went wrong, how you tried to use it, and what is your use case.&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;re trying to improve the packaging ecosystem genuinely. As such, we&amp;rsquo;ve created the
+&lt;a href="https://github.com/pypa/integration-test" class="external-link" target="_blank" rel="noopener"&gt;integration-test&lt;/a&gt; repository, as an effort to ensure that in the future, we
+can catch at least some of these edge cases before they land on your machine. If you have any suggestion or requirements
+for any part of the packaging feel free to start a discussion on the
+&lt;a href="https://discuss.python.org/c/packaging/14" class="external-link" target="_blank" rel="noopener"&gt;Discuss Python forums&lt;/a&gt; packaging section, or open an issue for the relevant
+tool at hand.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/growing-pain/final_pug.webp"
+alt="Pug saying goodbye"&gt;
+&lt;/figure&gt;
+&lt;p&gt;That&amp;rsquo;s all for now. Thanks for reading through it all! I would like to thank
+&lt;a href="https://twitter.com/pganssle" class="external-link" target="_blank" rel="noopener"&gt;Paul Ganssle&lt;/a&gt; for reviewing the packaging series post, and
+&lt;a href="https://twitter.com/techatbloomberg" class="external-link" target="_blank" rel="noopener"&gt;Tech At Bloomberg&lt;/a&gt; for allowing me to do open source contributions during my
+working hours.&lt;/p&gt;</description><category>python</category><category>packaging</category><category>pip</category><category>setuptools</category><category>pep517</category><category>pep518</category></item><item><title>Python packaging - Past, Present, Future</title><link>https://bernat.tech/posts/pep-517-518/</link><pubDate>Thu, 07 Feb 2019 13:40:59 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pep-517-518/</guid><description>&lt;p&gt;Have you ever wondered what happens exactly when you run pip install? This post will give you a detailed overview of the
 steps involved in the past, and how it all changes with the adoption of PEP-517 and PEP-518.&lt;/p&gt;
 &lt;p&gt;[In my previous post](https://bernat.tech/posts/pep-517-and-python-packaging/) I&amp;rsquo;ve described how it&amp;rsquo;s possible to install three
 types of content: source tree, source distribution, and wheels. Only the last two types are uploaded to PyPI, the
 central Python repository. However, one could get its hands on a source tree (by feeding, for example, a git protocol
 for pip). The advantage of wheels over the others is that it does not require any build operation to happen on the user
-machine; it&amp;rsquo;s just downloading and extract.&lt;/p&gt;</description></item><item><title>The state of Python Packaging</title><link>https://bernat.tech/posts/pep-517-and-python-packaging/</link><pubDate>Thu, 07 Feb 2019 13:40:54 +0000</pubDate><guid>https://bernat.tech/posts/pep-517-and-python-packaging/</guid><description>&lt;p&gt;pip 19.0 has been released on 22nd January 2019. On the feature list, most notably, it now supports PEP-517, which by
+machine; it&amp;rsquo;s just downloading and extract.&lt;/p&gt;
+&lt;h2 id="building-python-packages"&gt;
+Building python packages
+&lt;a class="heading-link" href="#building-python-packages"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;Now independent of where the build happens (user or the developer machine), you still need to build the package (either
+the sdist or wheel). To do this, you need some builders in place. Historically, the need for third-party packages
+manifested itself early on. Following the principle that Python has batteries included in the year 2000 with Python 1.6,
+the &lt;a href="https://packaging.python.org/key_projects/#distutils" class="external-link" target="_blank" rel="noopener"&gt;distutils&lt;/a&gt; package was added to the Python standard library.
+It introduced the concept of the &lt;code&gt;setup.py&lt;/code&gt; file containing the build logic and is triggered via &lt;code&gt;python setup.py cmd&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;It allowed users to package code as libraries but did not have features such as declaration and automatic installation
+of dependencies. Furthermore, its improvement lifecycle was directly tied to the core interpreter release cycle. In 2004
+&lt;code&gt;setuptools&lt;/code&gt; was created, built on top of &lt;code&gt;distutils&lt;/code&gt;, and extended with other excellent features. It quickly became so
+prevalent that most python installations started to provide it together with the core interpreter itself.&lt;/p&gt;
+&lt;p&gt;Back in those days, all packages were source distributions. Wheel distributions came along a lot later, in 2014.
+&lt;em&gt;distutils&lt;/em&gt; was created back when only a few highly proficient people did the packaging. It is very flexible and
+imperative; you write a python script to modify every step in the package generation process.&lt;/p&gt;
+&lt;p&gt;The downside of this, though, is that it&amp;rsquo;s anything but easy to learn and understand. This started to become more and
+more an issue as Python grew in popularity and we had more and more users who were less proficient in the inner workings
+of Python.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-518/smart_pug.webp"
+alt="Smart pug"&gt;
+&lt;/figure&gt;
+&lt;h3 id="build-requirements"&gt;
+build requirements
+&lt;a class="heading-link" href="#build-requirements"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;For installing a source distribution pip mostly &lt;strong&gt;did&lt;/strong&gt; the following:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;discover the package&lt;/li&gt;
+&lt;li&gt;download the source distribution and extract it&lt;/li&gt;
+&lt;li&gt;run &lt;code&gt;python setup.py install&lt;/code&gt; on the extracted folder (does a build + install).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Developers did &lt;code&gt;python setup.py sdist&lt;/code&gt; to generate the distribution and &lt;code&gt;python setup.py upload&lt;/code&gt; to upload it to a
+central repository (the upload command has been deprecated with 2013 in favor of the
+&lt;a href="https://pypi.org/project/twine/" class="external-link" target="_blank" rel="noopener"&gt;twine&lt;/a&gt; tool most notably due to the upload using a non-secure HTTP connection, and
+upload command also did a fresh build, not allowing the end-user to inspect the generated package before the actual
+upload).&lt;/p&gt;
+&lt;p&gt;When pip ran the &lt;code&gt;python setup.py install&lt;/code&gt;, it did so with the python interpreter for which it was installing the
+package. As such the build operation had access to all third-party packages already available inside that interpreter.
+Most notably, it used exactly the &lt;em&gt;setuptools&lt;/em&gt; version that was installed on the host python interpreter. If a package
+used a &lt;em&gt;setuptools&lt;/em&gt; feature available on a newer release than currently installed, the only way one could complete the
+installation was to update first the installed &lt;em&gt;setuptools.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;This potentially can cause problems if a new release contained a bug that broke other packages. It is especially
+troublesome on systems where the users can&amp;rsquo;t alter installed packages. Then there was also the problem of what happens
+when the builder (e.g., setuptools) wants to use other helper packages, such as cython.&lt;/p&gt;
+&lt;p&gt;If any of these helpers were missing the build usually just broke with a failed to import package error:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-Python" data-lang="Python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;File&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;setup_build.py&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;line&lt;/span&gt; &lt;span class="mi"&gt;99&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;run&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;Cython.Build&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;cythonize&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="ne"&gt;ImportError&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;No&lt;/span&gt; &lt;span class="n"&gt;module&lt;/span&gt; &lt;span class="n"&gt;named&lt;/span&gt; &lt;span class="n"&gt;Cython&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Build&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;There was no way to provide such build dependencies from the developers&amp;rsquo; side. It also meant that users needed to
+install all packaging build dependencies even if they did not want to use that at runtime. To solve this issue
+&lt;a href="https://peps.python.org/pep-0518/" class="external-link" target="_blank" rel="noopener"&gt;PEP-518&lt;/a&gt; was created.&lt;/p&gt;
+&lt;p&gt;The idea is that instead of using the host python with its currently installed packages for the build, the package
+provides the ability to be explicit about what they need for their build operation. Instead of making this available on
+the host python, we create an isolated python (think of a virtual environment) to run the packaging command.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;python setup.py install&lt;/code&gt; now becomes:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;create a temporary folder&lt;/li&gt;
+&lt;li&gt;create an isolated (from the third-party &lt;code&gt;site-packages&lt;/code&gt;) python environment &lt;code&gt;python -m virtualenv our_build_env&lt;/code&gt;,
+let&amp;rsquo;s refer to this python executable as &lt;code&gt;python_isolated&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;install the build dependencies&lt;/li&gt;
+&lt;li&gt;generate a wheel we can install via &lt;code&gt;python_isolated setup.py bdist_wheel&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;extract wheel to site packages of &lt;code&gt;python&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;With this we can install packages that depend on &lt;code&gt;cython&lt;/code&gt; without actually installing &lt;code&gt;cython&lt;/code&gt; inside the runtime python
+environment. The file and method of specifying the build dependencies is the &lt;code&gt;pyproject.toml&lt;/code&gt; metadata file:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-toml" data-lang="toml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;build-system&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;requires&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;setuptools&amp;gt;=44&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;wheel&amp;gt;=0.30.0&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;cython&amp;gt;=0.29.4&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Furthermore, this also allows for whoever does the packaging to be explicit about what minimum versions they require for
+the packaging and these can be quickly provisioned via pip transparently on the user machines.&lt;/p&gt;
+&lt;p&gt;The same mechanism can also be used when generating the source distribution or the wheel on the developers&amp;rsquo; machine.
+When one invokes the &lt;code&gt;pip wheel . --no-deps&lt;/code&gt; command that will automatically create in the background an isolated python
+that satisfies the build systems dependencies, and then call inside that environment the &lt;code&gt;python setup.py bdist_wheel&lt;/code&gt;
+or &lt;code&gt;python setup.py sdist&lt;/code&gt; command.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-518/jump_pug.webp"
+alt="Jumping pug"&gt;
+&lt;/figure&gt;
+&lt;h3 id="packaging-tool-diversity"&gt;
+packaging tool diversity
+&lt;a class="heading-link" href="#packaging-tool-diversity"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;Now there&amp;rsquo;s one more problem here, though. Note all these operations still go through the mechanism introduced twenty
+years ago, aka executing &lt;code&gt;setup.py&lt;/code&gt;. The whole ecosystem still builds on the top of the &lt;em&gt;distutils&lt;/em&gt; and &lt;em&gt;setuptools&lt;/em&gt;
+interface that cannot change much due to trying to preserving backward compatibility.&lt;/p&gt;
+&lt;p&gt;Also, executing arbitrary user-side Python code during packaging though is dangerous, leading to subtle errors hard to
+debug by less experienced users. Imperative build systems were great for flexibility twenty years ago when we were not
+aware of all the use cases. Still, now that we have a good understanding, we can probably make very robust and easy
+package builders for various use cases.&lt;/p&gt;
+&lt;p&gt;To quote &lt;a href="https://twitter.com/pganssle" class="external-link" target="_blank" rel="noopener"&gt;Paul Ganssle&lt;/a&gt; (maintainer of &lt;code&gt;setuptools&lt;/code&gt;and &lt;code&gt;dateutil&lt;/code&gt; on this):&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Ideally, the default option would be a declarative build configuration that works well for the 99% case, with an
+option to fall back to an imperative system when you need the flexibility. At this point, it&amp;rsquo;s feasible for us to move
+to a world where it&amp;rsquo;s considered a code smell if you find you need to reach for the imperative build options.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The biggest problem with &lt;code&gt;setup.py&lt;/code&gt; is that most people use it declaratively, and when they use it imperatively, they
+tend to introduce bugs into the build system. One example of this: if you have a Python 2.7-only dependency, you may
+be tempted to specify it conditionally with &lt;code&gt;sys.version&lt;/code&gt; in your &lt;code&gt;setup.py&lt;/code&gt;, but &lt;code&gt;sys.version&lt;/code&gt; only refers to the
+interpreter that &lt;em&gt;executed&lt;/em&gt; the build; instead, you should be using the declarative environment markers for your
+install requirements.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;a href="https://pypi.org/project/flit/" class="external-link" target="_blank" rel="noopener"&gt;flit&lt;/a&gt; proved this assumption correct already with its introduction in 2015. It has
+become the favorite packaging tool for many newcomers to Python, making sure new users avoid many foot guns. However, to
+get to this point, &lt;code&gt;flit&lt;/code&gt; had to again build on top of &lt;em&gt;distutils&lt;/em&gt;/&lt;em&gt;setuptools,&lt;/em&gt; which makes its implementation
+non-trivial, and the codebase quite a few shim layers (it still generates the &lt;code&gt;setup.py&lt;/code&gt; file, for example, for its
+source distributions).&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s time to free it from these shackles and encourage other people to build their packaging tools that make packaging
+easy for their use cases, making &lt;code&gt;setup.py&lt;/code&gt; the exception rather than the default.
+&lt;a href="https://github.com/pypa/setuptools/pull/1675" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;setuptools&lt;/code&gt; plans to offer a &lt;code&gt;setup.cfg&lt;/code&gt;&lt;/a&gt; the only user interface to
+lead the way, and when a PEP-517 system is in place, you should prefer that overusing the &lt;code&gt;setup.py&lt;/code&gt; for most cases. To
+not tie everything back to &lt;code&gt;setuptools&lt;/code&gt; and &lt;code&gt;distutils&lt;/code&gt; and facilitate the creation of new-build backends
+&lt;a href="https://peps.python.org/pep-0517/" class="external-link" target="_blank" rel="noopener"&gt;PEP-517&lt;/a&gt; was created. It separates builders into a backend and frontend. The
+frontend provides an isolated python environment satisfying all the declared build dependencies; the backend provides
+hooks that the frontend can call from its isolated environment to generate either a source distribution or wheel.&lt;/p&gt;
+&lt;p&gt;Furthermore, instead of talking with the backend via the &lt;code&gt;setup.py&lt;/code&gt; file and its commands, we move to python modules and
+functions. All packaging backends must provide a python object API that implements two methods
+&lt;a href="https://peps.python.org/pep-0517/#build-wheel" class="external-link" target="_blank" rel="noopener"&gt;build_wheel&lt;/a&gt; and &lt;a href="https://peps.python.org/pep-0517/#id9" class="external-link" target="_blank" rel="noopener"&gt;build_sdist&lt;/a&gt; at
+the minimum. The API object point is specified via the &lt;code&gt;pyproject.toml&lt;/code&gt; file under the &lt;code&gt;build-backend&lt;/code&gt; key:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-toml" data-lang="toml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;build-system&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;requires&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;flit&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;build-backend&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;flit.api:main&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The above code effectively means for the frontend that you can get hold of the backend by running the above code inside
+the isolated python environment:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;flit.api&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;backend&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;flit&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;api&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;main&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# build wheel via&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;backend&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;build_wheel&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# build source distribution via&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;backend&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;build_sdist&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;It&amp;rsquo;s up to the backend where and how they want to expose their official API:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="https://flit.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;flit&lt;/a&gt; does it via &lt;code&gt;flit.buildapi&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://setuptools.readthedocs.io/en/latest/history.html#v40-8-0" class="external-link" target="_blank" rel="noopener"&gt;setuptools&lt;/a&gt; provides two variants:
+&lt;code&gt;setuptools.build_meta&lt;/code&gt; (on why read on later)&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://poetry.eustace.io/docs/pyproject/#poetry-and-pep-517" class="external-link" target="_blank" rel="noopener"&gt;poetry&lt;/a&gt; does it via &lt;code&gt;poetry.masonry.api&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;With this, we can start having packaging tools that are no longer bound to the legacy decisions of the &lt;code&gt;distutils&lt;/code&gt; in
+the frontend.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-518/curious_pug.webp"
+alt="Curious pug"&gt;
+&lt;/figure&gt;
+&lt;h1 id="tox-and-packaging"&gt;
+tox and packaging
+&lt;a class="heading-link" href="#tox-and-packaging"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h1&gt;
+&lt;p&gt;&lt;a href="https://tox.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;tox is testing tool&lt;/a&gt; and used by most projects to ensure compatibility against
+multiple Python interpreter versions of a given package. It also allows the quick creation of Python environments with
+the package under inspection installed in it, making reproducing failures faster.&lt;/p&gt;
+&lt;p&gt;To be able to test a package, it first needs to build a source distribution, though. While both PEP-518 and PEP-517
+should make things better, turning them on can break packaging under some use cases. Therefore when
+&lt;a href="https://tox.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;tox&lt;/code&gt;&lt;/a&gt; added isolated build in version
+&lt;a href="https://tox.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;3.3.0&lt;/code&gt;&lt;/a&gt; decided not to enable it by default, for now. You need to enable it
+manually (it will be turned on by default in version &lt;code&gt;4&lt;/code&gt; sometime later this year - 2021).&lt;/p&gt;
+&lt;p&gt;Once you&amp;rsquo;ve specified a &lt;code&gt;pyproject.toml&lt;/code&gt; with appropriate &lt;code&gt;requires&lt;/code&gt; and &lt;code&gt;build-backend&lt;/code&gt;, you need to turn on the
+&lt;code&gt;isolated_build&lt;/code&gt; flag inside &lt;code&gt;tox.ini&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ini" data-lang="ini"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[tox]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;isolated_build&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;True&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After this, tox in the &lt;a href="https://tox.readthedocs.io/en/latest/#system-overview" class="external-link" target="_blank" rel="noopener"&gt;packaging phase&lt;/a&gt; will build the source
+distribution (by providing the build dependencies into an isolated python environment as per PEP-518). Afterward will
+call the build backend as stated in PEP-517. Otherwise, tox will use the old way of building source distributions,
+invoking the &lt;code&gt;python setup.py sdist&lt;/code&gt; command with the same interpreter tox is installed into.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-518/moody_pug.webp"
+alt="Moody pug"&gt;
+&lt;/figure&gt;
+&lt;h2 id="conclusion"&gt;
+Conclusion
+&lt;a class="heading-link" href="#conclusion"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;The Python Packaging Authority hopes that all this makes sense and will have more user-friendly, error-proof and stable
+builds. The specifications for these standards were written up and debated in long threads between 2015 and 2017. The
+proposals were deemed good enough to benefit the most, but some less mainstream use cases could have been overlooked.&lt;/p&gt;
+&lt;p&gt;If your use case is such, don&amp;rsquo;t worry the PEPs are open to enhancement at any point if we deem required. [In my next
+post of this series here](https://bernat.tech/posts/growing-pain/) I&amp;rsquo;ll go over some of the pain points the community bumped into
+while releasing these two PEPs. These should serve as lessons learned and show that there&amp;rsquo;s still some work to be done.
+It&amp;rsquo;s not everything perfect yet. However, we&amp;rsquo;re getting better. Join the packaging community if you can help out, and
+let&amp;rsquo;s make things better together!&lt;/p&gt;</description><category>python</category><category>pip</category><category>install</category><category>packaging</category><category>setuptools</category><category>pep517</category><category>pep518</category></item><item><title>The state of Python Packaging</title><link>https://bernat.tech/posts/pep-517-and-python-packaging/</link><pubDate>Thu, 07 Feb 2019 13:40:54 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pep-517-and-python-packaging/</guid><description>&lt;p&gt;pip 19.0 has been released on 22nd January 2019. On the feature list, most notably, it now supports PEP-517, which by
 default is turned &lt;strong&gt;on&lt;/strong&gt; when that the project has a &lt;code&gt;pyproject.toml&lt;/code&gt; at the root folder. The PEP in question has been
 created in 2015 and accepted in 2017. Even though it took a while until pip implemented it, the release and the issues
 that followed confirmed that many people are not familiar with it. Read on if you want to get a picture of how the
 Python packaging ecosystem evolved today and where we hope to see it down the line. We expect that even though the
 introduction of the aforementioned python enhancement proposal may cause some discomfort, we will benefit from it in the
-long term.&lt;/p&gt;</description></item></channel></rss>
+long term.&lt;/p&gt;
+&lt;p&gt;I joined the Python open-source community around three years ago (though I have used it for more than 8 years). I&amp;rsquo;ve
+remarked that the Python packaging has a reputation of a somewhat black box from the early days. There are many unknown
+parts, and people mostly get by with just copying other projects, build configurations, and roll with them. On my path
+to better understanding this black box and improving it, I&amp;rsquo;ve become the maintainer of both the virtualenv and tox
+project, occasionally contributing to both &lt;code&gt;setuptools&lt;/code&gt; and &lt;code&gt;pip&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;As I hope to give an exhausting (hopefully still a relatively high level) overview of the subject, I decided to split it
+up into three posts. In this first post, I will give a broad overview of how Python packaging works and the type of
+packages it has. In a subsequent post, I will present in detail how the installation of packages works and how
+PEP-517/518 tries to improve on it. Finally, I dedicate a whole other post to explain some of the painful lessons we
+learned while introducing these improvements. A heads up, I will focus mainly on the Python Packaging Authorities
+systems (&lt;code&gt;pip&lt;/code&gt;, &lt;code&gt;setuptools&lt;/code&gt;, so no &lt;code&gt;conda&lt;/code&gt; or operating system-specific packagers).&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug.webp"
+alt="Sad pug"&gt;
+&lt;/figure&gt;
+&lt;h1 id="an-example-project"&gt;
+An example project
+&lt;a class="heading-link" href="#an-example-project"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h1&gt;
+&lt;p&gt;To tell this story, I&amp;rsquo;ll need to tell how to distribute python packages; more specifically, explain how to package
+installation worked in the past and how we hope it will work in the future. To have a concrete example of what to
+demonstrate, let me introduce my excellent example library: &lt;code&gt;pugs&lt;/code&gt;. This library reasonably simple: it generates a
+single package called &lt;code&gt;pugs&lt;/code&gt; containing only a single module called &lt;code&gt;logic&lt;/code&gt;. The logic is to generate random quotes, you
+guessed right, about &lt;em&gt;pugs&lt;/em&gt;. Here&amp;rsquo;s a simple example structure of it viewed as a source tree (also available under
+&lt;a href="https://github.com/gaborbernat/pugs" class="external-link" target="_blank" rel="noopener"&gt;gaborbernat/pugs&lt;/a&gt;):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pugs-project
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── README.rst
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── setup.cfg
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── setup.py
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── LICENSE.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── src
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│   └── pugs
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│   ├── __init__.py
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│   └── logic.py
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── tests
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│   ├── test_init.py
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│   └── test_logic.py
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── tox.ini
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;└── azure-pipelines.yml
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We have four distinct content type here:&lt;/p&gt;
+&lt;p&gt;What would it mean for our &lt;code&gt;pugs&lt;/code&gt; package to be available on a user machine&amp;rsquo;s interpreter? Ideally, the user should be
+able to import it and call functions from it once it starts up the interpreter:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;the business logic code (what&amp;rsquo;s inside the &lt;code&gt;src&lt;/code&gt; folder),&lt;/li&gt;
+&lt;li&gt;the test code (&lt;code&gt;tests&lt;/code&gt; folder and &lt;code&gt;tox.ini&lt;/code&gt;),&lt;/li&gt;
+&lt;li&gt;the packaging code and metadata (&lt;code&gt;setup.py&lt;/code&gt;, &lt;code&gt;setup.cfg&lt;/code&gt;, &lt;code&gt;LICENSE.txt&lt;/code&gt;, &lt;code&gt;README.rst&lt;/code&gt; - note we use nowadays the de
+facto standard packaging tool &lt;a href="https://pypi.org/project/setuptools" class="external-link" target="_blank" rel="noopener"&gt;setuptools&lt;/a&gt;),&lt;/li&gt;
+&lt;li&gt;files helping with project management and maintenance:
+&lt;ul&gt;
+&lt;li&gt;continuous-integration (&lt;code&gt;azure-pipelines.yml&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;version control (&lt;code&gt;.git&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;project management (for example, a potential &lt;code&gt;.github&lt;/code&gt; folder).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;Python&lt;/span&gt; &lt;span class="mf"&gt;3.7.2&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;v3&lt;/span&gt;&lt;span class="mf"&gt;.7.2&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;9&lt;/span&gt;&lt;span class="n"&gt;a3ffc0492&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Dec&lt;/span&gt; &lt;span class="mi"&gt;24&lt;/span&gt; &lt;span class="mi"&gt;2018&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;02&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;44&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;43&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Clang&lt;/span&gt; &lt;span class="mf"&gt;6.0&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;clang&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;600.0.57&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt; &lt;span class="n"&gt;on&lt;/span&gt; &lt;span class="n"&gt;darwin&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;Type&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;help&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;copyright&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;credits&amp;#34;&lt;/span&gt; &lt;span class="ow"&gt;or&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;license&amp;#34;&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;more&lt;/span&gt; &lt;span class="n"&gt;information&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pugs&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;pugs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;do_tell&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt;&amp;#34;An enlightened pug knows how to make the best of whatever he has to work with - A Pug&amp;#39;s Guide to Dating - Gemma Correll&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug.webp"
+alt="Enlightened pug"&gt;
+&lt;/figure&gt;
+&lt;h1 id="python-package-availability"&gt;
+Python package availability
+&lt;a class="heading-link" href="#python-package-availability"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h1&gt;
+&lt;p&gt;How does Python knows what&amp;rsquo;s available or not? The short answer is it does not. Not upfront, at least, that is. Instead,
+it will try to load and see if it succeeds dynamically. From where does it load it? There are many possible locations,
+but in most cases, we are talking about loading it from a folder on the file system. Where is this folder? For a given
+module, one can print out the representation of the module to find out:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pugs&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;pugs&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;module&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;pugs&amp;#39;&lt;/span&gt; &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;/Users/bernat/Library/Python/3.7/lib/python/site-packages/pugs/__init__.py&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The folder under you&amp;rsquo;ll find it depends on:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;the type of the package it is (third-party or built-in/aka part of the standard library)&lt;/li&gt;
+&lt;li&gt;if it&amp;rsquo;s globally or just for the current user available (see &lt;a href="https://peps.python.org/pep-0370/" class="external-link" target="_blank" rel="noopener"&gt;PEP-370&lt;/a&gt;),&lt;/li&gt;
+&lt;li&gt;and if it&amp;rsquo;s a system python or a virtual environment.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Generally speaking, though, for a given python interpreter, one can find a list of possible directories by printing out
+the &lt;code&gt;sys.path&lt;/code&gt; variables content, for example, on my macOS:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;sys&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sys&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Library&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Frameworks&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Python&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;framework&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Versions&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mf"&gt;3.7&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;lib&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;python37&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;zip&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Library&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Frameworks&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Python&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;framework&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Versions&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mf"&gt;3.7&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;lib&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;python3&lt;/span&gt;&lt;span class="mf"&gt;.7&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Library&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Frameworks&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Python&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;framework&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Versions&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mf"&gt;3.7&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;lib&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;python3&lt;/span&gt;&lt;span class="mf"&gt;.7&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;lib&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;dynload&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Users&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;bernat&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Library&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Python&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mf"&gt;3.7&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;lib&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;python&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;site&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;packages&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Library&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Frameworks&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Python&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;framework&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Versions&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mf"&gt;3.7&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;lib&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;python3&lt;/span&gt;&lt;span class="mf"&gt;.7&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;site&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;packages&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;For third-party packages, it&amp;rsquo;s going to be some &lt;code&gt;site-packages&lt;/code&gt; folder. Note in the above example how there&amp;rsquo;s a
+system-wide and a user-specific instance of this. How do packages end up inside this folder? It must be put there by
+some installer.&lt;/p&gt;
+&lt;p&gt;The following diagram displays how most of the time things go:&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/diagram.webp"
+alt="Python packaging diagram"&gt;
+&lt;/figure&gt;
+&lt;ol&gt;
+&lt;li&gt;The developer writes some python code inside a folder (referred to as the source tree).&lt;/li&gt;
+&lt;li&gt;Some tool (such as &lt;code&gt;setuptools&lt;/code&gt;) then takes the source tree and packages it up for redistribution.&lt;/li&gt;
+&lt;li&gt;The generated package is uploaded via another tool (twine) to a central repository (usually
+&lt;a href="https://pypi.org" class="external-link" target="_blank" rel="noopener"&gt;https://pypi.org&lt;/a&gt;) the end-user machine has access to.&lt;/li&gt;
+&lt;li&gt;The end-user machine uses some installer that discovers, downloads, and installs the package in question. The
+installation operation boils down by creating the correct directory structure and metadata inside the &lt;code&gt;site-packages&lt;/code&gt;
+folder.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug.webp"
+alt="Pug discovering something"&gt;
+&lt;/figure&gt;
+&lt;h1 id="python-package-types"&gt;
+Python package types
+&lt;a class="heading-link" href="#python-package-types"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h1&gt;
+&lt;p&gt;A package during installation must generate at least two types of content to be put in the site package: a metadata
+folder about the package contents the &lt;code&gt;{package}-{version}.dist-info&lt;/code&gt; and the business logic files.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;/Users/bernat/Library/Python/3.7/lib/python/site-packages/pugs
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── __init__.py
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── __pycache__
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ ├── __init__.cpython-37.pyc
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ └── logic.cpython-37.pyc
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;└── logic.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;/Users/bernat/Library/Python/3.7/lib/python/site-packages/pugs-0.0.1.dist-info
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── INSTALLER
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── LICENSE.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── METADATA
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── RECORD
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── WHEEL
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;├── top_level.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;└── zip-safe
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The distribution info folder describes the package: what installer was used to put it there, what license the package
+has attached to it, what files were created as part of the installation process, what is the top-level python package,
+what entry points the package exposes and so on. A good description of each file can be found inside
+&lt;a href="https://peps.python.org/pep-0427/#id14" class="external-link" target="_blank" rel="noopener"&gt;PEP-427&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;How do we get from our source tree to these two content types? We have two distinct paths in front of us:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Generate this directory structure and metadata from our source tree, compress it into a single file, and publish it
+to the central package repository. In this case, the installer has to download the package and extract it to the
+&lt;code&gt;site-packages&lt;/code&gt; folder. We refer to this type of package as a &lt;code&gt;wheel&lt;/code&gt; package.&lt;/li&gt;
+&lt;li&gt;Alternatively, you can create an archive containing the package source, build scripts and metadata required to
+generate the installable directory structure, then upload that to the central repository. This is called a source
+distribution or &lt;code&gt;sdist&lt;/code&gt;. In this case, the installer has a lot more work to do, extracts the archive, runs the
+builder, and only then copies it over.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The difference between the two options is mainly about where the package &lt;em&gt;compile/build&lt;/em&gt; operation happens: the
+developers&amp;rsquo; machine or the end-users machine. If it occurs on the developers&amp;rsquo; side (such as wheels), the installation
+process is very lightweight. Everything has already been done on the developer machine side. The user machine side
+operation is just a simple download and decompress.&lt;/p&gt;
+&lt;p&gt;In our case, we used &lt;code&gt;setuptools&lt;/code&gt; as our builder (the part that generates from the source tree the content to be put
+inside the site-packages folder). Therefore, to perform the build operation on the user machine, we would need to ensure
+that an &lt;em&gt;appropriate&lt;/em&gt; version of &lt;code&gt;setuptools&lt;/code&gt; is available on the user machine (if you&amp;rsquo;re using a feature from version
+&lt;code&gt;40.6.0&lt;/code&gt; you must guarantee that the user has at least that version).&lt;/p&gt;
+&lt;p&gt;Another use case to consider is that Python offers access to C/C++ libraries from within Python (to get that extra
+performance where you need it). Packages that do so are referred to as C-extension packages, as they take advantage of
+the C-extension API CPython offers.&lt;/p&gt;
+&lt;p&gt;Such extensions to work though, need to C/C++ compile their functionality against both the C/C++ library they interact
+with and the current Python interpreters C-API library. In these cases, the build operation involves calling a binary
+compiler, not just metadata and folder structure generation as was the case with pure python packages (such as our
+&lt;code&gt;pugs&lt;/code&gt; library was).&lt;/p&gt;
+&lt;p&gt;If the build happens on the user machine, one needs to ensure that the correct libraries and compilers are also
+available at build time. This is now a much harder job, as these are platform-specific binaries distributed via the
+platform&amp;rsquo;s packaging tools. The lack or version miss-match of these libraries often triggers cryptic errors during the
+build, which leaves users frustrated and puzzled.&lt;/p&gt;
+&lt;p&gt;Therefore, if possible, always prefer packaging your package as a &lt;strong&gt;&lt;em&gt;wheel&lt;/em&gt;&lt;/strong&gt;. This will altogether avoid the problem of
+users not having all the correct build dependencies (both pure python types such as setuptools or binary ones as is the
+C/C++ compiler). Even if those build dependencies are easy to provision (such as in the case of pure python builders -
+e.g. setuptools) you can save install time by avoiding this step entirely.&lt;/p&gt;
+&lt;p&gt;That being said they are still two use cases that warrant providing source distributions (even when you provide a
+wheel):&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;C-extension source distributions tend to be more auditable, as one can read the source code and thus offer greater
+transparency in what it offers: many big corporate environments prefer using these over wheels for this sole reason
+(they generally extend the rule to pure python wheels, mostly to avoid the need of categorizing what is pure python
+wheel and what is not).&lt;/li&gt;
+&lt;li&gt;You might not be able to provide a wheel for every possible platform out there (especially true in case of
+c-extension packages), in this case, the source distribution may allow these platforms to generate the wheel
+themselves.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id="conclusion"&gt;
+Conclusion
+&lt;a class="heading-link" href="#conclusion"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h1&gt;
+&lt;p&gt;The difference between a source tree, a source distribution, and a wheel:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;source tree &lt;em&gt;-&lt;/em&gt;&lt;/strong&gt; contains all project files available on the developers&amp;rsquo; machine/repository (business logic, tests,
+packaging data, CI files, IDE files, SVC, etc.) - for example, see example project above.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;source distribution&lt;/strong&gt; - contains code files required to build a wheel (business logic + packaging data + often also
+the unit tests files to validate the build; notably lacks developer environment content such as CI/IDE/version control
+files) - format: &lt;code&gt;pugs-0.0.1.tar.gz&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;wheel&lt;/strong&gt; - contains the package metadata and source files to be put into the &lt;code&gt;site-packages&lt;/code&gt; folder - format:
+&lt;code&gt;pugs-0.0.1-py2.py3-none-any.whl&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug.webp"
+alt="Smart pug"&gt;
+&lt;/figure&gt;
+&lt;p&gt;[Read the next post of the series here](https://bernat.tech/posts/pep-517-518/) to determine what happens when we install a
+package. Thanks for reading!&lt;/p&gt;</description><category>python</category><category>packaging</category><category>pip</category><category>setuptools</category><category>pep517</category><category>pep518</category><category>wheel</category><category>sdist</category></item></channel></rss>
