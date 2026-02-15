@@ -3,30 +3,66 @@
 {{- $color := "gray" -}}
 {{- $days := div $seconds 86400 -}}
 {{- $hours := div $seconds 3600 -}}
-{{- if lt $hours 24 -}}
-  {{- if eq $hours 0 -}}
+{{- $minutes := div $seconds 60 -}}
+{{- if lt $minutes 60 -}}
+  {{- if eq $minutes 0 -}}
     {{- $label = "just now" -}}
-  {{- else if eq $hours 1 -}}
-    {{- $label = "1 hour ago" -}}
   {{- else -}}
-    {{- $label = printf "%d hours ago" $hours -}}
+    {{- $hundredths := div (mul $seconds 100) 3600 -}}
+    {{- $whole := div $hundredths 100 -}}
+    {{- $frac := mod $hundredths 100 -}}
+    {{- if eq $frac 0 -}}
+      {{- $label = printf "%d minute%s ago" $minutes (cond (eq $minutes 1) "" "s") -}}
+    {{- else if eq (mod $frac 10) 0 -}}
+      {{- $label = printf "%d.%d minutes ago" $whole (div $frac 10) -}}
+    {{- else -}}
+      {{- $label = printf "%d.%02d minutes ago" $whole $frac -}}
+    {{- end -}}
+  {{- end -}}
+{{- else if lt $hours 24 -}}
+  {{- $hundredths := div (mul $minutes 100) 60 -}}
+  {{- $whole := div $hundredths 100 -}}
+  {{- $frac := mod $hundredths 100 -}}
+  {{- if eq $frac 0 -}}
+    {{- $label = printf "%d hour%s ago" $whole (cond (eq $whole 1) "" "s") -}}
+  {{- else if eq (mod $frac 10) 0 -}}
+    {{- $label = printf "%d.%d hours ago" $whole (div $frac 10) -}}
+  {{- else -}}
+    {{- $label = printf "%d.%02d hours ago" $whole $frac -}}
   {{- end -}}
 {{- else if lt $days 30 -}}
-  {{- if eq $days 1 -}}
-    {{- $label = "1 day ago" -}}
+  {{- $hundredths := div (mul $hours 100) 24 -}}
+  {{- $whole := div $hundredths 100 -}}
+  {{- $frac := mod $hundredths 100 -}}
+  {{- if eq $frac 0 -}}
+    {{- $label = printf "%d day%s ago" $whole (cond (eq $whole 1) "" "s") -}}
+  {{- else if eq (mod $frac 10) 0 -}}
+    {{- $label = printf "%d.%d days ago" $whole (div $frac 10) -}}
   {{- else -}}
-    {{- $label = printf "%d days ago" $days -}}
+    {{- $label = printf "%d.%02d days ago" $whole $frac -}}
   {{- end -}}
 {{- else if lt $days 365 -}}
   {{- $hundredths := div (mul $days 100) 30 -}}
   {{- $whole := div $hundredths 100 -}}
   {{- $frac := mod $hundredths 100 -}}
-  {{- $label = printf "%d.%02d months ago" $whole $frac -}}
+  {{- if eq $frac 0 -}}
+    {{- $label = printf "%d month%s ago" $whole (cond (eq $whole 1) "" "s") -}}
+  {{- else if eq (mod $frac 10) 0 -}}
+    {{- $label = printf "%d.%d months ago" $whole (div $frac 10) -}}
+  {{- else -}}
+    {{- $label = printf "%d.%02d months ago" $whole $frac -}}
+  {{- end -}}
 {{- else -}}
   {{- $hundredths := div (mul $days 100) 365 -}}
   {{- $whole := div $hundredths 100 -}}
   {{- $frac := mod $hundredths 100 -}}
-  {{- $label = printf "%d.%02d years ago" $whole $frac -}}
+  {{- if eq $frac 0 -}}
+    {{- $label = printf "%d year%s ago" $whole (cond (eq $whole 1) "" "s") -}}
+  {{- else if eq (mod $frac 10) 0 -}}
+    {{- $label = printf "%d.%d years ago" $whole (div $frac 10) -}}
+  {{- else -}}
+    {{- $label = printf "%d.%02d years ago" $whole $frac -}}
+  {{- end -}}
 {{- end -}}
 {{- if lt $days 30 -}}
   {{- $color = "green" -}}
