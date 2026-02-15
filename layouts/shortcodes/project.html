@@ -249,7 +249,7 @@
       {{- $formatted := replace (lang.FormatNumber 0 $stars) "," "_" -}}
   <td data-value="{{ $stars }}">
       {{- if gt $stars 0 -}}
-        <a href="https://github.com/{{ $org }}/{{ $repo }}/stargazers"><span class="badge badge-yellow">{{ $formatted }} ★</span></a>
+        <a href="https://www.star-history.com/#{{ $org }}/{{ $repo }}"><span class="badge badge-yellow">{{ $formatted }} ★</span></a>
       {{- end -}}
   </td>
     {{- end -}}
