@@ -1,0 +1,114 @@
+- title: "Python meets the crab - Friendship at first sight?"
+  event: PyCon US 2025
+  year: 2025
+  youtube: CqOZdTFb4io
+  slides: https://gaborbernat.github.io/python-meets-crab/
+  id: python-meets-crab-py-us-25
+  emoji: "\U0001F40D \U0001F980"
+
+- title: "Python meets the crab - Friendship at first sight?"
+  event: PyTexas 2025
+  year: 2025
+  youtube: krJZmNvUqK4
+  id: python-meets-crab-pytexas-25
+
+- title: "Lessons learned maintaining open source Python projects"
+  event: EuroPython 2024
+  year: 2024
+  youtube: 4qmuZQYxdrU
+  slides: https://gaborbernat.github.io/europython-24/
+  id: lessons-learned-europython-24
+
+- title: "Lessons learned maintaining open source Python projects"
+  event: PyTexas 2024
+  year: 2024
+  youtube: rcSLOqwpJk8
+  slides: https://gaborbernat.github.io/py-texas-24/
+  id: lessons-learned-py-texas-24
+
+- title: "What's new in tox 4?"
+  event: PyCon US 2023
+  type: lightning talk
+  year: 2023
+  youtube: 95tjPYvbJc0
+  start: 480
+  id: tox4-lightning-py-con-us-23
+
+- title: "How we standardized editable installs PEP 660 vs PEP 662"
+  event: PyCon US 2022
+  year: 2022
+  youtube: Z_-PuPwN6ZI
+  start: 5
+  slides: https://gaborbernat.github.io/pep-660-662-2022/#/
+  id: editables-us-22
+
+- title: "tox 4"
+  event: PyCon US 2021
+  type: lightning talk
+  year: 2021
+  youtube: 5zEn3Jta2Dg
+  start: 389
+  slides: https://gaborbernat.github.io/pycon-us-21-lighting/#/
+  id: tox-4-us-21
+
+- title: "Python packaging demystified"
+  event: PyCon US 2021
+  type: tutorial
+  year: 2021
+  youtube: ApDThpsr2Fw
+  start: 5
+  slides: https://gaborbernat.github.io/packaging-tutorial-pycon-us-21/#/
+  id: py-packaging-us-21
+
+- title: "Virtualenv - A Deep Dive"
+  event: PyCharm Webinar 2021
+  year: 2021
+  youtube: O9_MJHDkej8
+  start: 7
+  id: virtualenv-deep-dive-21
+
+- title: "Lessons from the Trenches: rewriting and re-releasing virtualenv"
+  event: EuroPython 2020
+  year: 2020
+  youtube: l9A0a8qZgOs
+  start: 27
+  slides: https://gaborbernat.github.io/virtualenv-rewrite-eupy20/
+  id: virtualenv-rewrite-eu-20
+
+- title: "status quo of virtual environments"
+  event: EuroPython 2019
+  year: 2019
+  youtube: o1Vue9CWRxU
+  start: 4
+  slides: https://gaborbernat.github.io/euro_python_2019/#/
+  id: status-quo-of-virtual-environments-eu-19
+
+- title: "How to best package your library?"
+  event: PyLondinium 2019
+  year: 2019
+  youtube: OSnRl8yF9a4
+  start: 17
+  slides: https://gaborbernat.github.io/pylondinium2019/#/
+  id: best-package-library-lon-19
+
+- title: "Type hinting (and mypy)"
+  event: PyCon US 2019
+  year: 2019
+  youtube: hTrjTAPnA_k
+  start: 47
+  slides: https://gaborbernat.github.io/pycon-us-2019/#/
+  id: type-hinting-and-mypy-us-19
+
+- title: "Standardize Testing in Python"
+  event: EuroPython 2018
+  year: 2018
+  youtube: SFqna5ilqig
+  start: 8
+  slides: https://gaborbernat.github.io/pycon-eu-2018/#/
+  id: standardize-testing-eu-18
+
+- title: "Type hints inside the snake pit"
+  event: PyLondinium 2018
+  year: 2018
+  youtube: DzRlR3BFCko
+  id: type-hints-snake-pit-lon-18

@@ -225,3 +225,46 @@ body.colorscheme-dark table.project-table img {
 .mastodon-comment .comment {
   flex-wrap: wrap;
 }
+.youtube-lazy {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  background: #000;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+}
+.youtube-lazy img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+}
+.youtube-lazy .youtube-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  width: 68px;
+  height: 48px;
+  z-index: 1;
+  opacity: 0.8;
+  transition: opacity 0.15s;
+}
+.youtube-lazy:hover .youtube-play {
+  opacity: 1;
+}
+.youtube-lazy iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}

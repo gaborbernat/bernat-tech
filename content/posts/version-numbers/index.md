@@ -1,7 +1,9 @@
 +++
 author = "Bernat Gabor"
 title = "Version numbers: how to use them?"
-description = ""
+description = "Comparing semantic versioning, calendar versioning, and ZeroVer for Python libraries and when to use each"
+image = "silky_tot.webp"
+images = ["silky_tot.webp"]
 tags = [ "python", "version", "semver", "calver", "0ver"]
 draft = false
 slug = "version-numbers"
