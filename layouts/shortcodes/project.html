@@ -36,11 +36,13 @@
 {{ $ghDownloads := 0 }}
 {{ $ghDownloadLabel := "total" }}
 {{ if and (not $showPypi) (not $jetbrainsId) }}
-  {{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/releases?per_page=100" $org $repo) $ghOpts) }}
-  {{ with $result.Value }}
-    {{ range (. | transform.Unmarshal) }}
-      {{ range .assets }}
-        {{ $ghDownloads = add $ghDownloads (int .download_count) }}
+  {{ if not (in (split (or ($.Get "type") "") ",") "github-action") }}
+    {{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/releases?per_page=100" $org $repo) $ghOpts) }}
+    {{ with $result.Value }}
+      {{ range (. | transform.Unmarshal) }}
+        {{ range .assets }}
+          {{ $ghDownloads = add $ghDownloads (int .download_count) }}
+        {{ end }}
       {{ end }}
     {{ end }}
   {{ end }}
