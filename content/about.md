@@ -15,14 +15,14 @@ Experience organizations Artifact Repository Hosting team. I am the primary main
 
 {{< project-table footer="true" >}} {{< project name="platformdirs" org="tox-dev" ci="check" >}}
 {{< project name="filelock" org="tox-dev" ci="check" >}} {{< project name="virtualenv" org="pypa" ci="check" >}}
-{{< project name="get-virtualenv" org="pypa" ci="release" pypi="false" type="python" >}}
+{{< project name="get-virtualenv" org="pypa" ci="release.yml" pypi="false" type="python" >}}
 {{< project name="tox" org="tox-dev" ci="check,weekly" >}} {{< project name="pyproject-api" org="tox-dev" ci="check" >}}
 {{< project name="pytest-env" org="pytest-dev" ci="check" >}}
 {{< project name="datamodel-code-generator" org="koxudaxi" ci="cli-docs,codeql,codespell,lint,llms-txt,readme,schema-docs,test" >}}
 {{< project name="pipdeptree" org="tox-dev" ci="check" >}}
 {{< project name="sphinx-autodoc-typehints" org="tox-dev" ci="check" >}}
 {{< project name="pre-commit-uv" org="tox-dev" ci="check" type="pre-commit" >}}
-{{< project name="action-pre-commit-uv" org="tox-dev" ci="main" pypi="false" type="github-action" >}}
+{{< project name="action-pre-commit-uv" org="tox-dev" ci="main.yml" pypi="false" type="github-action" >}}
 {{< project name="tox-uv" org="tox-dev" ci="check" >}}
 {{< project name="toml-fmt" org="tox-dev" ci="common" pypi="false" no-release="true" monorepo="Monorepo for pyproject-fmt, toml-fmt-common, and tox-toml-fmt" >}}
 {{< project name="pyproject-fmt" org="tox-dev" repo="toml-fmt" ci="pyproject_fmt_build,pyproject_fmt_test" monorepo="Part of toml-fmt monorepo" type="python,rust" >}}
