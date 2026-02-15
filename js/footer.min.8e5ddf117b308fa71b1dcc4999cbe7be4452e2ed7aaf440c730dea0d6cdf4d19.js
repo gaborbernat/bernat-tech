@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",function(){var e,t,n=document.getElementById("footer-ts");if(!n)return;if(e=new Date(n.dateTime),isNaN(e))return;t=function(e){return e<10?"0"+e:e},n.textContent=e.getFullYear()+"-"+t(e.getMonth()+1)+"-"+t(e.getDate())+"T"+t(e.getHours())+":"+t(e.getMinutes())+":"+t(e.getSeconds())})
