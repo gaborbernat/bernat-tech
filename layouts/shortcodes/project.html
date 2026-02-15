@@ -5,7 +5,7 @@
 {{ $showPypi := ne (.Get "pypi") "false" }}
 {{ $jetbrainsId := .Get "jetbrains-id" }}
 {{ $jetbrainsSlug := .Get "jetbrains-slug" }}
-{{ $cols := split (or (.Parent.Get "cols") "downloads,version,release,last-commit,stars,ci") "," }}
+{{ $cols := split (or (.Parent.Get "cols") "downloads,version,release,last-commit,issues,stars,ci") "," }}
 {{ $ghOpts := dict }}{{ with getenv "HUGO_GITHUB_TOKEN" }}{{ $ghOpts = dict "headers" (dict "Authorization" (printf "Bearer %s" .)) }}{{ end }}
 
 {{/* Fetch all API data upfront */}}
@@ -81,7 +81,14 @@
 
 {{ $stars := 0 }}
 {{ with $repoData.stargazers_count }}{{ $stars = int . }}{{ end }}
-{{ $logParts := slice (printf "stars=%d" $stars) }}
+{{ $openTotal := 0 }}
+{{ with $repoData.open_issues_count }}{{ $openTotal = int . }}{{ end }}
+{{ $openPRs := 0 }}
+{{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/pulls?state=open&per_page=100" $org $repo) $ghOpts) }}
+{{ with $result.Value }}{{ $openPRs = len (. | transform.Unmarshal) }}{{ end }}
+{{ with $result.Err }}{{ $errors = $errors | append (printf "gh-pulls: %s" .) }}{{ end }}
+{{ $openIssues := sub $openTotal $openPRs }}
+{{ $logParts := slice (printf "stars=%d" $stars) (printf "issues=%d prs=%d" $openIssues $openPRs) }}
 {{ if $showPypi }}
   {{ $logParts = $logParts | append (printf "pypi-version=%s" (or $pypiVersion "?")) (printf "pypi-downloads=%d" $pypiDownloads) }}
 {{ else if $jetbrainsId }}
@@ -256,6 +263,12 @@
         {{- $isoDate := "" -}}
         {{- with $repoData.pushed_at }}{{ $isoDate = (time .).Format "2006-01-02T15:04:05Z" }}{{ end -}}
         <a href="https://github.com/{{ $org }}/{{ $repo }}/commits"><span class="badge badge-{{ $color }} has-tip">{{ $label }}<span class="tip">{{ $isoDate }}</span></span></a>
+  </td>
+    {{- else if eq $col "issues" -}}
+  <td data-value="{{ $openTotal }}">
+      {{- if gt $openTotal 0 -}}
+        <span class="badge badge-gray"><a href="https://github.com/{{ $org }}/{{ $repo }}/issues">{{ $openIssues }}</a>/<a href="https://github.com/{{ $org }}/{{ $repo }}/pulls">{{ $openPRs }}</a></span>
+      {{- end -}}
   </td>
     {{- else if eq $col "stars" -}}
       {{- $formatted := replace (lang.FormatNumber 0 $stars) "," "_" -}}
