@@ -5,23 +5,27 @@
 {{ $showPypi := ne (.Get "pypi") "false" }}
 {{ $jetbrainsId := .Get "jetbrains-id" }}
 {{ $jetbrainsSlug := .Get "jetbrains-slug" }}
-{{ $cols := split (or (.Parent.Get "cols") "downloads,version,release,last-commit,ci,stars") "," }}
+{{ $cols := split (or (.Parent.Get "cols") "downloads,version,release,last-commit,stars,ci") "," }}
 {{ $ghOpts := dict }}{{ with getenv "HUGO_GITHUB_TOKEN" }}{{ $ghOpts = dict "headers" (dict "Authorization" (printf "Bearer %s" .)) }}{{ end }}
 
 {{/* Fetch all API data upfront */}}
+{{ $errors := slice }}
 {{ $repoData := dict }}
 {{ $result := try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s" $org $repo) $ghOpts) }}
 {{ with $result.Value }}{{ $repoData = . | transform.Unmarshal }}{{ end }}
+{{ with $result.Err }}{{ $errors = $errors | append (printf "repo-info: %s" .) }}{{ end }}
 {{ $defaultBranch := or $repoData.default_branch "main" }}
 
 {{ $releaseData := dict }}
 {{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/releases/latest" $org $repo) $ghOpts) }}
 {{ with $result.Value }}{{ $releaseData = . | transform.Unmarshal }}{{ end }}
+{{ with $result.Err }}{{ $errors = $errors | append (printf "release: %s" .) }}{{ end }}
 
 {{ $pypiVersion := "" }}
 {{ if $showPypi }}
   {{ $result = try (resources.GetRemote (printf "https://pypi.org/pypi/%s/json" $name)) }}
   {{ with $result.Value }}{{ $pypiVersion = (. | transform.Unmarshal).info.version }}{{ end }}
+  {{ with $result.Err }}{{ $errors = $errors | append (printf "pypi-version: %s" .) }}{{ end }}
 {{ end }}
 
 {{ $pypiDownloads := 0 }}
@@ -31,6 +35,7 @@
     {{ $parsed := (. | transform.Unmarshal).data.last_month }}
     {{ $pypiDownloads = int $parsed }}
   {{ end }}
+  {{ with $result.Err }}{{ $errors = $errors | append (printf "pypi-downloads: %s" .) }}{{ end }}
 {{ end }}
 
 {{ $ghDownloads := 0 }}
@@ -46,6 +51,7 @@
         {{ end }}
       {{ end }}
     {{ end }}
+    {{ with $result.Err }}{{ $errors = $errors | append (printf "gh-releases: %s" .) }}{{ end }}
   {{ end }}
   {{ if eq $ghDownloads 0 }}
     {{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/traffic/clones" $org $repo) $ghOpts) }}
@@ -53,6 +59,7 @@
       {{ $ghDownloads = int (. | transform.Unmarshal).count }}
       {{ $ghDownloadLabel = "clones/14d" }}
     {{ end }}
+    {{ with $result.Err }}{{ $errors = $errors | append (printf "gh-clones: %s" .) }}{{ end }}
   {{ end }}
 {{ end }}
 
@@ -63,11 +70,30 @@
   {{ with $result.Value }}
     {{ $jbDownloads = int (. | transform.Unmarshal).downloads }}
   {{ end }}
+  {{ with $result.Err }}{{ $errors = $errors | append (printf "jb-downloads: %s" .) }}{{ end }}
   {{ $result = try (resources.GetRemote (printf "https://plugins.jetbrains.com/api/plugins/%s/updates?channel=&size=1" $jetbrainsId)) }}
   {{ with $result.Value }}
     {{ $updates := . | transform.Unmarshal }}
     {{ with index $updates 0 }}{{ $jbVersion = .version }}{{ end }}
   {{ end }}
+  {{ with $result.Err }}{{ $errors = $errors | append (printf "jb-version: %s" .) }}{{ end }}
+{{ end }}
+
+{{ $stars := 0 }}
+{{ with $repoData.stargazers_count }}{{ $stars = int . }}{{ end }}
+{{ $logParts := slice (printf "stars=%d" $stars) }}
+{{ if $showPypi }}
+  {{ $logParts = $logParts | append (printf "pypi-version=%s" (or $pypiVersion "?")) (printf "pypi-downloads=%d" $pypiDownloads) }}
+{{ else if $jetbrainsId }}
+  {{ $logParts = $logParts | append (printf "jb-version=%s" (or $jbVersion "?")) (printf "jb-downloads=%d" $jbDownloads) }}
+{{ else }}
+  {{ $logParts = $logParts | append (printf "gh-downloads=%d(%s)" $ghDownloads $ghDownloadLabel) }}
+{{ end }}
+{{ with $releaseData.tag_name }}{{ $logParts = $logParts | append (printf "release=%s" .) }}{{ end }}
+{{ if $errors }}
+  {{ warnf "project %s/%s: %s | errors: %s" $org $repo (delimit $logParts " ") (delimit $errors "; ") }}
+{{ else }}
+  {{ warnf "project %s/%s: %s" $org $repo (delimit $logParts " ") }}
 {{ end }}
 
 {{ $nowUnix := now.Unix }}
@@ -231,6 +257,13 @@
         {{- with $repoData.pushed_at }}{{ $isoDate = (time .).Format "2006-01-02T15:04:05Z" }}{{ end -}}
         <a href="https://github.com/{{ $org }}/{{ $repo }}/commits"><span class="badge badge-{{ $color }} has-tip">{{ $label }}<span class="tip">{{ $isoDate }}</span></span></a>
   </td>
+    {{- else if eq $col "stars" -}}
+      {{- $formatted := replace (lang.FormatNumber 0 $stars) "," "_" -}}
+  <td data-value="{{ $stars }}">
+      {{- if gt $stars 0 -}}
+        <span class="badge badge-yellow"><a href="https://github.com/{{ $org }}/{{ $repo }}/stargazers">{{ $formatted }}</a> <a href="https://www.star-history.com/#{{ $org }}/{{ $repo }}">★</a></span>
+      {{- end -}}
+  </td>
     {{- else if eq $col "ci" -}}
   <td>
       {{- if isset $.Params "ci" -}}
@@ -241,15 +274,6 @@
           {{- if not (or (strings.HasSuffix $workflow ".yaml") (strings.HasSuffix $workflow ".yml")) }}{{ $file = printf "%s.yaml" $workflow }}{{ end -}}
           <a href="https://github.com/{{ $org }}/{{ $repo }}/actions/workflows/{{ $file }}"><img src="https://github.com/{{ $org }}/{{ $repo }}/actions/workflows/{{ $file }}/badge.svg" alt="{{ $workflow }}"></a>
         {{- end -}}
-      {{- end -}}
-  </td>
-    {{- else if eq $col "stars" -}}
-      {{- $stars := 0 -}}
-      {{- with $repoData.stargazers_count }}{{ $stars = int . }}{{ end -}}
-      {{- $formatted := replace (lang.FormatNumber 0 $stars) "," "_" -}}
-  <td data-value="{{ $stars }}">
-      {{- if gt $stars 0 -}}
-        <span class="badge badge-yellow"><a href="https://github.com/{{ $org }}/{{ $repo }}/stargazers">{{ $formatted }}</a> <a href="https://www.star-history.com/#{{ $org }}/{{ $repo }}">★</a></span>
       {{- end -}}
   </td>
     {{- end -}}

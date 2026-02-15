@@ -93,11 +93,13 @@ table.project-table td.row-num::before {
 .badge-gray {
   background: #9f9f9f;
 }
-a .badge {
+a .badge,
+.badge a {
   color: #212529;
   text-decoration: none;
 }
-a:hover .badge {
+a:hover .badge,
+.badge a:hover {
   opacity: 0.85;
 }
 table.project-table th[data-sort] {

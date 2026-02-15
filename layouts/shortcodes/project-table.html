@@ -1,4 +1,4 @@
-{{ $cols := split (or (.Get "cols") "downloads,version,release,last-commit,ci,stars") "," }}
+{{ $cols := split (or (.Get "cols") "downloads,version,release,last-commit,stars,ci") "," }}
 {{ $headerRow := slice (printf `<th>#</th><th data-sort="name">%s</th>` (or (.Get "name") "Name")) }}
 {{- range $cols -}}
   {{- $col := trim . " " -}}
