@@ -4,7 +4,7 @@
 
     <b>Opinions are my own</b> - {{ .Site.Params.author }} software engineer.
     {{ $date := .Page.Lastmod }} {{ if .GitInfo }} {{ $date = .GitInfo.AuthorDate }} {{ end }}
-    Updated&nbsp;{{- $date.Format "2006-01-02T15:04:05.000Z" -}}
+    Updated&nbsp;{{- $date.UTC.Format "2006-01-02T15:04:05.000Z" -}}&nbsp;UTC
     {{ if .GitInfo }}
       via <a href="https://github.com/gaborbernat/bernat-tech/commit/{{ .GitInfo.Hash }}">{{ .GitInfo.AbbreviatedHash }}</a>
     {{end}}.

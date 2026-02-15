@@ -187,12 +187,17 @@ body.colorscheme-dark table.project-table img {
 }
 .social-badges a {
   display: inline-block;
-  margin: 0 6px 0 0;
+  margin: 0;
   padding: 0;
   font-size: 0.85em;
   text-decoration: none;
   white-space: nowrap;
   opacity: 0.7;
+}
+.social-badges a + a::before {
+  content: "·";
+  margin: 0 6px;
+  opacity: 0.5;
 }
 .social-badges a:hover {
   opacity: 1;
