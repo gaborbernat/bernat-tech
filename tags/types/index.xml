@@ -16,8 +16,8 @@ Why do we need this?
 &lt;/a&gt;
 &lt;/h1&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/why_hu_774d3f7ab00efe8d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/why_hu_704303418076f954.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/why_hu_5d1df77ca7761857.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/why_hu_4ae7acd5740f8185.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/why.webp" alt="Seal asking why"
 width="700" height="525"
 loading="lazy" decoding="async"&gt;
@@ -85,8 +85,8 @@ drive your application logic.&lt;/p&gt;
 the IDE knows with complete confidence, what methods/attributes are available on an object. Furthermore, if the user
 tries to call something non-existent or passes arguments of an incorrect type, the IDE can instantly warn about it.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/editor_suggest_hu_192db03da553d9fe.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/editor_suggest_hu_469f9c0ab6dfb565.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/editor_suggest_hu_8f3c0c3a277847ae.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/editor_suggest_hu_f059ceefb127304e.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/editor_suggest.webp" alt="IDE suggestion"
 width="500" height="225"
 loading="lazy" decoding="async"&gt;
@@ -100,8 +100,8 @@ loading="lazy" decoding="async"&gt;
 &lt;/a&gt;
 &lt;/h3&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/type_mismatch_hu_ec1005c3748a95bf.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/type_mismatch_hu_5771bde0b2a028fc.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/type_mismatch_hu_e88a65466d33775f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/type_mismatch_hu_bc383e1b19cf73e8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/type_mismatch.webp" alt="Type mismatch warning"
 width="500" height="181"
 loading="lazy" decoding="async"&gt;
@@ -192,8 +192,8 @@ discards it.&lt;/p&gt;
 &lt;p&gt;The key takeaway should be that type hints are designed to improve developer experience, not influencing how your script
 evaluates. It creates happy developers, not faster code!&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/happy_programmer_hu_d6c54bd0ea3f4b76.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/happy_programmer_hu_ca0acea32f08fff5.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/happy_programmer_hu_ba8d64cd56a25d20.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/happy_programmer_hu_66c22468b0a2979.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/happy_programmer.webp" alt="Happy programmer seal"
 width="700" height="466"
 loading="lazy" decoding="async"&gt;
@@ -236,8 +236,8 @@ How to add it
 &lt;p&gt;Once you decide to add type hints, you&amp;rsquo;ll come to realize that you can add it in more than one way to the codebase.
 Let&amp;rsquo;s see what your options are.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/interested_hu_6d5ebeaafbd84d41.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/interested_hu_8c973c566305c32a.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/interested_hu_945febb80817bf74.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/interested_hu_5914b7b783b95f64.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/interested.webp" alt="Interested seal"
 width="700" height="532"
 loading="lazy" decoding="async"&gt;
@@ -505,8 +505,8 @@ What to add?
 &lt;/a&gt;
 &lt;/h2&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/deep_dive_hu_cb0ee4a20cdfa3e2.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/deep_dive_hu_db8591a10f99db2d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/deep_dive_hu_7086c369417a0dae.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/deep_dive_hu_cb54ccd066d6d83f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/deep_dive.webp" alt="Seal diving deep"
 width="700" height="467"
 loading="lazy" decoding="async"&gt;
@@ -600,8 +600,8 @@ Gotchas
 &lt;p&gt;Once you start adding type hints to a codebase, watch out that sometimes you may experience some oddities. During these
 moments, you might have the *what the hell** expression of the following seal:&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/gotcha_hu_26ba3e54dfaac706.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/gotcha_hu_bc2548a53cd31a36.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/gotcha_hu_288f8acbf535535b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/gotcha_hu_86495c6bbfcabddc.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/gotcha.webp" alt="Confused seal"
 width="700" height="408"
 loading="lazy" decoding="async"&gt;
@@ -829,8 +829,8 @@ When you hit the wall
 &lt;p&gt;So, in conclusion, watch out. Type hints sometimes cause strange warnings, which brings out the following feelings
 summarized in a tweet:&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/david_hu_f5f58c236c1421f4.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/david_hu_6b651791907c380b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/david_hu_5bc13c5877824e7f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/david_hu_326e2776d625e516.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/david.webp" alt="Frustrated tweet about type hints"
 width="700" height="448"
 loading="lazy" decoding="async"&gt;
@@ -945,8 +945,8 @@ directly to their respective Python standard library documentation link).&lt;/p&
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;That&amp;rsquo;s it all. An example use case of this is &lt;a href="https://github.com/RookieGameDevs/revived" class="external-link" target="_blank" rel="noopener"&gt;RookieGameDevs/revived&lt;/a&gt;
 documentation. For example, given the following source code:&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_c64e05ac11db2b8c.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_c99a4ef12e718e2e.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_befd844010e0d23e.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_d10d1e9858435d32.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_382e1df32e2cec54.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_4d9b9982f699fdea.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_cc209dfedc1a238f.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_417a843fb9430750.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src.webp" alt="Sphinx documentation source code"
 width="800" height="428"
 loading="lazy" decoding="async"&gt;
@@ -954,8 +954,8 @@ loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
 &lt;p&gt;You can get the following output:&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_25ca71d07023e4ba.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_696e98e558f035c1.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_79fe22a070b8ef42.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_3dfc335c9a70e750.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_661cc6035b06054d.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_6da04c2c6349e533.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_ae451e3be9b77166.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_13f4a619784a485c.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc.webp" alt="Sphinx documentation output"
 width="800" height="425"
 loading="lazy" decoding="async"&gt;
@@ -979,8 +979,8 @@ one-time usage scripts.&lt;/p&gt;
 the day, all the code you add is code that is automatically checked and enforced to be correct. It acts as a safety net
 to ensure that things keep working when you change things around later on, so probably worth paying this extra cost.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/thats_all_folks_hu_93f9962410455630.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/thats_all_folks_hu_11d847e80cfed2ec.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/thats_all_folks_hu_fc0743d2f6a6ea57.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/thats_all_folks_hu_dbda12f59304613c.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/thats_all_folks.webp" alt="Seal waving goodbye"
 width="700" height="467"
 loading="lazy" decoding="async"&gt;

@@ -17,8 +17,8 @@ PEP-517/518 tries to improve on it. Finally, I dedicate a whole other post to ex
 learned while introducing these improvements. A heads up, I will focus mainly on the Python Packaging Authorities
 systems (&lt;code&gt;pip&lt;/code&gt;, &lt;code&gt;setuptools&lt;/code&gt;, so no &lt;code&gt;conda&lt;/code&gt; or operating system-specific packagers).&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_9ebb8660d6ce83be.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_bf5fa51881a4b23b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_d32b541604b654d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_381c193442939d7a.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug.webp" alt="Sad pug"
 width="700" height="468"
 loading="lazy" decoding="async"&gt;
@@ -74,8 +74,8 @@ facto standard packaging tool &lt;a href="https://pypi.org/project/setuptools" c
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;pugs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;do_tell&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt;&amp;#34;An enlightened pug knows how to make the best of whatever he has to work with - A Pug&amp;#39;s Guide to Dating - Gemma Correll&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_606c4ec9c6566c7e.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_d25bf6926d1967cb.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_458749f529032d78.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_ddc49005578ad13e.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug.webp" alt="Enlightened pug"
 width="700" height="468"
 loading="lazy" decoding="async"&gt;
@@ -115,8 +115,8 @@ system-wide and a user-specific instance of this. How do packages end up inside 
 some installer.&lt;/p&gt;
 &lt;p&gt;The following diagram displays how most of the time things go:&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_ca29184fb2acdf3e.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_6ff8907d5905b8d5.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_9587b1e985543629.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_612e72107dff7c85.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/diagram.webp" alt="Python packaging diagram"
 width="700" height="425"
 loading="lazy" decoding="async"&gt;
@@ -132,8 +132,8 @@ installation operation boils down by creating the correct directory structure an
 folder.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_f99fccd7916792aa.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_b0253b0730940dd.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_de2585821125a90d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_a613beea37c2e9d0.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug.webp" alt="Pug discovering something"
 width="700" height="554"
 loading="lazy" decoding="async"&gt;
@@ -228,8 +228,8 @@ files) - format: &lt;code&gt;pugs-0.0.1.tar.gz&lt;/code&gt;.&lt;/li&gt;
 &lt;code&gt;pugs-0.0.1-py2.py3-none-any.whl&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_1c25a2912dcc5fba.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_290013d9f82054dc.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_3545bbe6cceb1f6b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_517233ebf709ba38.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug.webp" alt="Smart pug"
 width="600" height="614"
 loading="lazy" decoding="async"&gt;

@@ -20,8 +20,8 @@ a version number.&lt;/p&gt;
 cute animal photos to give you at least some moments of relief while you&amp;rsquo;re going through it. In this one, I&amp;rsquo;ll use
 pictures from my Yorkshire Terrier puppy, Silky. Without further ado (#ToT!!!)&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_tot_hu_73b14ba1c46f0521.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_tot_hu_fb5b7ccab25538b4.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_tot_hu_41b35ac38316a7a9.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_tot_hu_8a3eb44afbb1ffb8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_tot.webp" alt="Silky the Yorkshire Terrier puppy"
 width="700" height="417"
 loading="lazy" decoding="async"&gt;
@@ -66,8 +66,8 @@ Initially, in some &lt;a href="https://twitter.com/llanga/status/125396201584612
 talk held at a &lt;a href="https://remote.python.pizza/" class="external-link" target="_blank" rel="noopener"&gt;Remote Python Pizza&lt;/a&gt; conference. Looking back at my experience with this,
 I tend to agree.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_sit_hu_d1cc84e7b591769b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_sit_hu_ce9ade6727324ce9.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_sit_hu_be42516e9ae592a0.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_sit_hu_d2efc463b4910513.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_sit.webp" alt="Silky sitting"
 width="700" height="696"
 loading="lazy" decoding="async"&gt;
@@ -107,8 +107,8 @@ abandoned:&lt;/p&gt;
 &lt;p&gt;You get the idea. Unless you&amp;rsquo;re thrilled with your current version, to pull in any change you will need to move to the
 last released version (be that security improvement, bugfix, or feature). Otherwise, you&amp;rsquo;ll not get it.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_wind_hu_38621c958a433500.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_wind_hu_eac73ac3c94439a1.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_wind_hu_66e1d10865fa8710.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_wind_hu_15da751f2c7512cb.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_wind.webp" alt="Silky in the wind"
 width="700" height="557"
 loading="lazy" decoding="async"&gt;
@@ -148,8 +148,8 @@ their code, and you might not have the time to do this for every one of your pro
 &lt;p&gt;In my experience, this happens a lot. A lot more at least than when a major version bump breaks you. And then there&amp;rsquo;s
 another aspect version pinning will introduce: version conflicts.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_tot_2_hu_ce7adfccd5e6cd37.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_tot_2_hu_93d93a29f99f01a6.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_tot_2_hu_24306852d2a880e1.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_tot_2_hu_56fdf8ac2e25206c.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_tot_2.webp" alt="Silky the puppy running"
 width="700" height="648"
 loading="lazy" decoding="async"&gt;
@@ -194,8 +194,8 @@ change at all, as just a small part of their public API changed.&lt;/p&gt;
 experience start to appear every few months. You need only 5-6 of such cases for every 100 libraries for this issue to
 pop up every two months on your plate. And potentially for a multiple of your applications.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_yes_hu_861eeeedfd47f3d8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_yes_hu_93c1be2c43959be8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_yes_hu_9f29880ff1b2df60.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_yes_hu_37165db07bbda2cd.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_yes.webp" alt="Silky looking up"
 width="700" height="665"
 loading="lazy" decoding="async"&gt;
@@ -220,8 +220,8 @@ indicate the release date to signify just how old of a version you&amp;rsquo;re 
 can make calendar-based promises. For example, Ubuntu offers five years of support, therefore given version &lt;code&gt;20.04&lt;/code&gt; you
 can quickly determine that it will be supported up to April 2025.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_jump_hu_279768b4397a3e28.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_jump_hu_dd4b4d1b0408558.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_jump_hu_26723780bb3b0b2.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_jump_hu_2efbad2d6381b4b7.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_jump.webp" alt="Silky jumping"
 width="700" height="734"
 loading="lazy" decoding="async"&gt;
@@ -263,8 +263,8 @@ Lessons from the trenches suggest that &lt;strong&gt;the only way to ensure an u
 have a comprehensive test suite.&lt;/strong&gt; Ideally, your test framework can collect and report whenever and where your code is
 calling deprecated functions (&lt;a href="https://docs.pytest.org/en/latest/warnings.html#warnings-capture" class="external-link" target="_blank" rel="noopener"&gt;for example pytest&lt;/a&gt;).&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_wise_hu_f362ac27a210486a.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_wise_hu_f55dcda823163a0b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_wise_hu_59868ef4ee5e9db3.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_wise_hu_5d2ca53ba2cb74df.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_wise.webp" alt="Silky looking wise"
 width="700" height="696"
 loading="lazy" decoding="async"&gt;
@@ -302,8 +302,8 @@ versions with exact pins (this is the fundamental difference between
 &lt;a href="https://twitter.com/hynek" class="external-link" target="_blank" rel="noopener"&gt;Hynek Schlawack&lt;/a&gt;, and &lt;a href="https://twitter.com/LisaMcString" class="external-link" target="_blank" rel="noopener"&gt;Lisa McCord&lt;/a&gt; for reviewing this
 article in its draft versions and suggesting changes that made it a thousand times better.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_run_happy_hu_d4b86d39483b2aa1.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_run_happy_hu_4fbd4c7f8ac8cb0.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_run_happy_hu_f40fc9096b7bead3.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_run_happy_hu_6959f66d5ebfb9de.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_run_happy.webp" alt="Silky running happily"
 width="700" height="525"
 loading="lazy" decoding="async"&gt;
@@ -325,8 +325,8 @@ Planning, testing, and implementation have been going on for over a year in the 
 performed some operations that caught the maintainers by surprise. Let&amp;rsquo;s try to understand a few of these examples and
 how did they get addressed.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/growing-pain/stand_pug_hu_96d9f30a31489b90.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/growing-pain/stand_pug_hu_3e748675a85a730f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/growing-pain/stand_pug_hu_a7e329f48e0d8e0f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/growing-pain/stand_pug_hu_c0cfcbe27b018617.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/growing-pain/stand_pug.webp" alt="Standing pug"
 width="700" height="467"
 loading="lazy" decoding="async"&gt;
@@ -384,8 +384,8 @@ needs to ensure that &lt;code&gt;pyproject.toml&lt;/code&gt; is attached to the 
 machine will not be able to use it. &lt;a href="https://github.com/pypa/setuptools/pull/1650" class="external-link" target="_blank" rel="noopener"&gt;setuptools 1650&lt;/a&gt; will fix this for
 setuptools. One can include &lt;code&gt;pyproject.toml&lt;/code&gt; by specifying it inside &lt;code&gt;MANIFEST.in&lt;/code&gt; on earlier versions.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/growing-pain/chair_pug_hu_756a78547f37eb12.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/growing-pain/chair_pug_hu_612d5f1a36af04f2.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/growing-pain/chair_pug_hu_6a9c5b90e4b59fd6.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/growing-pain/chair_pug_hu_6120e5b9a1014e1.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/growing-pain/chair_pug.webp" alt="Pug on chair"
 width="700" height="469"
 loading="lazy" decoding="async"&gt;
@@ -441,8 +441,8 @@ Should these self-build backends allow to take on dependencies? There&amp;rsquo;
 cons, so if you&amp;rsquo;re interested, make sure to head over the
 &lt;a href="https://discuss.python.org/t/pep-517-backend-bootstrapping/789" class="external-link" target="_blank" rel="noopener"&gt;python Discourse board&lt;/a&gt; and give your opinion.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/growing-pain/many_pug_hu_be3b5ab6e13709b2.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/growing-pain/many_pug_hu_5b3c097f96347050.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/growing-pain/many_pug_hu_948b2a8634ba1a9b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/growing-pain/many_pug_hu_8748070f60f4d799.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/growing-pain/many_pug.webp" alt="Many pugs"
 width="700" height="525"
 loading="lazy" decoding="async"&gt;
@@ -672,8 +672,8 @@ distribution (by providing the build dependencies into an isolated python enviro
 call the build backend as stated in PEP-517. Otherwise, tox will use the old way of building source distributions,
 invoking the &lt;code&gt;python setup.py sdist&lt;/code&gt; command with the same interpreter tox is installed into.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_60b81e110d1cc1c7.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_2e60091af985f04d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_fd9c4cd43f9f6035.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_35e46f4b92c0d752.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-518/moody_pug.webp" alt="Moody pug"
 width="700" height="467"
 loading="lazy" decoding="async"&gt;
@@ -712,8 +712,8 @@ PEP-517/518 tries to improve on it. Finally, I dedicate a whole other post to ex
 learned while introducing these improvements. A heads up, I will focus mainly on the Python Packaging Authorities
 systems (&lt;code&gt;pip&lt;/code&gt;, &lt;code&gt;setuptools&lt;/code&gt;, so no &lt;code&gt;conda&lt;/code&gt; or operating system-specific packagers).&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_9ebb8660d6ce83be.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_bf5fa51881a4b23b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_d32b541604b654d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_381c193442939d7a.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug.webp" alt="Sad pug"
 width="700" height="468"
 loading="lazy" decoding="async"&gt;
@@ -769,8 +769,8 @@ facto standard packaging tool &lt;a href="https://pypi.org/project/setuptools" c
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;pugs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;do_tell&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt;&amp;#34;An enlightened pug knows how to make the best of whatever he has to work with - A Pug&amp;#39;s Guide to Dating - Gemma Correll&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_606c4ec9c6566c7e.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_d25bf6926d1967cb.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_458749f529032d78.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_ddc49005578ad13e.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug.webp" alt="Enlightened pug"
 width="700" height="468"
 loading="lazy" decoding="async"&gt;
@@ -810,8 +810,8 @@ system-wide and a user-specific instance of this. How do packages end up inside 
 some installer.&lt;/p&gt;
 &lt;p&gt;The following diagram displays how most of the time things go:&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_ca29184fb2acdf3e.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_6ff8907d5905b8d5.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_9587b1e985543629.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_612e72107dff7c85.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/diagram.webp" alt="Python packaging diagram"
 width="700" height="425"
 loading="lazy" decoding="async"&gt;
@@ -827,8 +827,8 @@ installation operation boils down by creating the correct directory structure an
 folder.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_f99fccd7916792aa.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_b0253b0730940dd.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_de2585821125a90d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_a613beea37c2e9d0.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug.webp" alt="Pug discovering something"
 width="700" height="554"
 loading="lazy" decoding="async"&gt;
@@ -923,8 +923,8 @@ files) - format: &lt;code&gt;pugs-0.0.1.tar.gz&lt;/code&gt;.&lt;/li&gt;
 &lt;code&gt;pugs-0.0.1-py2.py3-none-any.whl&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_1c25a2912dcc5fba.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_290013d9f82054dc.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_3545bbe6cceb1f6b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_517233ebf709ba38.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug.webp" alt="Smart pug"
 width="600" height="614"
 loading="lazy" decoding="async"&gt;
@@ -949,8 +949,8 @@ Why do we need this?
 &lt;/a&gt;
 &lt;/h1&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/why_hu_774d3f7ab00efe8d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/why_hu_704303418076f954.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/why_hu_5d1df77ca7761857.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/why_hu_4ae7acd5740f8185.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/why.webp" alt="Seal asking why"
 width="700" height="525"
 loading="lazy" decoding="async"&gt;
@@ -1018,8 +1018,8 @@ drive your application logic.&lt;/p&gt;
 the IDE knows with complete confidence, what methods/attributes are available on an object. Furthermore, if the user
 tries to call something non-existent or passes arguments of an incorrect type, the IDE can instantly warn about it.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/editor_suggest_hu_192db03da553d9fe.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/editor_suggest_hu_469f9c0ab6dfb565.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/editor_suggest_hu_8f3c0c3a277847ae.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/editor_suggest_hu_f059ceefb127304e.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/editor_suggest.webp" alt="IDE suggestion"
 width="500" height="225"
 loading="lazy" decoding="async"&gt;
@@ -1033,8 +1033,8 @@ loading="lazy" decoding="async"&gt;
 &lt;/a&gt;
 &lt;/h3&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/type_mismatch_hu_ec1005c3748a95bf.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/type_mismatch_hu_5771bde0b2a028fc.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/type_mismatch_hu_e88a65466d33775f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/type_mismatch_hu_bc383e1b19cf73e8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/type_mismatch.webp" alt="Type mismatch warning"
 width="500" height="181"
 loading="lazy" decoding="async"&gt;
@@ -1125,8 +1125,8 @@ discards it.&lt;/p&gt;
 &lt;p&gt;The key takeaway should be that type hints are designed to improve developer experience, not influencing how your script
 evaluates. It creates happy developers, not faster code!&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/happy_programmer_hu_d6c54bd0ea3f4b76.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/happy_programmer_hu_ca0acea32f08fff5.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/happy_programmer_hu_ba8d64cd56a25d20.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/happy_programmer_hu_66c22468b0a2979.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/happy_programmer.webp" alt="Happy programmer seal"
 width="700" height="466"
 loading="lazy" decoding="async"&gt;
@@ -1169,8 +1169,8 @@ How to add it
 &lt;p&gt;Once you decide to add type hints, you&amp;rsquo;ll come to realize that you can add it in more than one way to the codebase.
 Let&amp;rsquo;s see what your options are.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/interested_hu_6d5ebeaafbd84d41.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/interested_hu_8c973c566305c32a.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/interested_hu_945febb80817bf74.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/interested_hu_5914b7b783b95f64.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/interested.webp" alt="Interested seal"
 width="700" height="532"
 loading="lazy" decoding="async"&gt;
@@ -1438,8 +1438,8 @@ What to add?
 &lt;/a&gt;
 &lt;/h2&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/deep_dive_hu_cb0ee4a20cdfa3e2.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/deep_dive_hu_db8591a10f99db2d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/deep_dive_hu_7086c369417a0dae.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/deep_dive_hu_cb54ccd066d6d83f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/deep_dive.webp" alt="Seal diving deep"
 width="700" height="467"
 loading="lazy" decoding="async"&gt;
@@ -1533,8 +1533,8 @@ Gotchas
 &lt;p&gt;Once you start adding type hints to a codebase, watch out that sometimes you may experience some oddities. During these
 moments, you might have the *what the hell** expression of the following seal:&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/gotcha_hu_26ba3e54dfaac706.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/gotcha_hu_bc2548a53cd31a36.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/gotcha_hu_288f8acbf535535b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/gotcha_hu_86495c6bbfcabddc.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/gotcha.webp" alt="Confused seal"
 width="700" height="408"
 loading="lazy" decoding="async"&gt;
@@ -1762,8 +1762,8 @@ When you hit the wall
 &lt;p&gt;So, in conclusion, watch out. Type hints sometimes cause strange warnings, which brings out the following feelings
 summarized in a tweet:&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/david_hu_f5f58c236c1421f4.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/david_hu_6b651791907c380b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/david_hu_5bc13c5877824e7f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/david_hu_326e2776d625e516.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/david.webp" alt="Frustrated tweet about type hints"
 width="700" height="448"
 loading="lazy" decoding="async"&gt;
@@ -1878,8 +1878,8 @@ directly to their respective Python standard library documentation link).&lt;/p&
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;That&amp;rsquo;s it all. An example use case of this is &lt;a href="https://github.com/RookieGameDevs/revived" class="external-link" target="_blank" rel="noopener"&gt;RookieGameDevs/revived&lt;/a&gt;
 documentation. For example, given the following source code:&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_c64e05ac11db2b8c.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_c99a4ef12e718e2e.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_befd844010e0d23e.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_d10d1e9858435d32.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_382e1df32e2cec54.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_4d9b9982f699fdea.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_cc209dfedc1a238f.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_417a843fb9430750.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src.webp" alt="Sphinx documentation source code"
 width="800" height="428"
 loading="lazy" decoding="async"&gt;
@@ -1887,8 +1887,8 @@ loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
 &lt;p&gt;You can get the following output:&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_25ca71d07023e4ba.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_696e98e558f035c1.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_79fe22a070b8ef42.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_3dfc335c9a70e750.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_661cc6035b06054d.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_6da04c2c6349e533.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_ae451e3be9b77166.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_13f4a619784a485c.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc.webp" alt="Sphinx documentation output"
 width="800" height="425"
 loading="lazy" decoding="async"&gt;
@@ -1912,8 +1912,8 @@ one-time usage scripts.&lt;/p&gt;
 the day, all the code you add is code that is automatically checked and enforced to be correct. It acts as a safety net
 to ensure that things keep working when you change things around later on, so probably worth paying this extra cost.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/thats_all_folks_hu_93f9962410455630.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/thats_all_folks_hu_11d847e80cfed2ec.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/thats_all_folks_hu_fc0743d2f6a6ea57.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/thats_all_folks_hu_dbda12f59304613c.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/thats_all_folks.webp" alt="Seal waving goodbye"
 width="700" height="467"
 loading="lazy" decoding="async"&gt;

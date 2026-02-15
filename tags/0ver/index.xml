@@ -20,8 +20,8 @@ a version number.&lt;/p&gt;
 cute animal photos to give you at least some moments of relief while you&amp;rsquo;re going through it. In this one, I&amp;rsquo;ll use
 pictures from my Yorkshire Terrier puppy, Silky. Without further ado (#ToT!!!)&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_tot_hu_73b14ba1c46f0521.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_tot_hu_fb5b7ccab25538b4.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_tot_hu_41b35ac38316a7a9.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_tot_hu_8a3eb44afbb1ffb8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_tot.webp" alt="Silky the Yorkshire Terrier puppy"
 width="700" height="417"
 loading="lazy" decoding="async"&gt;
@@ -66,8 +66,8 @@ Initially, in some &lt;a href="https://twitter.com/llanga/status/125396201584612
 talk held at a &lt;a href="https://remote.python.pizza/" class="external-link" target="_blank" rel="noopener"&gt;Remote Python Pizza&lt;/a&gt; conference. Looking back at my experience with this,
 I tend to agree.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_sit_hu_d1cc84e7b591769b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_sit_hu_ce9ade6727324ce9.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_sit_hu_be42516e9ae592a0.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_sit_hu_d2efc463b4910513.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_sit.webp" alt="Silky sitting"
 width="700" height="696"
 loading="lazy" decoding="async"&gt;
@@ -107,8 +107,8 @@ abandoned:&lt;/p&gt;
 &lt;p&gt;You get the idea. Unless you&amp;rsquo;re thrilled with your current version, to pull in any change you will need to move to the
 last released version (be that security improvement, bugfix, or feature). Otherwise, you&amp;rsquo;ll not get it.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_wind_hu_38621c958a433500.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_wind_hu_eac73ac3c94439a1.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_wind_hu_66e1d10865fa8710.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_wind_hu_15da751f2c7512cb.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_wind.webp" alt="Silky in the wind"
 width="700" height="557"
 loading="lazy" decoding="async"&gt;
@@ -148,8 +148,8 @@ their code, and you might not have the time to do this for every one of your pro
 &lt;p&gt;In my experience, this happens a lot. A lot more at least than when a major version bump breaks you. And then there&amp;rsquo;s
 another aspect version pinning will introduce: version conflicts.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_tot_2_hu_ce7adfccd5e6cd37.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_tot_2_hu_93d93a29f99f01a6.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_tot_2_hu_24306852d2a880e1.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_tot_2_hu_56fdf8ac2e25206c.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_tot_2.webp" alt="Silky the puppy running"
 width="700" height="648"
 loading="lazy" decoding="async"&gt;
@@ -194,8 +194,8 @@ change at all, as just a small part of their public API changed.&lt;/p&gt;
 experience start to appear every few months. You need only 5-6 of such cases for every 100 libraries for this issue to
 pop up every two months on your plate. And potentially for a multiple of your applications.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_yes_hu_861eeeedfd47f3d8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_yes_hu_93c1be2c43959be8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_yes_hu_9f29880ff1b2df60.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_yes_hu_37165db07bbda2cd.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_yes.webp" alt="Silky looking up"
 width="700" height="665"
 loading="lazy" decoding="async"&gt;
@@ -220,8 +220,8 @@ indicate the release date to signify just how old of a version you&amp;rsquo;re 
 can make calendar-based promises. For example, Ubuntu offers five years of support, therefore given version &lt;code&gt;20.04&lt;/code&gt; you
 can quickly determine that it will be supported up to April 2025.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_jump_hu_279768b4397a3e28.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_jump_hu_dd4b4d1b0408558.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_jump_hu_26723780bb3b0b2.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_jump_hu_2efbad2d6381b4b7.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_jump.webp" alt="Silky jumping"
 width="700" height="734"
 loading="lazy" decoding="async"&gt;
@@ -263,8 +263,8 @@ Lessons from the trenches suggest that &lt;strong&gt;the only way to ensure an u
 have a comprehensive test suite.&lt;/strong&gt; Ideally, your test framework can collect and report whenever and where your code is
 calling deprecated functions (&lt;a href="https://docs.pytest.org/en/latest/warnings.html#warnings-capture" class="external-link" target="_blank" rel="noopener"&gt;for example pytest&lt;/a&gt;).&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_wise_hu_f362ac27a210486a.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_wise_hu_f55dcda823163a0b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_wise_hu_59868ef4ee5e9db3.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_wise_hu_5d2ca53ba2cb74df.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_wise.webp" alt="Silky looking wise"
 width="700" height="696"
 loading="lazy" decoding="async"&gt;
@@ -302,8 +302,8 @@ versions with exact pins (this is the fundamental difference between
 &lt;a href="https://twitter.com/hynek" class="external-link" target="_blank" rel="noopener"&gt;Hynek Schlawack&lt;/a&gt;, and &lt;a href="https://twitter.com/LisaMcString" class="external-link" target="_blank" rel="noopener"&gt;Lisa McCord&lt;/a&gt; for reviewing this
 article in its draft versions and suggesting changes that made it a thousand times better.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_run_happy_hu_d4b86d39483b2aa1.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_run_happy_hu_4fbd4c7f8ac8cb0.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_run_happy_hu_f40fc9096b7bead3.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_run_happy_hu_6959f66d5ebfb9de.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_run_happy.webp" alt="Silky running happily"
 width="700" height="525"
 loading="lazy" decoding="async"&gt;

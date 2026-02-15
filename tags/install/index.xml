@@ -193,8 +193,8 @@ distribution (by providing the build dependencies into an isolated python enviro
 call the build backend as stated in PEP-517. Otherwise, tox will use the old way of building source distributions,
 invoking the &lt;code&gt;python setup.py sdist&lt;/code&gt; command with the same interpreter tox is installed into.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_60b81e110d1cc1c7.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_2e60091af985f04d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_fd9c4cd43f9f6035.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_35e46f4b92c0d752.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-518/moody_pug.webp" alt="Moody pug"
 width="700" height="467"
 loading="lazy" decoding="async"&gt;
