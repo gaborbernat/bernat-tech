@@ -34,27 +34,10 @@ how you can use it, and what&amp;rsquo;s next for type hints.&lt;/p&gt;</descrip
  &lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
  &lt;/a&gt;
 &lt;/h2&gt;
-&lt;p class="social-badges"&gt;&lt;a href="https://github.com/gaborbernat/" aria-label="GitHub"
- &gt;&lt;i class="fa fa-github fa-2x"&gt;&lt;/i&gt; GitHub&lt;/a
- &gt;&lt;a href="https://github.com/sponsors/gaborbernat" aria-label="GitHub Sponsor"
- &gt;&lt;i class="fa fa-heart fa-2x"&gt;&lt;/i&gt; GitHub Sponsor&lt;/a
- &gt;&lt;a href="https://twitter.com/gjbernat/" aria-label="Twitter"
- &gt;&lt;i class="fa fa-twitter fa-2x"&gt;&lt;/i&gt; Twitter&lt;/a
- &gt;&lt;a href="https://bsky.app/profile/gjbernat.bsky.social" aria-label="Bluesky"
- &gt;&lt;i class="fa-brands fa-bluesky fa-2x"&gt;&lt;/i&gt; Bluesky&lt;/a
- &gt;&lt;a href="https://fosstodon.org/@gaborbernat" aria-label="Mastodon"
- &gt;&lt;i class="fa-brands fa-mastodon fa-2x"&gt;&lt;/i&gt; Mastodon&lt;/a
- &gt;&lt;a href="https://pypi.org/user/gaborbernat/" aria-label="PyPI"
- &gt;&lt;i class="fa-brands fa-python fa-2x"&gt;&lt;/i&gt; PyPI&lt;/a
- &gt;&lt;a href="https://www.linkedin.com/in/gaborbernat/" aria-label="Linkedin"
- &gt;&lt;i class="fa fa-linkedin fa-2x"&gt;&lt;/i&gt; Linkedin&lt;/a
- &gt;&lt;a href="mailto:gaborjbernat@gmail.com" aria-label="Google Mail"
- &gt;&lt;i class="fa fa-envelope fa-2x"&gt;&lt;/i&gt; Google Mail&lt;/a
- &gt;&lt;a href="https://www.twitch.tv/gaborbernat" aria-label="Twitch"
- &gt;&lt;i class="fa fa-twitch fa-2x"&gt;&lt;/i&gt; Twitch&lt;/a
- &gt;&lt;a href="https://instagram.com/gabor_bernat" aria-label="Instagram"
- &gt;&lt;i class="fa fa-instagram fa-2x"&gt;&lt;/i&gt; Instagram&lt;/a
- &gt;&lt;/p&gt;</description></item><item><title>Presentations by Bernát Gábor</title><link>https://bernat.tech/presentations/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://bernat.tech/presentations/</guid><description>&lt;p&gt;I&amp;rsquo;m a regular speaker at (Python) conferences. Here you&amp;rsquo;ll find a list of my recorded presentations.&lt;/p&gt;
+&lt;p class="social-badges"&gt;&lt;a href="https://github.com/gaborbernat/" aria-label="GitHub"&gt;&lt;i class="fa fa-github fa-2x"&gt;&lt;/i&gt; GitHub&lt;/a&gt;&lt;a href="https://github.com/sponsors/gaborbernat" aria-label="GitHub Sponsor"&gt;&lt;i class="fa fa-heart fa-2x"&gt;&lt;/i&gt; GitHub Sponsor&lt;/a&gt;&lt;a href="https://twitter.com/gjbernat/" aria-label="Twitter"&gt;&lt;i class="fa fa-twitter fa-2x"&gt;&lt;/i&gt; Twitter&lt;/a&gt;&lt;a href="https://bsky.app/profile/gjbernat.bsky.social" aria-label="Bluesky"&gt;&lt;i class="fa-brands fa-bluesky fa-2x"&gt;&lt;/i&gt; Bluesky&lt;/a&gt;&lt;a href="https://fosstodon.org/@gaborbernat" aria-label="Mastodon"&gt;&lt;i class="fa-brands fa-mastodon fa-2x"&gt;&lt;/i&gt; Mastodon&lt;/a&gt;&lt;a href="https://pypi.org/user/gaborbernat/" aria-label="PyPI"&gt;&lt;i class="fa-brands fa-python fa-2x"&gt;&lt;/i&gt; PyPI&lt;/a&gt;&lt;a href="https://www.linkedin.com/in/gaborbernat/" aria-label="Linkedin"&gt;&lt;i class="fa fa-linkedin fa-2x"&gt;&lt;/i&gt; Linkedin&lt;/a&gt;&lt;a href="mailto:gaborjbernat@gmail.com" aria-label="Google Mail"&gt;&lt;i class="fa fa-envelope fa-2x"&gt;&lt;/i&gt; Google Mail&lt;/a&gt;&lt;a href="https://www.twitch.tv/gaborbernat" aria-label="Twitch"&gt;&lt;i class="fa fa-twitch fa-2x"&gt;&lt;/i&gt; Twitch&lt;/a&gt;&lt;a href="https://instagram.com/gabor_bernat" aria-label="Instagram"&gt;&lt;i class="fa fa-instagram fa-2x"&gt;&lt;/i&gt; Instagram&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I work at &lt;a href="https://www.bloomberg.com/company/values/tech-at-bloomberg/" class="external-link" target="_blank" rel="noopener"&gt;Bloomberg US - Los Angeles&lt;/a&gt; within the Developer
+Experience organizations Artifact Repository Hosting team. I am the primary maintainer (and author) for the following
+&lt;a href="https://en.wikipedia.org/wiki/Open_source" class="external-link" target="_blank" rel="noopener"&gt;open-source projects&lt;/a&gt;:&lt;/p&gt;</description></item><item><title>Presentations by Bernát Gábor</title><link>https://bernat.tech/presentations/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://bernat.tech/presentations/</guid><description>&lt;p&gt;I&amp;rsquo;m a regular speaker at (Python) conferences. Here you&amp;rsquo;ll find a list of my recorded presentations.&lt;/p&gt;
 &lt;p&gt;Here you can find a &lt;a href="https://www.youtube.com/playlist?list=PLYWe9Aw9Owsod3Orf-pDqABD--r7mlho7" class="external-link" target="_blank" rel="noopener"&gt;YouTube playlist&lt;/a&gt; with
 all of them.&lt;/p&gt;
 &lt;div class="toc"&gt;&lt;nav id="TableOfContents"&gt;
