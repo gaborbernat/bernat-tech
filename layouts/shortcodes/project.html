@@ -76,8 +76,8 @@
 {{ end }}
 {{ with $.Get "type" }}{{ $type = . }}{{ end }}
 
-{{ $typeIcons := dict "python" "fab fa-python" "rust" "fab fa-rust" "jetbrains" "fas fa-plug" "monorepo" "fas fa-layer-group" "pre-commit" "fab fa-git-alt" "other" "fab fa-github" }}
-{{ $typeLabels := dict "python" "Python" "rust" "Rust" "jetbrains" "JetBrains plugin" "monorepo" "Monorepo" "pre-commit" "Pre-commit hook" "other" "Repository" }}
+{{ $typeIcons := dict "python" "fab fa-python" "rust" "fab fa-rust" "jetbrains" "fas fa-plug" "monorepo" "fas fa-layer-group" "pre-commit" "fab fa-git-alt" "github-action" "fas fa-bolt" "other" "fab fa-github" }}
+{{ $typeLabels := dict "python" "Python" "rust" "Rust" "jetbrains" "JetBrains plugin" "monorepo" "Monorepo" "pre-commit" "Pre-commit hook" "github-action" "GitHub Action" "other" "Repository" }}
 
 {{ $types := split $type "," }}
 
