@@ -36,7 +36,8 @@
 {{ $ghDownloads := 0 }}
 {{ $ghDownloadLabel := "total" }}
 {{ if and (not $showPypi) (not $jetbrainsId) }}
-  {{ if not (in (split (or ($.Get "type") "") ",") "github-action") }}
+  {{ $rawType := split (or ($.Get "type") "") "," }}
+  {{ if not (or (in $rawType "github-action") (in $rawType "pre-commit")) }}
     {{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/releases?per_page=100" $org $repo) $ghOpts) }}
     {{ with $result.Value }}
       {{ range (. | transform.Unmarshal) }}
