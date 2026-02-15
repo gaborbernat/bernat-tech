@@ -15,8 +15,8 @@ Planning, testing, and implementation have been going on for over a year in the 
 performed some operations that caught the maintainers by surprise. Let&amp;rsquo;s try to understand a few of these examples and
 how did they get addressed.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/growing-pain/stand_pug_hu_a7e329f48e0d8e0f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/growing-pain/stand_pug_hu_c0cfcbe27b018617.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/growing-pain/stand_pug_hu_52ac955d3e1498d3.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/growing-pain/stand_pug_hu_6c52b91bbec06c42.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/growing-pain/stand_pug.webp" alt="Standing pug"
 width="700" height="467"
 loading="lazy" decoding="async"&gt;
@@ -74,8 +74,8 @@ needs to ensure that &lt;code&gt;pyproject.toml&lt;/code&gt; is attached to the 
 machine will not be able to use it. &lt;a href="https://github.com/pypa/setuptools/pull/1650" class="external-link" target="_blank" rel="noopener"&gt;setuptools 1650&lt;/a&gt; will fix this for
 setuptools. One can include &lt;code&gt;pyproject.toml&lt;/code&gt; by specifying it inside &lt;code&gt;MANIFEST.in&lt;/code&gt; on earlier versions.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/growing-pain/chair_pug_hu_6a9c5b90e4b59fd6.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/growing-pain/chair_pug_hu_6120e5b9a1014e1.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/growing-pain/chair_pug_hu_1bead99d45d517cd.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/growing-pain/chair_pug_hu_65bddb8c16d434c9.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/growing-pain/chair_pug.webp" alt="Pug on chair"
 width="700" height="469"
 loading="lazy" decoding="async"&gt;
@@ -131,8 +131,8 @@ Should these self-build backends allow to take on dependencies? There&amp;rsquo;
 cons, so if you&amp;rsquo;re interested, make sure to head over the
 &lt;a href="https://discuss.python.org/t/pep-517-backend-bootstrapping/789" class="external-link" target="_blank" rel="noopener"&gt;python Discourse board&lt;/a&gt; and give your opinion.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/growing-pain/many_pug_hu_948b2a8634ba1a9b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/growing-pain/many_pug_hu_8748070f60f4d799.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/growing-pain/many_pug_hu_ea389ae5197eb88b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/growing-pain/many_pug_hu_8020c5ceaa728414.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/growing-pain/many_pug.webp" alt="Many pugs"
 width="700" height="525"
 loading="lazy" decoding="async"&gt;
@@ -362,8 +362,8 @@ distribution (by providing the build dependencies into an isolated python enviro
 call the build backend as stated in PEP-517. Otherwise, tox will use the old way of building source distributions,
 invoking the &lt;code&gt;python setup.py sdist&lt;/code&gt; command with the same interpreter tox is installed into.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_fd9c4cd43f9f6035.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_35e46f4b92c0d752.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_12215429623f9b66.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_94a4de09c68b721d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-518/moody_pug.webp" alt="Moody pug"
 width="700" height="467"
 loading="lazy" decoding="async"&gt;
@@ -402,8 +402,8 @@ PEP-517/518 tries to improve on it. Finally, I dedicate a whole other post to ex
 learned while introducing these improvements. A heads up, I will focus mainly on the Python Packaging Authorities
 systems (&lt;code&gt;pip&lt;/code&gt;, &lt;code&gt;setuptools&lt;/code&gt;, so no &lt;code&gt;conda&lt;/code&gt; or operating system-specific packagers).&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_d32b541604b654d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_381c193442939d7a.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_9e75fa8849d4a989.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_2c310c7e3a7f8e56.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug.webp" alt="Sad pug"
 width="700" height="468"
 loading="lazy" decoding="async"&gt;
@@ -459,8 +459,8 @@ facto standard packaging tool &lt;a href="https://pypi.org/project/setuptools" c
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;pugs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;do_tell&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt;&amp;#34;An enlightened pug knows how to make the best of whatever he has to work with - A Pug&amp;#39;s Guide to Dating - Gemma Correll&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_458749f529032d78.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_ddc49005578ad13e.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_d7661640dfbd971f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_d9656d45932712d8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug.webp" alt="Enlightened pug"
 width="700" height="468"
 loading="lazy" decoding="async"&gt;
@@ -500,8 +500,8 @@ system-wide and a user-specific instance of this. How do packages end up inside 
 some installer.&lt;/p&gt;
 &lt;p&gt;The following diagram displays how most of the time things go:&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_9587b1e985543629.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_612e72107dff7c85.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_46fc39cd0944e521.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_697fb3e41a71dcd2.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/diagram.webp" alt="Python packaging diagram"
 width="700" height="425"
 loading="lazy" decoding="async"&gt;
@@ -517,8 +517,8 @@ installation operation boils down by creating the correct directory structure an
 folder.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_de2585821125a90d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_a613beea37c2e9d0.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_18f474b5cff6df18.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_f731d5a9f88dfc52.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug.webp" alt="Pug discovering something"
 width="700" height="554"
 loading="lazy" decoding="async"&gt;
@@ -613,8 +613,8 @@ files) - format: &lt;code&gt;pugs-0.0.1.tar.gz&lt;/code&gt;.&lt;/li&gt;
 &lt;code&gt;pugs-0.0.1-py2.py3-none-any.whl&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_3545bbe6cceb1f6b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_517233ebf709ba38.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_4ab5df6b25f602bc.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_a239ae4645d0da08.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug.webp" alt="Smart pug"
 width="600" height="614"
 loading="lazy" decoding="async"&gt;

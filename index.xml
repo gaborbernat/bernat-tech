@@ -20,8 +20,8 @@ a version number.&lt;/p&gt;
 cute animal photos to give you at least some moments of relief while you&amp;rsquo;re going through it. In this one, I&amp;rsquo;ll use
 pictures from my Yorkshire Terrier puppy, Silky. Without further ado (#ToT!!!)&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_tot_hu_41b35ac38316a7a9.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_tot_hu_8a3eb44afbb1ffb8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_tot_hu_8cd119c7b9567fc4.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_tot_hu_6e45e4b1848882c8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_tot.webp" alt="Silky the Yorkshire Terrier puppy"
 width="700" height="417"
 loading="lazy" decoding="async"&gt;
@@ -66,8 +66,8 @@ Initially, in some &lt;a href="https://twitter.com/llanga/status/125396201584612
 talk held at a &lt;a href="https://remote.python.pizza/" class="external-link" target="_blank" rel="noopener"&gt;Remote Python Pizza&lt;/a&gt; conference. Looking back at my experience with this,
 I tend to agree.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_sit_hu_be42516e9ae592a0.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_sit_hu_d2efc463b4910513.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_sit_hu_1a2ab607e2cf2454.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_sit_hu_cb6cdaf5b409b8ed.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_sit.webp" alt="Silky sitting"
 width="700" height="696"
 loading="lazy" decoding="async"&gt;
@@ -107,8 +107,8 @@ abandoned:&lt;/p&gt;
 &lt;p&gt;You get the idea. Unless you&amp;rsquo;re thrilled with your current version, to pull in any change you will need to move to the
 last released version (be that security improvement, bugfix, or feature). Otherwise, you&amp;rsquo;ll not get it.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_wind_hu_66e1d10865fa8710.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_wind_hu_15da751f2c7512cb.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_wind_hu_2490db7ccc46bd92.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_wind_hu_43cf71b72b7fc0f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_wind.webp" alt="Silky in the wind"
 width="700" height="557"
 loading="lazy" decoding="async"&gt;
@@ -148,8 +148,8 @@ their code, and you might not have the time to do this for every one of your pro
 &lt;p&gt;In my experience, this happens a lot. A lot more at least than when a major version bump breaks you. And then there&amp;rsquo;s
 another aspect version pinning will introduce: version conflicts.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_tot_2_hu_24306852d2a880e1.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_tot_2_hu_56fdf8ac2e25206c.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_tot_2_hu_7ab2628cc225f391.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_tot_2_hu_1bba1ed33e0c5f29.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_tot_2.webp" alt="Silky the puppy running"
 width="700" height="648"
 loading="lazy" decoding="async"&gt;
@@ -194,8 +194,8 @@ change at all, as just a small part of their public API changed.&lt;/p&gt;
 experience start to appear every few months. You need only 5-6 of such cases for every 100 libraries for this issue to
 pop up every two months on your plate. And potentially for a multiple of your applications.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_yes_hu_9f29880ff1b2df60.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_yes_hu_37165db07bbda2cd.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_yes_hu_aa09bb5a01c01ef8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_yes_hu_36054eb81236b06.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_yes.webp" alt="Silky looking up"
 width="700" height="665"
 loading="lazy" decoding="async"&gt;
@@ -220,8 +220,8 @@ indicate the release date to signify just how old of a version you&amp;rsquo;re 
 can make calendar-based promises. For example, Ubuntu offers five years of support, therefore given version &lt;code&gt;20.04&lt;/code&gt; you
 can quickly determine that it will be supported up to April 2025.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_jump_hu_26723780bb3b0b2.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_jump_hu_2efbad2d6381b4b7.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_jump_hu_16690993dffbdff9.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_jump_hu_fb582372e2c4a68f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_jump.webp" alt="Silky jumping"
 width="700" height="734"
 loading="lazy" decoding="async"&gt;
@@ -263,8 +263,8 @@ Lessons from the trenches suggest that &lt;strong&gt;the only way to ensure an u
 have a comprehensive test suite.&lt;/strong&gt; Ideally, your test framework can collect and report whenever and where your code is
 calling deprecated functions (&lt;a href="https://docs.pytest.org/en/latest/warnings.html#warnings-capture" class="external-link" target="_blank" rel="noopener"&gt;for example pytest&lt;/a&gt;).&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_wise_hu_59868ef4ee5e9db3.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_wise_hu_5d2ca53ba2cb74df.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_wise_hu_5bde3f26931a68db.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_wise_hu_c068afdb0fef36bf.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_wise.webp" alt="Silky looking wise"
 width="700" height="696"
 loading="lazy" decoding="async"&gt;
@@ -302,8 +302,8 @@ versions with exact pins (this is the fundamental difference between
 &lt;a href="https://twitter.com/hynek" class="external-link" target="_blank" rel="noopener"&gt;Hynek Schlawack&lt;/a&gt;, and &lt;a href="https://twitter.com/LisaMcString" class="external-link" target="_blank" rel="noopener"&gt;Lisa McCord&lt;/a&gt; for reviewing this
 article in its draft versions and suggesting changes that made it a thousand times better.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_run_happy_hu_f40fc9096b7bead3.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_run_happy_hu_6959f66d5ebfb9de.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_run_happy_hu_3aa43a1d7f7d7f4c.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_run_happy_hu_f7d7be02b1684d4c.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_run_happy.webp" alt="Silky running happily"
 width="700" height="525"
 loading="lazy" decoding="async"&gt;
@@ -325,8 +325,8 @@ Planning, testing, and implementation have been going on for over a year in the 
 performed some operations that caught the maintainers by surprise. Let&amp;rsquo;s try to understand a few of these examples and
 how did they get addressed.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/growing-pain/stand_pug_hu_a7e329f48e0d8e0f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/growing-pain/stand_pug_hu_c0cfcbe27b018617.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/growing-pain/stand_pug_hu_52ac955d3e1498d3.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/growing-pain/stand_pug_hu_6c52b91bbec06c42.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/growing-pain/stand_pug.webp" alt="Standing pug"
 width="700" height="467"
 loading="lazy" decoding="async"&gt;
@@ -384,8 +384,8 @@ needs to ensure that &lt;code&gt;pyproject.toml&lt;/code&gt; is attached to the 
 machine will not be able to use it. &lt;a href="https://github.com/pypa/setuptools/pull/1650" class="external-link" target="_blank" rel="noopener"&gt;setuptools 1650&lt;/a&gt; will fix this for
 setuptools. One can include &lt;code&gt;pyproject.toml&lt;/code&gt; by specifying it inside &lt;code&gt;MANIFEST.in&lt;/code&gt; on earlier versions.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/growing-pain/chair_pug_hu_6a9c5b90e4b59fd6.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/growing-pain/chair_pug_hu_6120e5b9a1014e1.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/growing-pain/chair_pug_hu_1bead99d45d517cd.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/growing-pain/chair_pug_hu_65bddb8c16d434c9.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/growing-pain/chair_pug.webp" alt="Pug on chair"
 width="700" height="469"
 loading="lazy" decoding="async"&gt;
@@ -441,8 +441,8 @@ Should these self-build backends allow to take on dependencies? There&amp;rsquo;
 cons, so if you&amp;rsquo;re interested, make sure to head over the
 &lt;a href="https://discuss.python.org/t/pep-517-backend-bootstrapping/789" class="external-link" target="_blank" rel="noopener"&gt;python Discourse board&lt;/a&gt; and give your opinion.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/growing-pain/many_pug_hu_948b2a8634ba1a9b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/growing-pain/many_pug_hu_8748070f60f4d799.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/growing-pain/many_pug_hu_ea389ae5197eb88b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/growing-pain/many_pug_hu_8020c5ceaa728414.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/growing-pain/many_pug.webp" alt="Many pugs"
 width="700" height="525"
 loading="lazy" decoding="async"&gt;
@@ -672,8 +672,8 @@ distribution (by providing the build dependencies into an isolated python enviro
 call the build backend as stated in PEP-517. Otherwise, tox will use the old way of building source distributions,
 invoking the &lt;code&gt;python setup.py sdist&lt;/code&gt; command with the same interpreter tox is installed into.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_fd9c4cd43f9f6035.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_35e46f4b92c0d752.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_12215429623f9b66.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_94a4de09c68b721d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-518/moody_pug.webp" alt="Moody pug"
 width="700" height="467"
 loading="lazy" decoding="async"&gt;
@@ -712,8 +712,8 @@ PEP-517/518 tries to improve on it. Finally, I dedicate a whole other post to ex
 learned while introducing these improvements. A heads up, I will focus mainly on the Python Packaging Authorities
 systems (&lt;code&gt;pip&lt;/code&gt;, &lt;code&gt;setuptools&lt;/code&gt;, so no &lt;code&gt;conda&lt;/code&gt; or operating system-specific packagers).&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_d32b541604b654d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_381c193442939d7a.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_9e75fa8849d4a989.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_2c310c7e3a7f8e56.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug.webp" alt="Sad pug"
 width="700" height="468"
 loading="lazy" decoding="async"&gt;
@@ -769,8 +769,8 @@ facto standard packaging tool &lt;a href="https://pypi.org/project/setuptools" c
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;pugs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;do_tell&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt;&amp;#34;An enlightened pug knows how to make the best of whatever he has to work with - A Pug&amp;#39;s Guide to Dating - Gemma Correll&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_458749f529032d78.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_ddc49005578ad13e.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_d7661640dfbd971f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_d9656d45932712d8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug.webp" alt="Enlightened pug"
 width="700" height="468"
 loading="lazy" decoding="async"&gt;
@@ -810,8 +810,8 @@ system-wide and a user-specific instance of this. How do packages end up inside 
 some installer.&lt;/p&gt;
 &lt;p&gt;The following diagram displays how most of the time things go:&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_9587b1e985543629.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_612e72107dff7c85.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_46fc39cd0944e521.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_697fb3e41a71dcd2.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/diagram.webp" alt="Python packaging diagram"
 width="700" height="425"
 loading="lazy" decoding="async"&gt;
@@ -827,8 +827,8 @@ installation operation boils down by creating the correct directory structure an
 folder.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_de2585821125a90d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_a613beea37c2e9d0.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_18f474b5cff6df18.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_f731d5a9f88dfc52.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug.webp" alt="Pug discovering something"
 width="700" height="554"
 loading="lazy" decoding="async"&gt;
@@ -923,8 +923,8 @@ files) - format: &lt;code&gt;pugs-0.0.1.tar.gz&lt;/code&gt;.&lt;/li&gt;
 &lt;code&gt;pugs-0.0.1-py2.py3-none-any.whl&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_3545bbe6cceb1f6b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_517233ebf709ba38.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_4ab5df6b25f602bc.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_a239ae4645d0da08.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug.webp" alt="Smart pug"
 width="600" height="614"
 loading="lazy" decoding="async"&gt;
@@ -949,8 +949,8 @@ Why do we need this?
 &lt;/a&gt;
 &lt;/h1&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/why_hu_5d1df77ca7761857.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/why_hu_4ae7acd5740f8185.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/why_hu_e32631b467db0235.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/why_hu_e0deed3d1627845f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/why.webp" alt="Seal asking why"
 width="700" height="525"
 loading="lazy" decoding="async"&gt;
@@ -1018,8 +1018,8 @@ drive your application logic.&lt;/p&gt;
 the IDE knows with complete confidence, what methods/attributes are available on an object. Furthermore, if the user
 tries to call something non-existent or passes arguments of an incorrect type, the IDE can instantly warn about it.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/editor_suggest_hu_8f3c0c3a277847ae.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/editor_suggest_hu_f059ceefb127304e.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/editor_suggest_hu_aa03d44631d9a37.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/editor_suggest_hu_5003627f3aff6bd6.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/editor_suggest.webp" alt="IDE suggestion"
 width="500" height="225"
 loading="lazy" decoding="async"&gt;
@@ -1033,8 +1033,8 @@ loading="lazy" decoding="async"&gt;
 &lt;/a&gt;
 &lt;/h3&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/type_mismatch_hu_e88a65466d33775f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/type_mismatch_hu_bc383e1b19cf73e8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/type_mismatch_hu_ba6a63f0cc145c38.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/type_mismatch_hu_c9f9874cfa53e93c.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/type_mismatch.webp" alt="Type mismatch warning"
 width="500" height="181"
 loading="lazy" decoding="async"&gt;
@@ -1125,8 +1125,8 @@ discards it.&lt;/p&gt;
 &lt;p&gt;The key takeaway should be that type hints are designed to improve developer experience, not influencing how your script
 evaluates. It creates happy developers, not faster code!&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/happy_programmer_hu_ba8d64cd56a25d20.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/happy_programmer_hu_66c22468b0a2979.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/happy_programmer_hu_efd886726a89acf8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/happy_programmer_hu_f7b979985975e24b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/happy_programmer.webp" alt="Happy programmer seal"
 width="700" height="466"
 loading="lazy" decoding="async"&gt;
@@ -1169,8 +1169,8 @@ How to add it
 &lt;p&gt;Once you decide to add type hints, you&amp;rsquo;ll come to realize that you can add it in more than one way to the codebase.
 Let&amp;rsquo;s see what your options are.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/interested_hu_945febb80817bf74.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/interested_hu_5914b7b783b95f64.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/interested_hu_95c1c741d8df113d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/interested_hu_911eb9cee3c648cd.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/interested.webp" alt="Interested seal"
 width="700" height="532"
 loading="lazy" decoding="async"&gt;
@@ -1438,8 +1438,8 @@ What to add?
 &lt;/a&gt;
 &lt;/h2&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/deep_dive_hu_7086c369417a0dae.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/deep_dive_hu_cb54ccd066d6d83f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/deep_dive_hu_160907ece21bcf56.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/deep_dive_hu_d391ef35a52d4dab.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/deep_dive.webp" alt="Seal diving deep"
 width="700" height="467"
 loading="lazy" decoding="async"&gt;
@@ -1533,8 +1533,8 @@ Gotchas
 &lt;p&gt;Once you start adding type hints to a codebase, watch out that sometimes you may experience some oddities. During these
 moments, you might have the *what the hell** expression of the following seal:&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/gotcha_hu_288f8acbf535535b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/gotcha_hu_86495c6bbfcabddc.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/gotcha_hu_7fc436a3b45f32f0.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/gotcha_hu_36e0e0742c89d325.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/gotcha.webp" alt="Confused seal"
 width="700" height="408"
 loading="lazy" decoding="async"&gt;
@@ -1762,8 +1762,8 @@ When you hit the wall
 &lt;p&gt;So, in conclusion, watch out. Type hints sometimes cause strange warnings, which brings out the following feelings
 summarized in a tweet:&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/david_hu_5bc13c5877824e7f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/david_hu_326e2776d625e516.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/david_hu_4837cda58bdec705.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/david_hu_ee85eb4f11166eb9.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/david.webp" alt="Frustrated tweet about type hints"
 width="700" height="448"
 loading="lazy" decoding="async"&gt;
@@ -1878,8 +1878,8 @@ directly to their respective Python standard library documentation link).&lt;/p&
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;That&amp;rsquo;s it all. An example use case of this is &lt;a href="https://github.com/RookieGameDevs/revived" class="external-link" target="_blank" rel="noopener"&gt;RookieGameDevs/revived&lt;/a&gt;
 documentation. For example, given the following source code:&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_382e1df32e2cec54.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_4d9b9982f699fdea.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_cc209dfedc1a238f.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_417a843fb9430750.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_6e052643f6ba08bf.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_97bed83453356657.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_76bc09199564bbeb.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src_hu_9701ca0e9a360ff0.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_src.webp" alt="Sphinx documentation source code"
 width="800" height="428"
 loading="lazy" decoding="async"&gt;
@@ -1887,8 +1887,8 @@ loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
 &lt;p&gt;You can get the following output:&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_661cc6035b06054d.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_6da04c2c6349e533.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_ae451e3be9b77166.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_13f4a619784a485c.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_e39e006ff9931cc1.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_d0839e2b592606ac.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_9b06b72eb02fae21.webp 500w, https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc_hu_98d291f2ffb9559e.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/sphinx_doc.webp" alt="Sphinx documentation output"
 width="800" height="425"
 loading="lazy" decoding="async"&gt;
@@ -1912,8 +1912,8 @@ one-time usage scripts.&lt;/p&gt;
 the day, all the code you add is code that is automatically checked and enforced to be correct. It acts as a safety net
 to ensure that things keep working when you change things around later on, so probably worth paying this extra cost.&lt;/p&gt;
 &lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/thats_all_folks_hu_fc0743d2f6a6ea57.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/thats_all_folks_hu_dbda12f59304613c.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/avif" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/thats_all_folks_hu_1424e91f8e4f99ab.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;source type="image/webp" srcset="https://bernat.tech/posts/the-state-of-type-hints-in-python/thats_all_folks_hu_2dff252a02830b01.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
 &lt;img src="https://bernat.tech/posts/the-state-of-type-hints-in-python/thats_all_folks.webp" alt="Seal waving goodbye"
 width="700" height="467"
 loading="lazy" decoding="async"&gt;
@@ -1938,7 +1938,7 @@ Experience organizations Artifact Repository Hosting team. I am the primary main
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td class="row-num"&gt;&lt;/td&gt;
-&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-python"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Python&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/tox-dev/platformdirs"&gt;platformdirs&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="14305842"&gt;&lt;a href="https://pepy.tech/projects/platformdirs"&gt;&lt;span class="badge badge-green"&gt;429_175_269/mo&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://pypi.org/project/platformdirs"&gt;&lt;span class="badge badge-blue"&gt;4.9.1&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771102966"&gt;&lt;a href="https://github.com/tox-dev/platformdirs/releases"&gt;&lt;span class="badge badge-green has-tip"&gt;20.93 hours ago&lt;span class="tip"&gt;2026-02-14T21:02:46Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771102952"&gt;&lt;a href="https://github.com/tox-dev/platformdirs/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;20.93 hours ago&lt;span class="tip"&gt;2026-02-14T21:02:32Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
+&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-python"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Python&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/tox-dev/platformdirs"&gt;platformdirs&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="14305842"&gt;&lt;a href="https://pepy.tech/projects/platformdirs"&gt;&lt;span class="badge badge-green"&gt;429_175_269/mo&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://pypi.org/project/platformdirs"&gt;&lt;span class="badge badge-blue"&gt;4.9.1&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771102966"&gt;&lt;a href="https://github.com/tox-dev/platformdirs/releases"&gt;&lt;span class="badge badge-green has-tip"&gt;20.98 hours ago&lt;span class="tip"&gt;2026-02-14T21:02:46Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771102952"&gt;&lt;a href="https://github.com/tox-dev/platformdirs/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;21 hours ago&lt;span class="tip"&gt;2026-02-14T21:02:32Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
 &lt;span class="badge badge-gray"&gt;&lt;a href="https://github.com/tox-dev/platformdirs/issues"&gt;0&lt;/a&gt;/&lt;a href="https://github.com/tox-dev/platformdirs/pulls"&gt;0&lt;/a&gt;&lt;/span&gt;
 &lt;/td&gt;&lt;td class="col-data" data-value="895"&gt;&lt;span class="badge badge-yellow"&gt;&lt;a href="https://github.com/tox-dev/platformdirs/stargazers"&gt;895&lt;/a&gt; &lt;a href="https://www.star-history.com/#tox-dev/platformdirs"&gt;★&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;td class="col-ci"&gt;&lt;a href="https://github.com/tox-dev/platformdirs/actions/workflows/check.yaml"&gt;&lt;img src="https://github.com/tox-dev/platformdirs/actions/workflows/check.yaml/badge.svg" alt="check"&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
@@ -1948,17 +1948,17 @@ Experience organizations Artifact Repository Hosting team. I am the primary main
 &lt;/td&gt;&lt;td class="col-data" data-value="934"&gt;&lt;span class="badge badge-yellow"&gt;&lt;a href="https://github.com/tox-dev/filelock/stargazers"&gt;934&lt;/a&gt; &lt;a href="https://www.star-history.com/#tox-dev/filelock"&gt;★&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;td class="col-ci"&gt;&lt;a href="https://github.com/tox-dev/filelock/actions/workflows/check.yaml"&gt;&lt;img src="https://github.com/tox-dev/filelock/actions/workflows/check.yaml/badge.svg" alt="check"&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td class="row-num"&gt;&lt;/td&gt;
-&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-python"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Python&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/pypa/virtualenv"&gt;virtualenv&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="10008868"&gt;&lt;a href="https://pepy.tech/projects/virtualenv"&gt;&lt;span class="badge badge-green"&gt;300_266_046/mo&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://pypi.org/project/virtualenv"&gt;&lt;span class="badge badge-blue"&gt;20.36.1&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1767982862"&gt;&lt;a href="https://github.com/pypa/virtualenv/releases"&gt;&lt;span class="badge badge-yellow has-tip"&gt;1.2 months ago&lt;span class="tip"&gt;2026-01-09T18:21:02Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771173365"&gt;&lt;a href="https://github.com/pypa/virtualenv/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;1.38 hours ago&lt;span class="tip"&gt;2026-02-15T16:36:05Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="16"&gt;
+&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-python"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Python&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/pypa/virtualenv"&gt;virtualenv&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="10008868"&gt;&lt;a href="https://pepy.tech/projects/virtualenv"&gt;&lt;span class="badge badge-green"&gt;300_266_046/mo&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://pypi.org/project/virtualenv"&gt;&lt;span class="badge badge-blue"&gt;20.36.1&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1767982862"&gt;&lt;a href="https://github.com/pypa/virtualenv/releases"&gt;&lt;span class="badge badge-yellow has-tip"&gt;1.2 months ago&lt;span class="tip"&gt;2026-01-09T18:21:02Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771173365"&gt;&lt;a href="https://github.com/pypa/virtualenv/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;1.43 hours ago&lt;span class="tip"&gt;2026-02-15T16:36:05Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="16"&gt;
 &lt;span class="badge badge-gray"&gt;&lt;a href="https://github.com/pypa/virtualenv/issues"&gt;13&lt;/a&gt;/&lt;a href="https://github.com/pypa/virtualenv/pulls"&gt;3&lt;/a&gt;&lt;/span&gt;
 &lt;/td&gt;&lt;td class="col-data" data-value="5010"&gt;&lt;span class="badge badge-yellow"&gt;&lt;a href="https://github.com/pypa/virtualenv/stargazers"&gt;5_010&lt;/a&gt; &lt;a href="https://www.star-history.com/#pypa/virtualenv"&gt;★&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;td class="col-ci"&gt;&lt;a href="https://github.com/pypa/virtualenv/actions/workflows/check.yaml"&gt;&lt;img src="https://github.com/pypa/virtualenv/actions/workflows/check.yaml/badge.svg" alt="check"&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td class="row-num"&gt;&lt;/td&gt;
-&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-python"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Python&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/pypa/get-virtualenv"&gt;get-virtualenv&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="0"&gt;&lt;a href="https://github.com/pypa/get-virtualenv"&gt;&lt;span class="badge badge-green"&gt;677_807 total&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://github.com/pypa/get-virtualenv/releases"&gt;&lt;span class="badge badge-blue"&gt;20.36.1&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1767983039"&gt;&lt;a href="https://github.com/pypa/get-virtualenv/releases"&gt;&lt;span class="badge badge-yellow has-tip"&gt;1.2 months ago&lt;span class="tip"&gt;2026-01-09T18:23:59Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1767983021"&gt;&lt;a href="https://github.com/pypa/get-virtualenv/commits"&gt;&lt;span class="badge badge-yellow has-tip"&gt;1.2 months ago&lt;span class="tip"&gt;2026-01-09T18:23:41Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
+&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-python"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Python&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/pypa/get-virtualenv"&gt;get-virtualenv&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="0"&gt;&lt;a href="https://github.com/pypa/get-virtualenv"&gt;&lt;span class="badge badge-green"&gt;677_810 total&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://github.com/pypa/get-virtualenv/releases"&gt;&lt;span class="badge badge-blue"&gt;20.36.1&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1767983039"&gt;&lt;a href="https://github.com/pypa/get-virtualenv/releases"&gt;&lt;span class="badge badge-yellow has-tip"&gt;1.2 months ago&lt;span class="tip"&gt;2026-01-09T18:23:59Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1767983021"&gt;&lt;a href="https://github.com/pypa/get-virtualenv/commits"&gt;&lt;span class="badge badge-yellow has-tip"&gt;1.2 months ago&lt;span class="tip"&gt;2026-01-09T18:23:41Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
 &lt;span class="badge badge-gray"&gt;&lt;a href="https://github.com/pypa/get-virtualenv/issues"&gt;0&lt;/a&gt;/&lt;a href="https://github.com/pypa/get-virtualenv/pulls"&gt;0&lt;/a&gt;&lt;/span&gt;
 &lt;/td&gt;&lt;td class="col-data" data-value="17"&gt;&lt;span class="badge badge-yellow"&gt;&lt;a href="https://github.com/pypa/get-virtualenv/stargazers"&gt;17&lt;/a&gt; &lt;a href="https://www.star-history.com/#pypa/get-virtualenv"&gt;★&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;td class="col-ci"&gt;&lt;a href="https://github.com/pypa/get-virtualenv/actions/workflows/release.yml"&gt;&lt;img src="https://github.com/pypa/get-virtualenv/actions/workflows/release.yml/badge.svg" alt="release.yml"&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td class="row-num"&gt;&lt;/td&gt;
-&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-python"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Python&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/tox-dev/tox"&gt;tox&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="819239"&gt;&lt;a href="https://pepy.tech/projects/tox"&gt;&lt;span class="badge badge-green"&gt;24_577_184/mo&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://pypi.org/project/tox"&gt;&lt;span class="badge badge-blue"&gt;4.35.0&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1770937748"&gt;&lt;a href="https://github.com/tox-dev/tox/releases"&gt;&lt;span class="badge badge-green has-tip"&gt;2.75 days ago&lt;span class="tip"&gt;2026-02-12T23:09:08Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771168092"&gt;&lt;a href="https://github.com/tox-dev/tox/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;2.83 hours ago&lt;span class="tip"&gt;2026-02-15T15:08:12Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="120"&gt;
+&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-python"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Python&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/tox-dev/tox"&gt;tox&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="819239"&gt;&lt;a href="https://pepy.tech/projects/tox"&gt;&lt;span class="badge badge-green"&gt;24_577_184/mo&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://pypi.org/project/tox"&gt;&lt;span class="badge badge-blue"&gt;4.35.0&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1770937748"&gt;&lt;a href="https://github.com/tox-dev/tox/releases"&gt;&lt;span class="badge badge-green has-tip"&gt;2.75 days ago&lt;span class="tip"&gt;2026-02-12T23:09:08Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771168092"&gt;&lt;a href="https://github.com/tox-dev/tox/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;2.9 hours ago&lt;span class="tip"&gt;2026-02-15T15:08:12Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="120"&gt;
 &lt;span class="badge badge-gray"&gt;&lt;a href="https://github.com/tox-dev/tox/issues"&gt;116&lt;/a&gt;/&lt;a href="https://github.com/tox-dev/tox/pulls"&gt;4&lt;/a&gt;&lt;/span&gt;
 &lt;/td&gt;&lt;td class="col-data" data-value="3895"&gt;&lt;span class="badge badge-yellow"&gt;&lt;a href="https://github.com/tox-dev/tox/stargazers"&gt;3_895&lt;/a&gt; &lt;a href="https://www.star-history.com/#tox-dev/tox"&gt;★&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;td class="col-ci"&gt;&lt;a href="https://github.com/tox-dev/tox/actions/workflows/check.yaml"&gt;&lt;img src="https://github.com/tox-dev/tox/actions/workflows/check.yaml/badge.svg" alt="check"&gt;&lt;/a&gt;&lt;a href="https://github.com/tox-dev/tox/actions/workflows/weekly.yaml"&gt;&lt;img src="https://github.com/tox-dev/tox/actions/workflows/weekly.yaml/badge.svg" alt="weekly"&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
@@ -2003,32 +2003,32 @@ Experience organizations Artifact Repository Hosting team. I am the primary main
 &lt;/td&gt;&lt;td class="col-data" data-value="326"&gt;&lt;span class="badge badge-yellow"&gt;&lt;a href="https://github.com/tox-dev/tox-uv/stargazers"&gt;326&lt;/a&gt; &lt;a href="https://www.star-history.com/#tox-dev/tox-uv"&gt;★&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;td class="col-ci"&gt;&lt;a href="https://github.com/tox-dev/tox-uv/actions/workflows/check.yaml"&gt;&lt;img src="https://github.com/tox-dev/tox-uv/actions/workflows/check.yaml/badge.svg" alt="check"&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td class="row-num"&gt;&lt;/td&gt;
-&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fas fa-layer-group"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Monorepo for pyproject-fmt, toml-fmt-common, and tox-toml-fmt&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/tox-dev/toml-fmt"&gt;toml-fmt&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="889"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt"&gt;&lt;span class="badge badge-green"&gt;12_459 clones/14d&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/releases"&gt;&lt;span class="badge badge-blue"&gt;pyproject-fmt/2.16.0&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1770935476"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/releases"&gt;&lt;span class="badge badge-green has-tip"&gt;2.79 days ago&lt;span class="tip"&gt;2026-02-12T22:31:16Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771176306"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;0.57 minutes ago&lt;span class="tip"&gt;2026-02-15T17:25:06Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
+&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fas fa-layer-group"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Monorepo for pyproject-fmt, toml-fmt-common, and tox-toml-fmt&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/tox-dev/toml-fmt"&gt;toml-fmt&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="889"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt"&gt;&lt;span class="badge badge-green"&gt;12_459 clones/14d&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/releases"&gt;&lt;span class="badge badge-blue"&gt;pyproject-fmt/2.16.0&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1770935476"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/releases"&gt;&lt;span class="badge badge-green has-tip"&gt;2.79 days ago&lt;span class="tip"&gt;2026-02-12T22:31:16Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771176306"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;0.63 minutes ago&lt;span class="tip"&gt;2026-02-15T17:25:06Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
 &lt;span class="badge badge-gray"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/issues"&gt;0&lt;/a&gt;/&lt;a href="https://github.com/tox-dev/toml-fmt/pulls"&gt;0&lt;/a&gt;&lt;/span&gt;
 &lt;/td&gt;&lt;td class="col-data" data-value="56"&gt;&lt;span class="badge badge-yellow"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/stargazers"&gt;56&lt;/a&gt; &lt;a href="https://www.star-history.com/#tox-dev/toml-fmt"&gt;★&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;td class="col-ci"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/actions/workflows/common.yaml"&gt;&lt;img src="https://github.com/tox-dev/toml-fmt/actions/workflows/common.yaml/badge.svg" alt="common"&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td class="row-num"&gt;&lt;/td&gt;
-&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-python"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Part of toml-fmt monorepo&lt;/span&gt;&lt;/span&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-rust"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Part of toml-fmt monorepo&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/tree/main/pyproject-fmt"&gt;pyproject-fmt&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="12356"&gt;&lt;a href="https://pepy.tech/projects/pyproject-fmt"&gt;&lt;span class="badge badge-green"&gt;370_682/mo&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://pypi.org/project/pyproject-fmt"&gt;&lt;span class="badge badge-blue"&gt;2.16.0&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1770935476"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/releases"&gt;&lt;span class="badge badge-green has-tip"&gt;2.79 days ago&lt;span class="tip"&gt;2026-02-12T22:31:16Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771176306"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;0.57 minutes ago&lt;span class="tip"&gt;2026-02-15T17:25:06Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
+&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-python"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Part of toml-fmt monorepo&lt;/span&gt;&lt;/span&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-rust"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Part of toml-fmt monorepo&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/tree/main/pyproject-fmt"&gt;pyproject-fmt&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="12356"&gt;&lt;a href="https://pepy.tech/projects/pyproject-fmt"&gt;&lt;span class="badge badge-green"&gt;370_682/mo&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://pypi.org/project/pyproject-fmt"&gt;&lt;span class="badge badge-blue"&gt;2.16.0&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1770935476"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/releases"&gt;&lt;span class="badge badge-green has-tip"&gt;2.79 days ago&lt;span class="tip"&gt;2026-02-12T22:31:16Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771176306"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;0.63 minutes ago&lt;span class="tip"&gt;2026-02-15T17:25:06Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
 &lt;span class="badge badge-gray"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/issues"&gt;0&lt;/a&gt;/&lt;a href="https://github.com/tox-dev/toml-fmt/pulls"&gt;0&lt;/a&gt;&lt;/span&gt;
 &lt;/td&gt;&lt;td class="col-data" data-value="56"&gt;&lt;span class="badge badge-yellow"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/stargazers"&gt;56&lt;/a&gt; &lt;a href="https://www.star-history.com/#tox-dev/toml-fmt"&gt;★&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;td class="col-ci"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/actions/workflows/pyproject_fmt_build.yaml"&gt;&lt;img src="https://github.com/tox-dev/toml-fmt/actions/workflows/pyproject_fmt_build.yaml/badge.svg" alt="pyproject_fmt_build"&gt;&lt;/a&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/actions/workflows/pyproject_fmt_test.yaml"&gt;&lt;img src="https://github.com/tox-dev/toml-fmt/actions/workflows/pyproject_fmt_test.yaml/badge.svg" alt="pyproject_fmt_test"&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td class="row-num"&gt;&lt;/td&gt;
-&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-python"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Part of toml-fmt monorepo&lt;/span&gt;&lt;/span&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-rust"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Part of toml-fmt monorepo&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/tree/main/pyproject-fmt"&gt;pyproject-fmt&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="12356"&gt;&lt;a href="https://pepy.tech/projects/pyproject-fmt"&gt;&lt;span class="badge badge-green"&gt;370_682/mo&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://pypi.org/project/pyproject-fmt"&gt;&lt;span class="badge badge-blue"&gt;2.16.0&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1770935476"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/releases"&gt;&lt;span class="badge badge-green has-tip"&gt;2.79 days ago&lt;span class="tip"&gt;2026-02-12T22:31:16Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771176306"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;0.57 minutes ago&lt;span class="tip"&gt;2026-02-15T17:25:06Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
+&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-python"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Part of toml-fmt monorepo&lt;/span&gt;&lt;/span&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-rust"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Part of toml-fmt monorepo&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/tree/main/pyproject-fmt"&gt;pyproject-fmt&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="12356"&gt;&lt;a href="https://pepy.tech/projects/pyproject-fmt"&gt;&lt;span class="badge badge-green"&gt;370_682/mo&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://pypi.org/project/pyproject-fmt"&gt;&lt;span class="badge badge-blue"&gt;2.16.0&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1770935476"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/releases"&gt;&lt;span class="badge badge-green has-tip"&gt;2.79 days ago&lt;span class="tip"&gt;2026-02-12T22:31:16Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771176306"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;0.63 minutes ago&lt;span class="tip"&gt;2026-02-15T17:25:06Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
 &lt;span class="badge badge-gray"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/issues"&gt;0&lt;/a&gt;/&lt;a href="https://github.com/tox-dev/toml-fmt/pulls"&gt;0&lt;/a&gt;&lt;/span&gt;
 &lt;/td&gt;&lt;td class="col-data" data-value="56"&gt;&lt;span class="badge badge-yellow"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/stargazers"&gt;56&lt;/a&gt; &lt;a href="https://www.star-history.com/#tox-dev/toml-fmt"&gt;★&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;td class="col-ci"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/actions/workflows/pyproject_fmt_build.yaml"&gt;&lt;img src="https://github.com/tox-dev/toml-fmt/actions/workflows/pyproject_fmt_build.yaml/badge.svg" alt="pyproject_fmt_build"&gt;&lt;/a&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/actions/workflows/pyproject_fmt_test.yaml"&gt;&lt;img src="https://github.com/tox-dev/toml-fmt/actions/workflows/pyproject_fmt_test.yaml/badge.svg" alt="pyproject_fmt_test"&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td class="row-num"&gt;&lt;/td&gt;
-&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-python"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Part of toml-fmt monorepo&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/tree/main/toml-fmt-common"&gt;toml-fmt-common&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="12284"&gt;&lt;a href="https://pepy.tech/projects/toml-fmt-common"&gt;&lt;span class="badge badge-green"&gt;368_547/mo&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://pypi.org/project/toml-fmt-common"&gt;&lt;span class="badge badge-blue"&gt;1.2.0&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1770935476"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/releases"&gt;&lt;span class="badge badge-green has-tip"&gt;2.79 days ago&lt;span class="tip"&gt;2026-02-12T22:31:16Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771176306"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;0.57 minutes ago&lt;span class="tip"&gt;2026-02-15T17:25:06Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
+&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-python"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Part of toml-fmt monorepo&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/tree/main/toml-fmt-common"&gt;toml-fmt-common&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="12284"&gt;&lt;a href="https://pepy.tech/projects/toml-fmt-common"&gt;&lt;span class="badge badge-green"&gt;368_547/mo&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://pypi.org/project/toml-fmt-common"&gt;&lt;span class="badge badge-blue"&gt;1.2.0&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1770935476"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/releases"&gt;&lt;span class="badge badge-green has-tip"&gt;2.79 days ago&lt;span class="tip"&gt;2026-02-12T22:31:16Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771176306"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;0.63 minutes ago&lt;span class="tip"&gt;2026-02-15T17:25:06Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
 &lt;span class="badge badge-gray"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/issues"&gt;0&lt;/a&gt;/&lt;a href="https://github.com/tox-dev/toml-fmt/pulls"&gt;0&lt;/a&gt;&lt;/span&gt;
 &lt;/td&gt;&lt;td class="col-data" data-value="56"&gt;&lt;span class="badge badge-yellow"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/stargazers"&gt;56&lt;/a&gt; &lt;a href="https://www.star-history.com/#tox-dev/toml-fmt"&gt;★&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;td class="col-ci"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/actions/workflows/toml_fmt_common_build.yaml"&gt;&lt;img src="https://github.com/tox-dev/toml-fmt/actions/workflows/toml_fmt_common_build.yaml/badge.svg" alt="toml_fmt_common_build"&gt;&lt;/a&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/actions/workflows/toml_fmt_common_test.yaml"&gt;&lt;img src="https://github.com/tox-dev/toml-fmt/actions/workflows/toml_fmt_common_test.yaml/badge.svg" alt="toml_fmt_common_test"&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td class="row-num"&gt;&lt;/td&gt;
-&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-python"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Part of toml-fmt monorepo&lt;/span&gt;&lt;/span&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-rust"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Part of toml-fmt monorepo&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/tree/main/tox-toml-fmt"&gt;tox-toml-fmt&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="375"&gt;&lt;a href="https://pepy.tech/projects/tox-toml-fmt"&gt;&lt;span class="badge badge-green"&gt;11_256/mo&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://pypi.org/project/tox-toml-fmt"&gt;&lt;span class="badge badge-blue"&gt;1.6.0&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1770935476"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/releases"&gt;&lt;span class="badge badge-green has-tip"&gt;2.79 days ago&lt;span class="tip"&gt;2026-02-12T22:31:16Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771176306"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;0.57 minutes ago&lt;span class="tip"&gt;2026-02-15T17:25:06Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
+&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-python"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Part of toml-fmt monorepo&lt;/span&gt;&lt;/span&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-rust"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Part of toml-fmt monorepo&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/tree/main/tox-toml-fmt"&gt;tox-toml-fmt&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="375"&gt;&lt;a href="https://pepy.tech/projects/tox-toml-fmt"&gt;&lt;span class="badge badge-green"&gt;11_256/mo&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://pypi.org/project/tox-toml-fmt"&gt;&lt;span class="badge badge-blue"&gt;1.6.0&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1770935476"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/releases"&gt;&lt;span class="badge badge-green has-tip"&gt;2.79 days ago&lt;span class="tip"&gt;2026-02-12T22:31:16Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771176306"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;0.63 minutes ago&lt;span class="tip"&gt;2026-02-15T17:25:06Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
 &lt;span class="badge badge-gray"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/issues"&gt;0&lt;/a&gt;/&lt;a href="https://github.com/tox-dev/toml-fmt/pulls"&gt;0&lt;/a&gt;&lt;/span&gt;
 &lt;/td&gt;&lt;td class="col-data" data-value="56"&gt;&lt;span class="badge badge-yellow"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/stargazers"&gt;56&lt;/a&gt; &lt;a href="https://www.star-history.com/#tox-dev/toml-fmt"&gt;★&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;td class="col-ci"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/actions/workflows/tox_toml_fmt_build.yaml"&gt;&lt;img src="https://github.com/tox-dev/toml-fmt/actions/workflows/tox_toml_fmt_build.yaml/badge.svg" alt="tox_toml_fmt_build"&gt;&lt;/a&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/actions/workflows/tox_toml_fmt_test.yaml"&gt;&lt;img src="https://github.com/tox-dev/toml-fmt/actions/workflows/tox_toml_fmt_test.yaml/badge.svg" alt="tox_toml_fmt_test"&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td class="row-num"&gt;&lt;/td&gt;
-&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-python"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Part of toml-fmt monorepo&lt;/span&gt;&lt;/span&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-rust"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Part of toml-fmt monorepo&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/tree/main/tox-toml-fmt"&gt;tox-toml-fmt&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="375"&gt;&lt;a href="https://pepy.tech/projects/tox-toml-fmt"&gt;&lt;span class="badge badge-green"&gt;11_256/mo&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://pypi.org/project/tox-toml-fmt"&gt;&lt;span class="badge badge-blue"&gt;1.6.0&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1770935476"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/releases"&gt;&lt;span class="badge badge-green has-tip"&gt;2.79 days ago&lt;span class="tip"&gt;2026-02-12T22:31:16Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771176306"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;0.57 minutes ago&lt;span class="tip"&gt;2026-02-15T17:25:06Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
+&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-python"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Part of toml-fmt monorepo&lt;/span&gt;&lt;/span&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-rust"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Part of toml-fmt monorepo&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/tree/main/tox-toml-fmt"&gt;tox-toml-fmt&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="375"&gt;&lt;a href="https://pepy.tech/projects/tox-toml-fmt"&gt;&lt;span class="badge badge-green"&gt;11_256/mo&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://pypi.org/project/tox-toml-fmt"&gt;&lt;span class="badge badge-blue"&gt;1.6.0&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1770935476"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/releases"&gt;&lt;span class="badge badge-green has-tip"&gt;2.79 days ago&lt;span class="tip"&gt;2026-02-12T22:31:16Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771176306"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;0.63 minutes ago&lt;span class="tip"&gt;2026-02-15T17:25:06Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
 &lt;span class="badge badge-gray"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/issues"&gt;0&lt;/a&gt;/&lt;a href="https://github.com/tox-dev/toml-fmt/pulls"&gt;0&lt;/a&gt;&lt;/span&gt;
 &lt;/td&gt;&lt;td class="col-data" data-value="56"&gt;&lt;span class="badge badge-yellow"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/stargazers"&gt;56&lt;/a&gt; &lt;a href="https://www.star-history.com/#tox-dev/toml-fmt"&gt;★&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;td class="col-ci"&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/actions/workflows/tox_toml_fmt_build.yaml"&gt;&lt;img src="https://github.com/tox-dev/toml-fmt/actions/workflows/tox_toml_fmt_build.yaml/badge.svg" alt="tox_toml_fmt_build"&gt;&lt;/a&gt;&lt;a href="https://github.com/tox-dev/toml-fmt/actions/workflows/tox_toml_fmt_test.yaml"&gt;&lt;img src="https://github.com/tox-dev/toml-fmt/actions/workflows/tox_toml_fmt_test.yaml/badge.svg" alt="tox_toml_fmt_test"&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
@@ -2078,12 +2078,12 @@ Experience organizations Artifact Repository Hosting team. I am the primary main
 &lt;/td&gt;&lt;td class="col-data" data-value="8"&gt;&lt;span class="badge badge-yellow"&gt;&lt;a href="https://github.com/tox-dev/xml-fmt/stargazers"&gt;8&lt;/a&gt; &lt;a href="https://www.star-history.com/#tox-dev/xml-fmt"&gt;★&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;td class="col-ci"&gt;&lt;a href="https://github.com/tox-dev/xml-fmt/actions/workflows/check.yaml"&gt;&lt;img src="https://github.com/tox-dev/xml-fmt/actions/workflows/check.yaml/badge.svg" alt="check"&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td class="row-num"&gt;&lt;/td&gt;
-&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-github"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Repository&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/tox-dev/PyVenvManage"&gt;PyVenv Manage 2&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="0"&gt;&lt;a href="https://github.com/tox-dev/PyVenvManage"&gt;&lt;span class="badge badge-green"&gt;15 total&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://github.com/tox-dev/PyVenvManage/releases"&gt;&lt;span class="badge badge-blue"&gt;2.2.5&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1769745624"&gt;&lt;a href="https://github.com/tox-dev/PyVenvManage/releases"&gt;&lt;span class="badge badge-green has-tip"&gt;16.54 days ago&lt;span class="tip"&gt;2026-01-30T04:00:24Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1770795560"&gt;&lt;a href="https://github.com/tox-dev/PyVenvManage/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;4.41 days ago&lt;span class="tip"&gt;2026-02-11T07:39:20Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
+&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-github"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Repository&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/tox-dev/PyVenvManage"&gt;PyVenv Manage 2&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="0"&gt;&lt;a href="https://github.com/tox-dev/PyVenvManage"&gt;&lt;span class="badge badge-green"&gt;15 total&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://github.com/tox-dev/PyVenvManage/releases"&gt;&lt;span class="badge badge-blue"&gt;2.2.5&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1769745624"&gt;&lt;a href="https://github.com/tox-dev/PyVenvManage/releases"&gt;&lt;span class="badge badge-green has-tip"&gt;16.58 days ago&lt;span class="tip"&gt;2026-01-30T04:00:24Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1770795560"&gt;&lt;a href="https://github.com/tox-dev/PyVenvManage/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;4.41 days ago&lt;span class="tip"&gt;2026-02-11T07:39:20Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
 &lt;span class="badge badge-gray"&gt;&lt;a href="https://github.com/tox-dev/PyVenvManage/issues"&gt;0&lt;/a&gt;/&lt;a href="https://github.com/tox-dev/PyVenvManage/pulls"&gt;0&lt;/a&gt;&lt;/span&gt;
 &lt;/td&gt;&lt;td class="col-data" data-value="7"&gt;&lt;span class="badge badge-yellow"&gt;&lt;a href="https://github.com/tox-dev/PyVenvManage/stargazers"&gt;7&lt;/a&gt; &lt;a href="https://www.star-history.com/#tox-dev/PyVenvManage"&gt;★&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;td class="col-ci"&gt;&lt;a href="https://github.com/tox-dev/PyVenvManage/actions/workflows/check.yaml"&gt;&lt;img src="https://github.com/tox-dev/PyVenvManage/actions/workflows/check.yaml/badge.svg" alt="check"&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td class="row-num"&gt;&lt;/td&gt;
-&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-github"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Repository&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/tox-dev/jetbrains-fish"&gt;Fish Shell&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="0"&gt;&lt;a href="https://github.com/tox-dev/jetbrains-fish"&gt;&lt;span class="badge badge-green"&gt;6 total&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://github.com/tox-dev/jetbrains-fish/releases"&gt;&lt;span class="badge badge-blue"&gt;0.1.7&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1769729765"&gt;&lt;a href="https://github.com/tox-dev/jetbrains-fish/releases"&gt;&lt;span class="badge badge-green has-tip"&gt;16.75 days ago&lt;span class="tip"&gt;2026-01-29T23:36:05Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771141919"&gt;&lt;a href="https://github.com/tox-dev/jetbrains-fish/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;10.11 hours ago&lt;span class="tip"&gt;2026-02-15T07:51:59Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
+&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-github"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Repository&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/tox-dev/jetbrains-fish"&gt;Fish Shell&lt;/a&gt;&lt;/td&gt;&lt;td class="dl-cell col-data" data-value="0"&gt;&lt;a href="https://github.com/tox-dev/jetbrains-fish"&gt;&lt;span class="badge badge-green"&gt;6 total&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data"&gt;&lt;a href="https://github.com/tox-dev/jetbrains-fish/releases"&gt;&lt;span class="badge badge-blue"&gt;0.1.7&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1769729765"&gt;&lt;a href="https://github.com/tox-dev/jetbrains-fish/releases"&gt;&lt;span class="badge badge-green has-tip"&gt;16.75 days ago&lt;span class="tip"&gt;2026-01-29T23:36:05Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771141919"&gt;&lt;a href="https://github.com/tox-dev/jetbrains-fish/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;10.18 hours ago&lt;span class="tip"&gt;2026-02-15T07:51:59Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
 &lt;span class="badge badge-gray"&gt;&lt;a href="https://github.com/tox-dev/jetbrains-fish/issues"&gt;0&lt;/a&gt;/&lt;a href="https://github.com/tox-dev/jetbrains-fish/pulls"&gt;0&lt;/a&gt;&lt;/span&gt;
 &lt;/td&gt;&lt;td class="col-data" data-value="1"&gt;&lt;span class="badge badge-yellow"&gt;&lt;a href="https://github.com/tox-dev/jetbrains-fish/stargazers"&gt;1&lt;/a&gt; &lt;a href="https://www.star-history.com/#tox-dev/jetbrains-fish"&gt;★&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;td class="col-ci"&gt;&lt;a href="https://github.com/tox-dev/jetbrains-fish/actions/workflows/check.yaml"&gt;&lt;img src="https://github.com/tox-dev/jetbrains-fish/actions/workflows/check.yaml/badge.svg" alt="check"&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr class="co-maintained"&gt;
@@ -2130,22 +2130,22 @@ repositories helping with maintaining and self:&lt;/p&gt;
 &lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;&lt;/td&gt;&lt;td class="col-ci"&gt;&lt;a href="https://github.com/gaborbernat/all-repos-self/actions/workflows/check.yaml"&gt;&lt;img src="https://github.com/gaborbernat/all-repos-self/actions/workflows/check.yaml/badge.svg" alt="check"&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td class="row-num"&gt;&lt;/td&gt;
-&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-github"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Repository&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/gaborbernat/bernat-tech"&gt;bernat-tech&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771178323"&gt;&lt;a href="https://github.com/gaborbernat/bernat-tech/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;0.01 minutes ago&lt;span class="tip"&gt;2026-02-15T17:58:43Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
+&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-github"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Repository&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/gaborbernat/bernat-tech"&gt;bernat-tech&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771178450"&gt;&lt;a href="https://github.com/gaborbernat/bernat-tech/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;0.05 minutes ago&lt;span class="tip"&gt;2026-02-15T18:00:50Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
 &lt;span class="badge badge-gray"&gt;&lt;a href="https://github.com/gaborbernat/bernat-tech/issues"&gt;0&lt;/a&gt;/&lt;a href="https://github.com/gaborbernat/bernat-tech/pulls"&gt;0&lt;/a&gt;&lt;/span&gt;
 &lt;/td&gt;&lt;td class="col-data" data-value="2"&gt;&lt;span class="badge badge-yellow"&gt;&lt;a href="https://github.com/gaborbernat/bernat-tech/stargazers"&gt;2&lt;/a&gt; &lt;a href="https://www.star-history.com/#gaborbernat/bernat-tech"&gt;★&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;td class="col-ci"&gt;&lt;a href="https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml"&gt;&lt;img src="https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml/badge.svg" alt="build"&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td class="row-num"&gt;&lt;/td&gt;
-&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-github"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Repository&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/gaborbernat/cv"&gt;cv&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771177814"&gt;&lt;a href="https://github.com/gaborbernat/cv/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;0.16 minutes ago&lt;span class="tip"&gt;2026-02-15T17:50:14Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
+&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-github"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Repository&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/gaborbernat/cv"&gt;cv&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771177814"&gt;&lt;a href="https://github.com/gaborbernat/cv/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;0.22 minutes ago&lt;span class="tip"&gt;2026-02-15T17:50:14Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
 &lt;span class="badge badge-gray"&gt;&lt;a href="https://github.com/gaborbernat/cv/issues"&gt;0&lt;/a&gt;/&lt;a href="https://github.com/gaborbernat/cv/pulls"&gt;0&lt;/a&gt;&lt;/span&gt;
 &lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;&lt;/td&gt;&lt;td class="col-ci"&gt;&lt;a href="https://github.com/gaborbernat/cv/actions/workflows/build.yaml"&gt;&lt;img src="https://github.com/gaborbernat/cv/actions/workflows/build.yaml/badge.svg" alt="build"&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td class="row-num"&gt;&lt;/td&gt;
-&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-github"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Repository&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/gaborbernat/dotfiles"&gt;dotfiles&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771135970"&gt;&lt;a href="https://github.com/gaborbernat/dotfiles/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;11.78 hours ago&lt;span class="tip"&gt;2026-02-15T06:12:50Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
+&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-github"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Repository&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/gaborbernat/dotfiles"&gt;dotfiles&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771135970"&gt;&lt;a href="https://github.com/gaborbernat/dotfiles/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;11.85 hours ago&lt;span class="tip"&gt;2026-02-15T06:12:50Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
 &lt;span class="badge badge-gray"&gt;&lt;a href="https://github.com/gaborbernat/dotfiles/issues"&gt;0&lt;/a&gt;/&lt;a href="https://github.com/gaborbernat/dotfiles/pulls"&gt;0&lt;/a&gt;&lt;/span&gt;
 &lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;&lt;/td&gt;&lt;td class="col-ci"&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td class="row-num"&gt;&lt;/td&gt;
-&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-github"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Repository&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/gaborbernat/gaborbernat"&gt;gaborbernat&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771177167"&gt;&lt;a href="https://github.com/gaborbernat/gaborbernat/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;0.34 minutes ago&lt;span class="tip"&gt;2026-02-15T17:39:27Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
+&lt;td&gt;&lt;span class="pkg-type has-tip"&gt;&lt;i class="fab fa-github"&gt;&lt;/i&gt;&lt;span class="tip"&gt;Repository&lt;/span&gt;&lt;/span&gt;&lt;a href="https://github.com/gaborbernat/gaborbernat"&gt;gaborbernat&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="1771178636"&gt;&lt;a href="https://github.com/gaborbernat/gaborbernat/commits"&gt;&lt;span class="badge badge-green has-tip"&gt;just now&lt;span class="tip"&gt;2026-02-15T18:03:56Z&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class="col-data" data-value="0"&gt;
 &lt;span class="badge badge-gray"&gt;&lt;a href="https://github.com/gaborbernat/gaborbernat/issues"&gt;0&lt;/a&gt;/&lt;a href="https://github.com/gaborbernat/gaborbernat/pulls"&gt;0&lt;/a&gt;&lt;/span&gt;
 &lt;/td&gt;&lt;td class="col-data" data-value="5"&gt;&lt;span class="badge badge-yellow"&gt;&lt;a href="https://github.com/gaborbernat/gaborbernat/stargazers"&gt;5&lt;/a&gt; &lt;a href="https://www.star-history.com/#gaborbernat/gaborbernat"&gt;★&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;td class="col-ci"&gt;&lt;a href="https://github.com/gaborbernat/gaborbernat/actions/workflows/update-readme.yaml"&gt;&lt;img src="https://github.com/gaborbernat/gaborbernat/actions/workflows/update-readme.yaml/badge.svg" alt="update-readme"&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;/tbody&gt;
