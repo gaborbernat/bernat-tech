@@ -1,0 +1,45 @@
+{{ $group := .Get "group" }}
+{{ $projects := index .Site.Data.projects $group }}
+{{ $cols := split (or (.Get "cols") "downloads,version,release,last-commit,issues,stars,ci") "," }}
+{{ $headerRow := slice (printf `<th>#</th><th data-sort="name">%s</th>` (or (.Get "name") "Name")) }}
+{{- range $cols -}}
+  {{- $col := trim . " " -}}
+  {{- if eq $col "downloads" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="downloads">Downloads</th>` }}
+  {{- else if eq $col "version" -}}{{ $headerRow = $headerRow | append `<th class="col-data">Version</th>` }}
+  {{- else if eq $col "release" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="date">Release</th>` }}
+  {{- else if eq $col "last-commit" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="date">Last Commit</th>` }}
+  {{- else if eq $col "ci" -}}{{ $headerRow = $headerRow | append `<th class="col-ci">CI</th>` }}
+  {{- else if eq $col "issues" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="issues" title="Issues/Pull Requests">I/P</th>` }}
+  {{- else if eq $col "stars" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="stars">Stars</th>` }}
+  {{- end -}}
+{{- end -}}
+{{ $cells := delimit $headerRow "" }}
+<table class="project-table">
+  <thead>
+    <tr>{{ $cells | safeHTML }}</tr>
+  </thead>
+  <tbody>
+    {{- range $projects -}}
+      {{ $p := dict
+        "name" .name
+        "org" .org
+        "repo" .repo
+        "label" .label
+        "pypi" .pypi
+        "type" .type
+        "ci" .ci
+        "monorepo" .monorepo
+        "no_release" .no_release
+        "role" .role
+        "jetbrains_id" .jetbrains_id
+        "jetbrains_slug" .jetbrains_slug
+      }}
+      {{ partial "project-row.html" (dict "project" $p "cols" $cols) }}
+    {{- end -}}
+  </tbody>
+  {{- if eq ($.Get "footer") "true" }}
+  <tfoot>
+    <tr>{{ $cells | safeHTML }}</tr>
+  </tfoot>
+  {{- end }}
+</table>

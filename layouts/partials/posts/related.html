@@ -1,0 +1,14 @@
+{{ $related := .Site.RegularPages.Related . | first 5 }}
+{{ with $related }}
+<div class="related-posts">
+  <h3>Related Posts</h3>
+  <ul>
+    {{ range . }}
+    <li>
+      <a href="{{ .Permalink }}">{{ .Title }}</a>
+      <span class="date"> - {{ .Date | time.Format ($.Site.Params.dateFormat | default "January 2, 2006") }}</span>
+    </li>
+    {{ end }}
+  </ul>
+</div>
+{{ end }}

@@ -1,0 +1,18 @@
+{{ define "title" }}
+  404 Page not found · {{ .Site.Title }}
+{{ end }}
+{{ define "content" }}
+<section class="container centered">
+  <div class="error">
+    <h1>404</h1>
+    <h2>Page Not Found</h2>
+    <p>The page you're looking for doesn't exist or has been moved.</p>
+    <ul style="list-style: none; padding: 0; margin: 2rem 0;">
+      <li style="margin: 0.5rem 0;"><a href="{{ .Site.BaseURL }}">Home</a></li>
+      <li style="margin: 0.5rem 0;"><a href="{{ .Site.BaseURL }}posts">Blog</a></li>
+      <li style="margin: 0.5rem 0;"><a href="{{ .Site.BaseURL }}about">About</a></li>
+      <li style="margin: 0.5rem 0;"><a href="{{ .Site.BaseURL }}tags">Tags</a></li>
+    </ul>
+  </div>
+</section>
+{{ end }}

@@ -1,0 +1,62 @@
+document.addEventListener("DOMContentLoaded", function () {
+  var btn = document.getElementById("ci-toggle-btn");
+  if (btn) {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll(".project-table").forEach(function (t) {
+        t.classList.toggle("ci-view");
+      });
+    });
+  }
+
+  document.querySelectorAll(".project-table th[data-sort]").forEach(function (th) {
+    th.addEventListener("click", function () {
+      var table = this.closest("table");
+      var tbody = table.querySelector("tbody");
+      var rows = Array.from(tbody.querySelectorAll("tr"));
+      var colIndex = Array.from(this.parentNode.children).indexOf(this);
+      var asc = this.dataset.dir === "asc";
+      this.dataset.dir = asc ? "desc" : "asc";
+
+      table.querySelectorAll("th[data-sort]").forEach(function (h) {
+        h.classList.remove("sort-asc", "sort-desc");
+      });
+      this.classList.add(asc ? "sort-desc" : "sort-asc");
+
+      var sortType = this.dataset.sort;
+      rows.sort(function (a, b) {
+        if (sortType === "name") {
+          var linkA = a.children[colIndex]?.querySelector("a");
+          var linkB = b.children[colIndex]?.querySelector("a");
+          var va = (linkA?.textContent || "").trim().toLowerCase();
+          var vb = (linkB?.textContent || "").trim().toLowerCase();
+          return asc ? va.localeCompare(vb) : vb.localeCompare(va);
+        }
+        var rawA = a.children[colIndex]?.dataset.value;
+        var rawB = b.children[colIndex]?.dataset.value;
+        var hasA = rawA != null && rawA !== "";
+        var hasB = rawB != null && rawB !== "";
+        if (!hasA && !hasB) return 0;
+        if (!hasA) return 1;
+        if (!hasB) return -1;
+        var va = parseFloat(rawA);
+        var vb = parseFloat(rawB);
+        return asc ? va - vb : vb - va;
+      });
+      rows.forEach(function (row) {
+        tbody.appendChild(row);
+      });
+    });
+  });
+
+  document.querySelectorAll(".project-table").forEach(function (table) {
+    var dlHeader = table.querySelector('th[data-sort="downloads"]');
+    if (dlHeader) {
+      dlHeader.click();
+    } else {
+      var dateHeader = table.querySelector('th[data-sort="date"]');
+      if (dateHeader) {
+        dateHeader.click();
+      }
+    }
+  });
+});

@@ -207,6 +207,21 @@ body.colorscheme-dark table.project-table img {
   margin-right: 0;
   font-size: 1.2em;
 }
+.related-posts {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+.related-posts ul {
+  padding-left: 1.2rem;
+}
+.related-posts li {
+  margin: 0.3rem 0;
+}
+.related-posts .date {
+  opacity: 0.6;
+  font-size: 0.9em;
+}
 .mastodon-comment .comment {
   flex-wrap: wrap;
 }

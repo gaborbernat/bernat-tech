@@ -1,6 +1,8 @@
 baseURL = "https://bernat.tech"
 title = "Tech articles by Bernát Gábor"
-theme = "hugo-coder"
+[module]
+[[module.imports]]
+path = "github.com/luizdepra/hugo-coder"
 languageCode = "en"
 defaultContentLanguage = "en"
 enableRobotsTXT = true
@@ -117,6 +119,25 @@ weight = 2
 name = "Presentations"
 url = "presentations"
 weight = 3
+
+[[menu.main]]
+name = "Tags"
+url = "tags"
+weight = 4
+
+[related]
+includeNewer = true
+threshold = 80
+toLower = false
+[[related.indices]]
+name = "tags"
+weight = 100
+[[related.indices]]
+name = "date"
+weight = 10
+
+[outputs]
+home = ["HTML", "RSS", "JSON"]
 
 [languages.en]
 languageName = ":uk:"
