@@ -14,8 +14,9 @@ Planning, testing, and implementation have been going on for over a year in the 
 &lt;p&gt;Against all the preparations, though, inevitably, the first release did break a few packages, mostly where people
 performed some operations that caught the maintainers by surprise. Let&amp;rsquo;s try to understand a few of these examples and
 how did they get addressed.&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://bernat.tech/posts/growing-pain/stand_pug.webp"
-alt="Standing pug"&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/growing-pain/stand_pug.webp" srcset="https://bernat.tech/posts/growing-pain/stand_pug_hu_e80d6d14d8b68c0f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw" alt="Standing pug"
+width="700" height="467"
+loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
 &lt;h2 id="pep-518"&gt;
 PEP-518
@@ -68,8 +69,9 @@ though, but en masse, as most CI systems run with this option turned on. Just a 
 needs to ensure that &lt;code&gt;pyproject.toml&lt;/code&gt; is attached to the built source package. Otherwise, the build backend on the user
 machine will not be able to use it. &lt;a href="https://github.com/pypa/setuptools/pull/1650" class="external-link" target="_blank" rel="noopener"&gt;setuptools 1650&lt;/a&gt; will fix this for
 setuptools. One can include &lt;code&gt;pyproject.toml&lt;/code&gt; by specifying it inside &lt;code&gt;MANIFEST.in&lt;/code&gt; on earlier versions.&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://bernat.tech/posts/growing-pain/chair_pug.webp"
-alt="Pug on chair"&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/growing-pain/chair_pug.webp" srcset="https://bernat.tech/posts/growing-pain/chair_pug_hu_45aeb9e0007806e5.webp 500w" sizes="(min-width: 35em) 1200px, 100vw" alt="Pug on chair"
+width="700" height="469"
+loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
 &lt;h3 id="importing-the-built-package-from-within-setuppy"&gt;
 Importing the built package from within &lt;code&gt;setup.py&lt;/code&gt;
@@ -120,8 +122,9 @@ isolated environment, which has build dependency again &lt;code&gt;setuptools&lt
 Should these self-build backends allow to take on dependencies? There&amp;rsquo;s a long discussion with various options, pros and
 cons, so if you&amp;rsquo;re interested, make sure to head over the
 &lt;a href="https://discuss.python.org/t/pep-517-backend-bootstrapping/789" class="external-link" target="_blank" rel="noopener"&gt;python Discourse board&lt;/a&gt; and give your opinion.&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://bernat.tech/posts/growing-pain/many_pug.webp"
-alt="Many pugs"&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/growing-pain/many_pug.webp" srcset="https://bernat.tech/posts/growing-pain/many_pug_hu_18313968b48aca95.webp 500w" sizes="(min-width: 35em) 1200px, 100vw" alt="Many pugs"
+width="700" height="525"
+loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
 &lt;h2 id="conclusion"&gt;
 Conclusion
@@ -143,8 +146,9 @@ can catch at least some of these edge cases before they land on your machine. If
 for any part of the packaging feel free to start a discussion on the
 &lt;a href="https://discuss.python.org/c/packaging/14" class="external-link" target="_blank" rel="noopener"&gt;Discuss Python forums&lt;/a&gt; packaging section, or open an issue for the relevant
 tool at hand.&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://bernat.tech/posts/growing-pain/final_pug.webp"
-alt="Pug saying goodbye"&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/growing-pain/final_pug.webp" alt="Pug saying goodbye"
+width="480" height="600"
+loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
 &lt;p&gt;That&amp;rsquo;s all for now. Thanks for reading through it all! I would like to thank
 &lt;a href="https://twitter.com/pganssle" class="external-link" target="_blank" rel="noopener"&gt;Paul Ganssle&lt;/a&gt; for reviewing the packaging series post, and
@@ -178,8 +182,9 @@ imperative; you write a python script to modify every step in the package genera
 &lt;p&gt;The downside of this, though, is that it&amp;rsquo;s anything but easy to learn and understand. This started to become more and
 more an issue as Python grew in popularity and we had more and more users who were less proficient in the inner workings
 of Python.&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-518/smart_pug.webp"
-alt="Smart pug"&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-518/smart_pug.webp" alt="Smart pug"
+width="400" height="600"
+loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
 &lt;h3 id="build-requirements"&gt;
 build requirements
@@ -240,8 +245,9 @@ the packaging and these can be quickly provisioned via pip transparently on the 
 When one invokes the &lt;code&gt;pip wheel . --no-deps&lt;/code&gt; command that will automatically create in the background an isolated python
 that satisfies the build systems dependencies, and then call inside that environment the &lt;code&gt;python setup.py bdist_wheel&lt;/code&gt;
 or &lt;code&gt;python setup.py sdist&lt;/code&gt; command.&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-518/jump_pug.webp"
-alt="Jumping pug"&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-518/jump_pug.webp" alt="Jumping pug"
+width="400" height="600"
+loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
 &lt;h3 id="packaging-tool-diversity"&gt;
 packaging tool diversity
@@ -310,8 +316,9 @@ the isolated python environment:&lt;/p&gt;
 &lt;/ol&gt;
 &lt;p&gt;With this, we can start having packaging tools that are no longer bound to the legacy decisions of the &lt;code&gt;distutils&lt;/code&gt; in
 the frontend.&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-518/curious_pug.webp"
-alt="Curious pug"&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-518/curious_pug.webp" alt="Curious pug"
+width="400" height="600"
+loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
 &lt;h1 id="tox-and-packaging"&gt;
 tox and packaging
@@ -336,8 +343,9 @@ manually (it will be turned on by default in version &lt;code&gt;4&lt;/code&gt; 
 distribution (by providing the build dependencies into an isolated python environment as per PEP-518). Afterward will
 call the build backend as stated in PEP-517. Otherwise, tox will use the old way of building source distributions,
 invoking the &lt;code&gt;python setup.py sdist&lt;/code&gt; command with the same interpreter tox is installed into.&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-518/moody_pug.webp"
-alt="Moody pug"&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-518/moody_pug.webp" srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_7bb3882171c71c5e.webp 500w" sizes="(min-width: 35em) 1200px, 100vw" alt="Moody pug"
+width="700" height="467"
+loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
 &lt;h2 id="conclusion"&gt;
 Conclusion
@@ -371,8 +379,9 @@ packages it has. In a subsequent post, I will present in detail how the installa
 PEP-517/518 tries to improve on it. Finally, I dedicate a whole other post to explain some of the painful lessons we
 learned while introducing these improvements. A heads up, I will focus mainly on the Python Packaging Authorities
 systems (&lt;code&gt;pip&lt;/code&gt;, &lt;code&gt;setuptools&lt;/code&gt;, so no &lt;code&gt;conda&lt;/code&gt; or operating system-specific packagers).&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug.webp"
-alt="Sad pug"&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug.webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_563c98b909335f51.webp 500w" sizes="(min-width: 35em) 1200px, 100vw" alt="Sad pug"
+width="700" height="468"
+loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
 &lt;h1 id="an-example-project"&gt;
 An example project
@@ -423,8 +432,9 @@ facto standard packaging tool &lt;a href="https://pypi.org/project/setuptools" c
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pugs&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;pugs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;do_tell&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt;&amp;#34;An enlightened pug knows how to make the best of whatever he has to work with - A Pug&amp;#39;s Guide to Dating - Gemma Correll&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug.webp"
-alt="Enlightened pug"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug.webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_b4e96063ccddd819.webp 500w" sizes="(min-width: 35em) 1200px, 100vw" alt="Enlightened pug"
+width="700" height="468"
+loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
 &lt;h1 id="python-package-availability"&gt;
 Python package availability
@@ -459,8 +469,9 @@ the &lt;code&gt;sys.path&lt;/code&gt; variables content, for example, on my macO
 system-wide and a user-specific instance of this. How do packages end up inside this folder? It must be put there by
 some installer.&lt;/p&gt;
 &lt;p&gt;The following diagram displays how most of the time things go:&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/diagram.webp"
-alt="Python packaging diagram"&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/diagram.webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_14f80b0d0a0ac888.webp 500w" sizes="(min-width: 35em) 1200px, 100vw" alt="Python packaging diagram"
+width="700" height="425"
+loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
 &lt;ol&gt;
 &lt;li&gt;The developer writes some python code inside a folder (referred to as the source tree).&lt;/li&gt;
@@ -471,8 +482,9 @@ alt="Python packaging diagram"&gt;
 installation operation boils down by creating the correct directory structure and metadata inside the &lt;code&gt;site-packages&lt;/code&gt;
 folder.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug.webp"
-alt="Pug discovering something"&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug.webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_cb3f96e67d23f645.webp 500w" sizes="(min-width: 35em) 1200px, 100vw" alt="Pug discovering something"
+width="700" height="554"
+loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
 &lt;h1 id="python-package-types"&gt;
 Python package types
@@ -562,8 +574,9 @@ files) - format: &lt;code&gt;pugs-0.0.1.tar.gz&lt;/code&gt;.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;wheel&lt;/strong&gt; - contains the package metadata and source files to be put into the &lt;code&gt;site-packages&lt;/code&gt; folder - format:
 &lt;code&gt;pugs-0.0.1-py2.py3-none-any.whl&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug.webp"
-alt="Smart pug"&gt;
+&lt;figure&gt;&lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug.webp" srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_3e53a23d800d32da.webp 500w" sizes="(min-width: 35em) 1200px, 100vw" alt="Smart pug"
+width="600" height="614"
+loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
 &lt;p&gt;[Read the next post of the series here](https://bernat.tech/posts/pep-517-518/) to determine what happens when we install a
 package. Thanks for reading!&lt;/p&gt;</description><category>python</category><category>packaging</category><category>pip</category><category>setuptools</category><category>pep517</category><category>pep518</category><category>wheel</category><category>sdist</category></item></channel></rss>
