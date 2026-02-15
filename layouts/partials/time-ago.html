@@ -18,15 +18,15 @@
     {{- $label = printf "%d days ago" $days -}}
   {{- end -}}
 {{- else if lt $days 365 -}}
-  {{- $tenths := div (mul $days 10) 30 -}}
-  {{- $whole := div $tenths 10 -}}
-  {{- $frac := mod $tenths 10 -}}
-  {{- $label = printf "%d.%d months ago" $whole $frac -}}
+  {{- $hundredths := div (mul $days 100) 30 -}}
+  {{- $whole := div $hundredths 100 -}}
+  {{- $frac := mod $hundredths 100 -}}
+  {{- $label = printf "%d.%02d months ago" $whole $frac -}}
 {{- else -}}
-  {{- $tenths := div (mul $days 10) 365 -}}
-  {{- $whole := div $tenths 10 -}}
-  {{- $frac := mod $tenths 10 -}}
-  {{- $label = printf "%d.%d years ago" $whole $frac -}}
+  {{- $hundredths := div (mul $days 100) 365 -}}
+  {{- $whole := div $hundredths 100 -}}
+  {{- $frac := mod $hundredths 100 -}}
+  {{- $label = printf "%d.%02d years ago" $whole $frac -}}
 {{- end -}}
 {{- if lt $days 30 -}}
   {{- $color = "green" -}}
