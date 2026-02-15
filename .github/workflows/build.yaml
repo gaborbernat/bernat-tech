@@ -76,6 +76,6 @@ jobs:
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.TOKEN }}
+          github_token: ${{ secrets.HUGO_GITHUB_TOKEN }}
           publish_dir: ./public
           cname: bernat.tech
