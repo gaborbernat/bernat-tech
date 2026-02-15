@@ -16,6 +16,14 @@
 {{ with $result.Err }}{{ $errors = $errors | append (printf "repo-info: %s" .) }}{{ end }}
 {{ $defaultBranch := or $repoData.default_branch "main" }}
 
+{{ $lastCommitDate := "" }}
+{{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/commits?sha=%s&per_page=1" $org $repo $defaultBranch) $ghOpts) }}
+{{ with $result.Value }}
+  {{ $commits := . | transform.Unmarshal }}
+  {{ with index $commits 0 }}{{ $lastCommitDate = .commit.committer.date }}{{ end }}
+{{ end }}
+{{ with $result.Err }}{{ $errors = $errors | append (printf "commits: %s" .) }}{{ end }}
+
 {{ $releaseData := dict }}
 {{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/releases/latest" $org $repo) $ghOpts) }}
 {{ with $result.Value }}{{ $releaseData = . | transform.Unmarshal }}{{ end }}
@@ -88,7 +96,7 @@
 {{ with $result.Value }}{{ $openPRs = len (. | transform.Unmarshal) }}{{ end }}
 {{ with $result.Err }}{{ $errors = $errors | append (printf "gh-pulls: %s" .) }}{{ end }}
 {{ $openIssues := sub $openTotal $openPRs }}
-{{ $logParts := slice (printf "stars=%d" $stars) (printf "issues=%d prs=%d" $openIssues $openPRs) }}
+{{ $logParts := slice (printf "stars=%d" $stars) (printf "issues=%d prs=%d" $openIssues $openPRs) (printf "last-commit=%s" (or $lastCommitDate "?")) }}
 {{ if $showPypi }}
   {{ $logParts = $logParts | append (printf "pypi-version=%s" (or $pypiVersion "?")) (printf "pypi-downloads=%d" $pypiDownloads) }}
 {{ else if $jetbrainsId }}
@@ -224,7 +232,7 @@
   </td>
     {{- else if eq $col "last-commit" -}}
       {{- $sortVal := 0 -}}
-      {{- with $repoData.pushed_at }}{{ $sortVal = (time .).Unix }}{{ end -}}
+      {{- if $lastCommitDate }}{{ $sortVal = (time $lastCommitDate).Unix }}{{ end -}}
       {{- $days := 0 -}}
       {{- $label := "" -}}
       {{- $color := "gray" -}}
@@ -260,9 +268,9 @@
         {{- end -}}
       {{- end -}}
   <td data-value="{{ $sortVal }}">
-        {{- $isoDate := "" -}}
-        {{- with $repoData.pushed_at }}{{ $isoDate = (time .).Format "2006-01-02T15:04:05Z" }}{{ end -}}
-        <a href="https://github.com/{{ $org }}/{{ $repo }}/commits"><span class="badge badge-{{ $color }} has-tip">{{ $label }}<span class="tip">{{ $isoDate }}</span></span></a>
+        {{- if $lastCommitDate -}}
+        <a href="https://github.com/{{ $org }}/{{ $repo }}/commits"><span class="badge badge-{{ $color }} has-tip">{{ $label }}<span class="tip">{{ $lastCommitDate }}</span></span></a>
+        {{- end -}}
   </td>
     {{- else if eq $col "issues" -}}
   <td data-value="{{ $openTotal }}">
