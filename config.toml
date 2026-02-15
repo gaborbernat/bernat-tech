@@ -1,5 +1,5 @@
 baseURL = "https://bernat.tech"
-title = "Tech articles by Bernát Gábor"
+title = "Bernát Gábor - Engineering & Open Source"
 languageCode = "en"
 defaultContentLanguage = "en"
 enableRobotsTXT = true
@@ -17,9 +17,7 @@ author = "Bernát Gábor"
 description = "Bernát Gábor's personal website"
 keywords = "blog,developer,personal,python,packaging"
 info = [
-    "Bloomberg",
-    "Python open-source",
-    "software engineer",
+    "Bloomberg · Open Source · Software Engineering",
 ]
 avatarurl = "img/avatar.jpg"
 dateFormat = "2006-01-01"
