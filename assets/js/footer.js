@@ -6,8 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var p = function (n) {
     return n < 10 ? "0" + n : n;
   };
-  var ms = d.getMilliseconds();
-  var s =
+  el.textContent =
     d.getFullYear() +
     "-" +
     p(d.getMonth() + 1) +
@@ -18,10 +17,5 @@ document.addEventListener("DOMContentLoaded", function () {
     ":" +
     p(d.getMinutes()) +
     ":" +
-    p(d.getSeconds()) +
-    "." +
-    (ms < 100 ? (ms < 10 ? "00" : "0") : "") +
-    ms;
-  var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  el.textContent = s + "\u00a0" + tz;
+    p(d.getSeconds());
 });
