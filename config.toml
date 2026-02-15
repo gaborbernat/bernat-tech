@@ -108,13 +108,13 @@ url = "posts"
 weight = 1
 
 [[menu.main]]
-name = "About"
-url = "about"
+name = "Presentations"
+url = "presentations"
 weight = 2
 
 [[menu.main]]
-name = "Presentations"
-url = "presentations"
+name = "About"
+url = "about"
 weight = 3
 
 [[menu.main]]
