@@ -166,7 +166,7 @@ filename = "sitemap.xml"
 priority = 0.5
 
 [imaging]
-quality = 95
+quality = 100
 resampleFilter = "Lanczos"
 hint = "photo"
 

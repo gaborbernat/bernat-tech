@@ -22,9 +22,9 @@
     {{- $webpSet := slice -}}
     {{- range $w := $widths -}}
       {{- if ge $img.Width (string $w) -}}
-        {{- $avif := $img.Resize (printf "%dx avif" $w) -}}
+        {{- $avif := $img.Resize (printf "%dx avif q100" $w) -}}
         {{- $avifSet = $avifSet | append (printf "%s %dw" $avif.RelPermalink $w) -}}
-        {{- $webp := $img.Resize (printf "%dx webp" $w) -}}
+        {{- $webp := $img.Resize (printf "%dx webp q100" $w) -}}
         {{- $webpSet = $webpSet | append (printf "%s %dw" $webp.RelPermalink $w) -}}
       {{- end -}}
     {{- end -}}
