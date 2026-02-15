@@ -18,27 +18,23 @@
   {{- if $img -}}
     {{- $sizes := "(min-width: 35em) 1200px, 100vw" -}}
     {{- $widths := slice 500 800 1200 -}}
-    {{- $avifSet := slice -}}
     {{- $webpSet := slice -}}
     {{- range $w := $widths -}}
       {{- if ge $img.Width (string $w) -}}
-        {{- $avif := $img.Resize (printf "%dx avif q100" $w) -}}
-        {{- $avifSet = $avifSet | append (printf "%s %dw" $avif.RelPermalink $w) -}}
         {{- $webp := $img.Resize (printf "%dx webp q100" $w) -}}
         {{- $webpSet = $webpSet | append (printf "%s %dw" $webp.RelPermalink $w) -}}
       {{- end -}}
     {{- end -}}
-    <picture>
-      {{- if len $avifSet }}
-      <source type="image/avif" srcset="{{ delimit $avifSet ", " }}" sizes="{{ $sizes }}">
-      {{- end }}
-      {{- if len $webpSet }}
-      <source type="image/webp" srcset="{{ delimit $webpSet ", " }}" sizes="{{ $sizes }}">
-      {{- end }}
-      <img src="{{ $src }}" alt="{{ $alt }}"
-        width="{{ $img.Width }}" height="{{ $img.Height }}"
-        loading="lazy" decoding="async">
-    </picture>
+    {{- if len $webpSet }}
+    <img src="{{ $src }}" alt="{{ $alt }}"
+      srcset="{{ delimit $webpSet ", " }}" sizes="{{ $sizes }}"
+      width="{{ $img.Width }}" height="{{ $img.Height }}"
+      loading="lazy" decoding="async">
+    {{- else }}
+    <img src="{{ $src }}" alt="{{ $alt }}"
+      width="{{ $img.Width }}" height="{{ $img.Height }}"
+      loading="lazy" decoding="async">
+    {{- end }}
   {{- else -}}
     <img src="{{ $src }}" alt="{{ $alt }}"
       {{- with .Get "width" }} width="{{ . }}"{{ end }}
