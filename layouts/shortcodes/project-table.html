@@ -7,7 +7,7 @@
   {{- else if eq $col "release" -}}{{ $headerRow = $headerRow | append `<th data-sort="date">Release</th>` }}
   {{- else if eq $col "last-commit" -}}{{ $headerRow = $headerRow | append `<th data-sort="date">Last Commit</th>` }}
   {{- else if eq $col "ci" -}}{{ $headerRow = $headerRow | append `<th>CI</th>` }}
-  {{- else if eq $col "issues" -}}{{ $headerRow = $headerRow | append `<th data-sort="issues">Issues/PRs</th>` }}
+  {{- else if eq $col "issues" -}}{{ $headerRow = $headerRow | append `<th data-sort="issues" title="Issues/Pull Requests">I/P</th>` }}
   {{- else if eq $col "stars" -}}{{ $headerRow = $headerRow | append `<th data-sort="stars">Stars</th>` }}
   {{- end -}}
 {{- end -}}
