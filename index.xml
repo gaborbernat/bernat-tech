@@ -34,12 +34,10 @@ how you can use it, and what&amp;rsquo;s next for type hints.&lt;/p&gt;</descrip
  &lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
  &lt;/a&gt;
 &lt;/h2&gt;
-&lt;p class="social-badges"&gt;&lt;a href="https://github.com/sponsors/gaborbernat" aria-label="Sponsor"
- &gt;&lt;i class="fa fa-heart fa-2x"&gt;&lt;/i&gt; Sponsor&lt;/a
- &gt;&lt;a href="https://github.com/gaborbernat/" aria-label="Github"
- &gt;&lt;i class="fa fa-github fa-2x"&gt;&lt;/i&gt; Github&lt;/a
- &gt;&lt;a href="https://www.twitch.tv/gaborbernat" aria-label="Twitch"
- &gt;&lt;i class="fa fa-twitch fa-2x"&gt;&lt;/i&gt; Twitch&lt;/a
+&lt;p class="social-badges"&gt;&lt;a href="https://github.com/gaborbernat/" aria-label="GitHub"
+ &gt;&lt;i class="fa fa-github fa-2x"&gt;&lt;/i&gt; GitHub&lt;/a
+ &gt;&lt;a href="https://github.com/sponsors/gaborbernat" aria-label="GitHub Sponsor"
+ &gt;&lt;i class="fa fa-heart fa-2x"&gt;&lt;/i&gt; GitHub Sponsor&lt;/a
  &gt;&lt;a href="https://twitter.com/gjbernat/" aria-label="Twitter"
  &gt;&lt;i class="fa fa-twitter fa-2x"&gt;&lt;/i&gt; Twitter&lt;/a
  &gt;&lt;a href="https://bsky.app/profile/gjbernat.bsky.social" aria-label="Bluesky"
@@ -48,10 +46,12 @@ how you can use it, and what&amp;rsquo;s next for type hints.&lt;/p&gt;</descrip
  &gt;&lt;i class="fa-brands fa-mastodon fa-2x"&gt;&lt;/i&gt; Mastodon&lt;/a
  &gt;&lt;a href="https://pypi.org/user/gaborbernat/" aria-label="PyPI"
  &gt;&lt;i class="fa-brands fa-python fa-2x"&gt;&lt;/i&gt; PyPI&lt;/a
- &gt;&lt;a href="https://www.linkedin.com/in/gaborbernat/" aria-label="LinkedIn"
- &gt;&lt;i class="fa fa-linkedin fa-2x"&gt;&lt;/i&gt; LinkedIn&lt;/a
- &gt;&lt;a href="mailto:gaborjbernat@gmail.com" aria-label="GMail"
- &gt;&lt;i class="fa fa-envelope fa-2x"&gt;&lt;/i&gt; GMail&lt;/a
+ &gt;&lt;a href="https://www.linkedin.com/in/gaborbernat/" aria-label="Linkedin"
+ &gt;&lt;i class="fa fa-linkedin fa-2x"&gt;&lt;/i&gt; Linkedin&lt;/a
+ &gt;&lt;a href="mailto:gaborjbernat@gmail.com" aria-label="Google Mail"
+ &gt;&lt;i class="fa fa-envelope fa-2x"&gt;&lt;/i&gt; Google Mail&lt;/a
+ &gt;&lt;a href="https://www.twitch.tv/gaborbernat" aria-label="Twitch"
+ &gt;&lt;i class="fa fa-twitch fa-2x"&gt;&lt;/i&gt; Twitch&lt;/a
  &gt;&lt;a href="https://instagram.com/gabor_bernat" aria-label="Instagram"
  &gt;&lt;i class="fa fa-instagram fa-2x"&gt;&lt;/i&gt; Instagram&lt;/a
  &gt;&lt;/p&gt;</description></item><item><title>Presentations by Bernát Gábor</title><link>https://bernat.tech/presentations/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://bernat.tech/presentations/</guid><description>&lt;p&gt;I&amp;rsquo;m a regular speaker at (Python) conferences. Here you&amp;rsquo;ll find a list of my recorded presentations.&lt;/p&gt;
