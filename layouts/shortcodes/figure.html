@@ -11,24 +11,36 @@
       {{- $src = .RelPermalink -}}
     {{- end -}}
   {{- end -}}
+  {{- $alt := "" -}}
+  {{- if or (.Get "alt") (.Get "caption") -}}
+    {{- with .Get "alt" }}{{ $alt = . }}{{ else }}{{ $alt = (.Get "caption" | markdownify | plainify) }}{{ end -}}
+  {{- end -}}
   {{- if $img -}}
     {{- $sizes := "(min-width: 35em) 1200px, 100vw" -}}
     {{- $widths := slice 500 800 1200 -}}
-    {{- $srcset := slice -}}
+    {{- $avifSet := slice -}}
+    {{- $webpSet := slice -}}
     {{- range $w := $widths -}}
       {{- if ge $img.Width (string $w) -}}
-        {{- $resized := $img.Resize (printf "%dx" $w) -}}
-        {{- $srcset = $srcset | append (printf "%s %dw" $resized.RelPermalink $w) -}}
+        {{- $avif := $img.Resize (printf "%dx avif" $w) -}}
+        {{- $avifSet = $avifSet | append (printf "%s %dw" $avif.RelPermalink $w) -}}
+        {{- $webp := $img.Resize (printf "%dx webp" $w) -}}
+        {{- $webpSet = $webpSet | append (printf "%s %dw" $webp.RelPermalink $w) -}}
       {{- end -}}
     {{- end -}}
-    <img src="{{ $src }}"
-      {{- if len $srcset }} srcset="{{ delimit $srcset ", " }}" sizes="{{ $sizes }}"{{ end }}
-      {{- if or (.Get "alt") (.Get "caption") }} alt="{{ with .Get "alt" }}{{ . }}{{ else }}{{ .Get "caption" | markdownify | plainify }}{{ end }}"{{ end }}
-      width="{{ $img.Width }}" height="{{ $img.Height }}"
-      loading="lazy" decoding="async">
+    <picture>
+      {{- if len $avifSet }}
+      <source type="image/avif" srcset="{{ delimit $avifSet ", " }}" sizes="{{ $sizes }}">
+      {{- end }}
+      {{- if len $webpSet }}
+      <source type="image/webp" srcset="{{ delimit $webpSet ", " }}" sizes="{{ $sizes }}">
+      {{- end }}
+      <img src="{{ $src }}" alt="{{ $alt }}"
+        width="{{ $img.Width }}" height="{{ $img.Height }}"
+        loading="lazy" decoding="async">
+    </picture>
   {{- else -}}
-    <img src="{{ $src }}"
-      {{- if or (.Get "alt") (.Get "caption") }} alt="{{ with .Get "alt" }}{{ . }}{{ else }}{{ .Get "caption" | markdownify | plainify }}{{ end }}"{{ end }}
+    <img src="{{ $src }}" alt="{{ $alt }}"
       {{- with .Get "width" }} width="{{ . }}"{{ end }}
       {{- with .Get "height" }} height="{{ . }}"{{ end }}
       loading="lazy" decoding="async">

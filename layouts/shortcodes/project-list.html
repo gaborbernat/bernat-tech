@@ -34,7 +34,7 @@
         "jetbrains_id" .jetbrains_id
         "jetbrains_slug" .jetbrains_slug
       }}
-      {{ partial "project-row.html" (dict "project" $p "cols" $cols) }}
+      {{ partialCached "project-row.html" (dict "project" $p "cols" $cols) .org .name (delimit $cols ",") }}
     {{- end -}}
   </tbody>
   {{- if eq ($.Get "footer") "true" }}

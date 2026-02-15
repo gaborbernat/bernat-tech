@@ -13,4 +13,4 @@
   "jetbrains_slug" (.Get "jetbrains-slug")
 }}
 {{ $cols := split (or (.Parent.Get "cols") "downloads,version,release,last-commit,issues,stars,ci") "," }}
-{{ partial "project-row.html" (dict "project" $project "cols" $cols) }}
+{{ partialCached "project-row.html" (dict "project" $project "cols" $cols) (.Get "org") (.Get "name") (delimit $cols ",") }}

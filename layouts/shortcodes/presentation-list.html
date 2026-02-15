@@ -5,8 +5,23 @@
     {{- $years = $years | append .year -}}
   {{- end -}}
 {{- end -}}
+<nav class="toc">
+  <ul>
+    {{- range $year := $years }}
+    <li><a href="#year-{{ $year }}">{{ $year }}</a>
+      <ul>
+        {{- range $presentations -}}
+          {{- if eq .year $year }}
+        <li><a href="#{{ .id }}">{{ .title }}{{ with .type }} ({{ . }}){{ end }} - {{ .event }}</a></li>
+          {{- end -}}
+        {{- end }}
+      </ul>
+    </li>
+    {{- end }}
+  </ul>
+</nav>
 {{- range $year := $years }}
-<h2>{{ $year }}</h2>
+<h2 id="year-{{ $year }}">{{ $year }}</h2>
 {{- range $presentations -}}
   {{- if eq .year $year }}
 <h3 id="{{ .id }}">
@@ -26,4 +41,4 @@
 {{- end -}}
 {{- end }}
 {{ $js := resources.Get "js/youtube-lazy.js" | minify | fingerprint }}
-<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
+<script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>

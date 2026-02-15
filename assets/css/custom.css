@@ -268,3 +268,39 @@ body.colorscheme-dark table.project-table img {
   height: 100%;
   border: 0;
 }
+.alert {
+  border-left: 4px solid;
+  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+}
+.alert p:last-child {
+  margin-bottom: 0;
+}
+.alert-title {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+.alert-title i {
+  margin-right: 0.4em;
+}
+.alert-info {
+  border-color: #4493f8;
+  background: rgba(68, 147, 248, 0.1);
+}
+.alert-success {
+  border-color: #3fb950;
+  background: rgba(63, 185, 80, 0.1);
+}
+.alert-important {
+  border-color: #a371f7;
+  background: rgba(163, 113, 247, 0.1);
+}
+.alert-warning {
+  border-color: #d29922;
+  background: rgba(210, 153, 34, 0.1);
+}
+.alert-danger {
+  border-color: #f85149;
+  background: rgba(248, 81, 73, 0.1);
+}
