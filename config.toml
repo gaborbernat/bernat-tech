@@ -165,6 +165,14 @@ changefreq = "weekly"
 filename = "sitemap.xml"
 priority = 0.5
 
+[imaging]
+quality = 95
+resampleFilter = "Lanczos"
+hint = "photo"
+
+[imaging.exif]
+includeFields = ""
+
 [module]
 [[module.imports]]
 path = "github.com/luizdepra/hugo-coder"
