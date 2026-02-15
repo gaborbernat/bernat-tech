@@ -1,0 +1,38 @@
+{{- $seconds := .seconds -}}
+{{- $label := "" -}}
+{{- $color := "gray" -}}
+{{- $days := div $seconds 86400 -}}
+{{- $hours := div $seconds 3600 -}}
+{{- if lt $hours 24 -}}
+  {{- if eq $hours 0 -}}
+    {{- $label = "just now" -}}
+  {{- else if eq $hours 1 -}}
+    {{- $label = "1 hour ago" -}}
+  {{- else -}}
+    {{- $label = printf "%d hours ago" $hours -}}
+  {{- end -}}
+{{- else if lt $days 30 -}}
+  {{- if eq $days 1 -}}
+    {{- $label = "1 day ago" -}}
+  {{- else -}}
+    {{- $label = printf "%d days ago" $days -}}
+  {{- end -}}
+{{- else if lt $days 365 -}}
+  {{- $tenths := div (mul $days 10) 30 -}}
+  {{- $whole := div $tenths 10 -}}
+  {{- $frac := mod $tenths 10 -}}
+  {{- $label = printf "%d.%d months ago" $whole $frac -}}
+{{- else -}}
+  {{- $tenths := div (mul $days 10) 365 -}}
+  {{- $whole := div $tenths 10 -}}
+  {{- $frac := mod $tenths 10 -}}
+  {{- $label = printf "%d.%d years ago" $whole $frac -}}
+{{- end -}}
+{{- if lt $days 30 -}}
+  {{- $color = "green" -}}
+{{- else if le $days 180 -}}
+  {{- $color = "yellow" -}}
+{{- else -}}
+  {{- $color = "red" -}}
+{{- end -}}
+{{- return dict "label" $label "color" $color -}}

@@ -189,87 +189,27 @@
       {{- if not $noRelease -}}
         {{- with $releaseData.published_at }}{{ $sortVal = (time .).Unix }}{{ end -}}
       {{- end -}}
-      {{- $days := 0 -}}
-      {{- $label := "" -}}
-      {{- $color := "gray" -}}
+      {{- $ago := dict "label" "" "color" "gray" -}}
       {{- if gt $sortVal 0 -}}
-        {{- $days = div (sub $nowUnix $sortVal) 86400 -}}
-        {{- if eq $days 0 -}}
-          {{- $label = "today" -}}
-        {{- else if eq $days 1 -}}
-          {{- $label = "yesterday" -}}
-        {{- else if lt $days 30 -}}
-          {{- $label = printf "%d days ago" $days -}}
-        {{- else if lt $days 365 -}}
-          {{- $months := div $days 30 -}}
-          {{- if eq $months 1 -}}
-            {{- $label = "1 month ago" -}}
-          {{- else -}}
-            {{- $label = printf "%d months ago" $months -}}
-          {{- end -}}
-        {{- else -}}
-          {{- $years := div $days 365 -}}
-          {{- if eq $years 1 -}}
-            {{- $label = "1 year ago" -}}
-          {{- else -}}
-            {{- $label = printf "%d years ago" $years -}}
-          {{- end -}}
-        {{- end -}}
-        {{- if lt $days 30 -}}
-          {{- $color = "green" -}}
-        {{- else if le $days 180 -}}
-          {{- $color = "yellow" -}}
-        {{- else -}}
-          {{- $color = "red" -}}
-        {{- end -}}
+        {{- $ago = partial "time-ago.html" (dict "seconds" (sub $nowUnix $sortVal)) -}}
       {{- end -}}
   <td data-value="{{ $sortVal }}">
-      {{- if $label -}}
+      {{- if $ago.label -}}
         {{- $isoDate := "" -}}
         {{- with $releaseData.published_at }}{{ $isoDate = (time .).Format "2006-01-02T15:04:05Z" }}{{ end -}}
-        <a href="https://github.com/{{ $org }}/{{ $repo }}/releases"><span class="badge badge-{{ $color }} has-tip">{{ $label }}<span class="tip">{{ $isoDate }}</span></span></a>
+        <a href="https://github.com/{{ $org }}/{{ $repo }}/releases"><span class="badge badge-{{ $ago.color }} has-tip">{{ $ago.label }}<span class="tip">{{ $isoDate }}</span></span></a>
       {{- end -}}
   </td>
     {{- else if eq $col "last-commit" -}}
       {{- $sortVal := 0 -}}
       {{- if $lastCommitDate }}{{ $sortVal = (time $lastCommitDate).Unix }}{{ end -}}
-      {{- $days := 0 -}}
-      {{- $label := "" -}}
-      {{- $color := "gray" -}}
+      {{- $ago := dict "label" "" "color" "gray" -}}
       {{- if gt $sortVal 0 -}}
-        {{- $days = div (sub $nowUnix $sortVal) 86400 -}}
-        {{- if eq $days 0 -}}
-          {{- $label = "today" -}}
-        {{- else if eq $days 1 -}}
-          {{- $label = "yesterday" -}}
-        {{- else if lt $days 30 -}}
-          {{- $label = printf "%d days ago" $days -}}
-        {{- else if lt $days 365 -}}
-          {{- $months := div $days 30 -}}
-          {{- if eq $months 1 -}}
-            {{- $label = "1 month ago" -}}
-          {{- else -}}
-            {{- $label = printf "%d months ago" $months -}}
-          {{- end -}}
-        {{- else -}}
-          {{- $years := div $days 365 -}}
-          {{- if eq $years 1 -}}
-            {{- $label = "1 year ago" -}}
-          {{- else -}}
-            {{- $label = printf "%d years ago" $years -}}
-          {{- end -}}
-        {{- end -}}
-        {{- if lt $days 30 -}}
-          {{- $color = "green" -}}
-        {{- else if le $days 180 -}}
-          {{- $color = "yellow" -}}
-        {{- else -}}
-          {{- $color = "red" -}}
-        {{- end -}}
+        {{- $ago = partial "time-ago.html" (dict "seconds" (sub $nowUnix $sortVal)) -}}
       {{- end -}}
   <td data-value="{{ $sortVal }}">
         {{- if $lastCommitDate -}}
-        <a href="https://github.com/{{ $org }}/{{ $repo }}/commits"><span class="badge badge-{{ $color }} has-tip">{{ $label }}<span class="tip">{{ $lastCommitDate }}</span></span></a>
+        <a href="https://github.com/{{ $org }}/{{ $repo }}/commits"><span class="badge badge-{{ $ago.color }} has-tip">{{ $ago.label }}<span class="tip">{{ $lastCommitDate }}</span></span></a>
         {{- end -}}
   </td>
     {{- else if eq $col "issues" -}}
