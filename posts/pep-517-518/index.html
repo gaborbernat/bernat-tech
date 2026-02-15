@@ -34,7 +34,7 @@ prevalent that most python installations started to provide it together with the
 <em>distutils</em> was created back when only a few highly proficient people did the packaging. It is very flexible and
 imperative; you write a python script to modify every step in the package generation process.</p><p>The downside of this, though, is that it&rsquo;s anything but easy to learn and understand. This started to become more and
 more an issue as Python grew in popularity and we had more and more users who were less proficient in the inner workings
-of Python.</p><figure><picture><img src=/posts/pep-517-518/smart_pug.webp alt="Smart pug" width=400 height=600 loading=lazy decoding=async></picture></figure><h3 id=build-requirements>build requirements
+of Python.</p><figure><img src=/posts/pep-517-518/smart_pug.webp alt="Smart pug" width=400 height=600 loading=lazy decoding=async></figure><h3 id=build-requirements>build requirements
 <a class=heading-link href=#build-requirements><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h3><p>For installing a source distribution pip mostly <strong>did</strong> the following:</p><ol><li>discover the package</li><li>download the source distribution and extract it</li><li>run <code>python setup.py install</code> on the extracted folder (does a build + install).</li></ol><p>Developers did <code>python setup.py sdist</code> to generate the distribution and <code>python setup.py upload</code> to upload it to a
 central repository (the upload command has been deprecated with 2013 in favor of the
@@ -65,7 +65,7 @@ environment. The file and method of specifying the build dependencies is the <co
 the packaging and these can be quickly provisioned via pip transparently on the user machines.</p><p>The same mechanism can also be used when generating the source distribution or the wheel on the developers&rsquo; machine.
 When one invokes the <code>pip wheel . --no-deps</code> command that will automatically create in the background an isolated python
 that satisfies the build systems dependencies, and then call inside that environment the <code>python setup.py bdist_wheel</code>
-or <code>python setup.py sdist</code> command.</p><figure><picture><img src=/posts/pep-517-518/jump_pug.webp alt="Jumping pug" width=400 height=600 loading=lazy decoding=async></picture></figure><h3 id=packaging-tool-diversity>packaging tool diversity
+or <code>python setup.py sdist</code> command.</p><figure><img src=/posts/pep-517-518/jump_pug.webp alt="Jumping pug" width=400 height=600 loading=lazy decoding=async></figure><h3 id=packaging-tool-diversity>packaging tool diversity
 <a class=heading-link href=#packaging-tool-diversity><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h3><p>Now there&rsquo;s one more problem here, though. Note all these operations still go through the mechanism introduced twenty
 years ago, aka executing <code>setup.py</code>. The whole ecosystem still builds on the top of the <em>distutils</em> and <em>setuptools</em>
@@ -107,7 +107,7 @@ the isolated python environment:</p><div class=highlight><pre tabindex=0 class=c
 </span></span><span class=line><span class=cl><span class=n>backend</span><span class=o>.</span><span class=n>build_sdist</span><span class=p>()</span>
 </span></span></code></pre></div><p>It&rsquo;s up to the backend where and how they want to expose their official API:</p><ol><li><a href=https://flit.readthedocs.io/en/latest/ class=external-link target=_blank rel=noopener>flit</a> does it via <code>flit.buildapi</code></li><li><a href=https://setuptools.readthedocs.io/en/latest/history.html#v40-8-0 class=external-link target=_blank rel=noopener>setuptools</a> provides two variants:
 <code>setuptools.build_meta</code> (on why read on later)</li><li><a href=https://poetry.eustace.io/docs/pyproject/#poetry-and-pep-517 class=external-link target=_blank rel=noopener>poetry</a> does it via <code>poetry.masonry.api</code></li></ol><p>With this, we can start having packaging tools that are no longer bound to the legacy decisions of the <code>distutils</code> in
-the frontend.</p><figure><picture><img src=/posts/pep-517-518/curious_pug.webp alt="Curious pug" width=400 height=600 loading=lazy decoding=async></picture></figure><h1 id=tox-and-packaging>tox and packaging
+the frontend.</p><figure><img src=/posts/pep-517-518/curious_pug.webp alt="Curious pug" width=400 height=600 loading=lazy decoding=async></figure><h1 id=tox-and-packaging>tox and packaging
 <a class=heading-link href=#tox-and-packaging><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p><a href=https://tox.readthedocs.io/en/latest/ class=external-link target=_blank rel=noopener>tox is testing tool</a> and used by most projects to ensure compatibility against
 multiple Python interpreter versions of a given package. It also allows the quick creation of Python environments with
@@ -121,7 +121,7 @@ manually (it will be turned on by default in version <code>4</code> sometime lat
 </span></span></code></pre></div><p>After this, tox in the <a href=https://tox.readthedocs.io/en/latest/#system-overview class=external-link target=_blank rel=noopener>packaging phase</a> will build the source
 distribution (by providing the build dependencies into an isolated python environment as per PEP-518). Afterward will
 call the build backend as stated in PEP-517. Otherwise, tox will use the old way of building source distributions,
-invoking the <code>python setup.py sdist</code> command with the same interpreter tox is installed into.</p><figure><picture><source type=image/avif srcset="/posts/pep-517-518/moody_pug_hu_12215429623f9b66.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"><source type=image/webp srcset="/posts/pep-517-518/moody_pug_hu_94a4de09c68b721d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"><img src=/posts/pep-517-518/moody_pug.webp alt="Moody pug" width=700 height=467 loading=lazy decoding=async></picture></figure><h2 id=conclusion>Conclusion
+invoking the <code>python setup.py sdist</code> command with the same interpreter tox is installed into.</p><figure><img src=/posts/pep-517-518/moody_pug.webp alt="Moody pug" srcset="/posts/pep-517-518/moody_pug_hu_94a4de09c68b721d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw" width=700 height=467 loading=lazy decoding=async></figure><h2 id=conclusion>Conclusion
 <a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h2><p>The Python Packaging Authority hopes that all this makes sense and will have more user-friendly, error-proof and stable
 builds. The specifications for these standards were written up and debated in long threads between 2015 and 2017. The

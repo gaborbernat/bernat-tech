@@ -27,11 +27,10 @@ imperative; you write a python script to modify every step in the package genera
 &lt;p&gt;The downside of this, though, is that it&amp;rsquo;s anything but easy to learn and understand. This started to become more and
 more an issue as Python grew in popularity and we had more and more users who were less proficient in the inner workings
 of Python.&lt;/p&gt;
-&lt;figure&gt;&lt;picture&gt;
+&lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-518/smart_pug.webp" alt="Smart pug"
 width="400" height="600"
 loading="lazy" decoding="async"&gt;
-&lt;/picture&gt;
 &lt;/figure&gt;
 &lt;h3 id="build-requirements"&gt;
 build requirements
@@ -92,11 +91,10 @@ the packaging and these can be quickly provisioned via pip transparently on the 
 When one invokes the &lt;code&gt;pip wheel . --no-deps&lt;/code&gt; command that will automatically create in the background an isolated python
 that satisfies the build systems dependencies, and then call inside that environment the &lt;code&gt;python setup.py bdist_wheel&lt;/code&gt;
 or &lt;code&gt;python setup.py sdist&lt;/code&gt; command.&lt;/p&gt;
-&lt;figure&gt;&lt;picture&gt;
+&lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-518/jump_pug.webp" alt="Jumping pug"
 width="400" height="600"
 loading="lazy" decoding="async"&gt;
-&lt;/picture&gt;
 &lt;/figure&gt;
 &lt;h3 id="packaging-tool-diversity"&gt;
 packaging tool diversity
@@ -163,11 +161,10 @@ the isolated python environment:&lt;/p&gt;
 &lt;/ol&gt;
 &lt;p&gt;With this, we can start having packaging tools that are no longer bound to the legacy decisions of the &lt;code&gt;distutils&lt;/code&gt; in
 the frontend.&lt;/p&gt;
-&lt;figure&gt;&lt;picture&gt;
+&lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-518/curious_pug.webp" alt="Curious pug"
 width="400" height="600"
 loading="lazy" decoding="async"&gt;
-&lt;/picture&gt;
 &lt;/figure&gt;
 &lt;h1 id="tox-and-packaging"&gt;
 tox and packaging
@@ -192,13 +189,11 @@ manually (it will be turned on by default in version &lt;code&gt;4&lt;/code&gt; 
 distribution (by providing the build dependencies into an isolated python environment as per PEP-518). Afterward will
 call the build backend as stated in PEP-517. Otherwise, tox will use the old way of building source distributions,
 invoking the &lt;code&gt;python setup.py sdist&lt;/code&gt; command with the same interpreter tox is installed into.&lt;/p&gt;
-&lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_12215429623f9b66.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_94a4de09c68b721d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-518/moody_pug.webp" alt="Moody pug"
+srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_94a4de09c68b721d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="467"
 loading="lazy" decoding="async"&gt;
-&lt;/picture&gt;
 &lt;/figure&gt;
 &lt;h2 id="conclusion"&gt;
 Conclusion

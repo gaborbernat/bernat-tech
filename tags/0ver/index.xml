@@ -19,13 +19,11 @@ a version number.&lt;/p&gt;
 &lt;p&gt;For those who read my articles, you&amp;rsquo;ll know I like to sprinkle my otherwise technically dry posts with some lovely and
 cute animal photos to give you at least some moments of relief while you&amp;rsquo;re going through it. In this one, I&amp;rsquo;ll use
 pictures from my Yorkshire Terrier puppy, Silky. Without further ado (#ToT!!!)&lt;/p&gt;
-&lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_tot_hu_8cd119c7b9567fc4.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_tot_hu_6e45e4b1848882c8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_tot.webp" alt="Silky the Yorkshire Terrier puppy"
+srcset="https://bernat.tech/posts/version-numbers/silky_tot_hu_6e45e4b1848882c8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="417"
 loading="lazy" decoding="async"&gt;
-&lt;/picture&gt;
 &lt;/figure&gt;
 &lt;h2 id="semantic-and-zerover"&gt;
 Semantic and ZeroVer
@@ -65,13 +63,11 @@ protects you from pulling in versions whose API would not match.&lt;/li&gt;
 Initially, in some &lt;a href="https://twitter.com/llanga/status/1253962015846121472" class="external-link" target="_blank" rel="noopener"&gt;tweets&lt;/a&gt;, and then in more detail within a
 talk held at a &lt;a href="https://remote.python.pizza/" class="external-link" target="_blank" rel="noopener"&gt;Remote Python Pizza&lt;/a&gt; conference. Looking back at my experience with this,
 I tend to agree.&lt;/p&gt;
-&lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_sit_hu_1a2ab607e2cf2454.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_sit_hu_cb6cdaf5b409b8ed.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_sit.webp" alt="Silky sitting"
+srcset="https://bernat.tech/posts/version-numbers/silky_sit_hu_cb6cdaf5b409b8ed.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="696"
 loading="lazy" decoding="async"&gt;
-&lt;/picture&gt;
 &lt;/figure&gt;
 &lt;h2 id="whats-the-problem-with-semantic-versioning"&gt;
 What&amp;rsquo;s the problem with semantic versioning?
@@ -106,13 +102,11 @@ abandoned:&lt;/p&gt;
 &lt;/ul&gt;
 &lt;p&gt;You get the idea. Unless you&amp;rsquo;re thrilled with your current version, to pull in any change you will need to move to the
 last released version (be that security improvement, bugfix, or feature). Otherwise, you&amp;rsquo;ll not get it.&lt;/p&gt;
-&lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_wind_hu_2490db7ccc46bd92.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_wind_hu_43cf71b72b7fc0f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_wind.webp" alt="Silky in the wind"
+srcset="https://bernat.tech/posts/version-numbers/silky_wind_hu_43cf71b72b7fc0f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="557"
 loading="lazy" decoding="async"&gt;
-&lt;/picture&gt;
 &lt;/figure&gt;
 &lt;h3 id="will-a-major-version-bump-always-break-you"&gt;
 Will a major version bump always break you?
@@ -147,13 +141,11 @@ to the next version by pinning again via something like &lt;code&gt;tox&amp;gt;=
 their code, and you might not have the time to do this for every one of your projects.&lt;/p&gt;
 &lt;p&gt;In my experience, this happens a lot. A lot more at least than when a major version bump breaks you. And then there&amp;rsquo;s
 another aspect version pinning will introduce: version conflicts.&lt;/p&gt;
-&lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_tot_2_hu_7ab2628cc225f391.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_tot_2_hu_1bba1ed33e0c5f29.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_tot_2.webp" alt="Silky the puppy running"
+srcset="https://bernat.tech/posts/version-numbers/silky_tot_2_hu_1bba1ed33e0c5f29.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="648"
 loading="lazy" decoding="async"&gt;
-&lt;/picture&gt;
 &lt;/figure&gt;
 &lt;h3 id="version-conflicts"&gt;
 Version conflicts
@@ -193,13 +185,11 @@ change at all, as just a small part of their public API changed.&lt;/p&gt;
 &lt;p&gt;A mildly complex application will easily have close to (or possibly more than) 100 dependencies, so such issues in my
 experience start to appear every few months. You need only 5-6 of such cases for every 100 libraries for this issue to
 pop up every two months on your plate. And potentially for a multiple of your applications.&lt;/p&gt;
-&lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_yes_hu_aa09bb5a01c01ef8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_yes_hu_36054eb81236b06.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_yes.webp" alt="Silky looking up"
+srcset="https://bernat.tech/posts/version-numbers/silky_yes_hu_36054eb81236b06.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="665"
 loading="lazy" decoding="async"&gt;
-&lt;/picture&gt;
 &lt;/figure&gt;
 &lt;h2 id="calendar-versioning"&gt;
 Calendar Versioning
@@ -219,13 +209,11 @@ makes it easy to use in all places where semantic versioning can be used.&lt;/p&
 indicate the release date to signify just how old of a version you&amp;rsquo;re using. You also have the added benefit that you
 can make calendar-based promises. For example, Ubuntu offers five years of support, therefore given version &lt;code&gt;20.04&lt;/code&gt; you
 can quickly determine that it will be supported up to April 2025.&lt;/p&gt;
-&lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_jump_hu_16690993dffbdff9.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_jump_hu_fb582372e2c4a68f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_jump.webp" alt="Silky jumping"
+srcset="https://bernat.tech/posts/version-numbers/silky_jump_hu_fb582372e2c4a68f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="734"
 loading="lazy" decoding="async"&gt;
-&lt;/picture&gt;
 &lt;/figure&gt;
 &lt;h2 id="a-better-way-to-handle-api-evolution"&gt;
 A better way to handle API evolution?
@@ -262,13 +250,11 @@ constraints&lt;/strong&gt;. If the CI fails, I don&amp;rsquo;t merge it; rather 
 Lessons from the trenches suggest that &lt;strong&gt;the only way to ensure an upgrade of any magnitude does not break you is to
 have a comprehensive test suite.&lt;/strong&gt; Ideally, your test framework can collect and report whenever and where your code is
 calling deprecated functions (&lt;a href="https://docs.pytest.org/en/latest/warnings.html#warnings-capture" class="external-link" target="_blank" rel="noopener"&gt;for example pytest&lt;/a&gt;).&lt;/p&gt;
-&lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_wise_hu_5bde3f26931a68db.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_wise_hu_c068afdb0fef36bf.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_wise.webp" alt="Silky looking wise"
+srcset="https://bernat.tech/posts/version-numbers/silky_wise_hu_c068afdb0fef36bf.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="696"
 loading="lazy" decoding="async"&gt;
-&lt;/picture&gt;
 &lt;/figure&gt;
 &lt;h2 id="summary"&gt;
 Summary
@@ -301,11 +287,9 @@ versions with exact pins (this is the fundamental difference between
 &lt;p&gt;I want to thank &lt;a href="https://twitter.com/codewithanthony" class="external-link" target="_blank" rel="noopener"&gt;Anthony Sottile&lt;/a&gt;, &lt;a href="https://twitter.com/pganssle" class="external-link" target="_blank" rel="noopener"&gt;Paul Ganssle&lt;/a&gt;,
 &lt;a href="https://twitter.com/hynek" class="external-link" target="_blank" rel="noopener"&gt;Hynek Schlawack&lt;/a&gt;, and &lt;a href="https://twitter.com/LisaMcString" class="external-link" target="_blank" rel="noopener"&gt;Lisa McCord&lt;/a&gt; for reviewing this
 article in its draft versions and suggesting changes that made it a thousand times better.&lt;/p&gt;
-&lt;figure&gt;&lt;picture&gt;
-&lt;source type="image/avif" srcset="https://bernat.tech/posts/version-numbers/silky_run_happy_hu_3aa43a1d7f7d7f4c.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
-&lt;source type="image/webp" srcset="https://bernat.tech/posts/version-numbers/silky_run_happy_hu_f7d7be02b1684d4c.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"&gt;
+&lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_run_happy.webp" alt="Silky running happily"
+srcset="https://bernat.tech/posts/version-numbers/silky_run_happy_hu_f7d7be02b1684d4c.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="525"
 loading="lazy" decoding="async"&gt;
-&lt;/picture&gt;
 &lt;/figure&gt;</description><category>python</category><category>version</category><category>semver</category><category>calver</category><category>0ver</category></item></channel></rss>
