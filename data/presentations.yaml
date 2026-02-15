@@ -10,6 +10,7 @@
   event: PyTexas 2025
   year: 2025
   youtube: krJZmNvUqK4
+  slides: https://gaborbernat.github.io/python-meets-crab/
   id: python-meets-crab-pytexas-25
 
 - title: "Lessons learned maintaining open source Python projects"
@@ -32,6 +33,7 @@
   year: 2023
   youtube: 95tjPYvbJc0
   start: 480
+  slides: https://gaborbernat.github.io/pycon-us-23-lighting/
   id: tox4-lightning-py-con-us-23
 
 - title: "How we standardized editable installs PEP 660 vs PEP 662"
@@ -111,4 +113,5 @@
   event: PyLondinium 2018
   year: 2018
   youtube: DzRlR3BFCko
+  slides: https://gaborbernat.github.io/pylondinium18/
   id: type-hints-snake-pit-lon-18
