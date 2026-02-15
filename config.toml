@@ -1,8 +1,5 @@
 baseURL = "https://bernat.tech"
 title = "Tech articles by Bernát Gábor"
-[module]
-[[module.imports]]
-path = "github.com/luizdepra/hugo-coder"
 languageCode = "en"
 defaultContentLanguage = "en"
 enableRobotsTXT = true
@@ -169,3 +166,7 @@ maxAge = "30m"
 changefreq = "weekly"
 filename = "sitemap.xml"
 priority = 0.5
+
+[module]
+[[module.imports]]
+path = "github.com/luizdepra/hugo-coder"
