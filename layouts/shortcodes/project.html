@@ -140,7 +140,7 @@
   {{- range $cols -}}
     {{- $col := trim . " " -}}
     {{- if eq $col "version" -}}
-  <td>
+  <td class="col-data">
       {{- if $showPypi -}}
         {{- if $pypiVersion -}}
           <a href="https://pypi.org/project/{{ $name }}"><span class="badge badge-blue">{{ $pypiVersion }}</span></a>
@@ -157,7 +157,7 @@
   </td>
     {{- else if eq $col "downloads" -}}
       {{- if eq ($.Get "no-release") "true" -}}
-  <td></td>
+  <td class="col-data"></td>
       {{- else -}}
       {{- $downloads := 0 -}}
       {{- $sortValue := 0 -}}
@@ -173,7 +173,7 @@
         {{- end -}}
       {{- end -}}
       {{- $formatted := replace (lang.FormatNumber 0 $downloads) "," "_" -}}
-  <td class="dl-cell" data-value="{{ $sortValue }}">
+  <td class="dl-cell col-data" data-value="{{ $sortValue }}">
       {{- if $showPypi -}}
         <a href="https://pepy.tech/projects/{{ $name }}"><span class="badge badge-green">{{ $formatted }}/mo</span></a>
       {{- else if $jetbrainsId -}}
@@ -193,7 +193,7 @@
       {{- if gt $sortVal 0 -}}
         {{- $ago = partial "time-ago.html" (dict "seconds" (sub $nowUnix $sortVal)) -}}
       {{- end -}}
-  <td data-value="{{ $sortVal }}">
+  <td class="col-data" data-value="{{ $sortVal }}">
       {{- if $ago.label -}}
         {{- $isoDate := "" -}}
         {{- with $releaseData.published_at }}{{ $isoDate = (time .).Format "2006-01-02T15:04:05Z" }}{{ end -}}
@@ -207,24 +207,24 @@
       {{- if gt $sortVal 0 -}}
         {{- $ago = partial "time-ago.html" (dict "seconds" (sub $nowUnix $sortVal)) -}}
       {{- end -}}
-  <td data-value="{{ $sortVal }}">
+  <td class="col-data" data-value="{{ $sortVal }}">
         {{- if $lastCommitDate -}}
         <a href="https://github.com/{{ $org }}/{{ $repo }}/commits"><span class="badge badge-{{ $ago.color }} has-tip">{{ $ago.label }}<span class="tip">{{ $lastCommitDate }}</span></span></a>
         {{- end -}}
   </td>
     {{- else if eq $col "issues" -}}
-  <td data-value="{{ $openTotal }}">
+  <td class="col-data" data-value="{{ $openTotal }}">
         <span class="badge badge-gray"><a href="https://github.com/{{ $org }}/{{ $repo }}/issues">{{ $openIssues }}</a>/<a href="https://github.com/{{ $org }}/{{ $repo }}/pulls">{{ $openPRs }}</a></span>
   </td>
     {{- else if eq $col "stars" -}}
       {{- $formatted := replace (lang.FormatNumber 0 $stars) "," "_" -}}
-  <td data-value="{{ $stars }}">
+  <td class="col-data" data-value="{{ $stars }}">
       {{- if gt $stars 0 -}}
         <span class="badge badge-yellow"><a href="https://github.com/{{ $org }}/{{ $repo }}/stargazers">{{ $formatted }}</a> <a href="https://www.star-history.com/#{{ $org }}/{{ $repo }}">★</a></span>
       {{- end -}}
   </td>
     {{- else if eq $col "ci" -}}
-  <td>
+  <td class="col-ci">
       {{- if isset $.Params "ci" -}}
         {{- $workflows := split ($.Get "ci") "," -}}
         {{- range $workflows -}}

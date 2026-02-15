@@ -41,12 +41,13 @@ table.project-table thead th {
 table.project-table tfoot th {
   bottom: 0;
 }
-table.project-table td:last-child,
-table.project-table th:last-child {
+table.project-table .col-ci {
   display: none;
 }
-table.project-table.show-ci td:last-child,
-table.project-table.show-ci th:last-child {
+table.project-table.ci-view .col-data {
+  display: none;
+}
+table.project-table.ci-view .col-ci {
   display: table-cell;
   white-space: normal;
   max-width: 350px;

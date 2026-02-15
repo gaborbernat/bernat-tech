@@ -1,11 +1,10 @@
-<button class="ci-toggle" id="ci-toggle-btn">Show CI</button>
+<button class="ci-toggle" id="ci-toggle-btn">Toggle CI view</button>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("ci-toggle-btn").addEventListener("click", function () {
       document.querySelectorAll(".project-table").forEach(function (t) {
-        t.classList.toggle("show-ci");
+        t.classList.toggle("ci-view");
       });
-      this.textContent = this.textContent === "Show CI" ? "Hide CI" : "Show CI";
     });
 
     document.querySelectorAll(".project-table th[data-sort]").forEach(function (th) {

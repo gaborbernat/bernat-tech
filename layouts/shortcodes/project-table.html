@@ -2,13 +2,13 @@
 {{ $headerRow := slice (printf `<th>#</th><th data-sort="name">%s</th>` (or (.Get "name") "Name")) }}
 {{- range $cols -}}
   {{- $col := trim . " " -}}
-  {{- if eq $col "downloads" -}}{{ $headerRow = $headerRow | append `<th data-sort="downloads">Downloads</th>` }}
-  {{- else if eq $col "version" -}}{{ $headerRow = $headerRow | append `<th>Version</th>` }}
-  {{- else if eq $col "release" -}}{{ $headerRow = $headerRow | append `<th data-sort="date">Release</th>` }}
-  {{- else if eq $col "last-commit" -}}{{ $headerRow = $headerRow | append `<th data-sort="date">Last Commit</th>` }}
-  {{- else if eq $col "ci" -}}{{ $headerRow = $headerRow | append `<th>CI</th>` }}
-  {{- else if eq $col "issues" -}}{{ $headerRow = $headerRow | append `<th data-sort="issues" title="Issues/Pull Requests">I/P</th>` }}
-  {{- else if eq $col "stars" -}}{{ $headerRow = $headerRow | append `<th data-sort="stars">Stars</th>` }}
+  {{- if eq $col "downloads" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="downloads">Downloads</th>` }}
+  {{- else if eq $col "version" -}}{{ $headerRow = $headerRow | append `<th class="col-data">Version</th>` }}
+  {{- else if eq $col "release" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="date">Release</th>` }}
+  {{- else if eq $col "last-commit" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="date">Last Commit</th>` }}
+  {{- else if eq $col "ci" -}}{{ $headerRow = $headerRow | append `<th class="col-ci">CI</th>` }}
+  {{- else if eq $col "issues" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="issues" title="Issues/Pull Requests">I/P</th>` }}
+  {{- else if eq $col "stars" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="stars">Stars</th>` }}
   {{- end -}}
 {{- end -}}
 {{ $cells := delimit $headerRow "" }}
