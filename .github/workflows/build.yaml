@@ -36,7 +36,7 @@ jobs:
       - name: Build
         run: hugo --minify
         env:
-          HUGO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HUGO_GITHUB_TOKEN: ${{ secrets.HUGO_GITHUB_TOKEN }}
       - name: Validate HTML
         uses: Cyb3r-Jak3/html5validator-action@v8.0.0
         with:
