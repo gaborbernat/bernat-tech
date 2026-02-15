@@ -2,7 +2,7 @@
   <!-- prettier-ignore -->
   <section class="container">
 
-    <b>Opinions are my own</b> - {{ .Site.Params.author }} software engineer.
+    <b>Opinions are my own</b>.
     {{ $date := .Page.Lastmod }} {{ if .GitInfo }} {{ $date = .GitInfo.AuthorDate }} {{ end }}
     Updated&nbsp;{{- $date.UTC.Format "2006-01-02T15:04:05.000Z" -}}&nbsp;UTC
     {{ if .GitInfo }}
