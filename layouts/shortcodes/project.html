@@ -5,7 +5,7 @@
 {{ $showPypi := ne (.Get "pypi") "false" }}
 {{ $jetbrainsId := .Get "jetbrains-id" }}
 {{ $jetbrainsSlug := .Get "jetbrains-slug" }}
-{{ $cols := split (or (.Parent.Get "cols") "downloads,version,release,last-commit,ci") "," }}
+{{ $cols := split (or (.Parent.Get "cols") "downloads,version,release,last-commit,ci,stars") "," }}
 {{ $ghOpts := dict }}{{ with getenv "HUGO_GITHUB_TOKEN" }}{{ $ghOpts = dict "headers" (dict "Authorization" (printf "Bearer %s" .)) }}{{ end }}
 
 {{/* Fetch all API data upfront */}}
@@ -241,6 +241,15 @@
           {{- if not (or (strings.HasSuffix $workflow ".yaml") (strings.HasSuffix $workflow ".yml")) }}{{ $file = printf "%s.yaml" $workflow }}{{ end -}}
           <a href="https://github.com/{{ $org }}/{{ $repo }}/actions/workflows/{{ $file }}"><img src="https://github.com/{{ $org }}/{{ $repo }}/actions/workflows/{{ $file }}/badge.svg" alt="{{ $workflow }}"></a>
         {{- end -}}
+      {{- end -}}
+  </td>
+    {{- else if eq $col "stars" -}}
+      {{- $stars := 0 -}}
+      {{- with $repoData.stargazers_count }}{{ $stars = int . }}{{ end -}}
+      {{- $formatted := replace (lang.FormatNumber 0 $stars) "," "_" -}}
+  <td data-value="{{ $stars }}">
+      {{- if gt $stars 0 -}}
+        <a href="https://github.com/{{ $org }}/{{ $repo }}/stargazers"><span class="badge badge-yellow">{{ $formatted }} ★</span></a>
       {{- end -}}
   </td>
     {{- end -}}

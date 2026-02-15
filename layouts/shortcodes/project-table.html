@@ -1,4 +1,4 @@
-{{ $cols := split (or (.Get "cols") "downloads,version,release,last-commit,ci") "," }}
+{{ $cols := split (or (.Get "cols") "downloads,version,release,last-commit,ci,stars") "," }}
 {{ $headerRow := slice (printf `<th>#</th><th data-sort="name">%s</th>` (or (.Get "name") "Name")) }}
 {{- range $cols -}}
   {{- $col := trim . " " -}}
@@ -7,6 +7,7 @@
   {{- else if eq $col "release" -}}{{ $headerRow = $headerRow | append `<th data-sort="date">Release</th>` }}
   {{- else if eq $col "last-commit" -}}{{ $headerRow = $headerRow | append `<th data-sort="date">Last Commit</th>` }}
   {{- else if eq $col "ci" -}}{{ $headerRow = $headerRow | append `<th>CI</th>` }}
+  {{- else if eq $col "stars" -}}{{ $headerRow = $headerRow | append `<th data-sort="stars">Stars</th>` }}
   {{- end -}}
 {{- end -}}
 {{ $cells := delimit $headerRow "" }}

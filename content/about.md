@@ -49,7 +49,7 @@ Experience organizations Artifact Repository Hosting team. I am the primary main
 Grayed out rows are projects where I hold the write commit bit but only help with maintainership when needed. Below are
 repositories helping with maintaining and self:
 
-{{< project-table cols="last-commit,ci" >}}
+{{< project-table cols="last-commit,ci,stars" >}}
 {{< project name="all-repos-self" org="gaborbernat" ci="check" pypi="false" >}}
 {{< project name="bernat-tech" org="gaborbernat" ci="build" pypi="false" >}}
 {{< project name="cv" org="gaborbernat" ci="build" pypi="false" >}}
