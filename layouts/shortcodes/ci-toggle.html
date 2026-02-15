@@ -48,8 +48,17 @@
       });
     });
 
-    document.querySelectorAll('.project-table th[data-sort="downloads"]').forEach(function (th) {
-      th.click();
+    document.querySelectorAll(".project-table").forEach(function (table) {
+      var dlHeader = table.querySelector('th[data-sort="downloads"]');
+      if (dlHeader) {
+        dlHeader.click();
+      } else {
+        var dateHeader = table.querySelector('th[data-sort="date"]');
+        if (dateHeader) {
+          dateHeader.click();
+          dateHeader.click();
+        }
+      }
     });
   });
 </script>
