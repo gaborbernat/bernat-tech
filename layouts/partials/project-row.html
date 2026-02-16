@@ -79,6 +79,7 @@
 
 {{ $jbDownloads := 0 }}
 {{ $jbVersion := "" }}
+{{ $jbReleaseUnix := 0 }}
 {{ if $jetbrainsId }}
   {{ $result = try (resources.GetRemote (printf "https://plugins.jetbrains.com/api/plugins/%s" $jetbrainsId)) }}
   {{ with $result.Value }}
@@ -88,7 +89,10 @@
   {{ $result = try (resources.GetRemote (printf "https://plugins.jetbrains.com/api/plugins/%s/updates?channel=&size=1" $jetbrainsId)) }}
   {{ with $result.Value }}
     {{ $updates := . | transform.Unmarshal }}
-    {{ with index $updates 0 }}{{ $jbVersion = .version }}{{ end }}
+    {{ with index $updates 0 }}
+      {{ $jbVersion = .version }}
+      {{ $jbReleaseUnix = div (int .cdate) 1000 }}
+    {{ end }}
   {{ end }}
   {{ with $result.Err }}{{ $errors = $errors | append (printf "jb-version: %s" .) }}{{ end }}
 {{ end }}
@@ -197,11 +201,15 @@
         {{- if and $showPypi $pypiReleaseDate -}}
           {{- $releaseDate = $pypiReleaseDate -}}
           {{- $releaseLink = printf "https://pypi.org/project/%s/#history" $name -}}
+          {{- $sortVal = (time $releaseDate).Unix -}}
+        {{- else if and $jetbrainsId (gt $jbReleaseUnix 0) -}}
+          {{- $sortVal = $jbReleaseUnix -}}
+          {{- $releaseLink = printf "https://plugins.jetbrains.com/plugin/%s-%s/versions" $jetbrainsId $jetbrainsSlug -}}
         {{- else -}}
           {{- with $releaseData.published_at }}{{ $releaseDate = . }}{{ end -}}
           {{- $releaseLink = printf "https://github.com/%s/%s/releases" $org $repo -}}
+          {{- with $releaseDate }}{{ $sortVal = (time .).Unix }}{{ end -}}
         {{- end -}}
-        {{- with $releaseDate }}{{ $sortVal = (time .).Unix }}{{ end -}}
       {{- end -}}
       {{- $ago := dict "label" "" "color" "gray" -}}
       {{- if gt $sortVal 0 -}}
@@ -209,7 +217,7 @@
       {{- end -}}
   <td class="col-data" data-value="{{ $sortVal }}">
       {{- if $ago.label -}}
-        {{- $isoDate := (time $releaseDate).Format "2006-01-02T15:04:05Z" -}}
+        {{- $isoDate := (time (int $sortVal)).Format "2006-01-02T15:04:05Z" -}}
         <a href="{{ $releaseLink }}"><span class="badge badge-{{ $ago.color }} has-tip">{{ $ago.label }}<span class="tip">{{ $isoDate }}</span></span></a>
       {{- end -}}
   </td>
