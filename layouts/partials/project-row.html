@@ -31,9 +31,14 @@
 {{ with $result.Err }}{{ $errors = $errors | append (printf "release: %s" .) }}{{ end }}
 
 {{ $pypiVersion := "" }}
+{{ $pypiReleaseDate := "" }}
 {{ if $showPypi }}
   {{ $result = try (resources.GetRemote (printf "https://pypi.org/pypi/%s/json" $name)) }}
-  {{ with $result.Value }}{{ $pypiVersion = (. | transform.Unmarshal).info.version }}{{ end }}
+  {{ with $result.Value }}
+    {{ $pypiData := . | transform.Unmarshal }}
+    {{ $pypiVersion = $pypiData.info.version }}
+    {{ with index $pypiData.urls 0 }}{{ $pypiReleaseDate = .upload_time_iso_8601 }}{{ end }}
+  {{ end }}
   {{ with $result.Err }}{{ $errors = $errors | append (printf "pypi-version: %s" .) }}{{ end }}
 {{ end }}
 
@@ -186,8 +191,17 @@
       {{- end -}}
     {{- else if eq $col "release" -}}
       {{- $sortVal := 0 -}}
+      {{- $releaseDate := "" -}}
+      {{- $releaseLink := "" -}}
       {{- if not $noRelease -}}
-        {{- with $releaseData.published_at }}{{ $sortVal = (time .).Unix }}{{ end -}}
+        {{- if and $showPypi $pypiReleaseDate -}}
+          {{- $releaseDate = $pypiReleaseDate -}}
+          {{- $releaseLink = printf "https://pypi.org/project/%s/#history" $name -}}
+        {{- else -}}
+          {{- with $releaseData.published_at }}{{ $releaseDate = . }}{{ end -}}
+          {{- $releaseLink = printf "https://github.com/%s/%s/releases" $org $repo -}}
+        {{- end -}}
+        {{- with $releaseDate }}{{ $sortVal = (time .).Unix }}{{ end -}}
       {{- end -}}
       {{- $ago := dict "label" "" "color" "gray" -}}
       {{- if gt $sortVal 0 -}}
@@ -195,9 +209,8 @@
       {{- end -}}
   <td class="col-data" data-value="{{ $sortVal }}">
       {{- if $ago.label -}}
-        {{- $isoDate := "" -}}
-        {{- with $releaseData.published_at }}{{ $isoDate = (time .).Format "2006-01-02T15:04:05Z" }}{{ end -}}
-        <a href="https://github.com/{{ $org }}/{{ $repo }}/releases"><span class="badge badge-{{ $ago.color }} has-tip">{{ $ago.label }}<span class="tip">{{ $isoDate }}</span></span></a>
+        {{- $isoDate := (time $releaseDate).Format "2006-01-02T15:04:05Z" -}}
+        <a href="{{ $releaseLink }}"><span class="badge badge-{{ $ago.color }} has-tip">{{ $ago.label }}<span class="tip">{{ $isoDate }}</span></span></a>
       {{- end -}}
   </td>
     {{- else if eq $col "last-commit" -}}
