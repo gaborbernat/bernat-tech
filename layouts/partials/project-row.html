@@ -66,14 +66,14 @@
       {{ end }}
     {{ end }}
     {{ with $result.Err }}{{ $errors = $errors | append (printf "gh-releases: %s" .) }}{{ end }}
-  {{ end }}
-  {{ if eq $ghDownloads 0 }}
-    {{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/traffic/clones" $org $repo) $ghOpts) }}
-    {{ with $result.Value }}
-      {{ $ghDownloads = int (. | transform.Unmarshal).count }}
-      {{ $ghDownloadLabel = "clones/14d" }}
+    {{ if eq $ghDownloads 0 }}
+      {{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/traffic/clones" $org $repo) $ghOpts) }}
+      {{ with $result.Value }}
+        {{ $ghDownloads = int (. | transform.Unmarshal).count }}
+        {{ $ghDownloadLabel = "clones/14d" }}
+      {{ end }}
+      {{ with $result.Err }}{{ $errors = $errors | append (printf "gh-clones: %s" .) }}{{ end }}
     {{ end }}
-    {{ with $result.Err }}{{ $errors = $errors | append (printf "gh-clones: %s" .) }}{{ end }}
   {{ end }}
 {{ end }}
 
