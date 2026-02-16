@@ -54,9 +54,16 @@
 
 {{ $ghDownloads := 0 }}
 {{ $ghDownloadLabel := "total" }}
+{{ $ghaUsageCount := 0 }}
 {{ if and (not $showPypi) (not $jetbrainsId) }}
   {{ $rawType := split (or $p.type "") "," }}
-  {{ if not (or (in $rawType "github-action") (in $rawType "pre-commit")) }}
+  {{ if in $rawType "github-action" }}
+    {{ $result = try (resources.GetRemote (printf "https://api.github.com/search/code?q=%%22uses:+%s/%s%%22" $org $repo) $ghOpts) }}
+    {{ with $result.Value }}
+      {{ $ghaUsageCount = int (. | transform.Unmarshal).total_count }}
+    {{ end }}
+    {{ with $result.Err }}{{ $errors = $errors | append (printf "gha-usage: %s" .) }}{{ end }}
+  {{ else if not (in $rawType "pre-commit") }}
     {{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/releases?per_page=100" $org $repo) $ghOpts) }}
     {{ with $result.Value }}
       {{ range (. | transform.Unmarshal) }}
@@ -111,6 +118,8 @@
   {{ $logParts = $logParts | append (printf "pypi-version=%s" (or $pypiVersion "?")) (printf "pypi-downloads=%d" $pypiDownloads) }}
 {{ else if $jetbrainsId }}
   {{ $logParts = $logParts | append (printf "jb-version=%s" (or $jbVersion "?")) (printf "jb-downloads=%d" $jbDownloads) }}
+{{ else if gt $ghaUsageCount 0 }}
+  {{ $logParts = $logParts | append (printf "gha-usage=%d(repos)" $ghaUsageCount) }}
 {{ else }}
   {{ $logParts = $logParts | append (printf "gh-downloads=%d(%s)" $ghDownloads $ghDownloadLabel) }}
 {{ end }}
@@ -176,6 +185,8 @@
         {{- $sortValue = div $pypiDownloads 30 -}}
       {{- else if $jetbrainsId -}}
         {{- $downloads = $jbDownloads -}}
+      {{- else if gt $ghaUsageCount 0 -}}
+        {{- $downloads = $ghaUsageCount -}}
       {{- else if gt $ghDownloads 0 -}}
         {{- $downloads = $ghDownloads -}}
         {{- if eq $ghDownloadLabel "clones/14d" -}}
@@ -188,6 +199,8 @@
         <a href="https://pepy.tech/projects/{{ $name }}"><span class="badge badge-green">{{ $formatted }}/mo</span></a>
       {{- else if $jetbrainsId -}}
         <a href="https://plugins.jetbrains.com/plugin/{{ $jetbrainsId }}-{{ $jetbrainsSlug }}"><span class="badge badge-green">{{ $formatted }} total</span></a>
+      {{- else if gt $ghaUsageCount 0 -}}
+        <a href="https://github.com/search?q=%22uses%3A+{{ $org }}/{{ $repo }}%22&type=code"><span class="badge badge-green">{{ $formatted }} repos</span></a>
       {{- else if gt $ghDownloads 0 -}}
         <a href="https://github.com/{{ $org }}/{{ $repo }}"><span class="badge badge-green">{{ $formatted }} {{ $ghDownloadLabel }}</span></a>
       {{- end -}}
