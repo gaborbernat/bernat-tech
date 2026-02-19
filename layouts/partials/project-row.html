@@ -248,14 +248,16 @@
   </td>
     {{- else if eq $col "issues" -}}
   <td class="col-data" data-value="{{ $openTotal }}">
+      {{- if and (eq $openIssues 0) (eq $openPRs 0) -}}
+        <span class="badge badge-green"><a href="https://github.com/{{ $org }}/{{ $repo }}/issues">&#10003;</a></span>
+      {{- else -}}
         <span class="badge badge-gray"><a href="https://github.com/{{ $org }}/{{ $repo }}/issues">{{ $openIssues }}</a>/<a href="https://github.com/{{ $org }}/{{ $repo }}/pulls">{{ $openPRs }}</a></span>
+      {{- end -}}
   </td>
     {{- else if eq $col "stars" -}}
       {{- $formatted := replace (lang.FormatNumber 0 $stars) "," "_" -}}
   <td class="col-data" data-value="{{ $stars }}">
-      {{- if gt $stars 0 -}}
         <span class="badge badge-yellow"><a href="https://github.com/{{ $org }}/{{ $repo }}/stargazers">{{ $formatted }}</a> <a href="https://www.star-history.com/#{{ $org }}/{{ $repo }}">★</a></span>
-      {{- end -}}
   </td>
     {{- else if eq $col "ci" -}}
   <td class="col-ci">
