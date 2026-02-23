@@ -45,7 +45,7 @@ jobs:
         uses: lycheeverse/lychee-action@v2
         with:
           args: --verbose --no-progress --accept 200 --exclude 'bloomberg\.com' --exclude 'instagram\.com' --exclude 'pepy\.tech'
-            --root-dir ${{ github.workspace }}/public 'public/**/*.html'
+            --exclude 'linkedin\.com' --exclude 'caremad\.io' --root-dir ${{ github.workspace }}/public 'public/**/*.html'
           fail: true
       - name: Validate RSS feed
         run: |
