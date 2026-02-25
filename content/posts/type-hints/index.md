@@ -893,8 +893,8 @@ Remember you have some tools at hand that help you discover, understand and perh
   ```python
   x = confusing_function()  # type: ignore # see mypy/issues/1167
   ```
-- ask the community; expose a minimal reproducible version of the problem under the
-  [python/typing](https://gitter.im/python/typing) `Gitter` chat.
+- ask the community; expose a minimal reproducible version of the problem under the python/typing community (the Gitter
+  chat is no longer active).
 
 # Tools
 
