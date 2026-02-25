@@ -299,8 +299,8 @@ But we also generate some new problems:
 - Besides forcing you to import all of your type information, this leaves you in an even more precarious place. Now the
   imported types are only used in the code, which leaves most linter tools to believe all those imports are unused. Were
   you to allow them to remove it, and it does break your type linter. Note `pylint` fixed this by moving its AST parser
-  to a [typed-ast parser](https://github.com/PyCQA/pylint/issues/1063), and is going to be released with version 2 just
-  after Python `3.7` comes out.
+  to a [typed-ast parser](https://github.com/pylint-dev/pylint/issues/1063), and is going to be released with version 2
+  just after Python `3.7` comes out.
   </div>
 
 To avoid having long lines of code as type hint, it's possible to type hint arguments one by one via type comments, and
