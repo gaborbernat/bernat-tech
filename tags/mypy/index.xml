@@ -324,8 +324,8 @@ of expression, and your codebase enforces line length limits.&lt;/li&gt;
 &lt;li&gt;Besides forcing you to import all of your type information, this leaves you in an even more precarious place. Now the
 imported types are only used in the code, which leaves most linter tools to believe all those imports are unused. Were
 you to allow them to remove it, and it does break your type linter. Note &lt;code&gt;pylint&lt;/code&gt; fixed this by moving its AST parser
-to a &lt;a href="https://github.com/PyCQA/pylint/issues/1063" class="external-link" target="_blank" rel="noopener"&gt;typed-ast parser&lt;/a&gt;, and is going to be released with version 2 just
-after Python &lt;code&gt;3.7&lt;/code&gt; comes out.
+to a &lt;a href="https://github.com/pylint-dev/pylint/issues/1063" class="external-link" target="_blank" rel="noopener"&gt;typed-ast parser&lt;/a&gt;, and is going to be released with version 2
+just after Python &lt;code&gt;3.7&lt;/code&gt; comes out.
 &lt;!-- raw HTML omitted --&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -837,8 +837,8 @@ loading="lazy" decoding="async"&gt;
 &lt;li&gt;use the type ignore marker to disable an error in a line:
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;confusing_function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="c1"&gt;# type: ignore # see mypy/issues/1167&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-&lt;li&gt;ask the community; expose a minimal reproducible version of the problem under the
-&lt;a href="https://gitter.im/python/typing" class="external-link" target="_blank" rel="noopener"&gt;python/typing&lt;/a&gt; &lt;code&gt;Gitter&lt;/code&gt; chat.&lt;/li&gt;
+&lt;li&gt;ask the community; expose a minimal reproducible version of the problem under the python/typing community (the Gitter
+chat is no longer active).&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id="tools"&gt;
 Tools
