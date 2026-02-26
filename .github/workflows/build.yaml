@@ -54,7 +54,7 @@ jobs:
         run: |
           curl -sSf https://bernat.tech/index.xml > /dev/null || echo "RSS feed validation skipped (site not deployed)"
         continue-on-error: true
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           name: website
           path: public
