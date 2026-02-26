@@ -88,6 +88,9 @@ primary:
   - name: sphinx-argparse-cli
     org: tox-dev
     ci: check
+  - name: python-discovery
+    org: tox-dev
+    ci: check
   - name: devpi-process
     org: tox-dev
     ci: check
