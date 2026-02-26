@@ -63,7 +63,7 @@
       {{ $ghaUsageCount = int (. | transform.Unmarshal).total_count }}
     {{ end }}
     {{ with $result.Err }}{{ $errors = $errors | append (printf "gha-usage: %s" .) }}{{ end }}
-  {{ else if not (in $rawType "pre-commit") }}
+  {{ else }}
     {{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/releases?per_page=100" $org $repo) $ghOpts) }}
     {{ with $result.Value }}
       {{ range (. | transform.Unmarshal) }}
