@@ -63,6 +63,13 @@
       {{ $ghaUsageCount = int (. | transform.Unmarshal).total_count }}
     {{ end }}
     {{ with $result.Err }}{{ $errors = $errors | append (printf "gha-usage: %s" .) }}{{ end }}
+  {{ else if in $rawType "pre-commit" }}
+    {{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/traffic/clones" $org $repo) $ghOpts) }}
+    {{ with $result.Value }}
+      {{ $ghDownloads = int (. | transform.Unmarshal).count }}
+      {{ $ghDownloadLabel = "clones/14d" }}
+    {{ end }}
+    {{ with $result.Err }}{{ $errors = $errors | append (printf "gh-clones: %s" .) }}{{ end }}
   {{ else }}
     {{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/releases?per_page=100" $org $repo) $ghOpts) }}
     {{ with $result.Value }}
