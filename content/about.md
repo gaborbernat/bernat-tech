@@ -20,5 +20,9 @@ repositories helping with maintaining and self:
 
 {{< project-list group="maintenance" cols="last-commit,issues,stars,ci" >}}
 
+Presentations I have given at various conferences:
+
+{{< project-list group="presentations" cols="last-commit,stars" >}}
+
 You can find my Curriculum Vitae (or résumé) on the following link
 [![View PDF](https://img.shields.io/badge/View%20as%20PDF-latest%20CV-blue?style=flat-square&logo=docusign)](https://gaborbernat.github.io/cv/main.pdf).
