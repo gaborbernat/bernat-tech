@@ -278,6 +278,10 @@
         {{- end -}}
       {{- end -}}
   </td>
+    {{- else if eq $col "slides" -}}
+  <td class="col-data">
+        <a href="https://{{ $org }}.github.io/{{ $repo }}/"><span class="badge badge-blue">slides</span></a>
+  </td>
     {{- end -}}
   {{- end -}}
 </tr>

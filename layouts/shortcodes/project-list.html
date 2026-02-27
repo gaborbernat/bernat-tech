@@ -11,6 +11,7 @@
   {{- else if eq $col "ci" -}}{{ $headerRow = $headerRow | append `<th class="col-ci">CI</th>` }}
   {{- else if eq $col "issues" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="issues" title="Issues/Pull Requests">I/P</th>` }}
   {{- else if eq $col "stars" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="stars">Stars</th>` }}
+  {{- else if eq $col "slides" -}}{{ $headerRow = $headerRow | append `<th class="col-data">Slides</th>` }}
   {{- end -}}
 {{- end -}}
 {{ $cells := delimit $headerRow "" }}
