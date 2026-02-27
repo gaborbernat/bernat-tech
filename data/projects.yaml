@@ -157,6 +157,11 @@ maintenance:
     org: gaborbernat
     ci: build
     pypi: "false"
+  - name: ropi_jegyzet_latex
+    org: gaborbernat
+    ci: build
+    pypi: "false"
+    type: latex
   - name: dotfiles
     org: gaborbernat
     pypi: "false"
