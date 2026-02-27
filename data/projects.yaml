@@ -175,84 +175,101 @@ presentations:
     org: gaborbernat
     pypi: "false"
     type: presentation
-    label: "PyTexas 2025 - Python meets the crab"
-  - name: europython-24
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "EuroPython 2024 - How to maintain"
-  - name: py-texas-24
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "PyTexas 2024"
-  - name: pycon-us-23-lighting
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "PyCon US 2023 - What's new in tox 4"
-  - name: pep-660-662-2022
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "PEP-660 vs PEP-662 - Editable installs"
-  - name: type-hint-recr-2022
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "Type hints - Inside the snake pit (2022)"
-  - name: type-hint-recr-2021
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "Type hints - Inside the snake pit (2021)"
-  - name: packaging-tutorial-euro-21
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "Packaging tutorial - EuroPython 2021"
-  - name: packaging-tutorial-pycon-us-21
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "Packaging tutorial - PyCon US 2021"
-  - name: pycon-us-21-lighting
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "PyCon US 2021 - Lighting talk"
+    label: "Python meets the crab - PyCon US - 2025"
+    date: "2025-05-15"
   - name: new-wave-of-python-packaging
     org: gaborbernat
     pypi: "false"
     type: presentation
-    label: "New wave of Python packaging"
+    label: "The new wave of Python Packaging - PyTexas - 2025"
+    date: "2025-04-11"
+  - name: europython-24
+    org: gaborbernat
+    pypi: "false"
+    type: presentation
+    label: "Lessons learned maintaining open source Python projects - EuroPython - 2024"
+    date: "2024-07-10"
+  - name: py-texas-24
+    org: gaborbernat
+    pypi: "false"
+    type: presentation
+    label: "Lessons learned maintaining open source Python projects - PyTexas - 2024"
+    date: "2024-04-20"
+  - name: pycon-us-23-lighting
+    org: gaborbernat
+    pypi: "false"
+    type: presentation
+    label: "What's new in tox 4 - PyCon US - 2023"
+    date: "2023-04-22"
+  - name: pep-660-662-2022
+    org: gaborbernat
+    pypi: "false"
+    type: presentation
+    label: "How we standardized editable installs - PyCon US - 2022"
+    date: "2022-04-29"
+  - name: type-hint-recr-2022
+    org: gaborbernat
+    pypi: "false"
+    type: presentation
+    label: "Type hints - Inside the snake pit - Bloomberg - 2022"
+    date: "2022-03-01"
+  - name: type-hint-recr-2021
+    org: gaborbernat
+    pypi: "false"
+    type: presentation
+    label: "Type hints - Inside the snake pit - Bloomberg - 2021"
+    date: "2021-04-01"
+  - name: packaging-tutorial-euro-21
+    org: gaborbernat
+    pypi: "false"
+    type: presentation
+    label: "Python packaging tutorial - EuroPython - 2021"
+    date: "2021-07-26"
+  - name: packaging-tutorial-pycon-us-21
+    org: gaborbernat
+    pypi: "false"
+    type: presentation
+    label: "Python packaging tutorial - PyCon US - 2021"
+    date: "2021-05-12"
+  - name: pycon-us-21-lighting
+    org: gaborbernat
+    pypi: "false"
+    type: presentation
+    label: "tox 4 - coming soon - PyCon US - 2021"
+    date: "2021-05-14"
   - name: euro_python_2019
     org: gaborbernat
     pypi: "false"
     type: presentation
-    label: "EuroPython 2019 - Virtual environments"
+    label: "How a virtual environment works - EuroPython - 2019"
+    date: "2019-07-10"
   - name: pylondinium2019
     org: gaborbernat
     pypi: "false"
     type: presentation
-    label: "PyLondinium 2019 - Packaging your library"
+    label: "How to best package your library - PyLondinium - 2019"
+    date: "2019-06-15"
   - name: pycon-us-2019
     org: gaborbernat
     pypi: "false"
     type: presentation
-    label: "PyCon US 2019 - Type hinting"
+    label: "Type hints inside the snake pit - PyCon US - 2019"
+    date: "2019-05-03"
   - name: pycon-eu-2018
     org: gaborbernat
     pypi: "false"
     type: presentation
-    label: "EuroPython 2018"
+    label: "Standardize testing in Python - EuroPython - 2018"
+    date: "2018-07-26"
   - name: pylondinium18
     org: gaborbernat
     pypi: "false"
     type: presentation
-    label: "PyLondinium 2018"
+    label: "Type hints inside the snake pit - PyLondinium - 2018"
+    date: "2018-06-09"
   - name: presentation-london-apr-2018-type-hints
     org: gaborbernat
     pypi: "false"
     type: presentation
-    label: "London 2018 - Type hints"
+    label: "Type hinting with mypy - London Python - 2018"
+    date: "2018-04-01"

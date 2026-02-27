@@ -12,6 +12,7 @@
   {{- else if eq $col "issues" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="issues" title="Issues/Pull Requests">I/P</th>` }}
   {{- else if eq $col "stars" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="stars">Stars</th>` }}
   {{- else if eq $col "slides" -}}{{ $headerRow = $headerRow | append `<th class="col-data">Slides</th>` }}
+  {{- else if eq $col "date" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="date">Date</th>` }}
   {{- end -}}
 {{- end -}}
 {{ $cells := delimit $headerRow "" }}
@@ -34,6 +35,7 @@
         "role" .role
         "jetbrains_id" (index . "jetbrains-id")
         "jetbrains_slug" (index . "jetbrains-slug")
+        "date" .date
       }}
       {{ partialCached "project-row.html" (dict "project" $p "cols" $cols) .org .name .repo .type .pypi (delimit $cols ",") }}
     {{- end -}}

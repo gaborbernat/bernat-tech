@@ -282,6 +282,15 @@
   <td class="col-data">
         <a href="https://{{ $org }}.github.io/{{ $repo }}/"><span class="badge badge-blue">slides</span></a>
   </td>
+    {{- else if eq $col "date" -}}
+      {{- $dateVal := or $p.date "" -}}
+      {{- $sortVal := 0 -}}
+      {{- if $dateVal }}{{ $sortVal = (time $dateVal).Unix }}{{ end -}}
+  <td class="col-data" data-value="{{ $sortVal }}">
+        {{- if $dateVal -}}
+          <span class="badge badge-gray">{{ $dateVal }}</span>
+        {{- end -}}
+  </td>
     {{- end -}}
   {{- end -}}
 </tr>
