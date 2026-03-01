@@ -3,13 +3,15 @@
   <section class="container">
 
     <b>Opinions are my own</b>.
-    {{ if and .GitInfo (eq .Section "posts") }}
+    {{ if eq .Section "posts" }}
       {{ $date := .GitInfo.AuthorDate }}
       <a href="https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml">Updated</a>&nbsp;<time id="footer-ts" datetime="{{- $date.UTC.Format "2006-01-02T15:04:05.000Z" -}}">{{- $date.UTC.Format "2006-01-02T15:04:05.000Z" -}}&nbsp;UTC</time>
-      via <a href="https://github.com/gaborbernat/bernat-tech/commit/{{ .GitInfo.Hash }}">{{ .GitInfo.AbbreviatedHash }}</a>.
     {{ else }}
       {{ $date := now }}
-      <a href="https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml">Updated</a>&nbsp;<time id="footer-ts" datetime="{{- $date.UTC.Format "2006-01-02T15:04:05.000Z" -}}">{{- $date.UTC.Format "2006-01-02T15:04:05.000Z" -}}&nbsp;UTC</time>.
+      <a href="https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml">Updated</a>&nbsp;<time id="footer-ts" datetime="{{- $date.UTC.Format "2006-01-02T15:04:05.000Z" -}}">{{- $date.UTC.Format "2006-01-02T15:04:05.000Z" -}}&nbsp;UTC</time>
+    {{ end }}
+    {{ if .GitInfo }}
+      via <a href="https://github.com/gaborbernat/bernat-tech/commit/{{ .GitInfo.Hash }}">{{ .GitInfo.AbbreviatedHash }}</a>.
     {{ end }}
     © 2018-{{now.Year }}
     {{ $js := resources.Get "js/footer.js" | minify | fingerprint }}
