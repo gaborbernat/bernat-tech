@@ -3,7 +3,7 @@
   <section class="container">
 
     <b>Opinions are my own</b>.
-    {{ if eq .Section "posts" }}
+    {{ if and .GitInfo (eq .Section "posts") }}
       {{ $date := .GitInfo.AuthorDate }}
       <a href="https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml">Updated</a>&nbsp;<time id="footer-ts" datetime="{{- $date.UTC.Format "2006-01-02T15:04:05.000Z" -}}">{{- $date.UTC.Format "2006-01-02T15:04:05.000Z" -}}&nbsp;UTC</time>
     {{ else }}
