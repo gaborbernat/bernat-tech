@@ -3,11 +3,14 @@
   <section class="container">
 
     <b>Opinions are my own</b>.
-    {{ $date := .Page.Lastmod }} {{ if .GitInfo }} {{ $date = .GitInfo.AuthorDate }} {{ end }}
-    Updated&nbsp;<time id="footer-ts" datetime="{{- $date.UTC.Format "2006-01-02T15:04:05.000Z" -}}">{{- $date.UTC.Format "2006-01-02T15:04:05.000Z" -}}&nbsp;UTC</time>
-    {{ if .GitInfo }}
-      via <a href="https://github.com/gaborbernat/bernat-tech/commit/{{ .GitInfo.Hash }}">{{ .GitInfo.AbbreviatedHash }}</a>
-    {{end}}.
+    {{ if and .GitInfo (eq .Section "posts") }}
+      {{ $date := .GitInfo.AuthorDate }}
+      <a href="https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml">Updated</a>&nbsp;<time id="footer-ts" datetime="{{- $date.UTC.Format "2006-01-02T15:04:05.000Z" -}}">{{- $date.UTC.Format "2006-01-02T15:04:05.000Z" -}}&nbsp;UTC</time>
+      via <a href="https://github.com/gaborbernat/bernat-tech/commit/{{ .GitInfo.Hash }}">{{ .GitInfo.AbbreviatedHash }}</a>.
+    {{ else }}
+      {{ $date := now }}
+      <a href="https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml">Updated</a>&nbsp;<time id="footer-ts" datetime="{{- $date.UTC.Format "2006-01-02T15:04:05.000Z" -}}">{{- $date.UTC.Format "2006-01-02T15:04:05.000Z" -}}&nbsp;UTC</time>.
+    {{ end }}
     © 2018-{{now.Year }}
     {{ $js := resources.Get "js/footer.js" | minify | fingerprint }}
     <script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>

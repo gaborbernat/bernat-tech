@@ -13,13 +13,13 @@ repos:
         args: ["--fix=lf"]
       - id: check-case-conflict
   - repo: https://github.com/rbubley/mirrors-prettier
-    rev: "v3.6.2"
+    rev: "v3.8.1"
     hooks:
       - id: prettier
         exclude: layouts/.*|.*\.md$|.*\.ya?ml$
         args: ["--print-width=120", "--prose-wrap=always"]
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.21
+    rev: 1.0.0
     hooks:
       - id: mdformat
         args: ["--wrap", "120", "--number"]
@@ -29,11 +29,11 @@ repos:
           - mdformat-simple-breaks
           - mdformat-hugo
   - repo: https://github.com/rhysd/actionlint
-    rev: "v1.7.10"
+    rev: "v1.7.11"
     hooks:
       - id: actionlint
   - repo: https://github.com/google/yamlfmt
-    rev: v0.15.0
+    rev: v0.21.0
     hooks:
       - id: yamlfmt
         args: ["--formatter", "max_line_length=120,retain_line_breaks=true"]

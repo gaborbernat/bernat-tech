@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     p(d.getMonth() + 1) +
     "-" +
     p(d.getDate()) +
-    "T" +
+    " " +
     p(d.getHours()) +
     ":" +
     p(d.getMinutes()) +
