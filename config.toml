@@ -20,16 +20,18 @@ info = [
     "Bloomberg · Open Source · Software Engineering",
 ]
 avatarurl = "img/avatar.jpg"
-dateFormat = "2006-01-01"
+dateFormat = "2006-01-02"
 colorScheme = "auto"
 hidecolorschemetoggle = false
 customCSS = [
     "css/custom.css",
-    "css/syntax.css",
 ]
 favicon_16 = "img/android-chrome-192x192.png"
 favicon_32 = "img/android-chrome-192x192.png"
 touchIcon = "img/android-chrome-192x192.png"
+
+[params.Entry]
+toc = true
 
 [params.cloudflare]
 token = "3ead932f454449a799915b1721c18874"
@@ -153,7 +155,7 @@ style = "monokai"
 tabWidth = 4
 
 [markup.tableOfContents]
-endLevel = 3
+endLevel = 6
 ordered = true
 startLevel = 2
 

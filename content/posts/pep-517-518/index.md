@@ -179,7 +179,7 @@ backend.build_sdist()
 
 It's up to the backend where and how they want to expose their official API:
 
-1. [flit](https://flit.readthedocs.io/en/latest/) does it via `flit.buildapi`
+1. [flit](https://flit.pypa.io/en/latest/) does it via `flit.buildapi`
 2. [setuptools](https://setuptools.readthedocs.io/en/latest/history.html#v40-8-0) provides two variants:
    `setuptools.build_meta` (on why read on later)
 3. [poetry](https://poetry.eustace.io/docs/pyproject/#poetry-and-pep-517) does it via `poetry.masonry.api`
@@ -191,15 +191,15 @@ the frontend.
 
 # tox and packaging
 
-[tox is testing tool](https://tox.readthedocs.io/en/latest/) and used by most projects to ensure compatibility against
-multiple Python interpreter versions of a given package. It also allows the quick creation of Python environments with
-the package under inspection installed in it, making reproducing failures faster.
+[tox is testing tool](https://tox.wiki/en/latest/) and used by most projects to ensure compatibility against multiple
+Python interpreter versions of a given package. It also allows the quick creation of Python environments with the
+package under inspection installed in it, making reproducing failures faster.
 
 To be able to test a package, it first needs to build a source distribution, though. While both PEP-518 and PEP-517
 should make things better, turning them on can break packaging under some use cases. Therefore when
-[`tox`](https://tox.readthedocs.io/en/latest/) added isolated build in version
-[`3.3.0`](https://tox.readthedocs.io/en/latest/) decided not to enable it by default, for now. You need to enable it
-manually (it will be turned on by default in version `4` sometime later this year - 2021).
+[`tox`](https://tox.wiki/en/latest/) added isolated build in version [`3.3.0`](https://tox.wiki/en/latest/) decided not
+to enable it by default, for now. You need to enable it manually (it will be turned on by default in version `4`
+sometime later this year - 2021).
 
 Once you've specified a `pyproject.toml` with appropriate `requires` and `build-backend`, you need to turn on the
 `isolated_build` flag inside `tox.ini`:
@@ -209,10 +209,10 @@ Once you've specified a `pyproject.toml` with appropriate `requires` and `build-
 isolated_build = True
 ```
 
-After this, tox in the [packaging phase](https://tox.readthedocs.io/en/latest/#system-overview) will build the source
-distribution (by providing the build dependencies into an isolated python environment as per PEP-518). Afterward will
-call the build backend as stated in PEP-517. Otherwise, tox will use the old way of building source distributions,
-invoking the `python setup.py sdist` command with the same interpreter tox is installed into.
+After this, tox in the [packaging phase](https://tox.wiki/en/latest/#system-overview) will build the source distribution
+(by providing the build dependencies into an isolated python environment as per PEP-518). Afterward will call the build
+backend as stated in PEP-517. Otherwise, tox will use the old way of building source distributions, invoking the
+`python setup.py sdist` command with the same interpreter tox is installed into.
 
 {{< figure src="moody_pug.webp" alt="Moody pug" >}}
 

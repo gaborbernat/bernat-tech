@@ -10,14 +10,36 @@
 {{ $noRelease := eq (or $p.no_release "") "true" }}
 {{ $ghOpts := dict }}{{ with getenv "HUGO_GITHUB_TOKEN" }}{{ $ghOpts = dict "headers" (dict "Authorization" (printf "Bearer %s" .)) }}{{ end }}
 
+{{ $skipData := getenv "HUGO_SKIP_PROJECT_DATA" }}
+
 {{ $errors := slice }}
 {{ $repoData := dict }}
-{{ $result := try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s" $org $repo) $ghOpts) }}
+{{ $result := dict }}
+{{ $defaultBranch := "main" }}
+{{ if not $skipData }}
+{{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s" $org $repo) $ghOpts) }}
 {{ with $result.Value }}{{ $repoData = . | transform.Unmarshal }}{{ end }}
 {{ with $result.Err }}{{ $errors = $errors | append (printf "repo-info: %s" .) }}{{ end }}
-{{ $defaultBranch := or $repoData.default_branch "main" }}
+{{ $defaultBranch = or $repoData.default_branch "main" }}
+{{ end }}
 
 {{ $lastCommitDate := "" }}
+{{ $releaseData := dict }}
+{{ $pypiVersion := "" }}
+{{ $pypiReleaseDate := "" }}
+{{ $pypiDownloads := 0 }}
+{{ $ghDownloads := 0 }}
+{{ $ghDownloadLabel := "total" }}
+{{ $ghaUsageCount := 0 }}
+{{ $jbDownloads := 0 }}
+{{ $jbVersion := "" }}
+{{ $jbReleaseUnix := 0 }}
+{{ $stars := 0 }}
+{{ $openTotal := 0 }}
+{{ $openPRs := 0 }}
+{{ $openIssues := 0 }}
+
+{{ if not $skipData }}
 {{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/commits?sha=%s&per_page=1" $org $repo $defaultBranch) $ghOpts) }}
 {{ with $result.Value }}
   {{ $commits := . | transform.Unmarshal }}
@@ -25,13 +47,10 @@
 {{ end }}
 {{ with $result.Err }}{{ $errors = $errors | append (printf "commits: %s" .) }}{{ end }}
 
-{{ $releaseData := dict }}
 {{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/releases/latest" $org $repo) $ghOpts) }}
 {{ with $result.Value }}{{ $releaseData = . | transform.Unmarshal }}{{ end }}
 {{ with $result.Err }}{{ $errors = $errors | append (printf "release: %s" .) }}{{ end }}
 
-{{ $pypiVersion := "" }}
-{{ $pypiReleaseDate := "" }}
 {{ if $showPypi }}
   {{ $result = try (resources.GetRemote (printf "https://pypi.org/pypi/%s/json" $name)) }}
   {{ with $result.Value }}
@@ -42,7 +61,6 @@
   {{ with $result.Err }}{{ $errors = $errors | append (printf "pypi-version: %s" .) }}{{ end }}
 {{ end }}
 
-{{ $pypiDownloads := 0 }}
 {{ if $showPypi }}
   {{ $result = try (resources.GetRemote (printf "https://pypistats.org/api/packages/%s/recent" $name)) }}
   {{ with $result.Value }}
@@ -52,9 +70,6 @@
   {{ with $result.Err }}{{ $errors = $errors | append (printf "pypi-downloads: %s" .) }}{{ end }}
 {{ end }}
 
-{{ $ghDownloads := 0 }}
-{{ $ghDownloadLabel := "total" }}
-{{ $ghaUsageCount := 0 }}
 {{ if and (not $showPypi) (not $jetbrainsId) }}
   {{ $rawType := split (or $p.type "") "," }}
   {{ if in $rawType "github-action" }}
@@ -91,9 +106,6 @@
   {{ end }}
 {{ end }}
 
-{{ $jbDownloads := 0 }}
-{{ $jbVersion := "" }}
-{{ $jbReleaseUnix := 0 }}
 {{ if $jetbrainsId }}
   {{ $result = try (resources.GetRemote (printf "https://plugins.jetbrains.com/api/plugins/%s" $jetbrainsId)) }}
   {{ with $result.Value }}
@@ -111,15 +123,14 @@
   {{ with $result.Err }}{{ $errors = $errors | append (printf "jb-version: %s" .) }}{{ end }}
 {{ end }}
 
-{{ $stars := 0 }}
 {{ with $repoData.stargazers_count }}{{ $stars = int . }}{{ end }}
-{{ $openTotal := 0 }}
 {{ with $repoData.open_issues_count }}{{ $openTotal = int . }}{{ end }}
-{{ $openPRs := 0 }}
 {{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/pulls?state=open&per_page=100" $org $repo) $ghOpts) }}
 {{ with $result.Value }}{{ $openPRs = len (. | transform.Unmarshal) }}{{ end }}
 {{ with $result.Err }}{{ $errors = $errors | append (printf "gh-pulls: %s" .) }}{{ end }}
-{{ $openIssues := sub $openTotal $openPRs }}
+{{ $openIssues = sub $openTotal $openPRs }}
+{{ end }}
+{{ if not $skipData }}
 {{ $logParts := slice (printf "stars=%d" $stars) (printf "issues=%d prs=%d" $openIssues $openPRs) (printf "last-commit=%s" (or $lastCommitDate "?")) }}
 {{ if $showPypi }}
   {{ $logParts = $logParts | append (printf "pypi-version=%s" (or $pypiVersion "?")) (printf "pypi-downloads=%d" $pypiDownloads) }}
@@ -135,6 +146,7 @@
   {{ warnf "project %s/%s: %s | errors: %s" $org $repo (delimit $logParts " ") (delimit $errors "; ") }}
 {{ else }}
   {{ warnf "project %s/%s: %s" $org $repo (delimit $logParts " ") }}
+{{ end }}
 {{ end }}
 
 {{ $nowUnix := now.Unix }}

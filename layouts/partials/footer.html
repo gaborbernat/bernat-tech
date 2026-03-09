@@ -16,5 +16,71 @@
     © 2018-{{now.Year }}
     {{ $js := resources.Get "js/footer.js" | minify | fingerprint }}
     <script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
+    {{ $codeCopyJs := resources.Get "js/code-copy.js" | minify | fingerprint }}
+    <script defer src="{{ $codeCopyJs.RelPermalink }}" integrity="{{ $codeCopyJs.Data.Integrity }}"></script>
   </section>
 </footer>
+{{ if .Page.Store.Get "hasMermaid" }}
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+
+  const getTheme = () => {
+    const body = document.body;
+
+    // Check if explicitly dark mode
+    if (body.classList.contains('colorscheme-dark')) {
+      return 'dark';
+    }
+
+    // Check if explicitly light mode
+    if (body.classList.contains('colorscheme-light')) {
+      return 'default';
+    }
+
+    // Auto mode - check system preference
+    if (body.classList.contains('colorscheme-auto')) {
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'default';
+    }
+
+    // Fallback to default
+    return 'default';
+  };
+
+  // Store original mermaid code before rendering
+  document.querySelectorAll('pre.mermaid').forEach((diagram) => {
+    diagram.setAttribute('data-mermaid-code', diagram.textContent);
+  });
+
+  // Initialize mermaid with current theme
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: getTheme()
+  });
+
+  // Re-render diagrams when theme changes
+  document.addEventListener('themeChanged', async () => {
+    const newTheme = getTheme();
+
+    // Re-initialize mermaid with new theme
+    mermaid.initialize({ theme: newTheme });
+
+    // Find all mermaid diagram containers
+    const diagrams = document.querySelectorAll('pre.mermaid');
+
+    // Re-render each diagram
+    for (const diagram of diagrams) {
+      const code = diagram.getAttribute('data-mermaid-code');
+      const id = 'mermaid-' + Math.random().toString(36).substr(2, 9);
+
+      try {
+        const { svg } = await mermaid.render(id, code);
+        diagram.innerHTML = svg;
+      } catch (err) {
+        console.error('Failed to re-render mermaid diagram:', err);
+      }
+    }
+  });
+</script>
+{{ end }}

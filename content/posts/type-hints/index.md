@@ -112,7 +112,7 @@ transform(append(construct()))
 ```
 
 While there are more and more linters out there, the reference implementation of the Python type checking is
-[mypy](http://mypy-lang.org/). mypy is a Python command-line application, making it easy to integrate into a continuous
+[mypy](https://mypy-lang.org/). mypy is a Python command-line application, making it easy to integrate into a continuous
 integration pipeline.
 
 ### 5. Runtime data validation
@@ -120,7 +120,7 @@ integration pipeline.
 Type hints can be used to validate at runtime to ensure that the caller does not break the contract of methods. It is no
 longer needed to start your function with a long list of type asserts; instead, use a framework that re-uses type hints
 and automatically checks that they are meet before your business logic runs (for example, with
-[pydantic](https://github.com/samuelcolvin/pydantic)):
+[pydantic](https://github.com/pydantic/pydantic)):
 
 ```python
 from datetime import datetime
@@ -432,8 +432,8 @@ The upside of this is that:
   hints, nor can you add conflict with other linter tools.
 - It is a well-tested design; the [`typeshed`](https://github.com/python/typeshed) project uses it to type hint the
   entire standard library, plus some other popular libraries such as `requests`, `yaml`, `dateutil` and
-  [so on](https://github.com/python/typeshed/tree/master/stubs/). It can provide type information for source code that
-  you do not own or cannot change easily.
+  [so on](https://github.com/python/typeshed/tree/main/stubs). It can provide type information for source code that you
+  do not own or cannot change easily.
   </div>
 
 Now there are also some hefty penalties to pay:
@@ -904,7 +904,7 @@ Here's a non-exhaustive list of tools built around the type hint system.
 
 Use these tools to check against type safety inside your library or application:
 
-1. [`mypy` - Python](http://mypy-lang.org/) (the reference type linting tool)
+1. [`mypy` - Python](https://mypy-lang.org/) (the reference type linting tool)
 2. [`pyre` - Facebook](https://github.com/facebook/pyre-check) - Python 3 only, but faster than mypy. An interesting use
    case of this is the ability to do taint/security code analysis with it - see
    [Pieter Hooimeijer - Types, Deeper Static Analysis, and you](https://www.youtube.com/watch?v=hWV8t494N88).
@@ -924,7 +924,7 @@ When you want to add type annotations to an existing codebase, use these to auto
 
 Use these tools to check at runtime if the input arguments to your function/method are of the correct type or not:
 
-1. [`pydantic`](https://github.com/samuelcolvin/pydantic)
+1. [`pydantic`](https://github.com/pydantic/pydantic)
 2. [`enforce`](https://github.com/RussBaz/enforce)
 3. [`pytypes`](https://github.com/Stewori/pytypes)
 
