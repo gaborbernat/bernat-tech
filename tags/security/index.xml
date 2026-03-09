@@ -378,9 +378,10 @@ The Invisible Bug
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Renders: &amp;lt;div safe=&amp;#34;value&amp;#34; onclick=&amp;#34;fetch(...)&amp;#34;&amp;gt;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# The injected onclick executes JavaScript in users&amp;#39; browsers, stealing cookies&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This is CVE-2024-22195, a real vulnerability from 2024. The bug sits in the template engine itself, so even code that
-looks reasonable can be vulnerable when it feeds untrusted input into the affected paths. An attacker can inject
-malicious JavaScript that executes in users&amp;rsquo; browsers, potentially stealing sessions, credentials, or personal data.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This is &lt;a href="https://nvd.nist.gov/vuln/detail/CVE-2024-22195" class="external-link" target="_blank" rel="noopener"&gt;CVE-2024-22195&lt;/a&gt;, a real vulnerability from 2024. The bug sits
+in the template engine itself, so even code that looks reasonable can be vulnerable when it feeds untrusted input into
+the affected paths. An attacker can inject malicious JavaScript that executes in users&amp;rsquo; browsers, potentially stealing
+sessions, credentials, or personal data.&lt;/p&gt;
 &lt;p&gt;The critical insight: &lt;strong&gt;you can&amp;rsquo;t see these vulnerabilities by reading your own code&lt;/strong&gt;. The bug is in a dependency you
 imported. This is why automated vulnerability scanning is essential.&lt;/p&gt;
 &lt;h3 id="automated-scanning-with-pip-audit"&gt;
