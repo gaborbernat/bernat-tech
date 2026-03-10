@@ -3,7 +3,7 @@
 <label class="menu-button float-right" for=menu-toggle><i class="fa-solid fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/posts>Blog</a></li><li class=navigation-item><a class=navigation-link href=/presentations>Presentations</a></li><li class=navigation-item><a class=navigation-link href=/about>About</a></li><li class=navigation-item><a class=navigation-link href=/tags>Tags</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://bernat.tech/posts/securing-python-supply-chain/>Securing Your Python Supply Chain</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa-solid fa-calendar" aria-hidden=true></i>
 <time datetime=2026-03-10T00:00:00Z>2026-03-10
 </time></span><span class=reading-time><i class="fa-solid fa-clock" aria-hidden=true></i>
-29-minute read</span></div><div class=tags><i class="fa-solid fa-tag" aria-hidden=true></i>
+30-minute read</span></div><div class=tags><i class="fa-solid fa-tag" aria-hidden=true></i>
 <span class=tag><a href=/tags/python/>Python</a>
 </span><span class=separator>•</span>
 <span class=tag><a href=/tags/security/>Security</a>
@@ -197,8 +197,8 @@ You just installed malware without changing a single line of code.</p><p>The pro
     style F fill:#50b432,stroke:#3d8a26,color:#fff
 </pre><p><strong>Unpinned</strong> (<code>flask>=2.0</code>) is the most dangerous - you get whatever version is latest, which could be compromised. Your
 builds aren&rsquo;t reproducible and you have no way to detect tampering.</p><p><strong>Version pinned</strong> (<code>flask==3.1.1</code>) is better - you get the exact version you tested with. But there&rsquo;s no integrity
-check. If an attacker compromises the maintainer&rsquo;s account and re-uploads a modified file under the same version number,
-you&rsquo;d install it without knowing.</p><pre class=mermaid>sequenceDiagram
+check. If an attacker compromises the maintainer&rsquo;s account and publishes a new backdoored artifact for the same version
+(e.g., a wheel targeting a platform that wasn&rsquo;t previously uploaded), you&rsquo;d install it without knowing.</p><pre class=mermaid>sequenceDiagram
     participant D as Developer
     participant P as PyPI
     participant A as Attacker
@@ -208,17 +208,18 @@ you&rsquo;d install it without knowing.</p><pre class=mermaid>sequenceDiagram
     Note over D: ✅ Works fine, tests pass
 
     A-&gt;&gt;P: Compromises maintainer account
-    A-&gt;&gt;P: Re-uploads flask 3.1.1 (with backdoor)
+    A-&gt;&gt;P: Uploads new flask 3.1.1 wheel (with backdoor)
 
-    D-&gt;&gt;P: pip install flask==3.1.1 (new server)
-    P--&gt;&gt;D: flask-3.1.1.tar.gz (backdoored)
+    D-&gt;&gt;P: pip install flask==3.1.1 (different platform)
+    P--&gt;&gt;D: flask-3.1.1-cp312-linux.whl (backdoored)
     Note over D: ❌ Same version, different content
 </pre><p>With hash pinning, the second install would fail because the file&rsquo;s hash no longer matches what was recorded. <strong>Hash
 pinned</strong> (<code>flask==3.1.1 --hash=sha256:d667207822...</code>) is secure - it creates a cryptographic fingerprint of the package
 file. During installation, pip recalculates the hash and compares it to what you specified. If they don&rsquo;t match,
-installation fails immediately.</p><p>What does hash pinning protect against? It ensures you only install the exact artifact you locked, and it detects
-tampering in transit, in caches, or in mirrors. It also prevents a silent swap of content under a fixed version in
-systems that allow it.</p><p>What doesn&rsquo;t it protect against? If you install a package for the first time that&rsquo;s already malicious (like in the
+installation fails immediately. Note that PyPI does not allow re-uploading an existing filename — once
+<code>flask-3.1.1.tar.gz</code> is uploaded, that specific file is immutable. However, an attacker could still upload additional
+distribution files for the same version.</p><p>What does hash pinning protect against? It ensures you only install the exact artifact you locked, and it detects
+tampering in transit, in caches, or in mirrors.</p><p>What doesn&rsquo;t it protect against? If you install a package for the first time that&rsquo;s already malicious (like in the
 Ultralytics incident), hash pinning won&rsquo;t help - you&rsquo;ll just pin the malicious hash. This is why you combine hash
 pinning with vulnerability scanning and delayed ingestion. There are also deeper attacks at the archive format level -
 PyPI has had to introduce
@@ -228,8 +229,10 @@ where different installers could extract different content from the same wheel f
 <span class=sr-only>Link to heading</span></a></h3><p><a href=https://docs.astral.sh/uv/ class=external-link target=_blank rel=noopener>uv</a> makes hash pinning effortless by generating lockfiles with cryptographic hashes by
 default. See the <a href=https://docs.astral.sh/uv/concepts/projects/#lockfile class=external-link target=_blank rel=noopener>uv lockfile documentation</a> for details:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>uv lock
 </span></span><span class=line><span class=cl>uv sync
-</span></span></code></pre></div><p>For requirements files with hashes (see <a href=https://docs.astral.sh/uv/reference/cli/#uv-pip-compile class=external-link target=_blank rel=noopener>uv pip compile docs</a>):</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>uv pip compile --generate-hashes requirements.in &gt; requirements.txt
-</span></span><span class=line><span class=cl>uv <span class=nb>export</span> --format requirements-txt &gt; requirements.txt
+</span></span></code></pre></div><p>For requirements files with hashes (see <a href=https://docs.astral.sh/uv/reference/cli/#uv-pip-compile class=external-link target=_blank rel=noopener>uv pip compile docs</a>):</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># From a requirements.in file:</span>
+</span></span><span class=line><span class=cl>uv pip compile --generate-hashes requirements.in -o requirements.txt
+</span></span><span class=line><span class=cl><span class=c1># Or from a uv project (hashes included by default):</span>
+</span></span><span class=line><span class=cl>uv <span class=nb>export</span> --format requirements-txt -o requirements.txt
 </span></span></code></pre></div><p>If you&rsquo;re not ready to switch to uv yet, <a href=https://github.com/jazzband/pip-tools class=external-link target=_blank rel=noopener>pip-tools</a> provides similar
 functionality:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>pip-compile --generate-hashes requirements.in &gt; requirements.txt
 </span></span></code></pre></div><p>These commands create SHA256 checksums that get verified at install time. If someone modifies a package even with the
@@ -256,10 +259,10 @@ exact reproducibility for deployment (production always gets exactly what you te
 <a href=https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain class=external-link target=_blank rel=noopener>Dependabot</a> can automate updates by filing
 pull requests when new versions are available. Add a <code>.github/dependabot.yml</code> to your repository:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>version</span><span class=p>:</span><span class=w> </span><span class=m>2</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=nt>updates</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>package-ecosystem</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;pip&#34;</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>directory</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;/&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>package-ecosystem</span><span class=p>:</span><span class=w> </span><span class=l>pip</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>directory</span><span class=p>:</span><span class=w> </span><span class=l>/</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>schedule</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>interval</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;weekly&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>interval</span><span class=p>:</span><span class=w> </span><span class=l>weekly</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>open-pull-requests-limit</span><span class=p>:</span><span class=w> </span><span class=m>10</span><span class=w>
 </span></span></span></code></pre></div><p>Dependabot will check your <code>requirements.txt</code> (or <code>pyproject.toml</code>) weekly and open PRs for outdated or vulnerable
 dependencies. Each PR includes the changelog and compatibility score, so you can review before merging.</p><h2 id=scan-for-vulnerabilities>Scan For Vulnerabilities
@@ -417,10 +420,10 @@ the box. You can also pin packages to specific indexes explicitly:</p><div class
 </span></span></code></pre></div><p>If you&rsquo;re still using pip, mitigate with these strategies:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Use --index-url (single index) instead of --extra-index-url (multiple)</span>
 </span></span><span class=line><span class=cl>pip install --index-url https://internal.corp.com/pypi mypackage
 </span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># Or lock down pip.conf entirely</span>
+</span></span><span class=line><span class=cl><span class=c1># Or lock down pip.conf to a single internal index</span>
 </span></span><span class=line><span class=cl><span class=o>[</span>install<span class=o>]</span>
 </span></span><span class=line><span class=cl>index-url <span class=o>=</span> https://internal.corp.com/pypi
-</span></span><span class=line><span class=cl>no-index <span class=o>=</span> <span class=nb>true</span>  <span class=c1># Never fall back to PyPI</span>
+</span></span><span class=line><span class=cl>trusted-host <span class=o>=</span> internal.corp.com
 </span></span></code></pre></div><p>SBOMs can help detect potential naming conflicts by providing an inventory to audit, but they&rsquo;re detective controls -
 they show you what you installed after the fact.</p><p><strong>Reserve specific project names</strong>: While PyPI doesn&rsquo;t support wildcard namespaces like <code>yourcompany.*</code>, you can
 manually register specific package names you use internally. This prevents attackers from registering them, though it
@@ -467,6 +470,7 @@ provides detailed setup instructions. The authentication flow:</p><pre class=mer
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>publish</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>runs-on</span><span class=p>:</span><span class=w> </span><span class=l>ubuntu-latest</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>steps</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=c># Tags used for readability — pin to commit SHAs in production (see below)</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>uses</span><span class=p>:</span><span class=w> </span><span class=l>actions/checkout@v4</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>uses</span><span class=p>:</span><span class=w> </span><span class=l>astral-sh/setup-uv@v5</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>uses</span><span class=p>:</span><span class=w> </span><span class=l>pypa/gh-action-pypi-publish@release/v1</span><span class=w>
@@ -545,8 +549,8 @@ discover obvious threats:</p><pre class=mermaid>timeline
             : Security advisories published
 </pre><h3 id=for-individual-developers>For Individual Developers
 <a class=heading-link href=#for-individual-developers><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h3><p>Modern tools like uv support time-based filtering through the <code>--exclude-newer</code> flag:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Only use packages published before 7 days ago</span>
-</span></span><span class=line><span class=cl>uv pip compile --exclude-newer <span class=s2>&#34;1 week&#34;</span>
+<span class=sr-only>Link to heading</span></a></h3><p>Modern tools like uv support time-based filtering through the <code>--exclude-newer</code> flag:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Only use packages published before a specific date (e.g., 7 days ago)</span>
+</span></span><span class=line><span class=cl>uv pip compile --exclude-newer 2026-03-02 requirements.in -o requirements.txt
 </span></span></code></pre></div><p>This provides a buffer period that can help catch obvious malicious packages before they reach your systems. Think of it
 as letting others be the &ldquo;canaries in the coal mine.&rdquo;</p><p><strong>Limitations</strong>: Delayed ingestion won&rsquo;t catch sophisticated attacks that evade detection, doesn&rsquo;t protect against
 vulnerabilities in packages you&rsquo;re already using, and delays access to security patches (you might need to expedite
@@ -708,7 +712,7 @@ documentation</li><li><a href=https://pypi.org/project/pip-audit/ class=external
 <span class=date>- 2020-05-16</span></li><li><a href=https://bernat.tech/posts/the-state-of-type-hints-in-python/>The state of type hints in Python</a>
 <span class=date>- 2018-05-30</span></li></ul></div></footer></article></section></div><footer class=footer><section class=container><b>Opinions are my own</b>.
 <a href=https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml>Updated</a>&nbsp;<time id=footer-ts datetime=2026-03-09T20:52:26.000Z>2026-03-09T20:52:26.000Z&nbsp;UTC</time>
-via <a href=https://github.com/gaborbernat/bernat-tech/commit/7c482f8a12697ec3a6e1df8bf2c1a02c7a6fa00b>7c482f8a</a>.
+via <a href=https://github.com/gaborbernat/bernat-tech/commit/cad9197587610129e41e3ec856da096e2906fa8a>cad91975</a>.
 © 2018-2026
 <script defer src=/js/footer.min.d3f865d692fc079096014431769f338c835dbe4e2d0b5891f541d203b10af60e.js integrity="sha256-0/hl1pL8B5CWAUQxdp8zjINdvk4tC1iR9UHSA7EK9g4="></script><script defer src=/js/code-copy.min.00a564933606d3f06a8eef836cbec7a10f3b8d3c0126d0f041ec25622962ea46.js integrity="sha256-AKVkkzYG0/Bqju+DbL7HoQ87jTwBJtDwQewlYili6kY="></script></section></footer><script type=module>
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';

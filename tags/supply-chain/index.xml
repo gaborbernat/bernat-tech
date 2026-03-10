@@ -287,8 +287,8 @@ style F fill:#50b432,stroke:#3d8a26,color:#fff
 &lt;p&gt;&lt;strong&gt;Unpinned&lt;/strong&gt; (&lt;code&gt;flask&amp;gt;=2.0&lt;/code&gt;) is the most dangerous - you get whatever version is latest, which could be compromised. Your
 builds aren&amp;rsquo;t reproducible and you have no way to detect tampering.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Version pinned&lt;/strong&gt; (&lt;code&gt;flask==3.1.1&lt;/code&gt;) is better - you get the exact version you tested with. But there&amp;rsquo;s no integrity
-check. If an attacker compromises the maintainer&amp;rsquo;s account and re-uploads a modified file under the same version number,
-you&amp;rsquo;d install it without knowing.&lt;/p&gt;
+check. If an attacker compromises the maintainer&amp;rsquo;s account and publishes a new backdoored artifact for the same version
+(e.g., a wheel targeting a platform that wasn&amp;rsquo;t previously uploaded), you&amp;rsquo;d install it without knowing.&lt;/p&gt;
 &lt;pre class="mermaid"&gt;sequenceDiagram
 participant D as Developer
 participant P as PyPI
@@ -297,18 +297,19 @@ D-&amp;gt;&amp;gt;P: pip install flask==3.1.1
 P--&amp;gt;&amp;gt;D: flask-3.1.1.tar.gz (genuine)
 Note over D: ✅ Works fine, tests pass
 A-&amp;gt;&amp;gt;P: Compromises maintainer account
-A-&amp;gt;&amp;gt;P: Re-uploads flask 3.1.1 (with backdoor)
-D-&amp;gt;&amp;gt;P: pip install flask==3.1.1 (new server)
-P--&amp;gt;&amp;gt;D: flask-3.1.1.tar.gz (backdoored)
+A-&amp;gt;&amp;gt;P: Uploads new flask 3.1.1 wheel (with backdoor)
+D-&amp;gt;&amp;gt;P: pip install flask==3.1.1 (different platform)
+P--&amp;gt;&amp;gt;D: flask-3.1.1-cp312-linux.whl (backdoored)
 Note over D: ❌ Same version, different content
 &lt;/pre&gt;
 &lt;p&gt;With hash pinning, the second install would fail because the file&amp;rsquo;s hash no longer matches what was recorded. &lt;strong&gt;Hash
 pinned&lt;/strong&gt; (&lt;code&gt;flask==3.1.1 --hash=sha256:d667207822...&lt;/code&gt;) is secure - it creates a cryptographic fingerprint of the package
 file. During installation, pip recalculates the hash and compares it to what you specified. If they don&amp;rsquo;t match,
-installation fails immediately.&lt;/p&gt;
+installation fails immediately. Note that PyPI does not allow re-uploading an existing filename — once
+&lt;code&gt;flask-3.1.1.tar.gz&lt;/code&gt; is uploaded, that specific file is immutable. However, an attacker could still upload additional
+distribution files for the same version.&lt;/p&gt;
 &lt;p&gt;What does hash pinning protect against? It ensures you only install the exact artifact you locked, and it detects
-tampering in transit, in caches, or in mirrors. It also prevents a silent swap of content under a fixed version in
-systems that allow it.&lt;/p&gt;
+tampering in transit, in caches, or in mirrors.&lt;/p&gt;
 &lt;p&gt;What doesn&amp;rsquo;t it protect against? If you install a package for the first time that&amp;rsquo;s already malicious (like in the
 Ultralytics incident), hash pinning won&amp;rsquo;t help - you&amp;rsquo;ll just pin the malicious hash. This is why you combine hash
 pinning with vulnerability scanning and delayed ingestion. There are also deeper attacks at the archive format level -
@@ -327,8 +328,10 @@ default. See the &lt;a href="https://docs.astral.sh/uv/concepts/projects/#lockfi
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;uv lock
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;uv sync
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;For requirements files with hashes (see &lt;a href="https://docs.astral.sh/uv/reference/cli/#uv-pip-compile" class="external-link" target="_blank" rel="noopener"&gt;uv pip compile docs&lt;/a&gt;):&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;uv pip compile --generate-hashes requirements.in &amp;gt; requirements.txt
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;uv &lt;span class="nb"&gt;export&lt;/span&gt; --format requirements-txt &amp;gt; requirements.txt
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# From a requirements.in file:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;uv pip compile --generate-hashes requirements.in -o requirements.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Or from a uv project (hashes included by default):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;uv &lt;span class="nb"&gt;export&lt;/span&gt; --format requirements-txt -o requirements.txt
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If you&amp;rsquo;re not ready to switch to uv yet, &lt;a href="https://github.com/jazzband/pip-tools" class="external-link" target="_blank" rel="noopener"&gt;pip-tools&lt;/a&gt; provides similar
 functionality:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pip-compile --generate-hashes requirements.in &amp;gt; requirements.txt
@@ -365,10 +368,10 @@ exact reproducibility for deployment (production always gets exactly what you te
 pull requests when new versions are available. Add a &lt;code&gt;.github/dependabot.yml&lt;/code&gt; to your repository:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;version&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;updates&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;package-ecosystem&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;pip&amp;#34;&lt;/span&gt;&lt;span class="w"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;directory&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;/&amp;#34;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;package-ecosystem&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;pip&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;directory&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;/&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;schedule&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;interval&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;weekly&amp;#34;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;interval&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;weekly&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;open-pull-requests-limit&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Dependabot will check your &lt;code&gt;requirements.txt&lt;/code&gt; (or &lt;code&gt;pyproject.toml&lt;/code&gt;) weekly and open PRs for outdated or vulnerable
 dependencies. Each PR includes the changelog and compatibility score, so you can review before merging.&lt;/p&gt;
@@ -597,10 +600,10 @@ the box. You can also pin packages to specific indexes explicitly:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Use --index-url (single index) instead of --extra-index-url (multiple)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pip install --index-url https://internal.corp.com/pypi mypackage
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Or lock down pip.conf entirely&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Or lock down pip.conf to a single internal index&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;[&lt;/span&gt;install&lt;span class="o"&gt;]&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;index-url &lt;span class="o"&gt;=&lt;/span&gt; https://internal.corp.com/pypi
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;no-index &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt; &lt;span class="c1"&gt;# Never fall back to PyPI&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;trusted-host &lt;span class="o"&gt;=&lt;/span&gt; internal.corp.com
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;SBOMs can help detect potential naming conflicts by providing an inventory to audit, but they&amp;rsquo;re detective controls -
 they show you what you installed after the fact.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Reserve specific project names&lt;/strong&gt;: While PyPI doesn&amp;rsquo;t support wildcard namespaces like &lt;code&gt;yourcompany.*&lt;/code&gt;, you can
@@ -670,6 +673,7 @@ Note over GHA,PyPI: Key expires in minutes
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;publish&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;runs-on&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;ubuntu-latest&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;steps&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# Tags used for readability — pin to commit SHAs in production (see below)&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;uses&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;actions/checkout@v4&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;uses&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;astral-sh/setup-uv@v5&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;uses&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;pypa/gh-action-pypi-publish@release/v1&lt;/span&gt;&lt;span class="w"&gt;
@@ -778,8 +782,8 @@ For Individual Developers
 &lt;/a&gt;
 &lt;/h3&gt;
 &lt;p&gt;Modern tools like uv support time-based filtering through the &lt;code&gt;--exclude-newer&lt;/code&gt; flag:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Only use packages published before 7 days ago&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;uv pip compile --exclude-newer &lt;span class="s2"&gt;&amp;#34;1 week&amp;#34;&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Only use packages published before a specific date (e.g., 7 days ago)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;uv pip compile --exclude-newer 2026-03-02 requirements.in -o requirements.txt
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This provides a buffer period that can help catch obvious malicious packages before they reach your systems. Think of it
 as letting others be the &amp;ldquo;canaries in the coal mine.&amp;rdquo;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Limitations&lt;/strong&gt;: Delayed ingestion won&amp;rsquo;t catch sophisticated attacks that evade detection, doesn&amp;rsquo;t protect against
