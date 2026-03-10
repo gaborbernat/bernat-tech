@@ -2,9 +2,9 @@
 &lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-info" aria-hidden="true"&gt;&lt;/i&gt; TLDR:&lt;/p&gt;
 &lt;p&gt;Layer your defenses and don&amp;rsquo;t trust any single control. Use Ruff with security rules to catch bugs in your code before
 they ship. Pin all your dependencies with cryptographic hashes using &lt;code&gt;uv lock&lt;/code&gt; or &lt;code&gt;uv pip compile --generate-hashes&lt;/code&gt;
-so nobody can swap out packages on you. Run &lt;a href="https://github.com/pypa/pip-audit" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;pip-audit&lt;/code&gt;&lt;/a&gt; in CI to catch known CVEs before they hit production. Generate
-SBOMs with CycloneDX so when the next Ultralytics-style compromise drops, you can answer &amp;ldquo;are we affected?&amp;rdquo; in minutes
-instead of days.&lt;/p&gt;
+so nobody can swap out packages on you. Run &lt;a href="https://github.com/pypa/pip-audit" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;pip-audit&lt;/code&gt;&lt;/a&gt; in CI to catch known CVEs
+before they hit production. Generate SBOMs with CycloneDX so when the next Ultralytics-style compromise drops, you can
+answer &amp;ldquo;are we affected?&amp;rdquo; in minutes instead of days.&lt;/p&gt;
 &lt;p&gt;If you&amp;rsquo;re publishing packages, ditch the long-lived API tokens and switch to Trusted Publishing with OIDC. This
 generates attestations automatically via Sigstore, linking your packages back to source repos. Organizations running
 internal mirrors can add a 7-day delay to let the community be your canary - but only if you&amp;rsquo;ve got the infrastructure
@@ -302,9 +302,9 @@ D-&amp;gt;&amp;gt;P: pip install flask==3.1.1 (new server)
 P--&amp;gt;&amp;gt;D: flask-3.1.1.tar.gz (backdoored)
 Note over D: ❌ Same version, different content
 &lt;/pre&gt;
-&lt;p&gt;With hash pinning, the second install would fail because the file&amp;rsquo;s hash no longer matches what was recorded.
-&lt;strong&gt;Hash pinned&lt;/strong&gt; (&lt;code&gt;flask==3.1.1 --hash=sha256:d667207822...&lt;/code&gt;) is secure - it creates a cryptographic fingerprint of the
-package file. During installation, pip recalculates the hash and compares it to what you specified. If they don&amp;rsquo;t match,
+&lt;p&gt;With hash pinning, the second install would fail because the file&amp;rsquo;s hash no longer matches what was recorded. &lt;strong&gt;Hash
+pinned&lt;/strong&gt; (&lt;code&gt;flask==3.1.1 --hash=sha256:d667207822...&lt;/code&gt;) is secure - it creates a cryptographic fingerprint of the package
+file. During installation, pip recalculates the hash and compares it to what you specified. If they don&amp;rsquo;t match,
 installation fails immediately.&lt;/p&gt;
 &lt;p&gt;What does hash pinning protect against? It ensures you only install the exact artifact you locked, and it detects
 tampering in transit, in caches, or in mirrors. It also prevents a silent swap of content under a fixed version in
@@ -458,7 +458,8 @@ Integrate Into CI/CD
 &lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
 &lt;/a&gt;
 &lt;/h3&gt;
-&lt;p&gt;Security checks should run automatically on every commit. Adding &lt;a href="https://github.com/pypa/pip-audit" class="external-link" target="_blank" rel="noopener"&gt;pip-audit&lt;/a&gt; to common CI systems:&lt;/p&gt;
+&lt;p&gt;Security checks should run automatically on every commit. Adding &lt;a href="https://github.com/pypa/pip-audit" class="external-link" target="_blank" rel="noopener"&gt;pip-audit&lt;/a&gt; to
+common CI systems:&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;GitHub Actions:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;Security Scan&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;on&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="l"&gt;push, pull_request]&lt;/span&gt;&lt;span class="w"&gt;
@@ -811,9 +812,9 @@ style D2 fill:#50b432,stroke:#3d8a26,color:#fff
 faster downloads, offline availability, and enables centralized logging, it offers limited protection against
 supply-chain attacks - malicious packages get through instantly unless you layer on additional controls like scanning or
 allowlists. Examples include devpi in simple mode and basic Artifactory setups.&lt;/p&gt;
-&lt;p&gt;Ingestion control actively controls what packages enter the organization by enforcing a mandatory delay window (typically
-6-7 days) and scanning packages before making them available. This provides security benefit by giving the community
-time to discover threats, but requires dedicated infrastructure and policy management.&lt;/p&gt;
+&lt;p&gt;Ingestion control actively controls what packages enter the organization by enforcing a mandatory delay window
+(typically 6-7 days) and scanning packages before making them available. This provides security benefit by giving the
+community time to discover threats, but requires dedicated infrastructure and policy management.&lt;/p&gt;
 &lt;h4 id="how-ingestion-control-works"&gt;
 How Ingestion Control Works
 &lt;a class="heading-link" href="#how-ingestion-control-works"&gt;
@@ -960,8 +961,8 @@ credentials. Scan systems for indicators of compromise and check outbound networ
 exfiltration.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Remove and remediate.&lt;/strong&gt; Pin to a known-good version or remove the dependency entirely. Run &lt;code&gt;pip-audit&lt;/code&gt; to verify
-no other vulnerabilities were introduced, then update your lockfiles with the fixed version.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Remove and remediate.&lt;/strong&gt; Pin to a known-good version or remove the dependency entirely. Run &lt;code&gt;pip-audit&lt;/code&gt; to verify no
+other vulnerabilities were introduced, then update your lockfiles with the fixed version.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;Report.&lt;/strong&gt; Report the malicious package via &lt;a href="https://pypi.org/security/" class="external-link" target="_blank" rel="noopener"&gt;PyPI&amp;rsquo;s security reporting system&lt;/a&gt;. Notify

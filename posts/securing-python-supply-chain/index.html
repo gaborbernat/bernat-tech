@@ -18,9 +18,9 @@
 </span><span class=separator>•</span>
 <span class=tag><a href=/tags/pip/>Pip</a></span></div></div></header><div class="post-wrapper has-toc"><div class=post-content><div class="alert alert-info"><p class=alert-title><i class="fa-solid fa-circle-info" aria-hidden=true></i> TLDR:</p><p>Layer your defenses and don&rsquo;t trust any single control. Use Ruff with security rules to catch bugs in your code before
 they ship. Pin all your dependencies with cryptographic hashes using <code>uv lock</code> or <code>uv pip compile --generate-hashes</code>
-so nobody can swap out packages on you. Run <a href=https://github.com/pypa/pip-audit class=external-link target=_blank rel=noopener><code>pip-audit</code></a> in CI to catch known CVEs before they hit production. Generate
-SBOMs with CycloneDX so when the next Ultralytics-style compromise drops, you can answer &ldquo;are we affected?&rdquo; in minutes
-instead of days.</p><p>If you&rsquo;re publishing packages, ditch the long-lived API tokens and switch to Trusted Publishing with OIDC. This
+so nobody can swap out packages on you. Run <a href=https://github.com/pypa/pip-audit class=external-link target=_blank rel=noopener><code>pip-audit</code></a> in CI to catch known CVEs
+before they hit production. Generate SBOMs with CycloneDX so when the next Ultralytics-style compromise drops, you can
+answer &ldquo;are we affected?&rdquo; in minutes instead of days.</p><p>If you&rsquo;re publishing packages, ditch the long-lived API tokens and switch to Trusted Publishing with OIDC. This
 generates attestations automatically via Sigstore, linking your packages back to source repos. Organizations running
 internal mirrors can add a 7-day delay to let the community be your canary - but only if you&rsquo;ve got the infrastructure
 to maintain it.</p><p>Nothing here is perfect. Hash pinning stops tampering but won&rsquo;t save you from a malicious package you installed on day
@@ -213,9 +213,9 @@ you&rsquo;d install it without knowing.</p><pre class=mermaid>sequenceDiagram
     D-&gt;&gt;P: pip install flask==3.1.1 (new server)
     P--&gt;&gt;D: flask-3.1.1.tar.gz (backdoored)
     Note over D: ❌ Same version, different content
-</pre><p>With hash pinning, the second install would fail because the file&rsquo;s hash no longer matches what was recorded.
-<strong>Hash pinned</strong> (<code>flask==3.1.1 --hash=sha256:d667207822...</code>) is secure - it creates a cryptographic fingerprint of the
-package file. During installation, pip recalculates the hash and compares it to what you specified. If they don&rsquo;t match,
+</pre><p>With hash pinning, the second install would fail because the file&rsquo;s hash no longer matches what was recorded. <strong>Hash
+pinned</strong> (<code>flask==3.1.1 --hash=sha256:d667207822...</code>) is secure - it creates a cryptographic fingerprint of the package
+file. During installation, pip recalculates the hash and compares it to what you specified. If they don&rsquo;t match,
 installation fails immediately.</p><p>What does hash pinning protect against? It ensures you only install the exact artifact you locked, and it detects
 tampering in transit, in caches, or in mirrors. It also prevents a silent swap of content under a fixed version in
 systems that allow it.</p><p>What doesn&rsquo;t it protect against? If you install a package for the first time that&rsquo;s already malicious (like in the
@@ -313,7 +313,8 @@ before they reach production - it takes seconds and can save you from deploying 
 offers automated remediation and malicious package detection, though it uses a freemium model with paid plans for
 enterprise features.</p><h3 id=integrate-into-cicd>Integrate Into CI/CD
 <a class=heading-link href=#integrate-into-cicd><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h3><p>Security checks should run automatically on every commit. Adding <a href=https://github.com/pypa/pip-audit class=external-link target=_blank rel=noopener>pip-audit</a> to common CI systems:</p><p><strong>GitHub Actions:</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Security Scan</span><span class=w>
+<span class=sr-only>Link to heading</span></a></h3><p>Security checks should run automatically on every commit. Adding <a href=https://github.com/pypa/pip-audit class=external-link target=_blank rel=noopener>pip-audit</a> to
+common CI systems:</p><p><strong>GitHub Actions:</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Security Scan</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=nt>on</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=l>push, pull_request]</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=nt>jobs</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>security</span><span class=p>:</span><span class=w>
@@ -565,9 +566,9 @@ critical fixes). It&rsquo;s one layer of defense, not a complete solution.</p><h
 </pre><p>A simple mirror acts as a proxy to PyPI, making packages available immediately after publication. While this provides
 faster downloads, offline availability, and enables centralized logging, it offers limited protection against
 supply-chain attacks - malicious packages get through instantly unless you layer on additional controls like scanning or
-allowlists. Examples include devpi in simple mode and basic Artifactory setups.</p><p>Ingestion control actively controls what packages enter the organization by enforcing a mandatory delay window (typically
-6-7 days) and scanning packages before making them available. This provides security benefit by giving the community
-time to discover threats, but requires dedicated infrastructure and policy management.</p><h4 id=how-ingestion-control-works>How Ingestion Control Works
+allowlists. Examples include devpi in simple mode and basic Artifactory setups.</p><p>Ingestion control actively controls what packages enter the organization by enforcing a mandatory delay window
+(typically 6-7 days) and scanning packages before making them available. This provides security benefit by giving the
+community time to discover threats, but requires dedicated infrastructure and policy management.</p><h4 id=how-ingestion-control-works>How Ingestion Control Works
 <a class=heading-link href=#how-ingestion-control-works><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h4><p>For organizations with the resources to run ingestion control, the system works like this:</p><pre class=mermaid>sequenceDiagram
     participant PyPI as Public PyPI
@@ -650,8 +651,8 @@ internal mirror if you have one. The goal is to prevent further installations wh
 what secrets the package could have accessed - environment variables, filesystem credentials, cloud tokens. Use your
 SBOM to find all affected projects across your organization.</p></li><li><p><strong>Contain the breach.</strong> Rotate all credentials the package could have accessed: API keys, database passwords, cloud
 credentials. Scan systems for indicators of compromise and check outbound network connections for signs of data
-exfiltration.</p></li><li><p><strong>Remove and remediate.</strong> Pin to a known-good version or remove the dependency entirely. Run <code>pip-audit</code> to verify
-no other vulnerabilities were introduced, then update your lockfiles with the fixed version.</p></li><li><p><strong>Report.</strong> Report the malicious package via <a href=https://pypi.org/security/ class=external-link target=_blank rel=noopener>PyPI&rsquo;s security reporting system</a>. Notify
+exfiltration.</p></li><li><p><strong>Remove and remediate.</strong> Pin to a known-good version or remove the dependency entirely. Run <code>pip-audit</code> to verify no
+other vulnerabilities were introduced, then update your lockfiles with the fixed version.</p></li><li><p><strong>Report.</strong> Report the malicious package via <a href=https://pypi.org/security/ class=external-link target=_blank rel=noopener>PyPI&rsquo;s security reporting system</a>. Notify
 your security team and potentially affected customers. Document the incident for future reference - what happened,
 how it was detected, and what you changed to prevent recurrence.</p></li></ol><h2 id=your-roadmap>Your Roadmap
 <a class=heading-link href=#your-roadmap><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
@@ -707,7 +708,7 @@ documentation</li><li><a href=https://pypi.org/project/pip-audit/ class=external
 <span class=date>- 2020-05-16</span></li><li><a href=https://bernat.tech/posts/the-state-of-type-hints-in-python/>The state of type hints in Python</a>
 <span class=date>- 2018-05-30</span></li></ul></div></footer></article></section></div><footer class=footer><section class=container><b>Opinions are my own</b>.
 <a href=https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml>Updated</a>&nbsp;<time id=footer-ts datetime=2026-03-09T20:52:26.000Z>2026-03-09T20:52:26.000Z&nbsp;UTC</time>
-via <a href=https://github.com/gaborbernat/bernat-tech/commit/9b74bfdcaf7653140fd4bff8b33990d456f6fd43>9b74bfdc</a>.
+via <a href=https://github.com/gaborbernat/bernat-tech/commit/7c482f8a12697ec3a6e1df8bf2c1a02c7a6fa00b>7c482f8a</a>.
 © 2018-2026
 <script defer src=/js/footer.min.d3f865d692fc079096014431769f338c835dbe4e2d0b5891f541d203b10af60e.js integrity="sha256-0/hl1pL8B5CWAUQxdp8zjINdvk4tC1iR9UHSA7EK9g4="></script><script defer src=/js/code-copy.min.00a564933606d3f06a8eef836cbec7a10f3b8d3c0126d0f041ec25622962ea46.js integrity="sha256-AKVkkzYG0/Bqju+DbL7HoQ87jTwBJtDwQewlYili6kY="></script></section></footer><script type=module>
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
