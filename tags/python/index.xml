@@ -228,7 +228,7 @@ Catch These Automatically With Ruff
 &lt;/a&gt;
 &lt;/h3&gt;
 &lt;p&gt;&lt;a href="https://docs.astral.sh/ruff/" class="external-link" target="_blank" rel="noopener"&gt;Ruff&lt;/a&gt; is a blazingly fast Python linter that includes comprehensive security rules from
-&lt;a href="https://bandit.readthedocs.io/" class="external-link" target="_blank" rel="noopener"&gt;Bandit&lt;/a&gt;. You can learn more in the
+&lt;a href="https://bandit.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;Bandit&lt;/a&gt;. You can learn more in the
 &lt;a href="https://docs.astral.sh/ruff/rules/#flake8-bandit-s" class="external-link" target="_blank" rel="noopener"&gt;Ruff security rules documentation&lt;/a&gt;. Configure it in
 &lt;code&gt;pyproject.toml&lt;/code&gt;:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-toml" data-lang="toml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;tool&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;ruff&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
@@ -363,8 +363,8 @@ advice below is for application teams.&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; --hash=sha256:54b78bf3716...
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This approach gives you flexibility during development (you can easily upgrade to test new versions) while guaranteeing
 exact reproducibility for deployment (production always gets exactly what you tested). Modern tools like
-&lt;a href="https://docs.github.com/en/code-security/dependabot" class="external-link" target="_blank" rel="noopener"&gt;Dependabot&lt;/a&gt; can automate updates by filing pull requests when new
-versions are available.&lt;/p&gt;
+&lt;a href="https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain" class="external-link" target="_blank" rel="noopener"&gt;Dependabot&lt;/a&gt; can automate updates by filing
+pull requests when new versions are available.&lt;/p&gt;
 &lt;h2 id="scan-for-vulnerabilities"&gt;
 Scan For Vulnerabilities
 &lt;a class="heading-link" href="#scan-for-vulnerabilities"&gt;
@@ -528,7 +528,7 @@ Generate SBOMs
 &lt;/a&gt;
 &lt;/h3&gt;
 &lt;p&gt;&lt;a href="https://github.com/CycloneDX/cyclonedx-python" class="external-link" target="_blank" rel="noopener"&gt;CycloneDX Python&lt;/a&gt; is the recommended tool. See the
-&lt;a href="https://cyclonedx-bom-tool.readthedocs.io/" class="external-link" target="_blank" rel="noopener"&gt;CycloneDX Python documentation&lt;/a&gt; for advanced usage:&lt;/p&gt;
+&lt;a href="https://cyclonedx-bom-tool.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;CycloneDX Python documentation&lt;/a&gt; for advanced usage:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pip install cyclonedx-bom
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cyclonedx-py environment --output-file sbom.json
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Best practices:&lt;/strong&gt; Use lockfiles over requirements.txt for more accurate dependency trees. Include cryptographic hashes
@@ -1120,8 +1120,8 @@ documentation&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://github.com/pyupio/safety" class="external-link" target="_blank" rel="noopener"&gt;Safety&lt;/a&gt; - Alternative vulnerability scanner with malware detection&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://osv.dev/" class="external-link" target="_blank" rel="noopener"&gt;OSV.dev&lt;/a&gt; - Distributed vulnerability database for open source&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://github.com/pypa/advisory-database" class="external-link" target="_blank" rel="noopener"&gt;PyPA Advisory Database&lt;/a&gt; - Python package security advisories&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://cyclonedx-bom-tool.readthedocs.io/" class="external-link" target="_blank" rel="noopener"&gt;CycloneDX Python&lt;/a&gt; - SBOM generator documentation&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://docs.github.com/en/code-security/dependabot" class="external-link" target="_blank" rel="noopener"&gt;Dependabot&lt;/a&gt; - Automated dependency updates&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://cyclonedx-bom-tool.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;CycloneDX Python&lt;/a&gt; - SBOM generator documentation&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain" class="external-link" target="_blank" rel="noopener"&gt;Dependabot&lt;/a&gt; - Automated dependency updates&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://calmops.com/programming/python/dependency-security-vulnerability-scanning/" class="external-link" target="_blank" rel="noopener"&gt;CalmOps - Dependency Security Guide&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="standards--specifications"&gt;
@@ -1753,7 +1753,7 @@ the isolated python environment:&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;backend&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;build_sdist&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;It&amp;rsquo;s up to the backend where and how they want to expose their official API:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;a href="https://flit.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;flit&lt;/a&gt; does it via &lt;code&gt;flit.buildapi&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://flit.pypa.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;flit&lt;/a&gt; does it via &lt;code&gt;flit.buildapi&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://setuptools.readthedocs.io/en/latest/history.html#v40-8-0" class="external-link" target="_blank" rel="noopener"&gt;setuptools&lt;/a&gt; provides two variants:
 &lt;code&gt;setuptools.build_meta&lt;/code&gt; (on why read on later)&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://poetry.eustace.io/docs/pyproject/#poetry-and-pep-517" class="external-link" target="_blank" rel="noopener"&gt;poetry&lt;/a&gt; does it via &lt;code&gt;poetry.masonry.api&lt;/code&gt;&lt;/li&gt;
@@ -1772,22 +1772,22 @@ tox and packaging
 &lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
 &lt;/a&gt;
 &lt;/h1&gt;
-&lt;p&gt;&lt;a href="https://tox.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;tox is testing tool&lt;/a&gt; and used by most projects to ensure compatibility against
-multiple Python interpreter versions of a given package. It also allows the quick creation of Python environments with
-the package under inspection installed in it, making reproducing failures faster.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://tox.wiki/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;tox is testing tool&lt;/a&gt; and used by most projects to ensure compatibility against multiple
+Python interpreter versions of a given package. It also allows the quick creation of Python environments with the
+package under inspection installed in it, making reproducing failures faster.&lt;/p&gt;
 &lt;p&gt;To be able to test a package, it first needs to build a source distribution, though. While both PEP-518 and PEP-517
 should make things better, turning them on can break packaging under some use cases. Therefore when
-&lt;a href="https://tox.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;tox&lt;/code&gt;&lt;/a&gt; added isolated build in version
-&lt;a href="https://tox.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;3.3.0&lt;/code&gt;&lt;/a&gt; decided not to enable it by default, for now. You need to enable it
-manually (it will be turned on by default in version &lt;code&gt;4&lt;/code&gt; sometime later this year - 2021).&lt;/p&gt;
+&lt;a href="https://tox.wiki/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;tox&lt;/code&gt;&lt;/a&gt; added isolated build in version &lt;a href="https://tox.wiki/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;3.3.0&lt;/code&gt;&lt;/a&gt; decided not
+to enable it by default, for now. You need to enable it manually (it will be turned on by default in version &lt;code&gt;4&lt;/code&gt;
+sometime later this year - 2021).&lt;/p&gt;
 &lt;p&gt;Once you&amp;rsquo;ve specified a &lt;code&gt;pyproject.toml&lt;/code&gt; with appropriate &lt;code&gt;requires&lt;/code&gt; and &lt;code&gt;build-backend&lt;/code&gt;, you need to turn on the
 &lt;code&gt;isolated_build&lt;/code&gt; flag inside &lt;code&gt;tox.ini&lt;/code&gt;:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ini" data-lang="ini"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[tox]&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;isolated_build&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;True&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After this, tox in the &lt;a href="https://tox.readthedocs.io/en/latest/#system-overview" class="external-link" target="_blank" rel="noopener"&gt;packaging phase&lt;/a&gt; will build the source
-distribution (by providing the build dependencies into an isolated python environment as per PEP-518). Afterward will
-call the build backend as stated in PEP-517. Otherwise, tox will use the old way of building source distributions,
-invoking the &lt;code&gt;python setup.py sdist&lt;/code&gt; command with the same interpreter tox is installed into.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After this, tox in the &lt;a href="https://tox.wiki/en/latest/#system-overview" class="external-link" target="_blank" rel="noopener"&gt;packaging phase&lt;/a&gt; will build the source distribution
+(by providing the build dependencies into an isolated python environment as per PEP-518). Afterward will call the build
+backend as stated in PEP-517. Otherwise, tox will use the old way of building source distributions, invoking the
+&lt;code&gt;python setup.py sdist&lt;/code&gt; command with the same interpreter tox is installed into.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-518/moody_pug.webp" alt="Moody pug"
 srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_94a4de09c68b721d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
@@ -2160,7 +2160,7 @@ cases too, where such mismatches get harder and harder to see; such as nested fu
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;transform&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;construct&lt;/span&gt;&lt;span class="p"&gt;()))&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;While there are more and more linters out there, the reference implementation of the Python type checking is
-&lt;a href="http://mypy-lang.org/" class="external-link" target="_blank" rel="noopener"&gt;mypy&lt;/a&gt;. mypy is a Python command-line application, making it easy to integrate into a continuous
+&lt;a href="https://mypy-lang.org/" class="external-link" target="_blank" rel="noopener"&gt;mypy&lt;/a&gt;. mypy is a Python command-line application, making it easy to integrate into a continuous
 integration pipeline.&lt;/p&gt;
 &lt;h3 id="5-runtime-data-validation"&gt;
 5. Runtime data validation
@@ -2172,7 +2172,7 @@ integration pipeline.&lt;/p&gt;
 &lt;p&gt;Type hints can be used to validate at runtime to ensure that the caller does not break the contract of methods. It is no
 longer needed to start your function with a long list of type asserts; instead, use a framework that re-uses type hints
 and automatically checks that they are meet before your business logic runs (for example, with
-&lt;a href="https://github.com/samuelcolvin/pydantic" class="external-link" target="_blank" rel="noopener"&gt;pydantic&lt;/a&gt;):&lt;/p&gt;
+&lt;a href="https://github.com/pydantic/pydantic" class="external-link" target="_blank" rel="noopener"&gt;pydantic&lt;/a&gt;):&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;datetime&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;datetime&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;typing&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;List&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pydantic&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;BaseModel&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ValidationError&lt;/span&gt;
@@ -2470,8 +2470,8 @@ your application&amp;rsquo;s execution. Because you do not touch your source cod
 hints, nor can you add conflict with other linter tools.&lt;/li&gt;
 &lt;li&gt;It is a well-tested design; the &lt;a href="https://github.com/python/typeshed" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;typeshed&lt;/code&gt;&lt;/a&gt; project uses it to type hint the
 entire standard library, plus some other popular libraries such as &lt;code&gt;requests&lt;/code&gt;, &lt;code&gt;yaml&lt;/code&gt;, &lt;code&gt;dateutil&lt;/code&gt; and
-&lt;a href="https://github.com/python/typeshed/tree/master/stubs/" class="external-link" target="_blank" rel="noopener"&gt;so on&lt;/a&gt;. It can provide type information for source code that
-you do not own or cannot change easily.
+&lt;a href="https://github.com/python/typeshed/tree/main/stubs" class="external-link" target="_blank" rel="noopener"&gt;so on&lt;/a&gt;. It can provide type information for source code that you
+do not own or cannot change easily.
 &lt;!-- raw HTML omitted --&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -2895,7 +2895,7 @@ type checkers
 &lt;/h2&gt;
 &lt;p&gt;Use these tools to check against type safety inside your library or application:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;a href="http://mypy-lang.org/" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;mypy&lt;/code&gt; - Python&lt;/a&gt; (the reference type linting tool)&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://mypy-lang.org/" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;mypy&lt;/code&gt; - Python&lt;/a&gt; (the reference type linting tool)&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://github.com/facebook/pyre-check" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;pyre&lt;/code&gt; - Facebook&lt;/a&gt; - Python 3 only, but faster than mypy. An interesting use
 case of this is the ability to do taint/security code analysis with it - see
 &lt;a href="https://www.youtube.com/watch?v=hWV8t494N88" class="external-link" target="_blank" rel="noopener"&gt;Pieter Hooimeijer - Types, Deeper Static Analysis, and you&lt;/a&gt;.&lt;/li&gt;
@@ -2925,7 +2925,7 @@ runtime code evaluator
 &lt;/h2&gt;
 &lt;p&gt;Use these tools to check at runtime if the input arguments to your function/method are of the correct type or not:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;a href="https://github.com/samuelcolvin/pydantic" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;pydantic&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/pydantic/pydantic" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;pydantic&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://github.com/RussBaz/enforce" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;enforce&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://github.com/Stewori/pytypes" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;pytypes&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;

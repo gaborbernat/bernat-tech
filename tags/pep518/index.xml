@@ -316,7 +316,7 @@ the isolated python environment:&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;backend&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;build_sdist&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;It&amp;rsquo;s up to the backend where and how they want to expose their official API:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;a href="https://flit.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;flit&lt;/a&gt; does it via &lt;code&gt;flit.buildapi&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://flit.pypa.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;flit&lt;/a&gt; does it via &lt;code&gt;flit.buildapi&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://setuptools.readthedocs.io/en/latest/history.html#v40-8-0" class="external-link" target="_blank" rel="noopener"&gt;setuptools&lt;/a&gt; provides two variants:
 &lt;code&gt;setuptools.build_meta&lt;/code&gt; (on why read on later)&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://poetry.eustace.io/docs/pyproject/#poetry-and-pep-517" class="external-link" target="_blank" rel="noopener"&gt;poetry&lt;/a&gt; does it via &lt;code&gt;poetry.masonry.api&lt;/code&gt;&lt;/li&gt;
@@ -335,22 +335,22 @@ tox and packaging
 &lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
 &lt;/a&gt;
 &lt;/h1&gt;
-&lt;p&gt;&lt;a href="https://tox.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;tox is testing tool&lt;/a&gt; and used by most projects to ensure compatibility against
-multiple Python interpreter versions of a given package. It also allows the quick creation of Python environments with
-the package under inspection installed in it, making reproducing failures faster.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://tox.wiki/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;tox is testing tool&lt;/a&gt; and used by most projects to ensure compatibility against multiple
+Python interpreter versions of a given package. It also allows the quick creation of Python environments with the
+package under inspection installed in it, making reproducing failures faster.&lt;/p&gt;
 &lt;p&gt;To be able to test a package, it first needs to build a source distribution, though. While both PEP-518 and PEP-517
 should make things better, turning them on can break packaging under some use cases. Therefore when
-&lt;a href="https://tox.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;tox&lt;/code&gt;&lt;/a&gt; added isolated build in version
-&lt;a href="https://tox.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;3.3.0&lt;/code&gt;&lt;/a&gt; decided not to enable it by default, for now. You need to enable it
-manually (it will be turned on by default in version &lt;code&gt;4&lt;/code&gt; sometime later this year - 2021).&lt;/p&gt;
+&lt;a href="https://tox.wiki/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;tox&lt;/code&gt;&lt;/a&gt; added isolated build in version &lt;a href="https://tox.wiki/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;3.3.0&lt;/code&gt;&lt;/a&gt; decided not
+to enable it by default, for now. You need to enable it manually (it will be turned on by default in version &lt;code&gt;4&lt;/code&gt;
+sometime later this year - 2021).&lt;/p&gt;
 &lt;p&gt;Once you&amp;rsquo;ve specified a &lt;code&gt;pyproject.toml&lt;/code&gt; with appropriate &lt;code&gt;requires&lt;/code&gt; and &lt;code&gt;build-backend&lt;/code&gt;, you need to turn on the
 &lt;code&gt;isolated_build&lt;/code&gt; flag inside &lt;code&gt;tox.ini&lt;/code&gt;:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ini" data-lang="ini"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[tox]&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;isolated_build&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;True&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After this, tox in the &lt;a href="https://tox.readthedocs.io/en/latest/#system-overview" class="external-link" target="_blank" rel="noopener"&gt;packaging phase&lt;/a&gt; will build the source
-distribution (by providing the build dependencies into an isolated python environment as per PEP-518). Afterward will
-call the build backend as stated in PEP-517. Otherwise, tox will use the old way of building source distributions,
-invoking the &lt;code&gt;python setup.py sdist&lt;/code&gt; command with the same interpreter tox is installed into.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After this, tox in the &lt;a href="https://tox.wiki/en/latest/#system-overview" class="external-link" target="_blank" rel="noopener"&gt;packaging phase&lt;/a&gt; will build the source distribution
+(by providing the build dependencies into an isolated python environment as per PEP-518). Afterward will call the build
+backend as stated in PEP-517. Otherwise, tox will use the old way of building source distributions, invoking the
+&lt;code&gt;python setup.py sdist&lt;/code&gt; command with the same interpreter tox is installed into.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-518/moody_pug.webp" alt="Moody pug"
 srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_94a4de09c68b721d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"

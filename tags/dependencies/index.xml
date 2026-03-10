@@ -228,7 +228,7 @@ Catch These Automatically With Ruff
 &lt;/a&gt;
 &lt;/h3&gt;
 &lt;p&gt;&lt;a href="https://docs.astral.sh/ruff/" class="external-link" target="_blank" rel="noopener"&gt;Ruff&lt;/a&gt; is a blazingly fast Python linter that includes comprehensive security rules from
-&lt;a href="https://bandit.readthedocs.io/" class="external-link" target="_blank" rel="noopener"&gt;Bandit&lt;/a&gt;. You can learn more in the
+&lt;a href="https://bandit.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;Bandit&lt;/a&gt;. You can learn more in the
 &lt;a href="https://docs.astral.sh/ruff/rules/#flake8-bandit-s" class="external-link" target="_blank" rel="noopener"&gt;Ruff security rules documentation&lt;/a&gt;. Configure it in
 &lt;code&gt;pyproject.toml&lt;/code&gt;:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-toml" data-lang="toml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;tool&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;ruff&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
@@ -363,8 +363,8 @@ advice below is for application teams.&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; --hash=sha256:54b78bf3716...
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This approach gives you flexibility during development (you can easily upgrade to test new versions) while guaranteeing
 exact reproducibility for deployment (production always gets exactly what you tested). Modern tools like
-&lt;a href="https://docs.github.com/en/code-security/dependabot" class="external-link" target="_blank" rel="noopener"&gt;Dependabot&lt;/a&gt; can automate updates by filing pull requests when new
-versions are available.&lt;/p&gt;
+&lt;a href="https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain" class="external-link" target="_blank" rel="noopener"&gt;Dependabot&lt;/a&gt; can automate updates by filing
+pull requests when new versions are available.&lt;/p&gt;
 &lt;h2 id="scan-for-vulnerabilities"&gt;
 Scan For Vulnerabilities
 &lt;a class="heading-link" href="#scan-for-vulnerabilities"&gt;
@@ -528,7 +528,7 @@ Generate SBOMs
 &lt;/a&gt;
 &lt;/h3&gt;
 &lt;p&gt;&lt;a href="https://github.com/CycloneDX/cyclonedx-python" class="external-link" target="_blank" rel="noopener"&gt;CycloneDX Python&lt;/a&gt; is the recommended tool. See the
-&lt;a href="https://cyclonedx-bom-tool.readthedocs.io/" class="external-link" target="_blank" rel="noopener"&gt;CycloneDX Python documentation&lt;/a&gt; for advanced usage:&lt;/p&gt;
+&lt;a href="https://cyclonedx-bom-tool.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;CycloneDX Python documentation&lt;/a&gt; for advanced usage:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pip install cyclonedx-bom
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cyclonedx-py environment --output-file sbom.json
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Best practices:&lt;/strong&gt; Use lockfiles over requirements.txt for more accurate dependency trees. Include cryptographic hashes
@@ -1120,8 +1120,8 @@ documentation&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://github.com/pyupio/safety" class="external-link" target="_blank" rel="noopener"&gt;Safety&lt;/a&gt; - Alternative vulnerability scanner with malware detection&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://osv.dev/" class="external-link" target="_blank" rel="noopener"&gt;OSV.dev&lt;/a&gt; - Distributed vulnerability database for open source&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://github.com/pypa/advisory-database" class="external-link" target="_blank" rel="noopener"&gt;PyPA Advisory Database&lt;/a&gt; - Python package security advisories&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://cyclonedx-bom-tool.readthedocs.io/" class="external-link" target="_blank" rel="noopener"&gt;CycloneDX Python&lt;/a&gt; - SBOM generator documentation&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://docs.github.com/en/code-security/dependabot" class="external-link" target="_blank" rel="noopener"&gt;Dependabot&lt;/a&gt; - Automated dependency updates&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://cyclonedx-bom-tool.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;CycloneDX Python&lt;/a&gt; - SBOM generator documentation&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain" class="external-link" target="_blank" rel="noopener"&gt;Dependabot&lt;/a&gt; - Automated dependency updates&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://calmops.com/programming/python/dependency-security-vulnerability-scanning/" class="external-link" target="_blank" rel="noopener"&gt;CalmOps - Dependency Security Guide&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="standards--specifications"&gt;

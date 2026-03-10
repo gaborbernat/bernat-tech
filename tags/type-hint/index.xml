@@ -122,7 +122,7 @@ cases too, where such mismatches get harder and harder to see; such as nested fu
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;transform&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;construct&lt;/span&gt;&lt;span class="p"&gt;()))&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;While there are more and more linters out there, the reference implementation of the Python type checking is
-&lt;a href="http://mypy-lang.org/" class="external-link" target="_blank" rel="noopener"&gt;mypy&lt;/a&gt;. mypy is a Python command-line application, making it easy to integrate into a continuous
+&lt;a href="https://mypy-lang.org/" class="external-link" target="_blank" rel="noopener"&gt;mypy&lt;/a&gt;. mypy is a Python command-line application, making it easy to integrate into a continuous
 integration pipeline.&lt;/p&gt;
 &lt;h3 id="5-runtime-data-validation"&gt;
 5. Runtime data validation
@@ -134,7 +134,7 @@ integration pipeline.&lt;/p&gt;
 &lt;p&gt;Type hints can be used to validate at runtime to ensure that the caller does not break the contract of methods. It is no
 longer needed to start your function with a long list of type asserts; instead, use a framework that re-uses type hints
 and automatically checks that they are meet before your business logic runs (for example, with
-&lt;a href="https://github.com/samuelcolvin/pydantic" class="external-link" target="_blank" rel="noopener"&gt;pydantic&lt;/a&gt;):&lt;/p&gt;
+&lt;a href="https://github.com/pydantic/pydantic" class="external-link" target="_blank" rel="noopener"&gt;pydantic&lt;/a&gt;):&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;datetime&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;datetime&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;typing&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;List&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pydantic&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;BaseModel&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ValidationError&lt;/span&gt;
@@ -432,8 +432,8 @@ your application&amp;rsquo;s execution. Because you do not touch your source cod
 hints, nor can you add conflict with other linter tools.&lt;/li&gt;
 &lt;li&gt;It is a well-tested design; the &lt;a href="https://github.com/python/typeshed" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;typeshed&lt;/code&gt;&lt;/a&gt; project uses it to type hint the
 entire standard library, plus some other popular libraries such as &lt;code&gt;requests&lt;/code&gt;, &lt;code&gt;yaml&lt;/code&gt;, &lt;code&gt;dateutil&lt;/code&gt; and
-&lt;a href="https://github.com/python/typeshed/tree/master/stubs/" class="external-link" target="_blank" rel="noopener"&gt;so on&lt;/a&gt;. It can provide type information for source code that
-you do not own or cannot change easily.
+&lt;a href="https://github.com/python/typeshed/tree/main/stubs" class="external-link" target="_blank" rel="noopener"&gt;so on&lt;/a&gt;. It can provide type information for source code that you
+do not own or cannot change easily.
 &lt;!-- raw HTML omitted --&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -857,7 +857,7 @@ type checkers
 &lt;/h2&gt;
 &lt;p&gt;Use these tools to check against type safety inside your library or application:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;a href="http://mypy-lang.org/" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;mypy&lt;/code&gt; - Python&lt;/a&gt; (the reference type linting tool)&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://mypy-lang.org/" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;mypy&lt;/code&gt; - Python&lt;/a&gt; (the reference type linting tool)&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://github.com/facebook/pyre-check" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;pyre&lt;/code&gt; - Facebook&lt;/a&gt; - Python 3 only, but faster than mypy. An interesting use
 case of this is the ability to do taint/security code analysis with it - see
 &lt;a href="https://www.youtube.com/watch?v=hWV8t494N88" class="external-link" target="_blank" rel="noopener"&gt;Pieter Hooimeijer - Types, Deeper Static Analysis, and you&lt;/a&gt;.&lt;/li&gt;
@@ -887,7 +887,7 @@ runtime code evaluator
 &lt;/h2&gt;
 &lt;p&gt;Use these tools to check at runtime if the input arguments to your function/method are of the correct type or not:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;a href="https://github.com/samuelcolvin/pydantic" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;pydantic&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/pydantic/pydantic" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;pydantic&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://github.com/RussBaz/enforce" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;enforce&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://github.com/Stewori/pytypes" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;pytypes&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
