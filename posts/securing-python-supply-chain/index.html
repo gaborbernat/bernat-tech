@@ -3,7 +3,7 @@
 <label class="menu-button float-right" for=menu-toggle><i class="fa-solid fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/posts>Blog</a></li><li class=navigation-item><a class=navigation-link href=/presentations>Presentations</a></li><li class=navigation-item><a class=navigation-link href=/about>About</a></li><li class=navigation-item><a class=navigation-link href=/tags>Tags</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://bernat.tech/posts/securing-python-supply-chain/>Securing Your Python Supply Chain</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa-solid fa-calendar" aria-hidden=true></i>
 <time datetime=2026-03-10T00:00:00Z>2026-03-10
 </time></span><span class=reading-time><i class="fa-solid fa-clock" aria-hidden=true></i>
-28-minute read</span></div><div class=tags><i class="fa-solid fa-tag" aria-hidden=true></i>
+29-minute read</span></div><div class=tags><i class="fa-solid fa-tag" aria-hidden=true></i>
 <span class=tag><a href=/tags/python/>Python</a>
 </span><span class=separator>•</span>
 <span class=tag><a href=/tags/security/>Security</a>
@@ -18,7 +18,7 @@
 </span><span class=separator>•</span>
 <span class=tag><a href=/tags/pip/>Pip</a></span></div></div></header><div class="post-wrapper has-toc"><div class=post-content><div class="alert alert-info"><p class=alert-title><i class="fa-solid fa-circle-info" aria-hidden=true></i> TLDR:</p><p>Layer your defenses and don&rsquo;t trust any single control. Use Ruff with security rules to catch bugs in your code before
 they ship. Pin all your dependencies with cryptographic hashes using <code>uv lock</code> or <code>uv pip compile --generate-hashes</code>
-so nobody can swap out packages on you. Run <code>pip-audit</code> in CI to catch known CVEs before they hit production. Generate
+so nobody can swap out packages on you. Run <a href=https://github.com/pypa/pip-audit class=external-link target=_blank rel=noopener><code>pip-audit</code></a> in CI to catch known CVEs before they hit production. Generate
 SBOMs with CycloneDX so when the next Ultralytics-style compromise drops, you can answer &ldquo;are we affected?&rdquo; in minutes
 instead of days.</p><p>If you&rsquo;re publishing packages, ditch the long-lived API tokens and switch to Trusted Publishing with OIDC. This
 generates attestations automatically via Sigstore, linking your packages back to source repos. Organizations running
@@ -28,9 +28,9 @@ one. Scanning finds known CVEs but misses zero-days. Attestations prove where co
 That&rsquo;s why you layer them - when one control fails, the others catch it. Start with linting and pinning for quick
 wins, add scanning and SBOMs next, then level up to advanced stuff as you mature.</p></div><p>I maintain several PyPA projects (virtualenv, tox, platformdirs, filelock) and work on corporate package hosting
 infrastructure. I&rsquo;ve watched supply chain attacks targeting Python packages get nastier over the years from both sides:
-publishing to PyPI as an open-source maintainer and managing thousands of dependencies as an enterprise consumer.</p><p>This post covers practical approaches to securing your Python supply chain. We&rsquo;ll start with basics and build up to
-advanced defenses - writing secure code, managing dependencies, scanning for vulnerabilities, and verifying package
-authenticity.</p><h2 id=why-this-matters>Why This Matters
+publishing to PyPI as an open-source maintainer and managing thousands of dependencies as an enterprise consumer. This
+post covers practical approaches to securing your Python supply chain. We&rsquo;ll start with basics and build up to advanced
+defenses - writing secure code, managing dependencies, scanning for vulnerabilities, and verifying package authenticity.</p><h2 id=why-this-matters>Why This Matters
 <a class=heading-link href=#why-this-matters><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h2><p>Here&rsquo;s the scale we&rsquo;re dealing with: PyPI hosts over 743,000 packages as of March 2026, and that number grows daily.
 Your average Python project typically pulls in dozens of transitive dependencies - packages you never explicitly chose
@@ -72,7 +72,7 @@ devices.</p><p><strong><a href=https://blog.pypi.org/posts/2025-09-16-github-act
 Threat actors injected code into GitHub Actions workflows across 570+ repositories, stealing 3,300+ secrets including
 PyPI tokens, npm tokens, and AWS access keys. PyPI
 <a href=https://www.bleepingcomputer.com/news/security/pypi-invalidates-tokens-stolen-in-ghostaction-supply-chain-attack/ class=external-link target=_blank rel=noopener>invalidated all stolen tokens</a>
-and pushed everyone to migrate to Trusted Publishers.</p><p><strong><a href=https://blog.pypi.org/posts/2025-11-26-pypi-and-shai-hulud/ class=external-link target=_blank rel=noopener>Shai-Hulud Worm Campaign</a> (November 2025)</strong>: A
+and pushed everyone to migrate to <a href=#the-new-way-trusted-publishing>Trusted Publishers</a>.</p><p><strong><a href=https://blog.pypi.org/posts/2025-11-26-pypi-and-shai-hulud/ class=external-link target=_blank rel=noopener>Shai-Hulud Worm Campaign</a> (November 2025)</strong>: A
 cross-ecosystem worm primarily targeting npm that also hit PyPI because monorepo setups store credentials for both
 registries. Attackers compromised npm accounts and exfiltrated long-lived PyPI tokens from GitHub repository secrets.
 PyPI proactively revoked exposed tokens and recommended using <a href=https://woodruffw.github.io/zizmor/ class=external-link target=_blank rel=noopener>zizmor</a> for auditing
@@ -114,8 +114,8 @@ requirements file.</p><h3 id=key-terms-youll-need>Key Terms You&rsquo;ll Need
 dependency).</li><li><strong>CVE</strong> (Common Vulnerabilities and Exposures): A publicly disclosed security vulnerability with a unique identifier.</li><li><strong>Supply chain attack</strong>: When attackers compromise software dependencies to inject malicious code.</li><li><strong>SBOM</strong> (Software Bill of Materials): A complete inventory of all components in your software.</li><li><strong>CI/CD</strong>: Continuous Integration/Continuous Deployment - automated testing and deployment pipelines.</li></ul><p>Now let&rsquo;s build your defense strategy, starting with your own code.</p><h2 id=start-with-your-own-code>Start With Your Own Code
 <a class=heading-link href=#start-with-your-own-code><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h2><p>Before worrying about external dependencies, let&rsquo;s make sure your own code isn&rsquo;t introducing vulnerabilities. Security
-bugs hide in everyday code patterns that look perfectly fine during code review. Humans miss these under time pressure,
-but Ruff catches them in milliseconds - let&rsquo;s see what it&rsquo;s catching.</p><h3 id=the-forever-secret>The Forever Secret
+bugs hide in everyday code patterns that look perfectly fine during code review - and humans miss these under time
+pressure.</p><h3 id=the-forever-secret>The Forever Secret
 <a class=heading-link href=#the-forever-secret><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h3><p>A mistake I&rsquo;ve seen even experienced developers make:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># Bad: secrets in code live forever in git history</span>
 </span></span><span class=line><span class=cl><span class=n>SECRET_KEY</span> <span class=o>=</span> <span class=s2>&#34;hunter2&#34;</span>
@@ -169,14 +169,17 @@ whole application grinds to a halt because you forgot one parameter.</p><h3 id=c
 </span></span></code></pre></div><p>The magic is in <code>lint.select = ["ALL"]</code> - this enables every rule including all Bandit security checks. This
 configuration is aggressive and will flag hundreds of issues in existing codebases. For incremental adoption, start with
 <code>lint.select = ["E", "F", "S"]</code> (errors, fatal issues, security) and expand gradually. The security rules (<code>["S"]</code>)
-alone provide significant value.</p><p>Ruff is fast enough to run on every commit. All three vulnerabilities above get caught automatically:</p><ul><li><strong>S105</strong> - hardcoded secrets,</li><li><strong>S324</strong> - weak cryptography,</li><li><strong>S113</strong> - missing timeouts,</li><li><strong>S301</strong> - pickle and other unsafe deserialization,</li><li><strong>S608</strong> - SQL injection via string formatting,</li><li><strong>S307</strong> - using eval() with untrusted input.</li></ul><p>For example, this dangerous pattern gets flagged immediately:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># FLAGGED: S301 - pickle.loads() can execute arbitrary code</span>
+alone provide significant value. Ruff runs in under a second, so you can run it as you type in your IDE and before every
+commit. All three vulnerabilities above get caught automatically:</p><ul><li><a href=https://docs.astral.sh/ruff/rules/hardcoded-password-string/ class=external-link target=_blank rel=noopener><strong>S105</strong></a> - hardcoded secrets,</li><li><a href=https://docs.astral.sh/ruff/rules/hashlib-insecure-hash-function/ class=external-link target=_blank rel=noopener><strong>S324</strong></a> - weak cryptography,</li><li><a href=https://docs.astral.sh/ruff/rules/request-without-timeout/ class=external-link target=_blank rel=noopener><strong>S113</strong></a> - missing timeouts,</li><li><a href=https://docs.astral.sh/ruff/rules/suspicious-pickle-usage/ class=external-link target=_blank rel=noopener><strong>S301</strong></a> - pickle and other unsafe deserialization,</li><li><a href=https://docs.astral.sh/ruff/rules/hardcoded-sql-expression/ class=external-link target=_blank rel=noopener><strong>S608</strong></a> - SQL injection via string formatting,</li><li><a href=https://docs.astral.sh/ruff/rules/suspicious-eval-usage/ class=external-link target=_blank rel=noopener><strong>S307</strong></a> - using eval() with untrusted input.</li></ul><p>Each linked rule page includes a detailed explanation of why the pattern is dangerous, examples of vulnerable code, and
+how to fix it - worth reading if you want to understand the risks beyond just silencing the warning. For example, this
+dangerous pattern gets flagged immediately:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># FLAGGED: S301 - pickle.loads() can execute arbitrary code</span>
 </span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>pickle</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=n>data</span> <span class=o>=</span> <span class=n>pickle</span><span class=o>.</span><span class=n>loads</span><span class=p>(</span><span class=n>untrusted_input</span><span class=p>)</span>  <span class=c1># Use json.loads() instead</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># FLAGGED: S608 - SQL injection vulnerability</span>
 </span></span><span class=line><span class=cl><span class=n>cursor</span><span class=o>.</span><span class=n>execute</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;SELECT * FROM users WHERE name = &#39;</span><span class=si>{</span><span class=n>user_input</span><span class=si>}</span><span class=s2>&#39;&#34;</span><span class=p>)</span>
-</span></span></code></pre></div><p>Add Ruff to your editor and CI pipeline. It&rsquo;ll save you from yourself.</p><h2 id=manage-your-dependencies>Manage Your Dependencies
+</span></span></code></pre></div><p>Add Ruff to your editor and CI pipeline - it&rsquo;ll save your forgetful self.</p><h2 id=manage-your-dependencies>Manage Your Dependencies
 <a class=heading-link href=#manage-your-dependencies><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h2><p>Now let&rsquo;s talk about managing the code you didn&rsquo;t write - your dependencies. This is where supply chain attacks actually
 happen.</p><h3 id=the-unpinned-dependency-problem>The Unpinned Dependency Problem
@@ -192,22 +195,28 @@ You just installed malware without changing a single line of code.</p><p>The pro
     style B fill:#dc2626,stroke:#b91c1c,color:#fff
     style D fill:#f59e0b,stroke:#d97706,color:#fff
     style F fill:#50b432,stroke:#3d8a26,color:#fff
-</pre><p>Each level explained:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl># Level 1: Unpinned (UNSAFE)
-</span></span><span class=line><span class=cl>flask&gt;=2.0
-</span></span><span class=line><span class=cl>→ Gets whatever version is latest (could be compromised)
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl># Level 2: Version pinned (BETTER)
-</span></span><span class=line><span class=cl>flask==3.1.1
-</span></span><span class=line><span class=cl>→ Gets exact version, but no integrity check
-</span></span><span class=line><span class=cl>→ Vulnerable if maintainer account is compromised
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl># Level 3: Hash pinned (SECURE)
-</span></span><span class=line><span class=cl>flask==3.1.1 \
-</span></span><span class=line><span class=cl>    --hash=sha256:d667207822...
-</span></span><span class=line><span class=cl>→ Gets exact version AND verifies file integrity
-</span></span><span class=line><span class=cl>→ If file content differs, installation fails
-</span></span></code></pre></div><p>Hash pinning creates a cryptographic fingerprint of the package file. During installation, pip recalculates the hash and
-compares it to what you specified. If they don&rsquo;t match, installation fails immediately.</p><p>What does hash pinning protect against? It ensures you only install the exact artifact you locked, and it detects
+</pre><p><strong>Unpinned</strong> (<code>flask>=2.0</code>) is the most dangerous - you get whatever version is latest, which could be compromised. Your
+builds aren&rsquo;t reproducible and you have no way to detect tampering.</p><p><strong>Version pinned</strong> (<code>flask==3.1.1</code>) is better - you get the exact version you tested with. But there&rsquo;s no integrity
+check. If an attacker compromises the maintainer&rsquo;s account and re-uploads a modified file under the same version number,
+you&rsquo;d install it without knowing.</p><pre class=mermaid>sequenceDiagram
+    participant D as Developer
+    participant P as PyPI
+    participant A as Attacker
+
+    D-&gt;&gt;P: pip install flask==3.1.1
+    P--&gt;&gt;D: flask-3.1.1.tar.gz (genuine)
+    Note over D: ✅ Works fine, tests pass
+
+    A-&gt;&gt;P: Compromises maintainer account
+    A-&gt;&gt;P: Re-uploads flask 3.1.1 (with backdoor)
+
+    D-&gt;&gt;P: pip install flask==3.1.1 (new server)
+    P--&gt;&gt;D: flask-3.1.1.tar.gz (backdoored)
+    Note over D: ❌ Same version, different content
+</pre><p>With hash pinning, the second install would fail because the file&rsquo;s hash no longer matches what was recorded.
+<strong>Hash pinned</strong> (<code>flask==3.1.1 --hash=sha256:d667207822...</code>) is secure - it creates a cryptographic fingerprint of the
+package file. During installation, pip recalculates the hash and compares it to what you specified. If they don&rsquo;t match,
+installation fails immediately.</p><p>What does hash pinning protect against? It ensures you only install the exact artifact you locked, and it detects
 tampering in transit, in caches, or in mirrors. It also prevents a silent swap of content under a fixed version in
 systems that allow it.</p><p>What doesn&rsquo;t it protect against? If you install a package for the first time that&rsquo;s already malicious (like in the
 Ultralytics incident), hash pinning won&rsquo;t help - you&rsquo;ll just pin the malicious hash. This is why you combine hash
@@ -243,9 +252,17 @@ advice below is for application teams.</p><p>Modern best practice for applicatio
 </span></span><span class=line><span class=cl>werkzeug==3.1.3 \
 </span></span><span class=line><span class=cl>    --hash=sha256:54b78bf3716...
 </span></span></code></pre></div><p>This approach gives you flexibility during development (you can easily upgrade to test new versions) while guaranteeing
-exact reproducibility for deployment (production always gets exactly what you tested). Modern tools like
+exact reproducibility for deployment (production always gets exactly what you tested).
 <a href=https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain class=external-link target=_blank rel=noopener>Dependabot</a> can automate updates by filing
-pull requests when new versions are available.</p><h2 id=scan-for-vulnerabilities>Scan For Vulnerabilities
+pull requests when new versions are available. Add a <code>.github/dependabot.yml</code> to your repository:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>version</span><span class=p>:</span><span class=w> </span><span class=m>2</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>updates</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>package-ecosystem</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;pip&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>directory</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;/&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>schedule</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>interval</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;weekly&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>open-pull-requests-limit</span><span class=p>:</span><span class=w> </span><span class=m>10</span><span class=w>
+</span></span></span></code></pre></div><p>Dependabot will check your <code>requirements.txt</code> (or <code>pyproject.toml</code>) weekly and open PRs for outdated or vulnerable
+dependencies. Each PR includes the changelog and compatibility score, so you can review before merging.</p><h2 id=scan-for-vulnerabilities>Scan For Vulnerabilities
 <a class=heading-link href=#scan-for-vulnerabilities><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h2><p>Dependency pinning prevents unauthorized changes, but what if you&rsquo;ve pinned a version that already has a known
 vulnerability? New CVEs get discovered regularly in popular packages. A package that worked fine yesterday might have a
@@ -267,8 +284,8 @@ critical flaw discovered today.</p><h3 id=the-invisible-bug>The Invisible Bug
 </span></span></code></pre></div><p>This is <a href=https://nvd.nist.gov/vuln/detail/CVE-2024-22195 class=external-link target=_blank rel=noopener>CVE-2024-22195</a>, a real vulnerability from 2024. The bug sits
 in the template engine itself, so even code that looks reasonable can be vulnerable when it feeds untrusted input into
 the affected paths. An attacker can inject malicious JavaScript that executes in users&rsquo; browsers, potentially stealing
-sessions, credentials, or personal data.</p><p>The critical insight: <strong>you can&rsquo;t see these vulnerabilities by reading your own code</strong>. The bug is in a dependency you
-imported. This is why automated vulnerability scanning is essential.</p><h3 id=automated-scanning-with-pip-audit>Automated Scanning With pip-audit
+sessions, credentials, or personal data. The critical insight: <strong>you can&rsquo;t see these vulnerabilities by reading your own
+code</strong>. The bug is in a dependency you imported. This is why automated vulnerability scanning is essential.</p><h3 id=automated-scanning-with-pip-audit>Automated Scanning With pip-audit
 <a class=heading-link href=#automated-scanning-with-pip-audit><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h3><p><a href=https://github.com/pypa/pip-audit class=external-link target=_blank rel=noopener>pip-audit</a> is the modern standard for Python vulnerability scanning. Check out the
 <a href=https://pypi.org/project/pip-audit/ class=external-link target=_blank rel=noopener>pip-audit documentation</a> for full usage details. The flow:</p><pre class=mermaid>graph LR
@@ -291,12 +308,12 @@ imported. This is why automated vulnerability scanning is essential.</p><h3 id=a
 </span></span><span class=line><span class=cl>jinja2      3.1.1    CVE-2024-22195  &gt;=3.1.3
 </span></span></code></pre></div><p>By default, pip-audit uses the <a href=https://osv.dev/ class=external-link target=_blank rel=noopener>OSV</a> (Open Source Vulnerabilities) database, which aggregates
 vulnerability data from multiple sources:</p><ul><li><a href=https://github.com/pypa/advisory-database class=external-link target=_blank rel=noopener>PyPA Advisories</a> - Python-specific security advisories,</li><li><a href=https://github.com/advisories class=external-link target=_blank rel=noopener>GitHub Advisories</a> - Security advisories from GitHub repositories,</li><li><a href=https://nvd.nist.gov/ class=external-link target=_blank rel=noopener>National Vulnerability Database (NVD)</a> - US government repository (via OSV aggregation).</li></ul><p>The OSV database standardizes and merges data from these sources. Coverage is strong but not exhaustive, so treat
-pip-audit as an important signal rather than a complete guarantee.</p><p>Run this in CI on every commit to catch vulnerabilities before they reach production. It takes seconds and can save you
-from deploying a critical security hole.</p><p><strong>Alternative tools</strong>: <a href=https://github.com/pyupio/safety class=external-link target=_blank rel=noopener>Safety</a> is another popular Python vulnerability scanner that
+pip-audit as an important signal rather than a complete guarantee. Run it in CI on every commit to catch vulnerabilities
+before they reach production - it takes seconds and can save you from deploying a critical security hole.</p><p><strong>Alternative tools</strong>: <a href=https://github.com/pyupio/safety class=external-link target=_blank rel=noopener>Safety</a> is another popular Python vulnerability scanner that
 offers automated remediation and malicious package detection, though it uses a freemium model with paid plans for
 enterprise features.</p><h3 id=integrate-into-cicd>Integrate Into CI/CD
 <a class=heading-link href=#integrate-into-cicd><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h3><p>Security checks should run automatically on every commit. Adding pip-audit to common CI systems:</p><p><strong>GitHub Actions:</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Security Scan</span><span class=w>
+<span class=sr-only>Link to heading</span></a></h3><p>Security checks should run automatically on every commit. Adding <a href=https://github.com/pypa/pip-audit class=external-link target=_blank rel=noopener>pip-audit</a> to common CI systems:</p><p><strong>GitHub Actions:</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Security Scan</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=nt>on</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=l>push, pull_request]</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=nt>jobs</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>security</span><span class=p>:</span><span class=w>
@@ -380,7 +397,7 @@ for Python, <code>pkg:npm/@babel/core@7.24.0</code> for npm, etc.</p><h3 id=prev
 <a class=heading-link href=#prevent-dependency-confusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h3><p>Dependency confusion attacks exploit how package managers resolve names when you use both public and private package
 indexes. An attacker publishes a malicious package to PyPI with the same name as your internal package, and your build
-system accidentally installs the public one instead.</p><p>Here&rsquo;s how the attack works with pip:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Your pip.conf uses --extra-index-url for internal packages</span>
+system accidentally installs the public one instead. Here&rsquo;s how the attack works with pip:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Your pip.conf uses --extra-index-url for internal packages</span>
 </span></span><span class=line><span class=cl>pip install --extra-index-url https://internal.corp.com/pypi mypackage
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># pip checks BOTH indexes and picks the highest version</span>
@@ -534,27 +551,23 @@ as letting others be the &ldquo;canaries in the coal mine.&rdquo;</p><p><strong>
 vulnerabilities in packages you&rsquo;re already using, and delays access to security patches (you might need to expedite
 critical fixes). It&rsquo;s one layer of defense, not a complete solution.</p><h3 id=for-organizations>For Organizations
 <a class=heading-link href=#for-organizations><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h3><p>Organizations running internal package repositories have two main approaches:</p><pre class=mermaid>graph TB
-    subgraph &#34;Simple Mirror - Read-Through Cache&#34;
-        A1[PyPI] --&gt;|Instant sync| B1[Internal Mirror]
-        B1 --&gt;|Immediate access| C1[Developers]
-        style B1 fill:#f59e0b,stroke:#d97706,color:#fff
-    end
-
-    subgraph &#34;Ingestion Control - Delayed&#34;
-        A2[PyPI] --&gt;|New package| B2[Ingestion Queue]
-        B2 --&gt;|Wait 7 days| C2[Security Scan]
-        C2 --&gt;|Approved| D2[Internal Mirror]
-        D2 --&gt;|Controlled access| E2[Developers]
-        style C2 fill:#50b432,stroke:#3d8a26,color:#fff
-        style D2 fill:#50b432,stroke:#3d8a26,color:#fff
-    end
-</pre><p><strong>Simple Mirror (Read-Through Cache)</strong>: Acts as a proxy to PyPI, making packages available immediately after
-publication. While this provides faster downloads, offline availability, and enables centralized logging, it offers
-limited protection against supply-chain attacks - malicious packages get through instantly unless you layer on
-additional controls like scanning or allowlists. Examples include devpi in simple mode and basic Artifactory setups.</p><p><strong>Ingestion Control (Delayed)</strong>: Actively controls what packages enter the organization by enforcing a mandatory delay
-window (typically 6-7 days) and scanning packages before making them available. This provides security benefit by giving
-the community time to discover threats, but requires dedicated infrastructure and policy management.</p><h4 id=how-ingestion-control-works>How Ingestion Control Works
+<span class=sr-only>Link to heading</span></a></h3><p>Organizations running internal package repositories have two main approaches:</p><p><strong>Simple Mirror (Read-Through Cache):</strong></p><pre class=mermaid>graph LR
+    A1[PyPI] --&gt;|Instant sync| B1[Internal Mirror]
+    B1 --&gt;|Immediate access| C1[Developers]
+    style B1 fill:#f59e0b,stroke:#d97706,color:#fff
+</pre><p><strong>Ingestion Control (Delayed):</strong></p><pre class=mermaid>graph LR
+    A2[PyPI] --&gt;|New package| B2[Ingestion Queue]
+    B2 --&gt;|Wait 7 days| C2[Security Scan]
+    C2 --&gt;|Approved| D2[Internal Mirror]
+    D2 --&gt;|Controlled access| E2[Developers]
+    style C2 fill:#50b432,stroke:#3d8a26,color:#fff
+    style D2 fill:#50b432,stroke:#3d8a26,color:#fff
+</pre><p>A simple mirror acts as a proxy to PyPI, making packages available immediately after publication. While this provides
+faster downloads, offline availability, and enables centralized logging, it offers limited protection against
+supply-chain attacks - malicious packages get through instantly unless you layer on additional controls like scanning or
+allowlists. Examples include devpi in simple mode and basic Artifactory setups.</p><p>Ingestion control actively controls what packages enter the organization by enforcing a mandatory delay window (typically
+6-7 days) and scanning packages before making them available. This provides security benefit by giving the community
+time to discover threats, but requires dedicated infrastructure and policy management.</p><h4 id=how-ingestion-control-works>How Ingestion Control Works
 <a class=heading-link href=#how-ingestion-control-works><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h4><p>For organizations with the resources to run ingestion control, the system works like this:</p><pre class=mermaid>sequenceDiagram
     participant PyPI as Public PyPI
@@ -585,7 +598,8 @@ advisories manually. These provide 80% of the protection with 20% of the complex
 when you have dedicated security infrastructure.</p><h2 id=putting-it-all-together>Putting It All Together
 <a class=heading-link href=#putting-it-all-together><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h2><p>Each security practice we&rsquo;ve discussed provides a layer of defense. Together, they create a comprehensive security
-posture where if one layer fails, others still protect you. This is called &ldquo;defense in depth.&rdquo;</p><p>How these layers work together in your development pipeline:</p><pre class=mermaid>flowchart TB
+posture where if one layer fails, others still protect you. This is called &ldquo;defense in depth.&rdquo; Here&rsquo;s how these layers
+work together in your development pipeline:</p><pre class=mermaid>flowchart TB
     subgraph Development
         Code[Write Code] --&gt; Lint[Ruff Security Linting]
         Lint --&gt;|Pass| Commit[Commit Code]
@@ -630,7 +644,16 @@ posture where if one layer fails, others still protect you. This is called &ldqu
     style F fill:#50b432,stroke:#3d8a26,color:#fff
 </pre><p>The remediation workflow:</p><ol><li><strong>Detection</strong>: Vulnerability scanner flags affected packages automatically.</li><li><strong>Impact Analysis</strong>: SBOM search shows every deployment using the affected version.</li><li><strong>Remediation</strong>: Automated dependency update tools (like Dependabot) file a PR with the fix.</li><li><strong>Validation</strong>: CI runs tests to ensure the upgrade doesn&rsquo;t break functionality.</li><li><strong>Deployment</strong>: Once tests pass, the fixed version is deployed.</li></ol><p>Most of this is automated. You just review and merge the update.</p><h3 id=when-you-discover-a-malicious-package>When You Discover a Malicious Package
 <a class=heading-link href=#when-you-discover-a-malicious-package><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h3><p>If you&rsquo;ve installed a compromised package, follow this incident response process:</p><ol><li><p><strong>Isolate immediately</strong>:</p><ul><li>Stop deployments using the affected dependency</li><li>Block the package version in your internal mirror if you have one</li></ul></li><li><p><strong>Assess the damage</strong>:</p><ul><li>Check if the malicious code executed (review logs, process lists)</li><li>Identify what secrets the package could access (environment variables, filesystem)</li><li>Review your SBOM to find all affected projects</li></ul></li><li><p><strong>Contain the breach</strong>:</p><ul><li>Rotate all credentials the package could have accessed (API keys, database passwords, cloud credentials)</li><li>Scan systems for indicators of compromise</li><li>Check outbound network connections for data exfiltration</li></ul></li><li><p><strong>Remove and remediate</strong>:</p><ul><li>Pin to a known-good version or remove the dependency</li><li>Run <code>pip-audit</code> to verify no other vulnerabilities</li><li>Update your lockfiles with the fixed version</li></ul></li><li><p><strong>Report</strong>:</p><ul><li>Report the malicious package via <a href=https://pypi.org/security/ class=external-link target=_blank rel=noopener>PyPI&rsquo;s security reporting system</a></li><li>Notify your security team and potentially affected customers</li><li>Document the incident for future reference</li></ul></li></ol><p>Time is critical - malicious packages often exfiltrate credentials within seconds of installation.</p><h2 id=your-roadmap>Your Roadmap
+<span class=sr-only>Link to heading</span></a></h3><p>If you&rsquo;ve installed a compromised package, time is critical - malicious packages often exfiltrate credentials within
+seconds of installation.</p><ol><li><p><strong>Isolate immediately.</strong> Stop all deployments using the affected dependency and block the package version in your
+internal mirror if you have one. The goal is to prevent further installations while you investigate.</p></li><li><p><strong>Assess the damage.</strong> Check if the malicious code actually executed by reviewing logs and process lists. Identify
+what secrets the package could have accessed - environment variables, filesystem credentials, cloud tokens. Use your
+SBOM to find all affected projects across your organization.</p></li><li><p><strong>Contain the breach.</strong> Rotate all credentials the package could have accessed: API keys, database passwords, cloud
+credentials. Scan systems for indicators of compromise and check outbound network connections for signs of data
+exfiltration.</p></li><li><p><strong>Remove and remediate.</strong> Pin to a known-good version or remove the dependency entirely. Run <code>pip-audit</code> to verify
+no other vulnerabilities were introduced, then update your lockfiles with the fixed version.</p></li><li><p><strong>Report.</strong> Report the malicious package via <a href=https://pypi.org/security/ class=external-link target=_blank rel=noopener>PyPI&rsquo;s security reporting system</a>. Notify
+your security team and potentially affected customers. Document the incident for future reference - what happened,
+how it was detected, and what you changed to prevent recurrence.</p></li></ol><h2 id=your-roadmap>Your Roadmap
 <a class=heading-link href=#your-roadmap><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h2><p>Supply chain security can seem overwhelming, but you don&rsquo;t need to implement everything at once. A practical roadmap
 prioritized by impact and ease of implementation:</p><pre class=mermaid>graph TD
@@ -644,10 +667,10 @@ prioritized by impact and ease of implementation:</p><pre class=mermaid>graph TD
     Phase2 --&gt; F1[Set up pip-audit in CI]
     Phase2 --&gt; F2[Generate SBOMs]
     Phase2 --&gt; F3[Enable Dependabot]
+    Phase2 --&gt; F4[Trusted Publishing]
 
-    Phase3 --&gt; A1[Trusted Publishing]
-    Phase3 --&gt; A2[Delayed Ingestion]
-    Phase3 --&gt; A3[SBOM tracking system]
+    Phase3 --&gt; A1[Delayed Ingestion]
+    Phase3 --&gt; A2[SBOM tracking system]
 
     style Phase1 fill:#50b432,stroke:#3d8a26,color:#fff
     style Phase2 fill:#f59e0b,stroke:#d97706,color:#fff
@@ -659,13 +682,14 @@ prioritized by impact and ease of implementation:</p><pre class=mermaid>graph TD
 </span></span></code></pre></div><p>Once you&rsquo;re comfortable, expand to <code>lint.select = ["ALL"]</code> for broader coverage.</p></li><li><p><strong>Pin your dependencies</strong> with hash verification:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>uv pip compile --generate-hashes pyproject.toml -o requirements.txt
 </span></span></code></pre></div></li></ol><h3 id=phase-2-foundations>Phase 2: Foundations
 <a class=heading-link href=#phase-2-foundations><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h3><p>Build the foundation for ongoing security:</p><ol><li><strong>Add pip-audit to CI</strong> to catch vulnerabilities before they reach production.</li><li><strong>Generate SBOMs</strong> at build time to know what&rsquo;s deployed.</li><li><strong>Enable Dependabot</strong> or similar tools for automated dependency updates.</li></ol><h3 id=phase-3-advanced>Phase 3: Advanced
+<span class=sr-only>Link to heading</span></a></h3><p>Build the foundation for ongoing security:</p><ol><li><strong>Add pip-audit to CI</strong> to catch vulnerabilities before they reach production.</li><li><strong>Generate SBOMs</strong> at build time to know what&rsquo;s deployed.</li><li><strong>Enable Dependabot</strong> or similar tools for automated dependency updates.</li><li><strong>Switch to Trusted Publishing</strong> to eliminate credential theft risk.</li></ol><h3 id=phase-3-advanced>Phase 3: Advanced
 <a class=heading-link href=#phase-3-advanced><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h3><p>Implement advanced protections as your security maturity grows:</p><ol><li><strong>Switch to Trusted Publishing</strong> to eliminate credential theft risk.</li><li><strong>Set up delayed ingestion</strong> if you manage an internal package mirror.</li><li><strong>Build an SBOM tracking system</strong> to quickly respond to vulnerabilities.</li></ol><h3 id=key-takeaways>Key Takeaways
+<span class=sr-only>Link to heading</span></a></h3><p>Implement advanced protections as your security maturity grows:</p><ol><li><strong>Set up delayed ingestion</strong> if you manage an internal package mirror.</li><li><strong>Build an SBOM tracking system</strong> to quickly respond to vulnerabilities.</li></ol><h3 id=key-takeaways>Key Takeaways
 <a class=heading-link href=#key-takeaways><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h3><p>Supply chain security isn&rsquo;t a single solution but a layered approach:</p><ul><li><strong>Prevention</strong>: Linting catches bugs before they&rsquo;re committed.</li><li><strong>Control</strong>: Pinning and hashing prevent unauthorized package changes.</li><li><strong>Detection</strong>: Scanning identifies known vulnerabilities.</li><li><strong>Response</strong>: SBOMs enable rapid incident response.</li><li><strong>Defense</strong>: Attestations and delayed ingestion add additional protection layers.</li></ul><p>Each layer provides defense against different attack vectors. Together, they create a robust security posture that
-protects your applications from the evolving threat landscape. The tooling is mature and available today.</p><p>Start small, get the basics right, then expand. Even implementing just Phase 1 will significantly improve your security
-posture. The only question is: when will you start?</p><h2 id=references>References
+protects your applications from the evolving threat landscape. The tooling is mature and available today. Start small,
+get the basics right, then expand. Even implementing just Phase 1 will significantly improve your security posture. The
+only question is: when will you start?</p><h2 id=references>References
 <a class=heading-link href=#references><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h2><h3 id=security-incidents--analysis>Security Incidents & Analysis
 <a class=heading-link href=#security-incidents--analysis><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
@@ -683,7 +707,7 @@ documentation</li><li><a href=https://pypi.org/project/pip-audit/ class=external
 <span class=date>- 2020-05-16</span></li><li><a href=https://bernat.tech/posts/the-state-of-type-hints-in-python/>The state of type hints in Python</a>
 <span class=date>- 2018-05-30</span></li></ul></div></footer></article></section></div><footer class=footer><section class=container><b>Opinions are my own</b>.
 <a href=https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml>Updated</a>&nbsp;<time id=footer-ts datetime=2026-03-09T20:52:26.000Z>2026-03-09T20:52:26.000Z&nbsp;UTC</time>
-via <a href=https://github.com/gaborbernat/bernat-tech/commit/1c0583ce70bf767f430a5ce9886785d814c1cd0d>1c0583ce</a>.
+via <a href=https://github.com/gaborbernat/bernat-tech/commit/9b74bfdcaf7653140fd4bff8b33990d456f6fd43>9b74bfdc</a>.
 © 2018-2026
 <script defer src=/js/footer.min.d3f865d692fc079096014431769f338c835dbe4e2d0b5891f541d203b10af60e.js integrity="sha256-0/hl1pL8B5CWAUQxdp8zjINdvk4tC1iR9UHSA7EK9g4="></script><script defer src=/js/code-copy.min.00a564933606d3f06a8eef836cbec7a10f3b8d3c0126d0f041ec25622962ea46.js integrity="sha256-AKVkkzYG0/Bqju+DbL7HoQ87jTwBJtDwQewlYili6kY="></script></section></footer><script type=module>
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
