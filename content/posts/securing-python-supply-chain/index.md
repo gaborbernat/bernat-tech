@@ -7,14 +7,35 @@ image = "splash.webp"
 images = [ "splash.webp"]
 slug = "securing-python-supply-chain"
 tags = [ "python", "security", "dependencies", "supply-chain", "sbom", "pypi", "pip"]
-title = "Securing Your Python Supply Chain"
+title = "Defense in Depth: A Practical Guide to Python Supply Chain Security"
 +++
+
+> [!TLDR] **TLDR:**
+>
+> Layer your defenses and don't trust any single control. Use Ruff with security rules to catch bugs in your code before
+> they ship. Pin all your dependencies with cryptographic hashes using `uv lock` or `uv pip compile --generate-hashes`
+> so nobody can swap out packages on you. Run [`pip-audit`](https://github.com/pypa/pip-audit) in CI to catch known CVEs
+> before they hit production. Generate SBOMs with CycloneDX so when the next Ultralytics-style compromise drops, you can
+> answer "are we affected?" in minutes instead of days.
+>
+> If you're publishing packages, ditch the long-lived API tokens and switch to Trusted Publishing with OIDC. This
+> generates attestations automatically via Sigstore, linking your packages back to source repos. Organizations running
+> internal mirrors can add a 7-day delay to let the community be your canary - but only if you've got the infrastructure
+> to maintain it.
+>
+> Nothing here is perfect. Hash pinning stops tampering but won't save you from a malicious package you installed on day
+> one. Scanning finds known CVEs but misses zero-days. Attestations prove where code came from, not whether it's safe.
+> That's why you layer them - when one control fails, the others catch it. Start with linting and pinning for quick
+> wins, add scanning and SBOMs next, then level up to advanced stuff as you mature.
 
 I maintain several PyPA projects (virtualenv, tox, platformdirs, filelock) and work on corporate package hosting
 infrastructure. I've watched supply chain attacks targeting Python packages get nastier over the years from both sides:
 publishing to PyPI as an open-source maintainer and managing thousands of dependencies as an enterprise consumer. This
-post covers practical approaches to securing your Python supply chain. We'll start with basics and build up to advanced
-defenses - writing secure code, managing dependencies, scanning for vulnerabilities, and verifying package authenticity.
+post covers practical approaches to securing your Python supply chain. For a broader threat model across all ecosystems,
+the
+[CNCF Software Supply Chain Security Whitepaper](https://tag-security.cncf.io/community/working-groups/supply-chain-security/supply-chain-security-paper-v2/Software_Supply_Chain_Practices_whitepaper_v2.pdf)
+is an excellent primer. Here we'll focus on Python-specific defenses — writing secure code, managing dependencies,
+scanning for vulnerabilities, and verifying package authenticity.
 
 ## Why This Matters
 
@@ -115,15 +136,19 @@ requirements file.
 
 Now let's build your defense strategy, starting with your own code.
 
-## Start With Your Own Code
+## Secure Your Own Code First
 
-Before worrying about external dependencies, let's make sure your own code isn't introducing vulnerabilities. Security
-bugs hide in everyday code patterns that look perfectly fine during code review - and humans miss these under time
-pressure.
+Supply chain attacks don't just come from external dependencies — your own code can create the entry points. A hardcoded
+PyPI token in your source code, once pushed to a repository, gives an attacker everything they need to compromise your
+account and publish malicious packages under your name. Beyond secrets, common security bugs hide in everyday code
+patterns that look perfectly fine during code review — and humans miss these under time pressure. Catching them
+automatically with a linter is the first layer of defense.
 
 ### The Forever Secret
 
-A mistake I've seen even experienced developers make:
+A leaked credential is the starting point for many supply chain compromises. An exposed PyPI token lets an attacker
+publish backdoored versions of your packages. An exposed database URL lets them exfiltrate data. Yet this pattern is
+depressingly common:
 
 ```python
 # Bad: secrets in code live forever in git history
@@ -137,10 +162,10 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 DATABASE_URL = os.environ["DATABASE_URL"]
 ```
 
-Why is this so bad? Git never forgets. When you commit that secret, it lives in your repository's history forever.
-Deleting it in a later commit doesn't help - the secret is still there in the git history. Anyone who gets access to
-your repository, or anyone who has an old clone from before you "deleted" the secret, can extract those credentials.
-I've seen attackers trawl through git histories finding secrets from years ago.
+Git never forgets. When you commit a secret, it lives in your repository's history forever. Deleting it in a later
+commit doesn't help — anyone with repository access (or an old clone) can extract those credentials. Attackers routinely
+trawl git histories for secrets, and a leaked PyPI token or cloud credential is often the first step in a supply chain
+compromise.
 
 ### Broken Cryptography
 
@@ -237,8 +262,17 @@ Add Ruff to your editor and CI pipeline - it'll save your forgetful self.
 
 ## Manage Your Dependencies
 
-Now let's talk about managing the code you didn't write - your dependencies. This is where supply chain attacks actually
-happen.
+Now let's talk about managing the code you didn't write — your dependencies. This is where supply chain attacks actually
+happen. The [OpenSSF Secure Supply Chain Consumption Framework (S2C2F)](https://github.com/ossf/s2c2f) provides a
+structured maturity model for how organizations should consume open source software.
+
+### Choose Dependencies Carefully
+
+Before adding a dependency, consider whether you need it at all. Every dependency expands your attack surface — fewer
+dependencies means fewer opportunities for compromise. When you do add one, evaluate the publisher's security posture
+using the [OpenSSF Scorecard](https://securityscorecards.dev/), which grades projects on practices like branch
+protection, signed releases, dependency update tooling, and vulnerability disclosure. A low score doesn't mean "don't
+use it," but it tells you how much trust you're placing in a project with limited security hygiene.
 
 ### The Unpinned Dependency Problem
 
@@ -338,6 +372,11 @@ same version number, the hash won't match and installation fails. Read more abou
 > pip only enforces hash checking when every requirement in the file has a hash, or when you pass `--require-hashes`
 > explicitly. A single unhashed line silently disables verification for that package. Tools like
 > `uv pip compile --generate-hashes` avoid this by always generating hashes for every dependency.
+
+Hash-pinned lockfiles are a significant step toward **reproducible builds** — given the same lockfile, every install
+pulls the same artifacts. Full reproducibility also depends on deterministic build scripts and environments, but pinning
+the dependency layer removes one of the biggest sources of variation. `uv lock` captures exact versions, hashes, and
+platform markers, getting you most of the way there.
 
 ### Separate Development From Deployment
 
@@ -474,6 +513,12 @@ enterprise features. For a broader walkthrough of scanning strategies including 
 policies, see the
 [CalmOps dependency security guide](https://calmops.com/programming/python/dependency-security-vulnerability-scanning/).
 
+**Not every CVE affects you.** A vulnerability in a dependency's code path you never call is a false positive.
+[VEX](https://www.cisa.gov/resources-tools/resources/minimum-requirements-vulnerability-exploitability-exchange-vex)
+(Vulnerability Exploitability eXchange) is an emerging standard where software producers can declare whether a specific
+CVE actually affects their shipped product. VEX adoption in the Python ecosystem is still early, but it's worth knowing
+about — especially if you're triaging a long list of pip-audit findings and need to prioritize what actually matters.
+
 ### Integrate Into CI/CD
 
 Security checks should run automatically on every commit. Adding [pip-audit](https://github.com/pypa/pip-audit) to
@@ -552,8 +597,10 @@ visibility. You know exactly what dependencies were included when your applicati
 
 ### Generate SBOMs
 
-[CycloneDX Python](https://github.com/CycloneDX/cyclonedx-python) is the recommended tool. See the
-[CycloneDX Python documentation](https://cyclonedx-bom-tool.readthedocs.io/en/latest/) for advanced usage:
+Two major SBOM standards exist: [CycloneDX](https://cyclonedx.org/) (OWASP) and [SPDX](https://spdx.dev/) (Linux
+Foundation). Both are widely supported; CycloneDX is more common in the Python ecosystem. Generate one with
+[CycloneDX Python](https://github.com/CycloneDX/cyclonedx-python) (see the
+[documentation](https://cyclonedx-bom-tool.readthedocs.io/en/latest/) for advanced usage):
 
 ```bash
 uv pip install cyclonedx-bom
@@ -653,6 +700,11 @@ they show you what you installed after the fact.
 manually register specific package names you use internally. This prevents attackers from registering them, though it
 requires registering each name individually.
 
+**PyPI organization accounts** let teams manage packages under a shared identity, providing centralized access control
+and making it harder for typosquatting attacks to impersonate your project. If you publish packages,
+[register your organization](https://blog.pypi.org/posts/2025-11-10-trusted-publishers-coming-to-orgs/) to protect your
+namespace.
+
 **Other ecosystems handle this differently**: npm `@yourcompany/` scopes provide true namespace isolation, Maven
 `com.yourcompany.*` group IDs are self-managed namespaces, and NuGet `YourCompany.*` prefixes can be reserved.
 
@@ -718,7 +770,8 @@ jobs:
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5.4.2
-      - uses: pypa/gh-action-pypi-publish@7f25271a4aa483500f742f9492b2ab5648d61011 # v1.12.4
+      - uses:
+          pypa/gh-action-pypi-publish@7f25271a4aa483500f742f9492b2ab5648d61011     # v1.12.4
 ```
 
 The security improvements are substantial. There are no long-lived secrets to steal, and credentials rotate on every
@@ -771,10 +824,18 @@ Adoption is growing rapidly. By end of 2025,
 Trusted Publishing also
 [expanded to organizations and GitLab Self-Managed instances (beta)](https://blog.pypi.org/posts/2025-11-10-trusted-publishers-coming-to-orgs/).
 As of March 2026, 132,360+ packages have attestations (see
-[Are we PEP 740 yet?](https://trailofbits.github.io/are-we-pep740-yet/)). This aligns with the
-[SLSA framework](https://slsa.dev/) (Supply-chain Levels for Software Artifacts), which is becoming the industry
-standard for measuring supply chain security maturity. SLSA is maintained by the [OpenSSF](https://openssf.org/) (Open
-Source Security Foundation), a collaborative effort to improve open source software security.
+[Are we PEP 740 yet?](https://trailofbits.github.io/are-we-pep740-yet/)).
+
+The attestation shown above is a PyPI "publish" attestation — it proves the publishing identity and links back to the
+source repository. Under the hood, PyPI attestations use the
+[in-toto attestation framework](https://github.com/in-toto/attestation), which defines the attestation format that both
+Sigstore and [SLSA](https://slsa.dev/) (Supply-chain Levels for Software Artifacts) build on. SLSA standardizes what
+attestations *contain* (provenance metadata), while in-toto defines the attestation *format* itself.
+[PEP 740](https://peps.python.org/pep-0740/) also defines a slot for SLSA provenance attestations alongside publish
+attestations, though tooling for generating and uploading both to PyPI is still maturing. For non-PyPI use cases,
+GitHub's [actions/attest](https://github.com/actions/attest) can generate SLSA provenance and SBOM attestations for any
+artifact. The [OpenSSF](https://openssf.org/) (Open Source Security Foundation) maintains SLSA as part of a broader
+effort to improve open source software security.
 
 ### Attestations in Practice
 
@@ -1133,5 +1194,14 @@ only question is: when will you start?
 - [Sigstore](https://www.sigstore.dev/) - Cryptographic signing for software artifacts
 - [SLSA Framework](https://slsa.dev/) - Supply-chain security levels
 - [OpenSSF](https://openssf.org/) - Open Source Security Foundation
+- [in-toto Attestation Framework](https://github.com/in-toto/attestation) - Attestation format underpinning Sigstore and
+  SLSA
+- [SPDX](https://spdx.dev/) - Alternative SBOM standard (Linux Foundation)
+- [CNCF Software Supply Chain Security Whitepaper](https://tag-security.cncf.io/community/working-groups/supply-chain-security/supply-chain-security-paper-v2/Software_Supply_Chain_Practices_whitepaper_v2.pdf)
+  -- Comprehensive supply chain threat model primer
+- [OpenSSF Scorecard](https://securityscorecards.dev/) - Automated security health assessment for open source projects
+- [S2C2F](https://github.com/ossf/s2c2f) - Secure Supply Chain Consumption Framework
+- [VEX](https://www.cisa.gov/resources-tools/resources/minimum-requirements-vulnerability-exploitability-exchange-vex) -
+  CISA minimum requirements for Vulnerability Exploitability eXchange
 - [Are we PEP 740 yet?](https://trailofbits.github.io/are-we-pep740-yet/) - Attestation adoption tracking
 - [sbomify Python Guide](https://sbomify.com/guides/python/)
