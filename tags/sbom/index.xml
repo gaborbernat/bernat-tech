@@ -319,8 +319,9 @@ functionality:&lt;/p&gt;
 same version number, the hash won&amp;rsquo;t match and installation fails. Read more about
 &lt;a href="https://pip.pypa.io/en/stable/topics/secure-installs/" class="external-link" target="_blank" rel="noopener"&gt;secure installs with pip&lt;/a&gt;.&lt;/p&gt;
 &lt;div class="alert alert-important"&gt;
-&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-exclamation" aria-hidden="true"&gt;&lt;/i&gt; pip only enforces hash checking when every requirement in the file has a hash, or when you pass&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;--require-hashes&lt;/code&gt; explicitly. A single unhashed line silently disables verification for that package. Tools like
+&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-exclamation" aria-hidden="true"&gt;&lt;/i&gt; &lt;/p&gt;
+&lt;p&gt;pip only enforces hash checking when every requirement in the file has a hash, or when you pass
+&lt;code&gt;--require-hashes&lt;/code&gt; explicitly. A single unhashed line silently disables verification for that package. Tools like
 &lt;code&gt;uv pip compile --generate-hashes&lt;/code&gt; avoid this by always generating hashes for every dependency.&lt;/p&gt;
 &lt;/div&gt;&lt;p&gt;Hash-pinned lockfiles are a significant step toward &lt;strong&gt;reproducible builds&lt;/strong&gt; — given the same lockfile, every install
 pulls the same artifacts. Full reproducibility also depends on deterministic build scripts and environments, but
@@ -334,8 +335,8 @@ Separate Development From Deployment
 &lt;/a&gt;
 &lt;/h3&gt;
 &lt;div class="alert alert-warning"&gt;
-&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-triangle-exclamation" aria-hidden="true"&gt;&lt;/i&gt; If you&amp;rsquo;re publishing a library to PyPI, don&amp;rsquo;t pin dependencies in your pyproject.toml. Use broad&lt;/p&gt;
-&lt;p&gt;version ranges to avoid conflicts when users install your library alongside others. The advice in this section is for
+&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-triangle-exclamation" aria-hidden="true"&gt;&lt;/i&gt; &lt;/p&gt;
+&lt;p&gt;If you&amp;rsquo;re publishing a &lt;strong&gt;library&lt;/strong&gt; to PyPI, don&amp;rsquo;t pin dependencies in your &lt;code&gt;pyproject.toml&lt;/code&gt;. Use broad version ranges to avoid conflicts when users install your library alongside others. The advice in this section is for
 application deployment only.&lt;/p&gt;
 &lt;/div&gt;&lt;p&gt;Modern best practice for applications separates what you want (development) from what you got (deployment):&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-toml" data-lang="toml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;# pyproject.toml - flexible ranges for development&lt;/span&gt;
@@ -365,8 +366,9 @@ pull requests when new versions are available. Add a &lt;code&gt;.github/dependa
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Dependabot will check your &lt;code&gt;requirements.txt&lt;/code&gt; (or &lt;code&gt;pyproject.toml&lt;/code&gt;) weekly and open PRs for outdated or vulnerable
 dependencies. Each PR includes the changelog and compatibility score, so you can review before merging.&lt;/p&gt;
 &lt;div class="alert alert-info"&gt;
-&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-info" aria-hidden="true"&gt;&lt;/i&gt; Dependabot&amp;rsquo;s pip ecosystem does not understand uv.lock files. If you use uv lock for dependency&lt;/p&gt;
-&lt;p&gt;management, either maintain a &lt;code&gt;requirements.txt&lt;/code&gt; via &lt;code&gt;uv export&lt;/code&gt; for Dependabot to scan, or use
+&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-info" aria-hidden="true"&gt;&lt;/i&gt; &lt;/p&gt;
+&lt;p&gt;Dependabot&amp;rsquo;s &lt;code&gt;pip&lt;/code&gt; ecosystem does not understand &lt;code&gt;uv.lock&lt;/code&gt; files. If you use &lt;code&gt;uv lock&lt;/code&gt; for dependency management,
+either maintain a &lt;code&gt;requirements.txt&lt;/code&gt; via &lt;code&gt;uv export&lt;/code&gt; for Dependabot to scan, or use
 &lt;a href="https://docs.renovatebot.com/" class="external-link" target="_blank" rel="noopener"&gt;Renovate&lt;/a&gt; which has native uv lockfile support.&lt;/p&gt;
 &lt;/div&gt;&lt;h2 id="scan-for-vulnerabilities"&gt;
 Scan For Vulnerabilities
