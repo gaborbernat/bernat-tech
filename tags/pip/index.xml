@@ -1,4 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pip on Bernát Gábor - Engineering &amp; Open Source</title><link>https://bernat.tech/tags/pip/</link><description>Bernát Gábor's personal website</description><generator>Hugo 0.155.3</generator><language>en</language><lastBuildDate>Tue, 10 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://bernat.tech/tags/pip/index.xml" rel="self" type="application/rss+xml"/><item><title>Defense in Depth: A Practical Guide to Python Supply Chain Security</title><link>https://bernat.tech/posts/securing-python-supply-chain/</link><pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/securing-python-supply-chain/</guid><description>&lt;p&gt;I maintain several PyPA projects (virtualenv, tox, platformdirs, filelock) and work on corporate package hosting
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pip on Bernát Gábor - Engineering &amp; Open Source</title><link>https://bernat.tech/tags/pip/</link><description>Bernát Gábor's personal website</description><generator>Hugo 0.155.3</generator><language>en</language><lastBuildDate>Tue, 10 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://bernat.tech/tags/pip/index.xml" rel="self" type="application/rss+xml"/><item><title>Defense in Depth: A Practical Guide to Python Supply Chain Security</title><link>https://bernat.tech/posts/securing-python-supply-chain/</link><pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/securing-python-supply-chain/</guid><description>&lt;div class="alert alert-info"&gt;
+&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-info" aria-hidden="true"&gt;&lt;/i&gt; TLDR:&lt;/p&gt;
+&lt;p&gt;Layer your defenses and don&amp;rsquo;t trust any single control. Use Ruff with security rules to catch bugs in your code before
+they ship. Pin all your dependencies with cryptographic hashes using &lt;code&gt;uv lock&lt;/code&gt; or &lt;code&gt;uv pip compile --generate-hashes&lt;/code&gt;
+so nobody can swap out packages on you. Run &lt;a href="https://github.com/pypa/pip-audit" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;pip-audit&lt;/code&gt;&lt;/a&gt; in CI to catch known CVEs
+before they hit production. Generate SBOMs with CycloneDX so when the next Ultralytics-style compromise drops, you can
+answer &amp;ldquo;are we affected?&amp;rdquo; in minutes instead of days.&lt;/p&gt;
+&lt;p&gt;If you&amp;rsquo;re publishing packages, ditch the long-lived API tokens and switch to Trusted Publishing with OIDC. This
+generates attestations automatically via Sigstore, linking your packages back to source repos. Organizations running
+internal mirrors can add a 7-day delay to let the community be your canary - but only if you&amp;rsquo;ve got the infrastructure
+to maintain it.&lt;/p&gt;
+&lt;p&gt;Nothing here is perfect. Hash pinning stops tampering but won&amp;rsquo;t save you from a malicious package you installed on day
+one. Scanning finds known CVEs but misses zero-days. Attestations prove where code came from, not whether it&amp;rsquo;s safe.
+That&amp;rsquo;s why you layer them - when one control fails, the others catch it. Start with linting and pinning for quick
+wins, add scanning and SBOMs next, then level up to advanced stuff as you mature.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;I maintain several PyPA projects (virtualenv, tox, platformdirs, filelock) and work on corporate package hosting
 infrastructure. I&amp;rsquo;ve watched supply chain attacks targeting Python packages get nastier over the years from both sides:
 publishing to PyPI as an open-source maintainer and managing thousands of dependencies as an enterprise consumer. This
 post covers practical approaches to securing your Python supply chain. For a broader threat model across all ecosystems,
