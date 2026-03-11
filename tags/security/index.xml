@@ -322,10 +322,10 @@ same version number, the hash won&amp;rsquo;t match and installation fails. Read
 &lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-exclamation" aria-hidden="true"&gt;&lt;/i&gt; pip only enforces hash checking when every requirement in the file has a hash, or when you pass&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;--require-hashes&lt;/code&gt; explicitly. A single unhashed line silently disables verification for that package. Tools like
 &lt;code&gt;uv pip compile --generate-hashes&lt;/code&gt; avoid this by always generating hashes for every dependency.&lt;/p&gt;
-&lt;/div&gt;&lt;p&gt;Hash-pinned lockfiles also enable &lt;strong&gt;reproducible builds&lt;/strong&gt; — given the same lockfile, every install produces the same
-environment. This matters for security because if you can&amp;rsquo;t reproduce a build, you can&amp;rsquo;t verify whether an artifact was
-tampered with. &lt;code&gt;uv lock&lt;/code&gt; captures exact versions, hashes, and platform markers, making your builds reproducible by
-default.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Hash-pinned lockfiles are a significant step toward &lt;strong&gt;reproducible builds&lt;/strong&gt; — given the same lockfile, every install
+pulls the same artifacts. Full reproducibility also depends on deterministic build scripts and environments, but
+pinning the dependency layer removes one of the biggest sources of variation. &lt;code&gt;uv lock&lt;/code&gt; captures exact versions,
+hashes, and platform markers, getting you most of the way there.&lt;/p&gt;
 &lt;h3 id="separate-development-from-deployment"&gt;
 Separate Development From Deployment
 &lt;a class="heading-link" href="#separate-development-from-deployment"&gt;
