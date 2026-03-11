@@ -320,13 +320,13 @@ same version number, the hash won&amp;rsquo;t match and installation fails. Read
 &lt;a href="https://pip.pypa.io/en/stable/topics/secure-installs/" class="external-link" target="_blank" rel="noopener"&gt;secure installs with pip&lt;/a&gt;.&lt;/p&gt;
 &lt;div class="alert alert-important"&gt;
 &lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-exclamation" aria-hidden="true"&gt;&lt;/i&gt; &lt;/p&gt;
-&lt;p&gt;pip only enforces hash checking when every requirement in the file has a hash, or when you pass
-&lt;code&gt;--require-hashes&lt;/code&gt; explicitly. A single unhashed line silently disables verification for that package. Tools like
+&lt;p&gt;pip only enforces hash checking when every requirement in the file has a hash, or when you pass &lt;code&gt;--require-hashes&lt;/code&gt;
+explicitly. A single unhashed line silently disables verification for that package. Tools like
 &lt;code&gt;uv pip compile --generate-hashes&lt;/code&gt; avoid this by always generating hashes for every dependency.&lt;/p&gt;
 &lt;/div&gt;&lt;p&gt;Hash-pinned lockfiles are a significant step toward &lt;strong&gt;reproducible builds&lt;/strong&gt; — given the same lockfile, every install
-pulls the same artifacts. Full reproducibility also depends on deterministic build scripts and environments, but
-pinning the dependency layer removes one of the biggest sources of variation. &lt;code&gt;uv lock&lt;/code&gt; captures exact versions,
-hashes, and platform markers, getting you most of the way there.&lt;/p&gt;
+pulls the same artifacts. Full reproducibility also depends on deterministic build scripts and environments, but pinning
+the dependency layer removes one of the biggest sources of variation. &lt;code&gt;uv lock&lt;/code&gt; captures exact versions, hashes, and
+platform markers, getting you most of the way there.&lt;/p&gt;
 &lt;h3 id="separate-development-from-deployment"&gt;
 Separate Development From Deployment
 &lt;a class="heading-link" href="#separate-development-from-deployment"&gt;
@@ -336,8 +336,9 @@ Separate Development From Deployment
 &lt;/h3&gt;
 &lt;div class="alert alert-warning"&gt;
 &lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-triangle-exclamation" aria-hidden="true"&gt;&lt;/i&gt; &lt;/p&gt;
-&lt;p&gt;If you&amp;rsquo;re publishing a &lt;strong&gt;library&lt;/strong&gt; to PyPI, don&amp;rsquo;t pin dependencies in your &lt;code&gt;pyproject.toml&lt;/code&gt;. Use broad version ranges to avoid conflicts when users install your library alongside others. The advice in this section is for
-application deployment only.&lt;/p&gt;
+&lt;p&gt;If you&amp;rsquo;re publishing a &lt;strong&gt;library&lt;/strong&gt; to PyPI, don&amp;rsquo;t pin dependencies in your &lt;code&gt;pyproject.toml&lt;/code&gt;. Use broad version ranges
+to avoid conflicts when users install your library alongside others. The advice in this section is for application
+deployment only.&lt;/p&gt;
 &lt;/div&gt;&lt;p&gt;Modern best practice for applications separates what you want (development) from what you got (deployment):&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-toml" data-lang="toml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;# pyproject.toml - flexible ranges for development&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;project&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
@@ -683,7 +684,8 @@ Note over GHA,PyPI: Key expires in minutes
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;steps&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;uses&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# v4.3.1&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;uses&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# v5.4.2&lt;/span&gt;&lt;span class="w"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;uses&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;pypa/gh-action-pypi-publish@7f25271a4aa483500f742f9492b2ab5648d61011&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# v1.12.4&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;uses&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;pypa/gh-action-pypi-publish@7f25271a4aa483500f742f9492b2ab5648d61011 &lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# v1.12.4&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The security improvements are substantial. There are no long-lived secrets to steal, and credentials rotate on every
 workflow run. The short-lived, scoped tokens reduce the exposure window to minutes instead of forever. You also get
 provenance tracking through Sigstore transparency logs.&lt;/p&gt;
