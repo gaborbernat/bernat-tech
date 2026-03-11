@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Python on Bernát Gábor - Engineering &amp; Open Source</title><link>https://bernat.tech/tags/python/</link><description>Bernát Gábor's personal website</description><generator>Hugo 0.155.3</generator><language>en</language><lastBuildDate>Tue, 10 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://bernat.tech/tags/python/index.xml" rel="self" type="application/rss+xml"/><item><title>Securing Your Python Supply Chain</title><link>https://bernat.tech/posts/securing-python-supply-chain/</link><pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/securing-python-supply-chain/</guid><description>&lt;p&gt;I maintain several PyPA projects (virtualenv, tox, platformdirs, filelock) and work on corporate package hosting
 infrastructure. I&amp;rsquo;ve watched supply chain attacks targeting Python packages get nastier over the years from both sides:
 publishing to PyPI as an open-source maintainer and managing thousands of dependencies as an enterprise consumer. This
-post covers practical approaches to securing your Python supply chain. We&amp;rsquo;ll start with basics and build up to advanced
-defenses - writing secure code, managing dependencies, scanning for vulnerabilities, and verifying package authenticity.&lt;/p&gt;
+post covers practical approaches to securing your Python supply chain. For a broader threat model across all ecosystems,
+the
+&lt;a href="https://tag-security.cncf.io/community/working-groups/supply-chain-security/supply-chain-security-paper-v2/Software_Supply_Chain_Practices_whitepaper_v2.pdf" class="external-link" target="_blank" rel="noopener"&gt;CNCF Software Supply Chain Security Whitepaper&lt;/a&gt;
+is an excellent primer. Here we&amp;rsquo;ll focus on Python-specific defenses — writing secure code, managing dependencies,
+scanning for vulnerabilities, and verifying package authenticity.&lt;/p&gt;
 &lt;h2 id="why-this-matters"&gt;
 Why This Matters
 &lt;a class="heading-link" href="#why-this-matters"&gt;
@@ -97,16 +100,18 @@ know what it does. But if it has a vulnerability, your application is vulnerable
 &lt;p&gt;With 50+ transitive dependencies per project on average, your attack surface is massive compared to what appears in your
 requirements file.&lt;/p&gt;
 &lt;p&gt;Now let&amp;rsquo;s build your defense strategy, starting with your own code.&lt;/p&gt;
-&lt;h2 id="start-with-your-own-code"&gt;
-Start With Your Own Code
-&lt;a class="heading-link" href="#start-with-your-own-code"&gt;
+&lt;h2 id="secure-your-own-code-first"&gt;
+Secure Your Own Code First
+&lt;a class="heading-link" href="#secure-your-own-code-first"&gt;
 &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
 &lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
 &lt;/a&gt;
 &lt;/h2&gt;
-&lt;p&gt;Before worrying about external dependencies, let&amp;rsquo;s make sure your own code isn&amp;rsquo;t introducing vulnerabilities. Security
-bugs hide in everyday code patterns that look perfectly fine during code review - and humans miss these under time
-pressure.&lt;/p&gt;
+&lt;p&gt;Supply chain attacks don&amp;rsquo;t just come from external dependencies — your own code can create the entry points. A hardcoded
+PyPI token in your source code, once pushed to a repository, gives an attacker everything they need to compromise your
+account and publish malicious packages under your name. Beyond secrets, common security bugs hide in everyday code
+patterns that look perfectly fine during code review — and humans miss these under time pressure. Catching them
+automatically with a linter is the first layer of defense.&lt;/p&gt;
 &lt;h3 id="the-forever-secret"&gt;
 The Forever Secret
 &lt;a class="heading-link" href="#the-forever-secret"&gt;
@@ -114,7 +119,9 @@ The Forever Secret
 &lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
 &lt;/a&gt;
 &lt;/h3&gt;
-&lt;p&gt;A mistake I&amp;rsquo;ve seen even experienced developers make:&lt;/p&gt;
+&lt;p&gt;A leaked credential is the starting point for many supply chain compromises. An exposed PyPI token lets an attacker
+publish backdoored versions of your packages. An exposed database URL lets them exfiltrate data. Yet this pattern is
+depressingly common:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Bad: secrets in code live forever in git history&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;SECRET_KEY&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;hunter2&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;DATABASE_URL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;postgres://admin:password123@prod-db:5432/app&amp;#34;&lt;/span&gt;
@@ -124,10 +131,10 @@ The Forever Secret
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;SECRET_KEY&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;environ&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;SECRET_KEY&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;DATABASE_URL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;environ&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;DATABASE_URL&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Why is this so bad? Git never forgets. When you commit that secret, it lives in your repository&amp;rsquo;s history forever.
-Deleting it in a later commit doesn&amp;rsquo;t help - the secret is still there in the git history. Anyone who gets access to
-your repository, or anyone who has an old clone from before you &amp;ldquo;deleted&amp;rdquo; the secret, can extract those credentials.
-I&amp;rsquo;ve seen attackers trawl through git histories finding secrets from years ago.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Git never forgets. When you commit a secret, it lives in your repository&amp;rsquo;s history forever. Deleting it in a later
+commit doesn&amp;rsquo;t help — anyone with repository access (or an old clone) can extract those credentials. Attackers routinely
+trawl git histories for secrets, and a leaked PyPI token or cloud credential is often the first step in a supply chain
+compromise.&lt;/p&gt;
 &lt;h3 id="broken-cryptography"&gt;
 Broken Cryptography
 &lt;a class="heading-link" href="#broken-cryptography"&gt;
@@ -220,8 +227,21 @@ Manage Your Dependencies
 &lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
 &lt;/a&gt;
 &lt;/h2&gt;
-&lt;p&gt;Now let&amp;rsquo;s talk about managing the code you didn&amp;rsquo;t write - your dependencies. This is where supply chain attacks actually
-happen.&lt;/p&gt;
+&lt;p&gt;Now let&amp;rsquo;s talk about managing the code you didn&amp;rsquo;t write — your dependencies. This is where supply chain attacks actually
+happen. The &lt;a href="https://github.com/ossf/s2c2f" class="external-link" target="_blank" rel="noopener"&gt;OpenSSF Secure Supply Chain Consumption Framework (S2C2F)&lt;/a&gt; provides a
+structured maturity model for how organizations should consume open source software.&lt;/p&gt;
+&lt;h3 id="choose-dependencies-carefully"&gt;
+Choose Dependencies Carefully
+&lt;a class="heading-link" href="#choose-dependencies-carefully"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;Before adding a dependency, consider whether you need it at all. Every dependency expands your attack surface — fewer
+dependencies means fewer opportunities for compromise. When you do add one, evaluate the publisher&amp;rsquo;s security posture
+using the &lt;a href="https://securityscorecards.dev/" class="external-link" target="_blank" rel="noopener"&gt;OpenSSF Scorecard&lt;/a&gt;, which grades projects on practices like branch
+protection, signed releases, dependency update tooling, and vulnerability disclosure. A low score doesn&amp;rsquo;t mean &amp;ldquo;don&amp;rsquo;t
+use it,&amp;rdquo; but it tells you how much trust you&amp;rsquo;re placing in a project with limited security hygiene.&lt;/p&gt;
 &lt;h3 id="the-unpinned-dependency-problem"&gt;
 The Unpinned Dependency Problem
 &lt;a class="heading-link" href="#the-unpinned-dependency-problem"&gt;
@@ -299,11 +319,14 @@ functionality:&lt;/p&gt;
 same version number, the hash won&amp;rsquo;t match and installation fails. Read more about
 &lt;a href="https://pip.pypa.io/en/stable/topics/secure-installs/" class="external-link" target="_blank" rel="noopener"&gt;secure installs with pip&lt;/a&gt;.&lt;/p&gt;
 &lt;div class="alert alert-important"&gt;
-&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-exclamation" aria-hidden="true"&gt;&lt;/i&gt; &lt;/p&gt;
-&lt;p&gt;pip only enforces hash checking when every requirement in the file has a hash, or when you pass &lt;code&gt;--require-hashes&lt;/code&gt;
-explicitly. A single unhashed line silently disables verification for that package. Tools like
+&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-exclamation" aria-hidden="true"&gt;&lt;/i&gt; pip only enforces hash checking when every requirement in the file has a hash, or when you pass&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;--require-hashes&lt;/code&gt; explicitly. A single unhashed line silently disables verification for that package. Tools like
 &lt;code&gt;uv pip compile --generate-hashes&lt;/code&gt; avoid this by always generating hashes for every dependency.&lt;/p&gt;
-&lt;/div&gt;&lt;h3 id="separate-development-from-deployment"&gt;
+&lt;/div&gt;&lt;p&gt;Hash-pinned lockfiles also enable &lt;strong&gt;reproducible builds&lt;/strong&gt; — given the same lockfile, every install produces the same
+environment. This matters for security because if you can&amp;rsquo;t reproduce a build, you can&amp;rsquo;t verify whether an artifact was
+tampered with. &lt;code&gt;uv lock&lt;/code&gt; captures exact versions, hashes, and platform markers, making your builds reproducible by
+default.&lt;/p&gt;
+&lt;h3 id="separate-development-from-deployment"&gt;
 Separate Development From Deployment
 &lt;a class="heading-link" href="#separate-development-from-deployment"&gt;
 &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
@@ -311,10 +334,9 @@ Separate Development From Deployment
 &lt;/a&gt;
 &lt;/h3&gt;
 &lt;div class="alert alert-warning"&gt;
-&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-triangle-exclamation" aria-hidden="true"&gt;&lt;/i&gt; &lt;/p&gt;
-&lt;p&gt;If you&amp;rsquo;re publishing a &lt;strong&gt;library&lt;/strong&gt; to PyPI, don&amp;rsquo;t pin dependencies in your &lt;code&gt;pyproject.toml&lt;/code&gt;. Use broad version ranges
-to avoid conflicts when users install your library alongside others. The advice in this section is for application
-deployment only.&lt;/p&gt;
+&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-triangle-exclamation" aria-hidden="true"&gt;&lt;/i&gt; If you&amp;rsquo;re publishing a library to PyPI, don&amp;rsquo;t pin dependencies in your pyproject.toml. Use broad&lt;/p&gt;
+&lt;p&gt;version ranges to avoid conflicts when users install your library alongside others. The advice in this section is for
+application deployment only.&lt;/p&gt;
 &lt;/div&gt;&lt;p&gt;Modern best practice for applications separates what you want (development) from what you got (deployment):&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-toml" data-lang="toml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;# pyproject.toml - flexible ranges for development&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;project&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
@@ -343,9 +365,8 @@ pull requests when new versions are available. Add a &lt;code&gt;.github/dependa
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Dependabot will check your &lt;code&gt;requirements.txt&lt;/code&gt; (or &lt;code&gt;pyproject.toml&lt;/code&gt;) weekly and open PRs for outdated or vulnerable
 dependencies. Each PR includes the changelog and compatibility score, so you can review before merging.&lt;/p&gt;
 &lt;div class="alert alert-info"&gt;
-&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-info" aria-hidden="true"&gt;&lt;/i&gt; &lt;/p&gt;
-&lt;p&gt;Dependabot&amp;rsquo;s &lt;code&gt;pip&lt;/code&gt; ecosystem does not understand &lt;code&gt;uv.lock&lt;/code&gt; files. If you use &lt;code&gt;uv lock&lt;/code&gt; for dependency management,
-either maintain a &lt;code&gt;requirements.txt&lt;/code&gt; via &lt;code&gt;uv export&lt;/code&gt; for Dependabot to scan, or use
+&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-info" aria-hidden="true"&gt;&lt;/i&gt; Dependabot&amp;rsquo;s pip ecosystem does not understand uv.lock files. If you use uv lock for dependency&lt;/p&gt;
+&lt;p&gt;management, either maintain a &lt;code&gt;requirements.txt&lt;/code&gt; via &lt;code&gt;uv export&lt;/code&gt; for Dependabot to scan, or use
 &lt;a href="https://docs.renovatebot.com/" class="external-link" target="_blank" rel="noopener"&gt;Renovate&lt;/a&gt; which has native uv lockfile support.&lt;/p&gt;
 &lt;/div&gt;&lt;h2 id="scan-for-vulnerabilities"&gt;
 Scan For Vulnerabilities
@@ -427,6 +448,11 @@ offers automated remediation and malicious package detection, though it uses a f
 enterprise features. For a broader walkthrough of scanning strategies including pre-commit hooks and custom severity
 policies, see the
 &lt;a href="https://calmops.com/programming/python/dependency-security-vulnerability-scanning/" class="external-link" target="_blank" rel="noopener"&gt;CalmOps dependency security guide&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Not every CVE affects you.&lt;/strong&gt; A vulnerability in a dependency&amp;rsquo;s code path you never call is a false positive.
+&lt;a href="https://www.cisa.gov/resources-tools/resources/minimum-requirements-vulnerability-exploitability-exchange-vex" class="external-link" target="_blank" rel="noopener"&gt;VEX&lt;/a&gt;
+(Vulnerability Exploitability eXchange) is an emerging standard where software producers can declare whether a specific
+CVE actually affects their shipped product. VEX adoption in the Python ecosystem is still early, but it&amp;rsquo;s worth knowing
+about — especially if you&amp;rsquo;re triaging a long list of pip-audit findings and need to prioritize what actually matters.&lt;/p&gt;
 &lt;h3 id="integrate-into-cicd"&gt;
 Integrate Into CI/CD
 &lt;a class="heading-link" href="#integrate-into-cicd"&gt;
@@ -504,8 +530,10 @@ Generate SBOMs
 &lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
 &lt;/a&gt;
 &lt;/h3&gt;
-&lt;p&gt;&lt;a href="https://github.com/CycloneDX/cyclonedx-python" class="external-link" target="_blank" rel="noopener"&gt;CycloneDX Python&lt;/a&gt; is the recommended tool. See the
-&lt;a href="https://cyclonedx-bom-tool.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;CycloneDX Python documentation&lt;/a&gt; for advanced usage:&lt;/p&gt;
+&lt;p&gt;Two major SBOM standards exist: &lt;a href="https://cyclonedx.org/" class="external-link" target="_blank" rel="noopener"&gt;CycloneDX&lt;/a&gt; (OWASP) and &lt;a href="https://spdx.dev/" class="external-link" target="_blank" rel="noopener"&gt;SPDX&lt;/a&gt; (Linux
+Foundation). Both are widely supported; CycloneDX is more common in the Python ecosystem. Generate one with
+&lt;a href="https://github.com/CycloneDX/cyclonedx-python" class="external-link" target="_blank" rel="noopener"&gt;CycloneDX Python&lt;/a&gt; (see the
+&lt;a href="https://cyclonedx-bom-tool.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;documentation&lt;/a&gt; for advanced usage):&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;uv pip install cyclonedx-bom
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cyclonedx-py environment --output-file sbom.json
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Best practices:&lt;/strong&gt; Use lockfiles over requirements.txt for more accurate dependency trees. Include cryptographic hashes
@@ -582,6 +610,10 @@ they show you what you installed after the fact.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Reserve specific project names&lt;/strong&gt;: While PyPI doesn&amp;rsquo;t support wildcard namespaces like &lt;code&gt;yourcompany.*&lt;/code&gt;, you can
 manually register specific package names you use internally. This prevents attackers from registering them, though it
 requires registering each name individually.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;PyPI organization accounts&lt;/strong&gt; let teams manage packages under a shared identity, providing centralized access control
+and making it harder for typosquatting attacks to impersonate your project. If you publish packages,
+&lt;a href="https://blog.pypi.org/posts/2025-11-10-trusted-publishers-coming-to-orgs/" class="external-link" target="_blank" rel="noopener"&gt;register your organization&lt;/a&gt; to protect your
+namespace.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Other ecosystems handle this differently&lt;/strong&gt;: npm &lt;code&gt;@yourcompany/&lt;/code&gt; scopes provide true namespace isolation, Maven
 &lt;code&gt;com.yourcompany.*&lt;/code&gt; group IDs are self-managed namespaces, and NuGet &lt;code&gt;YourCompany.*&lt;/code&gt; prefixes can be reserved.&lt;/p&gt;
 &lt;h2 id="verify-package-authenticity"&gt;
@@ -695,10 +727,17 @@ action v1.11.0, attestations are generated automatically:&lt;/p&gt;
 Trusted Publishing also
 &lt;a href="https://blog.pypi.org/posts/2025-11-10-trusted-publishers-coming-to-orgs/" class="external-link" target="_blank" rel="noopener"&gt;expanded to organizations and GitLab Self-Managed instances (beta)&lt;/a&gt;.
 As of March 2026, 132,360+ packages have attestations (see
-&lt;a href="https://trailofbits.github.io/are-we-pep740-yet/" class="external-link" target="_blank" rel="noopener"&gt;Are we PEP 740 yet?&lt;/a&gt;). This aligns with the
-&lt;a href="https://slsa.dev/" class="external-link" target="_blank" rel="noopener"&gt;SLSA framework&lt;/a&gt; (Supply-chain Levels for Software Artifacts), which is becoming the industry
-standard for measuring supply chain security maturity. SLSA is maintained by the &lt;a href="https://openssf.org/" class="external-link" target="_blank" rel="noopener"&gt;OpenSSF&lt;/a&gt; (Open
-Source Security Foundation), a collaborative effort to improve open source software security.&lt;/p&gt;
+&lt;a href="https://trailofbits.github.io/are-we-pep740-yet/" class="external-link" target="_blank" rel="noopener"&gt;Are we PEP 740 yet?&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;The attestation shown above is a PyPI &amp;ldquo;publish&amp;rdquo; attestation — it proves the publishing identity and links back to the
+source repository. Under the hood, PyPI attestations use the
+&lt;a href="https://github.com/in-toto/attestation" class="external-link" target="_blank" rel="noopener"&gt;in-toto attestation framework&lt;/a&gt;, which defines the attestation format that both
+Sigstore and &lt;a href="https://slsa.dev/" class="external-link" target="_blank" rel="noopener"&gt;SLSA&lt;/a&gt; (Supply-chain Levels for Software Artifacts) build on. SLSA standardizes what
+attestations &lt;em&gt;contain&lt;/em&gt; (provenance metadata), while in-toto defines the attestation &lt;em&gt;format&lt;/em&gt; itself.
+&lt;a href="https://peps.python.org/pep-0740/" class="external-link" target="_blank" rel="noopener"&gt;PEP 740&lt;/a&gt; also defines a slot for SLSA provenance attestations alongside publish
+attestations, though tooling for generating and uploading both to PyPI is still maturing. For non-PyPI use cases,
+GitHub&amp;rsquo;s &lt;a href="https://github.com/actions/attest" class="external-link" target="_blank" rel="noopener"&gt;actions/attest&lt;/a&gt; can generate SLSA provenance and SBOM attestations for any
+artifact. The &lt;a href="https://openssf.org/" class="external-link" target="_blank" rel="noopener"&gt;OpenSSF&lt;/a&gt; (Open Source Security Foundation) maintains SLSA as part of a broader
+effort to improve open source software security.&lt;/p&gt;
 &lt;h3 id="attestations-in-practice"&gt;
 Attestations in Practice
 &lt;a class="heading-link" href="#attestations-in-practice"&gt;
@@ -1097,6 +1136,15 @@ Standards &amp;amp; Specifications
 &lt;li&gt;&lt;a href="https://www.sigstore.dev/" class="external-link" target="_blank" rel="noopener"&gt;Sigstore&lt;/a&gt; - Cryptographic signing for software artifacts&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://slsa.dev/" class="external-link" target="_blank" rel="noopener"&gt;SLSA Framework&lt;/a&gt; - Supply-chain security levels&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://openssf.org/" class="external-link" target="_blank" rel="noopener"&gt;OpenSSF&lt;/a&gt; - Open Source Security Foundation&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/in-toto/attestation" class="external-link" target="_blank" rel="noopener"&gt;in-toto Attestation Framework&lt;/a&gt; - Attestation format underpinning Sigstore and
+SLSA&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://spdx.dev/" class="external-link" target="_blank" rel="noopener"&gt;SPDX&lt;/a&gt; - Alternative SBOM standard (Linux Foundation)&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://tag-security.cncf.io/community/working-groups/supply-chain-security/supply-chain-security-paper-v2/Software_Supply_Chain_Practices_whitepaper_v2.pdf" class="external-link" target="_blank" rel="noopener"&gt;CNCF Software Supply Chain Security Whitepaper&lt;/a&gt;
+&amp;ndash; Comprehensive supply chain threat model primer&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://securityscorecards.dev/" class="external-link" target="_blank" rel="noopener"&gt;OpenSSF Scorecard&lt;/a&gt; - Automated security health assessment for open source projects&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/ossf/s2c2f" class="external-link" target="_blank" rel="noopener"&gt;S2C2F&lt;/a&gt; - Secure Supply Chain Consumption Framework&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.cisa.gov/resources-tools/resources/minimum-requirements-vulnerability-exploitability-exchange-vex" class="external-link" target="_blank" rel="noopener"&gt;VEX&lt;/a&gt; -
+CISA minimum requirements for Vulnerability Exploitability eXchange&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://trailofbits.github.io/are-we-pep740-yet/" class="external-link" target="_blank" rel="noopener"&gt;Are we PEP 740 yet?&lt;/a&gt; - Attestation adoption tracking&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://sbomify.com/guides/python/" class="external-link" target="_blank" rel="noopener"&gt;sbomify Python Guide&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</description><category>python</category><category>security</category><category>dependencies</category><category>supply-chain</category><category>sbom</category><category>pypi</category><category>pip</category></item><item><title>Version numbers: how to use them?</title><link>https://bernat.tech/posts/version-numbers/</link><pubDate>Sat, 16 May 2020 14:15:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/version-numbers/</guid><description>&lt;p&gt;The &lt;a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" class="external-link" target="_blank" rel="noopener"&gt;DRY principle&lt;/a&gt; (an acronym for don&amp;rsquo;t repeat yourself)
