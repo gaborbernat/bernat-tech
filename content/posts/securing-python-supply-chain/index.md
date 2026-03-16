@@ -378,6 +378,14 @@ pulls the same artifacts. Full reproducibility also depends on deterministic bui
 the dependency layer removes one of the biggest sources of variation. `uv lock` captures exact versions, hashes, and
 platform markers, getting you most of the way there.
 
+Looking ahead, [PEP 751](https://peps.python.org/pep-0751/) defines `pylock.toml` — a standardized, tool-agnostic lock
+file format. Unlike tool-specific formats (`uv.lock`, `poetry.lock`), any tool can produce or consume it. Notably,
+`pylock.toml` supports recording
+[attestation identities](https://packaging.python.org/en/latest/specifications/index-hosted-attestations/) directly in
+the lock file, so consumers can verify package provenance at install time. uv already supports both
+[installing from](https://docs.astral.sh/uv/reference/cli/#uv-pip-install) and
+[exporting to](https://docs.astral.sh/uv/reference/cli/#uv-export) `pylock.toml`.
+
 ### Separate Development From Deployment
 
 > [!WARNING]
@@ -483,7 +491,7 @@ graph LR
 Install and run it:
 
 ```bash
-uvx pip-audit --requirements requirements.txt
+uvx pip-audit --requirement requirements.txt
 uvx pip-audit --format json --requirements requirements.txt > report.json
 ```
 
@@ -535,7 +543,7 @@ jobs:
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5.4.2
-      - run: uvx pip-audit --requirements requirements.txt
+      - run: uvx pip-audit --requirement requirements.txt
 ```
 
 **GitLab CI:**
@@ -544,7 +552,7 @@ jobs:
 security-scan:
   image: ghcr.io/astral-sh/uv:python3.14
   script:
-    - uvx pip-audit --requirements requirements.txt
+    - uvx pip-audit --requirement requirements.txt
 ```
 
 **Jenkins:**
@@ -552,7 +560,7 @@ security-scan:
 ```groovy
 stage('Security Scan') {
     steps {
-        sh 'pip install uv && uvx pip-audit --requirements requirements.txt'
+        sh 'pip install uv && uvx pip-audit --requirement requirements.txt'
     }
 }
 ```
@@ -871,15 +879,20 @@ timeline
 
 ### For Individual Developers
 
-Modern tools like uv support time-based filtering through the `--exclude-newer` flag:
+Modern tools support time-based filtering. uv has `--exclude-newer`, and pip v26 introduced `--uploaded-prior-to` with
+the same purpose (both rely on upload-time metadata from [PEP 700](https://peps.python.org/pep-0700/)):
 
 ```bash
-# Only use packages published before a specific date (e.g., 7 days ago)
+# uv: only use packages published before a specific date
 uv pip compile --exclude-newer 2026-03-02 requirements.in -o requirements.txt
+
+# pip v26+: equivalent functionality
+pip install --uploaded-prior-to 2026-03-02T00:00:00Z -r requirements.txt
 ```
 
 This provides a buffer period that can help catch obvious malicious packages before they reach your systems. Think of it
-as letting others be the "canaries in the coal mine."
+as letting others be the "canaries in the coal mine." Note that both flags rely on the package index reporting accurate
+upload timestamps — they're one layer, not a guarantee.
 
 **Limitations**: Delayed ingestion won't catch sophisticated attacks that evade detection, doesn't protect against
 vulnerabilities in packages you're already using, and delays access to security patches (you might need to expedite
@@ -1187,7 +1200,10 @@ only question is: when will you start?
 
 ### Standards & Specifications
 
+- [PEP 700](https://peps.python.org/pep-0700/) - Index API upload-time metadata (enables `--exclude-newer` /
+  `--uploaded-prior-to`)
 - [PEP 740](https://peps.python.org/pep-0740/) - Index support for digital attestations
+- [PEP 751](https://peps.python.org/pep-0751/) - Standardized lock file format (`pylock.toml`) with attestation support
 - [PyPI Trusted Publishers](https://docs.pypi.org/trusted-publishers/)
 - [PyPI Blog - Trusted Publishers for Organizations](https://blog.pypi.org/posts/2025-11-10-trusted-publishers-coming-to-orgs/)
 - [Python Packaging Guide - Publishing with GitHub Actions](https://packaging.python.org/en/latest/guides/publishing-package-distribution-releases-using-github-actions-ci-cd-workflows/)
