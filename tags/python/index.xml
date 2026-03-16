@@ -342,6 +342,13 @@ explicitly. A single unhashed line silently disables verification for that packa
 pulls the same artifacts. Full reproducibility also depends on deterministic build scripts and environments, but pinning
 the dependency layer removes one of the biggest sources of variation. &lt;code&gt;uv lock&lt;/code&gt; captures exact versions, hashes, and
 platform markers, getting you most of the way there.&lt;/p&gt;
+&lt;p&gt;Looking ahead, &lt;a href="https://peps.python.org/pep-0751/" class="external-link" target="_blank" rel="noopener"&gt;PEP 751&lt;/a&gt; defines &lt;code&gt;pylock.toml&lt;/code&gt; — a standardized, tool-agnostic lock
+file format. Unlike tool-specific formats (&lt;code&gt;uv.lock&lt;/code&gt;, &lt;code&gt;poetry.lock&lt;/code&gt;), any tool can produce or consume it. Notably,
+&lt;code&gt;pylock.toml&lt;/code&gt; supports recording
+&lt;a href="https://packaging.python.org/en/latest/specifications/index-hosted-attestations/" class="external-link" target="_blank" rel="noopener"&gt;attestation identities&lt;/a&gt; directly in
+the lock file, so consumers can verify package provenance at install time. uv already supports both
+&lt;a href="https://docs.astral.sh/uv/reference/cli/#uv-pip-install" class="external-link" target="_blank" rel="noopener"&gt;installing from&lt;/a&gt; and
+&lt;a href="https://docs.astral.sh/uv/reference/cli/#uv-export" class="external-link" target="_blank" rel="noopener"&gt;exporting to&lt;/a&gt; &lt;code&gt;pylock.toml&lt;/code&gt;.&lt;/p&gt;
 &lt;h3 id="separate-development-from-deployment"&gt;
 Separate Development From Deployment
 &lt;a class="heading-link" href="#separate-development-from-deployment"&gt;
@@ -444,7 +451,7 @@ style C fill:#f59e0b,stroke:#d97706,color:#fff
 style G fill:#50b432,stroke:#3d8a26,color:#fff
 &lt;/pre&gt;
 &lt;p&gt;Install and run it:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;uvx pip-audit --requirements requirements.txt
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;uvx pip-audit --requirement requirements.txt
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;uvx pip-audit --format json --requirements requirements.txt &amp;gt; report.json
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Example output:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Name Version ID Fix Versions
@@ -489,16 +496,16 @@ common CI systems:&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;steps&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;uses&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# v4.3.1&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;uses&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# v5.4.2&lt;/span&gt;&lt;span class="w"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;run&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;uvx pip-audit --requirements requirements.txt&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;run&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;uvx pip-audit --requirement requirements.txt&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;GitLab CI:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;security-scan&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;ghcr.io/astral-sh/uv:python3.14&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;uvx pip-audit --requirements requirements.txt&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;uvx pip-audit --requirement requirements.txt&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Jenkins:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-groovy" data-lang="groovy"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;stage&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Security Scan&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;steps&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;sh&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;pip install uv &amp;amp;&amp;amp; uvx pip-audit --requirements requirements.txt&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;sh&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;pip install uv &amp;amp;&amp;amp; uvx pip-audit --requirement requirements.txt&amp;#39;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="o"&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Add Ruff linting to these pipelines as well to catch security issues in your own code before they get merged.&lt;/p&gt;
@@ -801,11 +808,16 @@ For Individual Developers
 &lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
 &lt;/a&gt;
 &lt;/h3&gt;
-&lt;p&gt;Modern tools like uv support time-based filtering through the &lt;code&gt;--exclude-newer&lt;/code&gt; flag:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Only use packages published before a specific date (e.g., 7 days ago)&lt;/span&gt;
+&lt;p&gt;Modern tools support time-based filtering. uv has &lt;code&gt;--exclude-newer&lt;/code&gt;, and pip v26 introduced &lt;code&gt;--uploaded-prior-to&lt;/code&gt; with
+the same purpose (both rely on upload-time metadata from &lt;a href="https://peps.python.org/pep-0700/" class="external-link" target="_blank" rel="noopener"&gt;PEP 700&lt;/a&gt;):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# uv: only use packages published before a specific date&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;uv pip compile --exclude-newer 2026-03-02 requirements.in -o requirements.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# pip v26+: equivalent functionality&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pip install --uploaded-prior-to 2026-03-02T00:00:00Z -r requirements.txt
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This provides a buffer period that can help catch obvious malicious packages before they reach your systems. Think of it
-as letting others be the &amp;ldquo;canaries in the coal mine.&amp;rdquo;&lt;/p&gt;
+as letting others be the &amp;ldquo;canaries in the coal mine.&amp;rdquo; Note that both flags rely on the package index reporting accurate
+upload timestamps — they&amp;rsquo;re one layer, not a guarantee.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Limitations&lt;/strong&gt;: Delayed ingestion won&amp;rsquo;t catch sophisticated attacks that evade detection, doesn&amp;rsquo;t protect against
 vulnerabilities in packages you&amp;rsquo;re already using, and delays access to security patches (you might need to expedite
 critical fixes). It&amp;rsquo;s one layer of defense, not a complete solution.&lt;/p&gt;
@@ -1148,7 +1160,10 @@ Standards &amp;amp; Specifications
 &lt;/a&gt;
 &lt;/h3&gt;
 &lt;ul&gt;
+&lt;li&gt;&lt;a href="https://peps.python.org/pep-0700/" class="external-link" target="_blank" rel="noopener"&gt;PEP 700&lt;/a&gt; - Index API upload-time metadata (enables &lt;code&gt;--exclude-newer&lt;/code&gt; /
+&lt;code&gt;--uploaded-prior-to&lt;/code&gt;)&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://peps.python.org/pep-0740/" class="external-link" target="_blank" rel="noopener"&gt;PEP 740&lt;/a&gt; - Index support for digital attestations&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://peps.python.org/pep-0751/" class="external-link" target="_blank" rel="noopener"&gt;PEP 751&lt;/a&gt; - Standardized lock file format (&lt;code&gt;pylock.toml&lt;/code&gt;) with attestation support&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://docs.pypi.org/trusted-publishers/" class="external-link" target="_blank" rel="noopener"&gt;PyPI Trusted Publishers&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://blog.pypi.org/posts/2025-11-10-trusted-publishers-coming-to-orgs/" class="external-link" target="_blank" rel="noopener"&gt;PyPI Blog - Trusted Publishers for Organizations&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://packaging.python.org/en/latest/guides/publishing-package-distribution-releases-using-github-actions-ci-cd-workflows/" class="external-link" target="_blank" rel="noopener"&gt;Python Packaging Guide - Publishing with GitHub Actions&lt;/a&gt;&lt;/li&gt;
