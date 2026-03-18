@@ -130,7 +130,6 @@ primary:
   - name: pipx
     org: pypa
     ci: tests.yml
-    role: co-maintained
   - name: pytest-memray
     org: bloomberg
     ci: build.yml,build_dist.yml
