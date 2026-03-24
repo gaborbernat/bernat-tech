@@ -17,19 +17,21 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: build
     env:
       HUGO_CACHEDIR: /tmp/hugo_cache
       HUGO_VERSION: "0.155.3" # Auto-updated by update-hugo.yaml workflow
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0
+          persist-credentials: false
       - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
+        uses: peaceiris/actions-hugo@75d2e84710de30f6ff7268e08f310b60ef14033f # v3
         with:
           hugo-version: ${{ env.HUGO_VERSION }}
           extended: true
-      - uses: actions/cache@v5
+      - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
         with:
           path: /tmp/hugo_cache
           key: ${{ runner.os }}-hugomod-${{ hashFiles('**/go.sum') }}
@@ -40,12 +42,12 @@ jobs:
         env:
           HUGO_GITHUB_TOKEN: ${{ secrets.HUGO_GITHUB_TOKEN }}
       - name: Validate HTML
-        uses: Cyb3r-Jak3/html5validator-action@v8.0.0
+        uses: Cyb3r-Jak3/html5validator-action@4ea5e57383ed7e14432ebbaae1b64893b7c5210b # v8.0.0
         with:
           root: public/
           css: false
       - name: Check links
-        uses: lycheeverse/lychee-action@v2
+        uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411 # v2
         with:
           args: --verbose --no-progress --accept 200 --max-concurrency 8 --max-retries 3 --retry-wait-time 5 --exclude 'bloomberg\.com'
             --exclude 'instagram\.com' --exclude 'pepy\.tech' --exclude 'linkedin\.com' --exclude 'caremad\.io' --remap 'https://bernat.tech/
@@ -55,7 +57,7 @@ jobs:
         run: |
           curl -sSf https://bernat.tech/index.xml > /dev/null || echo "RSS feed validation skipped (site not deployed)"
         continue-on-error: true
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: website
           path: public
@@ -72,12 +74,12 @@ jobs:
       id-token: write
     steps:
       - name: Download all the dists
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           name: website
           path: public
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
         with:
           github_token: ${{ secrets.HUGO_GITHUB_TOKEN }}
           publish_dir: ./public

@@ -12,7 +12,9 @@ jobs:
   update-hugo:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          persist-credentials: false
 
       - name: Get current Hugo version
         id: current
@@ -29,20 +31,25 @@ jobs:
       - name: Check if update needed
         id: check
         run: |
-          if [ "${{ steps.current.outputs.version }}" != "${{ steps.latest.outputs.version }}" ]; then
+          if [ "${STEPS_CURRENT_OUTPUTS_VERSION}" != "${STEPS_LATEST_OUTPUTS_VERSION}" ]; then
             echo "needed=true" >> "$GITHUB_OUTPUT"
           else
             echo "needed=false" >> "$GITHUB_OUTPUT"
           fi
+        env:
+          STEPS_CURRENT_OUTPUTS_VERSION: ${{ steps.current.outputs.version }}
+          STEPS_LATEST_OUTPUTS_VERSION: ${{ steps.latest.outputs.version }}
 
       - name: Update Hugo version
         if: steps.check.outputs.needed == 'true'
         run: |
-          sed -i 's/HUGO_VERSION: "[^"]*"/HUGO_VERSION: "${{ steps.latest.outputs.version }}"/' .github/workflows/build.yaml
+          sed -i 's/HUGO_VERSION: "[^"]*"/HUGO_VERSION: "${STEPS_LATEST_OUTPUTS_VERSION}"/' .github/workflows/build.yaml
+        env:
+          STEPS_LATEST_OUTPUTS_VERSION: ${{ steps.latest.outputs.version }}
 
       - name: Create Pull Request
         if: steps.check.outputs.needed == 'true'
-        uses: peter-evans/create-pull-request@v8
+        uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: Bump Hugo from ${{ steps.current.outputs.version }} to ${{ steps.latest.outputs.version }}
