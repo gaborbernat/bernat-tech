@@ -28,7 +28,7 @@ title = "Defense in Depth: A Practical Guide to Python Supply Chain Security"
 > That's why you layer them - when one control fails, the others catch it. Start with linting and pinning for quick
 > wins, add scanning and SBOMs next, then level up to advanced stuff as you mature.
 
-I maintain several PyPA projects (virtualenv, tox, platformdirs, filelock) and work on corporate package hosting
+I maintain several PyPA projects (virtualenv, tox, pipx, platformdirs, filelock) and work on corporate package hosting
 infrastructure. I've watched supply chain attacks targeting Python packages get nastier over the years from both sides:
 publishing to PyPI as an open-source maintainer and managing thousands of dependencies as an enterprise consumer. This
 post covers practical approaches to securing your Python supply chain. For a broader threat model across all ecosystems,
@@ -99,8 +99,8 @@ and pushed everyone to migrate to [Trusted Publishers](#the-new-way-trusted-publ
 **[Shai-Hulud Worm Campaign](https://blog.pypi.org/posts/2025-11-26-pypi-and-shai-hulud/) (November 2025)**: A
 cross-ecosystem worm primarily targeting npm that also hit PyPI because monorepo setups store credentials for both
 registries. Attackers compromised npm accounts and exfiltrated long-lived PyPI tokens from GitHub repository secrets.
-PyPI proactively revoked exposed tokens and recommended using [zizmor](https://woodruffw.github.io/zizmor/) for auditing
-GitHub Actions workflows.
+PyPI proactively revoked exposed tokens and recommended using [zizmor](https://docs.zizmor.sh/) for auditing GitHub
+Actions workflows.
 
 These aren't theoretical attacks. They happened to real projects with millions of users. If you discover a malicious
 package on PyPI, you can report it through [PyPI's security reporting system](https://pypi.org/security/).
@@ -793,7 +793,94 @@ pinning Actions to commit SHAs instead of tags (as shown above — the `# v4.3.1
 configuring a GitHub Actions
 [deployment environment](https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-deployments/managing-environments-for-deployment)
 with required reviewers so the publish job needs manual approval before the OIDC token exchange, restricting who can
-modify workflow files, and auditing your workflows with tools like [zizmor](https://woodruffw.github.io/zizmor/).
+modify workflow files, and auditing your workflows with tools like [zizmor](https://docs.zizmor.sh/).
+
+### Audit Your Workflows With zizmor
+
+[zizmor](https://docs.zizmor.sh/) is a static analysis tool that finds security issues in GitHub Actions workflows —
+template injection, unpinned actions, excessive permissions, credential leaks, and
+[30+ other audit rules](https://docs.zizmor.sh/audits/). It's particularly relevant here because the GhostAction attack
+exploited exactly the kind of workflow vulnerabilities zizmor detects.
+
+Run it against your repository:
+
+```bash
+# Scan all workflows in the current repo
+uvx zizmor .
+
+# Scan with a GitHub token for online checks (detects impostor commits, known CVEs in actions)
+uvx zizmor --gh-token $(gh auth token) .
+
+# Output as JSON or SARIF for CI integration
+uvx zizmor --format=sarif . > results.sarif
+```
+
+Example output:
+
+```text
+warning[excessive-permissions]: overly broad permissions
+  --> .github/workflows/ci.yml:4:1
+   |
+ 4 | permissions: write-all
+   | ^^^^^^^^^^^^^^^^^^^^^ this permission is overly broad
+   |
+   = note: audit confidence → High
+
+error[template-injection]: code injection via template expansion
+  --> .github/workflows/comment.yml:15:9
+   |
+15 |     run: echo "${{ github.event.issue.title }}"
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ attacker-controlled input in run step
+```
+
+Add it to your pre-commit hooks to catch issues before they're pushed:
+
+```yaml
+# .pre-commit-config.yaml
+- repo: https://github.com/zizmorcore/zizmor-pre-commit
+  rev: v1.22.0
+  hooks:
+  - id: zizmor
+```
+
+Or run it in CI to audit workflows on every PR. The
+[official zizmor action](https://github.com/zizmorcore/zizmor-action) uploads findings to GitHub's Security tab via
+SARIF:
+
+```yaml
+name: Audit GitHub Actions
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+permissions: {}
+
+jobs:
+  zizmor:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: zizmorcore/zizmor-action@71321a20a9ded102f6e9ce5718a2fcec2c4f70d8 # v0.5.2
+```
+
+Key audits relevant to supply chain security:
+
+- **template-injection** — `${{ }}` expansion with attacker-controlled input enables shell injection,
+- **unpinned-uses** — actions referenced by tag instead of SHA can be hijacked,
+- **excessive-permissions** — over-scoped `GITHUB_TOKEN` increases blast radius,
+- **use-trusted-publishing** — flags workflows still using long-lived PyPI tokens instead of OIDC,
+- **impostor-commit** — detects fork commits masquerading as main repo commits (requires `--gh-token`),
+- **known-vulnerable-actions** — flags actions with publicly disclosed CVEs.
+
+zizmor also has [VS Code integration](https://marketplace.visualstudio.com/items?itemName=zizmor.zizmor-vscode) and can
+run as an LSP server (`zizmor --lsp`) for real-time feedback in any editor.
 
 ### Package Attestations
 
@@ -1197,6 +1284,8 @@ only question is: when will you start?
 - [CycloneDX Python](https://cyclonedx-bom-tool.readthedocs.io/en/latest/) - SBOM generator documentation
 - [Dependabot](https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain) - Automated dependency updates
 - [CalmOps - Dependency Security Guide](https://calmops.com/programming/python/dependency-security-vulnerability-scanning/)
+- [zizmor](https://docs.zizmor.sh/) - Static analysis for GitHub Actions security
+- [zizmor Action](https://github.com/zizmorcore/zizmor-action) - Official GitHub Actions integration
 
 ### Standards & Specifications
 
