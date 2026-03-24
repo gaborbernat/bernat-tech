@@ -13,7 +13,7 @@ to maintain it.&lt;/p&gt;
 one. Scanning finds known CVEs but misses zero-days. Attestations prove where code came from, not whether it&amp;rsquo;s safe.
 That&amp;rsquo;s why you layer them - when one control fails, the others catch it. Start with linting and pinning for quick
 wins, add scanning and SBOMs next, then level up to advanced stuff as you mature.&lt;/p&gt;
-&lt;/div&gt;&lt;p&gt;I maintain several PyPA projects (virtualenv, tox, platformdirs, filelock) and work on corporate package hosting
+&lt;/div&gt;&lt;p&gt;I maintain several PyPA projects (virtualenv, tox, pipx, platformdirs, filelock) and work on corporate package hosting
 infrastructure. I&amp;rsquo;ve watched supply chain attacks targeting Python packages get nastier over the years from both sides:
 publishing to PyPI as an open-source maintainer and managing thousands of dependencies as an enterprise consumer. This
 post covers practical approaches to securing your Python supply chain. For a broader threat model across all ecosystems,
@@ -82,8 +82,8 @@ and pushed everyone to migrate to &lt;a href="#the-new-way-trusted-publishing" &
 &lt;p&gt;&lt;strong&gt;&lt;a href="https://blog.pypi.org/posts/2025-11-26-pypi-and-shai-hulud/" class="external-link" target="_blank" rel="noopener"&gt;Shai-Hulud Worm Campaign&lt;/a&gt; (November 2025)&lt;/strong&gt;: A
 cross-ecosystem worm primarily targeting npm that also hit PyPI because monorepo setups store credentials for both
 registries. Attackers compromised npm accounts and exfiltrated long-lived PyPI tokens from GitHub repository secrets.
-PyPI proactively revoked exposed tokens and recommended using &lt;a href="https://woodruffw.github.io/zizmor/" class="external-link" target="_blank" rel="noopener"&gt;zizmor&lt;/a&gt; for auditing
-GitHub Actions workflows.&lt;/p&gt;
+PyPI proactively revoked exposed tokens and recommended using &lt;a href="https://docs.zizmor.sh/" class="external-link" target="_blank" rel="noopener"&gt;zizmor&lt;/a&gt; for auditing GitHub
+Actions workflows.&lt;/p&gt;
 &lt;p&gt;These aren&amp;rsquo;t theoretical attacks. They happened to real projects with millions of users. If you discover a malicious
 package on PyPI, you can report it through &lt;a href="https://pypi.org/security/" class="external-link" target="_blank" rel="noopener"&gt;PyPI&amp;rsquo;s security reporting system&lt;/a&gt;.&lt;/p&gt;
 &lt;h3 id="the-hidden-dependency-problem"&gt;
@@ -718,7 +718,81 @@ pinning Actions to commit SHAs instead of tags (as shown above — the &lt;code&
 configuring a GitHub Actions
 &lt;a href="https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-deployments/managing-environments-for-deployment" class="external-link" target="_blank" rel="noopener"&gt;deployment environment&lt;/a&gt;
 with required reviewers so the publish job needs manual approval before the OIDC token exchange, restricting who can
-modify workflow files, and auditing your workflows with tools like &lt;a href="https://woodruffw.github.io/zizmor/" class="external-link" target="_blank" rel="noopener"&gt;zizmor&lt;/a&gt;.&lt;/p&gt;
+modify workflow files, and auditing your workflows with tools like &lt;a href="https://docs.zizmor.sh/" class="external-link" target="_blank" rel="noopener"&gt;zizmor&lt;/a&gt;.&lt;/p&gt;
+&lt;h3 id="audit-your-workflows-with-zizmor"&gt;
+Audit Your Workflows With zizmor
+&lt;a class="heading-link" href="#audit-your-workflows-with-zizmor"&gt;
+&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
+&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
+&lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://docs.zizmor.sh/" class="external-link" target="_blank" rel="noopener"&gt;zizmor&lt;/a&gt; is a static analysis tool that finds security issues in GitHub Actions workflows —
+template injection, unpinned actions, excessive permissions, credential leaks, and
+&lt;a href="https://docs.zizmor.sh/audits/" class="external-link" target="_blank" rel="noopener"&gt;30+ other audit rules&lt;/a&gt;. It&amp;rsquo;s particularly relevant here because the GhostAction attack
+exploited exactly the kind of workflow vulnerabilities zizmor detects.&lt;/p&gt;
+&lt;p&gt;Run it against your repository:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Scan all workflows in the current repo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;uvx zizmor .
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Scan with a GitHub token for online checks (detects impostor commits, known CVEs in actions)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;uvx zizmor --gh-token &lt;span class="k"&gt;$(&lt;/span&gt;gh auth token&lt;span class="k"&gt;)&lt;/span&gt; .
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Output as JSON or SARIF for CI integration&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;uvx zizmor --format&lt;span class="o"&gt;=&lt;/span&gt;sarif . &amp;gt; results.sarif
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Example output:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;warning[excessive-permissions]: overly broad permissions
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; --&amp;gt; .github/workflows/ci.yml:4:1
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; |
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; 4 | permissions: write-all
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; | ^^^^^^^^^^^^^^^^^^^^^ this permission is overly broad
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; |
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; = note: audit confidence → High
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;error[template-injection]: code injection via template expansion
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; --&amp;gt; .github/workflows/comment.yml:15:9
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; |
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;15 | run: echo &amp;#34;${{ github.event.issue.title }}&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ attacker-controlled input in run step
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Add it to your pre-commit hooks to catch issues before they&amp;rsquo;re pushed:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;# .pre-commit-config.yaml&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- &lt;span class="nt"&gt;repo&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;https://github.com/zizmorcore/zizmor-pre-commit&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;rev&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;v1.22.0&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;hooks&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;id&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;zizmor&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Or run it in CI to audit workflows on every PR. The
+&lt;a href="https://github.com/zizmorcore/zizmor-action" class="external-link" target="_blank" rel="noopener"&gt;official zizmor action&lt;/a&gt; uploads findings to GitHub&amp;rsquo;s Security tab via
+SARIF:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;Audit GitHub Actions&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;on&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;push&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;branches&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;main&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;pull_request&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;permissions&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;{}&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;jobs&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;zizmor&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;runs-on&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;ubuntu-latest&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;permissions&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;security-events&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;write&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;contents&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;read&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;actions&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;read&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;steps&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;uses&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# v6.0.2&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;with&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;persist-credentials&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;false&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;uses&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;zizmorcore/zizmor-action@71321a20a9ded102f6e9ce5718a2fcec2c4f70d8&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# v0.5.2&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Key audits relevant to supply chain security:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;template-injection&lt;/strong&gt; — &lt;code&gt;${{ }}&lt;/code&gt; expansion with attacker-controlled input enables shell injection,&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;unpinned-uses&lt;/strong&gt; — actions referenced by tag instead of SHA can be hijacked,&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;excessive-permissions&lt;/strong&gt; — over-scoped &lt;code&gt;GITHUB_TOKEN&lt;/code&gt; increases blast radius,&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;use-trusted-publishing&lt;/strong&gt; — flags workflows still using long-lived PyPI tokens instead of OIDC,&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;impostor-commit&lt;/strong&gt; — detects fork commits masquerading as main repo commits (requires &lt;code&gt;--gh-token&lt;/code&gt;),&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;known-vulnerable-actions&lt;/strong&gt; — flags actions with publicly disclosed CVEs.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;zizmor also has &lt;a href="https://marketplace.visualstudio.com/items?itemName=zizmor.zizmor-vscode" class="external-link" target="_blank" rel="noopener"&gt;VS Code integration&lt;/a&gt; and can
+run as an LSP server (&lt;code&gt;zizmor --lsp&lt;/code&gt;) for real-time feedback in any editor.&lt;/p&gt;
 &lt;h3 id="package-attestations"&gt;
 Package Attestations
 &lt;a class="heading-link" href="#package-attestations"&gt;
@@ -1151,6 +1225,8 @@ documentation&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://cyclonedx-bom-tool.readthedocs.io/en/latest/" class="external-link" target="_blank" rel="noopener"&gt;CycloneDX Python&lt;/a&gt; - SBOM generator documentation&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain" class="external-link" target="_blank" rel="noopener"&gt;Dependabot&lt;/a&gt; - Automated dependency updates&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://calmops.com/programming/python/dependency-security-vulnerability-scanning/" class="external-link" target="_blank" rel="noopener"&gt;CalmOps - Dependency Security Guide&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.zizmor.sh/" class="external-link" target="_blank" rel="noopener"&gt;zizmor&lt;/a&gt; - Static analysis for GitHub Actions security&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/zizmorcore/zizmor-action" class="external-link" target="_blank" rel="noopener"&gt;zizmor Action&lt;/a&gt; - Official GitHub Actions integration&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="standards--specifications"&gt;
 Standards &amp;amp; Specifications
