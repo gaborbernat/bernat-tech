@@ -126,7 +126,6 @@ primary:
   - name: build
     org: pypa
     ci: test.yml
-    role: co-maintained
   - name: pipx
     org: pypa
     ci: tests.yml
