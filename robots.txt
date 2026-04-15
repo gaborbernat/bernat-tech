@@ -1,1 +1,8 @@
 User-agent: *
+Allow: /
+Disallow: /tags/
+Disallow: /categories/
+Disallow: /authors/
+Disallow: /series/
+
+Sitemap: https://bernat.tech/sitemap.xml
