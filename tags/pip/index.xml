@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pip on Bernát Gábor - Engineering &amp; Open Source</title><link>https://bernat.tech/tags/pip/</link><description>Bernát Gábor's personal website</description><generator>Hugo 0.155.3</generator><language>en</language><lastBuildDate>Tue, 10 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://bernat.tech/tags/pip/index.xml" rel="self" type="application/rss+xml"/><item><title>Defense in Depth: A Practical Guide to Python Supply Chain Security</title><link>https://bernat.tech/posts/securing-python-supply-chain/</link><pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/securing-python-supply-chain/</guid><description>&lt;div class="alert alert-info"&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pip on Bernát Gábor - Engineering &amp; Open Source</title><link>https://bernat.tech/tags/pip/</link><description>Bernát Gábor's personal website</description><generator>Hugo 0.160.1</generator><language>en</language><lastBuildDate>Tue, 10 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://bernat.tech/tags/pip/index.xml" rel="self" type="application/rss+xml"/><item><title>Defense in Depth: A Practical Guide to Python Supply Chain Security</title><link>https://bernat.tech/posts/securing-python-supply-chain/</link><pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/securing-python-supply-chain/</guid><description>&lt;div class="alert alert-info"&gt;
 &lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-info" aria-hidden="true"&gt;&lt;/i&gt; TLDR:&lt;/p&gt;
 &lt;p&gt;Layer your defenses and don&amp;rsquo;t trust any single control. Use Ruff with security rules to catch bugs in your code before
 they ship. Pin all your dependencies with cryptographic hashes using &lt;code&gt;uv lock&lt;/code&gt; or &lt;code&gt;uv pip compile --generate-hashes&lt;/code&gt;
@@ -1275,7 +1275,7 @@ performed some operations that caught the maintainers by surprise. Let&amp;rsquo
 how did they get addressed.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/growing-pain/stand_pug.webp" alt="Standing pug"
-srcset="https://bernat.tech/posts/growing-pain/stand_pug_hu_6c52b91bbec06c42.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/growing-pain/stand_pug_hu_f31f94dc49485063.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="467"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
@@ -1332,7 +1332,7 @@ machine will not be able to use it. &lt;a href="https://github.com/pypa/setuptoo
 setuptools. One can include &lt;code&gt;pyproject.toml&lt;/code&gt; by specifying it inside &lt;code&gt;MANIFEST.in&lt;/code&gt; on earlier versions.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/growing-pain/chair_pug.webp" alt="Pug on chair"
-srcset="https://bernat.tech/posts/growing-pain/chair_pug_hu_65bddb8c16d434c9.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/growing-pain/chair_pug_hu_d9134a248726de99.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="469"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
@@ -1387,7 +1387,7 @@ cons, so if you&amp;rsquo;re interested, make sure to head over the
 &lt;a href="https://discuss.python.org/t/pep-517-backend-bootstrapping/789" class="external-link" target="_blank" rel="noopener"&gt;python Discourse board&lt;/a&gt; and give your opinion.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/growing-pain/many_pug.webp" alt="Many pugs"
-srcset="https://bernat.tech/posts/growing-pain/many_pug_hu_8020c5ceaa728414.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/growing-pain/many_pug_hu_bed32aea16eeea7e.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="525"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
@@ -1612,7 +1612,7 @@ backend as stated in PEP-517. Otherwise, tox will use the old way of building so
 &lt;code&gt;python setup.py sdist&lt;/code&gt; command with the same interpreter tox is installed into.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-518/moody_pug.webp" alt="Moody pug"
-srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_94a4de09c68b721d.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/pep-517-518/moody_pug_hu_33cc007216ef81b3.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="467"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
@@ -1650,7 +1650,7 @@ learned while introducing these improvements. A heads up, I will focus mainly on
 systems (&lt;code&gt;pip&lt;/code&gt;, &lt;code&gt;setuptools&lt;/code&gt;, so no &lt;code&gt;conda&lt;/code&gt; or operating system-specific packagers).&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug.webp" alt="Sad pug"
-srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_2c310c7e3a7f8e56.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_5b5f7fb0f35c80b1.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="468"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
@@ -1705,7 +1705,7 @@ facto standard packaging tool &lt;a href="https://pypi.org/project/setuptools" c
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt;&amp;#34;An enlightened pug knows how to make the best of whatever he has to work with - A Pug&amp;#39;s Guide to Dating - Gemma Correll&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug.webp" alt="Enlightened pug"
-srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_d9656d45932712d8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_c86c0df49e1cb18b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="468"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
@@ -1744,7 +1744,7 @@ some installer.&lt;/p&gt;
 &lt;p&gt;The following diagram displays how most of the time things go:&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/diagram.webp" alt="Python packaging diagram"
-srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_697fb3e41a71dcd2.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_a98fe9ab9071ab06.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="425"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
@@ -1759,7 +1759,7 @@ folder.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug.webp" alt="Pug discovering something"
-srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_f731d5a9f88dfc52.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_4bb0c825f1630f67.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="554"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
@@ -1853,7 +1853,7 @@ files) - format: &lt;code&gt;pugs-0.0.1.tar.gz&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug.webp" alt="Smart pug"
-srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_a239ae4645d0da08.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_7156ab647684fe66.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="600" height="614"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;

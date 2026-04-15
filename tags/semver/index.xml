@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Semver on Bernát Gábor - Engineering &amp; Open Source</title><link>https://bernat.tech/tags/semver/</link><description>Bernát Gábor's personal website</description><generator>Hugo 0.155.3</generator><language>en</language><lastBuildDate>Sat, 16 May 2020 14:15:00 +0000</lastBuildDate><atom:link href="https://bernat.tech/tags/semver/index.xml" rel="self" type="application/rss+xml"/><item><title>Version numbers: how to use them?</title><link>https://bernat.tech/posts/version-numbers/</link><pubDate>Sat, 16 May 2020 14:15:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/version-numbers/</guid><description>&lt;p&gt;The &lt;a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" class="external-link" target="_blank" rel="noopener"&gt;DRY principle&lt;/a&gt; (an acronym for don&amp;rsquo;t repeat yourself)
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Semver on Bernát Gábor - Engineering &amp; Open Source</title><link>https://bernat.tech/tags/semver/</link><description>Bernát Gábor's personal website</description><generator>Hugo 0.160.1</generator><language>en</language><lastBuildDate>Sat, 16 May 2020 14:15:00 +0000</lastBuildDate><atom:link href="https://bernat.tech/tags/semver/index.xml" rel="self" type="application/rss+xml"/><item><title>Version numbers: how to use them?</title><link>https://bernat.tech/posts/version-numbers/</link><pubDate>Sat, 16 May 2020 14:15:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/version-numbers/</guid><description>&lt;p&gt;The &lt;a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" class="external-link" target="_blank" rel="noopener"&gt;DRY principle&lt;/a&gt; (an acronym for don&amp;rsquo;t repeat yourself)
 encourages software engineers to abstract code into a separate component and reuse it rather than write it over and over
 again. If this happens across the system, the best practice is to put it inside a package that lives on its own (a
 library) and then pull it in from the applications when required.&lt;/p&gt;
@@ -21,7 +21,7 @@ cute animal photos to give you at least some moments of relief while you&amp;rsq
 pictures from my Yorkshire Terrier puppy, Silky. Without further ado (#ToT!!!)&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_tot.webp" alt="Silky the Yorkshire Terrier puppy"
-srcset="https://bernat.tech/posts/version-numbers/silky_tot_hu_6e45e4b1848882c8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/version-numbers/silky_tot_hu_d824671a17c8cb56.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="417"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
@@ -65,7 +65,7 @@ talk held at a &lt;a href="https://remote.python.pizza/" class="external-link" t
 I tend to agree.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_sit.webp" alt="Silky sitting"
-srcset="https://bernat.tech/posts/version-numbers/silky_sit_hu_cb6cdaf5b409b8ed.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/version-numbers/silky_sit_hu_6cf9cb0ce32c9ad1.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="696"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
@@ -104,7 +104,7 @@ abandoned:&lt;/p&gt;
 last released version (be that security improvement, bugfix, or feature). Otherwise, you&amp;rsquo;ll not get it.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_wind.webp" alt="Silky in the wind"
-srcset="https://bernat.tech/posts/version-numbers/silky_wind_hu_43cf71b72b7fc0f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/version-numbers/silky_wind_hu_381667d60a151899.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="557"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
@@ -143,7 +143,7 @@ their code, and you might not have the time to do this for every one of your pro
 another aspect version pinning will introduce: version conflicts.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_tot_2.webp" alt="Silky the puppy running"
-srcset="https://bernat.tech/posts/version-numbers/silky_tot_2_hu_1bba1ed33e0c5f29.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/version-numbers/silky_tot_2_hu_a353609a5cae98b1.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="648"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
@@ -187,7 +187,7 @@ experience start to appear every few months. You need only 5-6 of such cases for
 pop up every two months on your plate. And potentially for a multiple of your applications.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_yes.webp" alt="Silky looking up"
-srcset="https://bernat.tech/posts/version-numbers/silky_yes_hu_36054eb81236b06.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/version-numbers/silky_yes_hu_2626c13f2cf8acc7.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="665"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
@@ -211,7 +211,7 @@ can make calendar-based promises. For example, Ubuntu offers five years of suppo
 can quickly determine that it will be supported up to April 2025.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_jump.webp" alt="Silky jumping"
-srcset="https://bernat.tech/posts/version-numbers/silky_jump_hu_fb582372e2c4a68f.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/version-numbers/silky_jump_hu_e6ec4852fdd2993a.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="734"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
@@ -252,7 +252,7 @@ have a comprehensive test suite.&lt;/strong&gt; Ideally, your test framework can
 calling deprecated functions (&lt;a href="https://docs.pytest.org/en/latest/warnings.html#warnings-capture" class="external-link" target="_blank" rel="noopener"&gt;for example pytest&lt;/a&gt;).&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_wise.webp" alt="Silky looking wise"
-srcset="https://bernat.tech/posts/version-numbers/silky_wise_hu_c068afdb0fef36bf.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/version-numbers/silky_wise_hu_cf9673b70d785475.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="696"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
@@ -289,7 +289,7 @@ versions with exact pins (this is the fundamental difference between
 article in its draft versions and suggesting changes that made it a thousand times better.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/version-numbers/silky_run_happy.webp" alt="Silky running happily"
-srcset="https://bernat.tech/posts/version-numbers/silky_run_happy_hu_f7d7be02b1684d4c.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/version-numbers/silky_run_happy_hu_6823bebc46ffdb1a.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="525"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;</description><category>python</category><category>version</category><category>semver</category><category>calver</category><category>0ver</category></item></channel></rss>

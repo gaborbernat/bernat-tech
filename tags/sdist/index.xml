@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Sdist on Bernát Gábor - Engineering &amp; Open Source</title><link>https://bernat.tech/tags/sdist/</link><description>Bernát Gábor's personal website</description><generator>Hugo 0.155.3</generator><language>en</language><lastBuildDate>Thu, 07 Feb 2019 13:40:54 +0000</lastBuildDate><atom:link href="https://bernat.tech/tags/sdist/index.xml" rel="self" type="application/rss+xml"/><item><title>The state of Python Packaging</title><link>https://bernat.tech/posts/pep-517-and-python-packaging/</link><pubDate>Thu, 07 Feb 2019 13:40:54 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pep-517-and-python-packaging/</guid><description>&lt;p&gt;pip 19.0 has been released on 22nd January 2019. On the feature list, most notably, it now supports PEP-517, which by
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Sdist on Bernát Gábor - Engineering &amp; Open Source</title><link>https://bernat.tech/tags/sdist/</link><description>Bernát Gábor's personal website</description><generator>Hugo 0.160.1</generator><language>en</language><lastBuildDate>Thu, 07 Feb 2019 13:40:54 +0000</lastBuildDate><atom:link href="https://bernat.tech/tags/sdist/index.xml" rel="self" type="application/rss+xml"/><item><title>The state of Python Packaging</title><link>https://bernat.tech/posts/pep-517-and-python-packaging/</link><pubDate>Thu, 07 Feb 2019 13:40:54 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pep-517-and-python-packaging/</guid><description>&lt;p&gt;pip 19.0 has been released on 22nd January 2019. On the feature list, most notably, it now supports PEP-517, which by
 default is turned &lt;strong&gt;on&lt;/strong&gt; when that the project has a &lt;code&gt;pyproject.toml&lt;/code&gt; at the root folder. The PEP in question has been
 created in 2015 and accepted in 2017. Even though it took a while until pip implemented it, the release and the issues
 that followed confirmed that many people are not familiar with it. Read on if you want to get a picture of how the
@@ -18,7 +18,7 @@ learned while introducing these improvements. A heads up, I will focus mainly on
 systems (&lt;code&gt;pip&lt;/code&gt;, &lt;code&gt;setuptools&lt;/code&gt;, so no &lt;code&gt;conda&lt;/code&gt; or operating system-specific packagers).&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug.webp" alt="Sad pug"
-srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_2c310c7e3a7f8e56.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/pep-517-and-python-packaging/sad_pug_hu_5b5f7fb0f35c80b1.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="468"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
@@ -73,7 +73,7 @@ facto standard packaging tool &lt;a href="https://pypi.org/project/setuptools" c
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt;&amp;#34;An enlightened pug knows how to make the best of whatever he has to work with - A Pug&amp;#39;s Guide to Dating - Gemma Correll&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug.webp" alt="Enlightened pug"
-srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_d9656d45932712d8.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/pep-517-and-python-packaging/enlightened_pug_hu_c86c0df49e1cb18b.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="468"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
@@ -112,7 +112,7 @@ some installer.&lt;/p&gt;
 &lt;p&gt;The following diagram displays how most of the time things go:&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/diagram.webp" alt="Python packaging diagram"
-srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_697fb3e41a71dcd2.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/pep-517-and-python-packaging/diagram_hu_a98fe9ab9071ab06.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="425"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
@@ -127,7 +127,7 @@ folder.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug.webp" alt="Pug discovering something"
-srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_f731d5a9f88dfc52.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/pep-517-and-python-packaging/discover_pug_hu_4bb0c825f1630f67.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="700" height="554"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
@@ -221,7 +221,7 @@ files) - format: &lt;code&gt;pugs-0.0.1.tar.gz&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;figure&gt;
 &lt;img src="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug.webp" alt="Smart pug"
-srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_a239ae4645d0da08.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
+srcset="https://bernat.tech/posts/pep-517-and-python-packaging/smart_pug_hu_7156ab647684fe66.webp 500w" sizes="(min-width: 35em) 1200px, 100vw"
 width="600" height="614"
 loading="lazy" decoding="async"&gt;
 &lt;/figure&gt;
