@@ -18,9 +18,7 @@ jobs:
 
       - name: Get current Hugo version
         id: current
-        run: |
-          CURRENT_VERSION=$(grep -oP 'HUGO_VERSION: "\K[^"]+' .github/workflows/build.yaml)
-          echo "version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(cat .github/hugo-version)" >> "$GITHUB_OUTPUT"
 
       - name: Get latest Hugo version
         id: latest
@@ -42,8 +40,7 @@ jobs:
 
       - name: Update Hugo version
         if: steps.check.outputs.needed == 'true'
-        run: |
-          sed -i "s/HUGO_VERSION: \"[^\"]*\"/HUGO_VERSION: \"${STEPS_LATEST_OUTPUTS_VERSION}\"/" .github/workflows/build.yaml
+        run: echo "${STEPS_LATEST_OUTPUTS_VERSION}" > .github/hugo-version
         env:
           STEPS_LATEST_OUTPUTS_VERSION: ${{ steps.latest.outputs.version }}
 
@@ -60,7 +57,7 @@ jobs:
             This PR updates Hugo from `${{ steps.current.outputs.version }}` to `${{ steps.latest.outputs.version }}`.
 
             ### Changes
-            - Updated HUGO_VERSION in `.github/workflows/build.yaml`
+            - Updated Hugo version in `.github/hugo-version`
 
             ### Release Notes
             https://github.com/gohugoio/hugo/releases/tag/v${{ steps.latest.outputs.version }}
