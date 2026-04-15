@@ -1,0 +1,14 @@
+{{- /*
+  Demote in-content h1 to h2 so every page has exactly one <h1> (the page title).
+  Some posts authored section headings as `# ...`; rendering them verbatim would
+  emit multiple h1 elements per page, hurting accessibility and SERP outline.
+*/ -}}
+{{- $level := .Level -}}
+{{- if eq $level 1 -}}{{- $level = 2 -}}{{- end -}}
+<h{{ $level }} id="{{ .Anchor | safeURL }}">
+  {{ .Text | safeHTML }}
+  <a class="heading-link" href="#{{ .Anchor | safeURL }}">
+    <i class="fa-solid fa-link" aria-hidden="true" title="{{ i18n "link_to_heading" | default "Link to heading" }}"></i>
+    <span class="sr-only">{{ i18n "link_to_heading" | default "Link to heading" }}</span>
+  </a>
+</h{{ $level }}>

@@ -1,10 +1,11 @@
 baseURL = "https://bernat.tech"
-title = "Bernát Gábor - Engineering & Open Source"
+title = "Bernát Gábor — Python packaging, tox, virtualenv & open source"
 languageCode = "en"
 defaultContentLanguage = "en"
 enableRobotsTXT = true
 enableEmoji = true
 enableGitInfo = true
+disableHugoGeneratorInject = true
 ignoreLogs = ["warning-goldmark-raw-html"]
 
 pagination.pagerSize = 20
@@ -14,8 +15,9 @@ pygmentsCodeFencesGuessSyntax = true
 
 [params]
 author = "Bernát Gábor"
-description = "Bernát Gábor's personal website"
-keywords = "blog,developer,personal,python,packaging"
+description = "Engineering notes from Bernát Gábor — PyPA maintainer of tox, virtualenv, pipx, filelock, and platformdirs. Python packaging, type hints, and supply chain security."
+keywords = "python packaging,tox,virtualenv,pipx,pep 517,pep 518,type hints,mypy,python supply chain,sbom,bernat gabor"
+images = ["img/avatar.jpg"]
 info = [
     "Bloomberg · Open Source · Software Engineering",
 ]

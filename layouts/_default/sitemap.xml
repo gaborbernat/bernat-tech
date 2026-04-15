@@ -2,20 +2,21 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   {{- range .Data.Pages }}
+  {{- if and (ne .Kind "taxonomy") (ne .Kind "term") (ne .Kind "404") }}
   <url>
     <loc>{{ .Permalink }}</loc>
     {{- if not .Lastmod.IsZero }}
     <lastmod>{{ .Lastmod.Format "2006-01-02T15:04:05-07:00" | safeHTML }}</lastmod>
     {{- end }}
-    <changefreq>{{ if eq .Kind "page" }}monthly{{ else }}weekly{{ end }}</changefreq>
     <priority>
       {{- if .IsHome }}1.0
-      {{- else if and (eq .Kind "page") (eq .Section "") }}0.9
+      {{- else if and (eq .Section "posts") (eq .Kind "page") }}0.9
       {{- else if eq .Kind "page" }}0.8
-      {{- else if eq .Kind "section" }}0.5
-      {{- else }}0.3
+      {{- else if eq .Kind "section" }}0.6
+      {{- else }}0.4
       {{- end -}}
     </priority>
   </url>
+  {{- end }}
   {{- end }}
 </urlset>

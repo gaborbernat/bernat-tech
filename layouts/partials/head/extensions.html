@@ -1,3 +1,86 @@
 <link rel="preconnect" href="https://github.com" crossorigin>
 <link rel="preconnect" href="https://img.youtube.com" crossorigin>
 <link rel="preconnect" href="https://static.cloudflareinsights.com" crossorigin>
+
+{{- /* Mastodon identity verification */ -}}
+<link rel="me" href="https://fosstodon.org/@gaborbernat">
+
+{{- /* Twitter account attribution — Hugo internal template does not emit these. */ -}}
+<meta name="twitter:site" content="@gjbernat">
+<meta name="twitter:creator" content="@gjbernat">
+
+{{- /* Keep thin taxonomy pages out of the index (crawl budget + duplicate content). */ -}}
+{{- if or (eq .Kind "taxonomy") (eq .Kind "term") }}
+<meta name="robots" content="noindex,follow">
+{{- end }}
+
+{{- /* Structured data — JSON-LD for rich results and entity recognition. */ -}}
+{{- $author := dict
+  "@type" "Person"
+  "name" .Site.Params.author
+  "url" (printf "%sabout/" .Site.BaseURL)
+  "sameAs" (slice
+    "https://github.com/gaborbernat/"
+    "https://twitter.com/gjbernat/"
+    "https://bsky.app/profile/gjbernat.bsky.social"
+    "https://fosstodon.org/@gaborbernat"
+    "https://www.linkedin.com/in/gaborbernat/"
+    "https://pypi.org/user/gaborbernat/")
+-}}
+
+{{- if .IsHome }}
+<script type="application/ld+json">
+{{- dict
+  "@context" "https://schema.org"
+  "@type" "WebSite"
+  "url" .Site.BaseURL
+  "name" .Site.Title
+  "description" .Site.Params.description
+  "inLanguage" .Site.LanguageCode
+  "author" $author
+  "potentialAction" (dict
+    "@type" "SearchAction"
+    "target" (printf "%s?q={search_term_string}" .Site.BaseURL)
+    "query-input" "required name=search_term_string")
+  | jsonify | safeJS -}}
+</script>
+<script type="application/ld+json">
+{{- merge $author (dict "@context" "https://schema.org") | jsonify | safeJS -}}
+</script>
+{{- end }}
+
+{{- if and (eq .Kind "page") (eq .Section "posts") }}
+{{- $img := "" -}}
+{{- with .Params.image -}}
+  {{- $img = printf "%s%s" $.Permalink . -}}
+{{- end -}}
+{{- $desc := .Description | default .Summary | plainify -}}
+<script type="application/ld+json">
+{{- dict
+  "@context" "https://schema.org"
+  "@type" "BlogPosting"
+  "headline" .Title
+  "description" $desc
+  "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00")
+  "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+  "wordCount" .WordCount
+  "keywords" (delimit .Params.tags ", ")
+  "author" $author
+  "publisher" $author
+  "image" $img
+  "url" .Permalink
+  "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink)
+  "inLanguage" .Site.LanguageCode
+  | jsonify | safeJS -}}
+</script>
+<script type="application/ld+json">
+{{- dict
+  "@context" "https://schema.org"
+  "@type" "BreadcrumbList"
+  "itemListElement" (slice
+    (dict "@type" "ListItem" "position" 1 "name" "Home" "item" .Site.BaseURL)
+    (dict "@type" "ListItem" "position" 2 "name" "Blog" "item" (printf "%sposts/" .Site.BaseURL))
+    (dict "@type" "ListItem" "position" 3 "name" .Title "item" .Permalink))
+  | jsonify | safeJS -}}
+</script>
+{{- end }}
