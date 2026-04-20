@@ -19,9 +19,9 @@ title = "PyTexas 2026 Recap"
 > PyTexas 2026 ran April 17–19 in Austin. Friday was tutorials, Saturday and Sunday were talks with two keynotes and two
 > lightning-talk blocks. A few themes kept coming back across unrelated talks:
 >
-> - **Sovereignty.** The word came up in two different keynotes. Hynek Schlawack: *"the domain model must be
->   sovereign"*. Design it first, translate at the edges. Dawn Wages: *"sovereignty over your stack"* as one of her
->   three pillars for both model and career specialization.
+> - **Design deliberately.** A thread across both keynotes. Hynek Schlawack: the domain model is *"the precious"* —
+>   design it first, translate at the edges. Dawn Wages: ownership over your stack as one of her three pillars for model
+>   and career specialization.
 > - **Agents should write code, not decide what to write.** Peter Sobot's Seven Stages of AI Grief ended on that line.
 >   Al Sweigart argued "agentic engineering" is vibe coding with better marketing, and that almost-right is worse than
 >   wrong. Maria Silvia Mielniczuk's MCP talk built the same idea into an architecture: models suggest, only the server
@@ -96,11 +96,11 @@ Then she mapped each onto careers under three pillars:
    A personal knowledge base as your career's RAG. Teaching as distillation (repeat the explanation, deepen the
    mastery). Pruning low-value tasks, requiring that managers say out loud what counts as valuable. Domain flexibility
    from small modular learning in adjacent areas.
-2. **Small iterations, big wins.** Frequent check-ins compound. Design workflows that give you regular feedback instead
+1. **Small iterations, big wins.** Frequent check-ins compound. Design workflows that give you regular feedback instead
    of saving up for one big deliverable.
-3. **Sovereignty over your stack.** In software: your workflow, data, models, and infrastructure. In career: your
-   income, reputation, network, and skills. She advocated for local-first AI, and debunked the "you need a Mac Mini"
-   reflex: the point is a contained environment with clear boundaries, not the hardware.
+1. **Ownership over your stack.** In software: your workflow, data, models, and infrastructure. In career: your income,
+   reputation, network, and skills. She advocated for local-first AI, and debunked the "you need a Mac Mini" reflex: the
+   point is a contained environment with clear boundaries, not the hardware.
 
 She closed by reframing specialization as the **"art of strategic ignorance"**: deliberately choosing what *not* to
 know, so you can set boundaries, deepen expertise, and protect your energy. Scaling laws apply to humans too: balance
@@ -217,7 +217,7 @@ on the [Pulumi community page](https://www.pulumi.com/community/community-engine
 
 ### Maria Silvia Mielniczuk: Using MCP to Build Safe, Auditable AI Systems in Python
 
-{{< figure src="maria-mielniczuk-mcp-security.webp" width="900" alt="MCP hub-and-spoke architecture vs N×M custom integrations" \ >}}
+{{< figure src="maria-mielniczuk-mcp-security.webp" width="900" alt="MCP hub-and-spoke architecture vs N×M custom integrations" \\ >}}
 
 Maria's framing: when you connect a model to tools, its output stops being text and becomes actions with real-world
 consequences. Building model × tool integrations by hand gets you an N×M explosion of custom glue with high maintenance
@@ -273,10 +273,10 @@ and policy checks.
 1. **Malicious or untrusted MCP server.** A third-party server claims to offer analytics but probes internal APIs.
    Supply-chain risk similar to malicious `pip` packages. Mitigate by validating all responses, never trusting external
    servers implicitly.
-2. **Misguided or overzealous agent.** A well-intentioned agent misuses a tool because of faulty reasoning, for instance
+1. **Misguided or overzealous agent.** A well-intentioned agent misuses a tool because of faulty reasoning, for instance
    reaching for a log-purging tool and deleting production data. Mitigate with execution limits, rate limiting, and
    contextual policy checks.
-3. **Confused deputy.** A privileged tool is talked into performing an action the user shouldn't be allowed to do.
+1. **Confused deputy.** A privileged tool is talked into performing an action the user shouldn't be allowed to do.
    Classic privilege escalation via social engineering of the model. Mitigate with server-level policy enforcement based
    on provenance and intent.
 
@@ -321,25 +321,25 @@ used more than 25% of them. About 90% remain largely untested by the wider commu
 1. **Info-viz vs. sci-viz.** Information visualization (bar charts, line graphs with interpretable axes) vs. scientific
    visualization (3D or 4D, spatially embedded, axes optional). Tools are rarely good at both: Python's ecosystem shows
    almost no overlap between the two.
-2. **Type of data.** Statistical/tabular (most Info Viz tools work), array-based (satellite imagery, microscope images,
+1. **Type of data.** Statistical/tabular (most Info Viz tools work), array-based (satellite imagery, microscope images,
    simulation grids; needs [HoloViews](https://holoviews.org/), [xarray](https://xarray.dev/)), or specialized (graph
    data → [NetworkX](https://networkx.org/), genomic data → bioinformatics libraries).
-3. **Data size.** Legacy tools render each point on its own and break on large datasets, giving you a "solid block of
+1. **Data size.** Legacy tools render each point on its own and break on large datasets, giving you a "solid block of
    blue". [Datashader](https://datashader.org/) (James's team) plots density instead of points, scaling to billions. His
    analogy: if every star in the sky got a dot, the night sky would be white.
-4. **Output target.** Static outputs (PDF, PowerPoint, publications) favor [Matplotlib](https://matplotlib.org/).
+1. **Output target.** Static outputs (PDF, PowerPoint, publications) favor [Matplotlib](https://matplotlib.org/).
    Interactive web outputs need JavaScript-backed tools like [Bokeh](https://bokeh.org/) or
    [Plotly](https://plotly.com/python/), which are weak at publication-quality export. Native desktop GUIs
    ([Qt](https://www.qt.io/) / [Tkinter](https://docs.python.org/3/library/tkinter.html)) are a third category with few
    good options.
-5. **API design.** Three styles: concise one-liners
+1. **API design.** Three styles: concise one-liners
    ([`pandas.plot()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.plot.html), convenient but limited),
    verbose object-oriented (Matplotlib's full API, maximum control), and declarative
    ([Altair](https://altair-viz.github.io/), HoloViews; you describe the outcome, not the steps).
-6. **Underlying tech stack.** HTML/JS, OpenGL (great 3D, terrible text rendering),
+1. **Underlying tech stack.** HTML/JS, OpenGL (great 3D, terrible text rendering),
    [Qt/PySide](https://doc.qt.io/qtforpython/), or built on top of Matplotlib/Bokeh/Plotly. The base tech determines the
    ceiling. If a library sits on Matplotlib, it inherits the strengths and the constraints.
-7. **Adjacent categories.** Color mapping ([`cmocean`](https://matplotlib.org/cmocean/),
+1. **Adjacent categories.** Color mapping ([`cmocean`](https://matplotlib.org/cmocean/),
    [`colorcet`](https://colorcet.holoviz.org/)), table rendering ([`itables`](https://mwouts.github.io/itables/),
    [`pandas`](https://pandas.pydata.org/) styling), dashboarding ([Streamlit](https://streamlit.io/),
    [Panel](https://panel.holoviz.org/), [Dash](https://dash.plotly.com/)). Starts plot-adjacent, ends up app
@@ -442,16 +442,16 @@ with updated models:
    bug: the app downloaded the map data from a public GitHub repo on first run and cached it. Run it offline once, or
    take the repo down, and the app is permanently broken for new users. A vibe coder would never catch this; only
    someone reading the code would.
-2. **Circular maze generator.** Early outputs were circular in shape but not mazes (every path led to the center).
+1. **Circular maze generator.** Early outputs were circular in shape but not mazes (every path led to the center).
    February's version looked like it worked; Al didn't inspect the code. "Looks good enough" is not the same as correct.
-3. **Pinball game in Tkinter.** Terse prompt and verbose prompt produced nearly identical code. Worked, but the ball
+1. **Pinball game in Tkinter.** Terse prompt and verbose prompt produced nearly identical code. Worked, but the ball
    would occasionally move "hypersonically" out of the shooter because of a hard-coded velocity fudge. His line: *"Would
    you fly on an airplane that had 99% of its parts?"*
-4. **Lava lamp simulator.** Initial output: static ovals. Breakthrough only happened when the prompt included the term
+1. **Lava lamp simulator.** Initial output: static ovals. Breakthrough only happened when the prompt included the term
    **"metaball algorithm"** by name. Al's point: if you have to know the name of the algorithm, the AI isn't solving the
    problem from the description; it's surfacing what you already know. The "you didn't write the prompt right" rebuttal
    collapses once you realize the user has to be the domain expert first.
-5. **Combination lock simulator.** August 2025: complete failure. February 2026: sometimes unlocked correctly, sometimes
+1. **Combination lock simulator.** August 2025: complete failure. February 2026: sometimes unlocked correctly, sometimes
    not. As Al refined the prompt, the model started editing parts of the code that had already been correct.
 
 **Four recurring rebuttals to any AI criticism**, from his slide:
@@ -497,18 +497,18 @@ correct.
 
   1. **Denial, "Why use this?"** "These tools are overhyped, my workflow works fine." The coding agent suggests walking
      50 feet to the car wash instead of driving.
-  2. **Discovery, "Wait, it can do that?"** Tools improve with better configuration (more effort, more tokens). The same
+  1. **Discovery, "Wait, it can do that?"** Tools improve with better configuration (more effort, more tokens). The same
      agent, tuned, now reasons: "Drive. The car must end up at the car wash."
-  3. **Enthusiasm, "Let's build something useful."** First productive use: a dashboard generated from Google Calendar
+  1. **Enthusiasm, "Let's build something useful."** First productive use: a dashboard generated from Google Calendar
      data to show team availability. Rapid success with minimal effort.
-  4. **Over-automation, "Let's run multiple agents."** Three Claude Code instances in parallel. Code on screen where an
+  1. **Over-automation, "Let's run multiple agents."** Three Claude Code instances in parallel. Code on screen where an
      agent fetches [Jira](https://www.atlassian.com/software/jira) tickets, implements fixes, and opens pull requests on
      its own.
-  5. **AI psychosis, "I've automated my job."** Peak overuse. Full automation of development tasks with minimal human
+  1. **AI psychosis, "I've automated my job."** Peak overuse. Full automation of development tasks with minimal human
      oversight. Code generated fast, without planning or quality checks.
-  6. **AI shame, "What have I done?"** Colleagues' PR comments start questioning the motivation and reasoning. "What's
+  1. **AI shame, "What have I done?"** Colleagues' PR comments start questioning the motivation and reasoning. "What's
      the goal here?" Embarrassment when the quality and intent behind the code turn out to be absent.
-  7. **AI maturity, "Productive collaboration."** Regaining control. AI as a collaborator, not a decision-maker. Using
+  1. **AI maturity, "Productive collaboration."** Regaining control. AI as a collaborator, not a decision-maker. Using
      Cursor to plan code, discuss architecture, and review every line or chunk before approval. The landing insight:
      *let agents write your code; don't let them decide what to write.*
 
@@ -533,8 +533,8 @@ Hynek (PSF fellow, infrastructure and software engineer at Variomedia in Berlin,
 pressure** (a term he credits to J.B. Rainsberger's talk
 [*Integrated Tests Are a Scam*](https://blog.thecodewhisperer.com/permalink/integrated-tests-are-a-scam)): forces that
 change your code unintentionally, like tooling choices, test scope, or organizational constraints. His thesis: ORMs,
-class-based validators, and enthusiastic LLM-generated pull requests are calcifying business logic into compromises it
-didn't choose, and the AI moment is sanding down the pain signals that used to make us notice.
+class-based validators, and LLM-generated pull requests are calcifying business logic into compromises it didn't choose
+— and with every implementation one prompt away, we have lost *"an important pain signal of bad design."*
 
 The opening provocation: *"The use of object-relational mapping in fast-paced related frameworks ruins your projects."*
 He walked it back in the next breath: [Django](https://www.djangoproject.com/),
@@ -550,12 +550,13 @@ makes this worse because a model can mock half the universe without feeling the 
 1. **Business logic is the reason your application exists.** Not the Django views, not the Pydantic schemas, not the
    SQLAlchemy models. The code that decides what to do based on data and business rules. Many engineers have never seen
    explicit business logic in their career because tutorials teach it embedded in a framework.
-2. **Domain, data, and API are three different models with conflicting goals.** A database model is shaped by
+1. **Domain, data, and API are three different models with conflicting goals.** A database model is shaped by
    normalization, indexing, and storage performance. An API model is shaped by what's ergonomic for consumers. A domain
    model reflects the problem. Forcing them into one class produces a compromise between two of them, imposed on the
-   third. Hynek called this the *double impedance mismatch*.
-3. **The domain model must be sovereign.** Design it first, from the problem, and translate at the edges. Parse,
-   validate, and reshape incoming data at the boundary, keep the core pure.
+   third — not one impedance mismatch but two.
+1. **The domain model is *"the precious."*** Design it first, from the problem. Validate at the edges, reshape incoming
+   data at the boundary, and keep the domain model *"completely isolated from everything that is not part of the
+   domain."*
 
 He illustrated the domain-first approach with Matt Groer's PyKSC 2024 talk *The Rising Sea*: an Advent of Code puzzle
 about moving boxes between harbor stacks. The elegant solution starts by modeling `Harbor`, `Stack`, and `Move` classes
@@ -565,13 +566,13 @@ Matt called **"the darkness"**. The maxim: *structure your data so that the prob
 Hynek's worked example: international postal addresses. The "one table, all fields nullable" database shape is honest
 about storage but useless for business logic, because you end up checking `if field is None` everywhere. Replace it at
 the edge with tagged unions of per-country classes (`USAddress`, `IEAddress`), so a function receiving a `USAddress`
-knows which fields it can rely on. Make illegal states unrepresentable, and let [mypy](https://mypy-lang.org/) or
-[ty](https://docs.astral.sh/ty/) be the buffer between messy input and clean logic.
+knows which fields it can rely on. Make illegal states unrepresentable, and let [mypy](https://mypy-lang.org/) be the
+buffer between messy input and clean logic.
 
 **Why people don't do this.** He pulled a line from Ed Montgomery's blog post *How I Build*: *"It's okay to have
 duplicated domain types for different layers of a project… types near the edge, like API schemas and database tables,
 are inherently less flexible. It's often better to explicitly map types between these layers rather than create a common
-type and allow the least flexible layer to calcify the rest."* Hynek called this slide his whole talk in one paragraph.
+type and allow the least flexible layer to calcify the rest."* Hynek called this his whole talk in one slide.
 
 He closed on a broader point borrowed from Rich Hickey's
 [*Simple Made Easy*](https://www.infoq.com/presentations/Simple-Made-Easy/): **easy is not the same as simple**. Raw
@@ -585,7 +586,7 @@ Two verbatim quotes:
 
 > AGI is not around the corner. You may quote me, and it will definitely not save you.
 
-Closing: he thanked his employer Variomedia and his colleague Peter Dominicus, and pointed to his YouTube channel,
+Closing: he thanked his employer Variomedia, and pointed to his YouTube channel,
 [youtube.com/@The_Hynek](https://www.youtube.com/@The_Hynek), for longer-form versions of the same ideas. Talk page:
 [hynek.me/talks/design-pressure/](https://hynek.me/talks/design-pressure/).
 
@@ -625,8 +626,8 @@ via [WebAssembly](https://webassembly.org/) without local installation.
 Three ways to embed JupyterLite in MkDocs:
 
 1. **Notebooks**: inline rendering of specific notebooks via iframes.
-2. **Lab**: the full [JupyterLab](https://jupyter.org/) interface embedded in the docs.
-3. **File Browser (Tree)**: browse and open files.
+1. **Lab**: the full [JupyterLab](https://jupyter.org/) interface embedded in the docs.
+1. **File Browser (Tree)**: browse and open files.
 
 Configure everything in `mkdocs.yml` and publish with `mkdocs gh-deploy`. Her Community Garden project demonstrates
 specification-driven development: Markdown pages carry metadata (requirements, priority, status, doc numbers) and
@@ -672,13 +673,21 @@ section.
 
 Module initialization:
 
-- **Single-phase**: mark `Py_DisableGIL` in `PyModuleDef`.
-- **Multi-phase**: add a `PyModuleDef_Slot` with `Py_mod_gil` set to `PyGILMode_NotUsed`.
+- **Single-phase**: call `PyUnstable_Module_SetGIL` in the extension module's entry point `PyInit_<module name>`:
+  ```c
+  #ifdef Py_GIL_DISABLED
+      PyUnstable_Module_SetGIL(m, Py_MOD_GIL_NOT_USED);
+  #endif
+  ```
+- **Multi-phase**: add a `PyModuleDef_Slot` with `Py_mod_gil` set to `Py_MOD_GIL_NOT_USED`.
 
 Language and tool support: [Cython](https://cython.org/) (type annotations for efficient, compatible code),
-[PyBind11](https://pybind11.readthedocs.io/) (`PYBIND11_MODULE(..., m)` with the "GIL not used" flag),
-[PyO3](https://pyo3.rs/)/[Rust](https://www.rust-lang.org/) (`#[pyfunction(gil = false)]` and
-`#[pymodule(gil = false)]`). [SWIG](https://www.swig.org/) is not recommended.
+[PyBind11](https://pybind11.readthedocs.io/)
+([free-threading support](https://pybind11.readthedocs.io/en/stable/advanced/misc.html#free-threading-support),
+`PYBIND11_MODULE(..., m, py::mod_gil_not_used())`), [PyO3](https://pyo3.rs/)/[Rust](https://www.rust-lang.org/) (since
+0.28,
+[assumes Rust code is thread-safe](https://pyo3.rs/v0.28.3/free-threading.html?highlight=gil_used#supporting-free-threaded-python-with-pyo3);
+opt out with `#[pyo3::pymodule(gil_used = true)]`). [SWIG](https://www.swig.org/) is not recommended.
 
 Testing: environment variable `PYTHONMALLOC=debug` and `Py_GIL_DISABLED=1`,
 [AddressSanitizer](https://clang.llvm.org/docs/AddressSanitizer.html) and
@@ -686,9 +695,12 @@ Testing: environment variable `PYTHONMALLOC=debug` and `Py_GIL_DISABLED=1`,
 Docker images of CPython with ASan and TSan enabled. Build wheels targeting free-threaded Python using versions ending
 in `T` (e.g., `3.13.0T`).
 
-Community tracker for verified-compatible packages:
-[hugovk.dev/free-threaded-wheels](https://hugovk.dev/free-threaded-wheels/). Code examples from the talk:
-[gist](https://gist.github.com/clin1234/429cd977609a758e0e6f71f39789312b).
+Further reading: [porting extensions guide](https://py-free-threading.github.io/porting-extensions/),
+[PEP 703](https://peps.python.org/pep-0703/),
+[free-threading extensions HOWTO](https://docs.python.org/3/howto/free-threading-extensions.html#freethreading-extensions-howto),
+[What's New in 3.13](https://docs.python.org/3/whatsnew/3.13.html#free-threaded-cpython). Community tracker for
+verified-compatible packages: [hugovk.dev/free-threaded-wheels](https://hugovk.dev/free-threaded-wheels/). Code examples
+from the talk: [gist](https://gist.github.com/clin1234/429cd977609a758e0e6f71f39789312b).
 
 ### Avik Basu: Upgrading Python CLIs, From Scripts to Interactive Tools
 
@@ -704,11 +716,11 @@ three ways:
 
 1. [**argparse**](https://docs.python.org/3/library/argparse.html): standard library, boilerplate-heavy, manual argument
    definition and validation, no conflict hierarchy, text-only output.
-2. [**Typer**](https://typer.tiangolo.com/) + [**Rich**](https://rich.readthedocs.io/): type hints become CLI
+1. [**Typer**](https://typer.tiangolo.com/) + [**Rich**](https://rich.readthedocs.io/): type hints become CLI
    definitions, built-in path validation via `typer.Argument(exists=True)`, priority hierarchy (flag > environment
    variable > default), shell completion, and Rich tables with color-coded output. Demoed with `report summary` and
    `report drift` subcommands using PSI (Population Stability Index) to flag drift on features like `debt_ratio`.
-3. [**Textual**](https://textual.textualize.io/): the `watch` command opens a full-terminal dashboard that
+1. [**Textual**](https://textual.textualize.io/): the `watch` command opens a full-terminal dashboard that
    auto-refreshes every 5 seconds, with a filter input, a table of feature metrics, and bar charts. Defined as a class
    with CSS-like layout, composed of widgets, with `on_mount` / `set_interval` lifecycle hooks and key bindings.
 
@@ -728,8 +740,7 @@ tool: [github.com/ab93/shap-monitor](https://github.com/ab93/shap-monitor).
 
 Miguel's framing: AI agents produce cleaner, safer, faster code in codebases that are already clean, well-typed, and
 well-tested. Quality is an input to AI productivity, and without guardrails, AI accelerates technical debt. For
-background on the typing side of this argument, see my earlier post on \[the state of type hints in
-Python\]({{< ref "posts/type-hints" >}}).
+background on the typing side of this argument, see my earlier post on \[the state of type hints in Python\]({{< ref "posts/type-hints" >}}).
 
 Key terms:
 
