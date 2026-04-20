@@ -20,6 +20,15 @@
                 {{ .Date | time.Format (.Site.Params.dateFormat | default "January 2, 2006" ) }}
               </time>
             </span>
+            {{ if and (not .Lastmod.IsZero) (.Lastmod.After .Date) }}
+            <span class="last-updated">
+              <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+              Updated
+              <time datetime="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}">
+                {{ .Lastmod | time.Format (.Site.Params.dateFormat | default "January 2, 2006" ) }}
+              </time>
+            </span>
+            {{ end }}
             <span class="reading-time">
               <i class="fa-solid fa-clock" aria-hidden="true"></i>
               {{ i18n "reading_time" .ReadingTime }}

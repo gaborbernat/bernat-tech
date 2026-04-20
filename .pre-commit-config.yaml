@@ -13,7 +13,7 @@ repos:
         args: ["--fix=lf"]
       - id: check-case-conflict
   - repo: https://github.com/rbubley/mirrors-prettier
-    rev: "v3.8.1"
+    rev: "v3.8.3"
     hooks:
       - id: prettier
         exclude: layouts/.*|.*\.md$|.*\.ya?ml$
@@ -29,7 +29,7 @@ repos:
           - mdformat-simple-breaks
           - mdformat-hugo
   - repo: https://github.com/rhysd/actionlint
-    rev: "v1.7.11"
+    rev: "v1.7.12"
     hooks:
       - id: actionlint
   - repo: https://github.com/google/yamlfmt
@@ -38,6 +38,6 @@ repos:
       - id: yamlfmt
         args: ["--formatter", "max_line_length=120,retain_line_breaks=true"]
   - repo: https://github.com/zizmorcore/zizmor-pre-commit
-    rev: v1.23.1
+    rev: v1.24.1
     hooks:
       - id: zizmor
