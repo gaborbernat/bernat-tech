@@ -180,3 +180,7 @@ includeFields = ""
 [module]
 [[module.imports]]
 path = "github.com/luizdepra/hugo-coder"
+
+[security]
+[security.funcs]
+getenv = ['^HUGO_', '^CI$', '^GITHUB_TOKEN$']

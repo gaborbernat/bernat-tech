@@ -1,5 +1,5 @@
 {{ $group := .Get "group" }}
-{{ $projects := index .Site.Data.projects $group }}
+{{ $projects := index hugo.Data.projects $group }}
 {{ $cols := split (or (.Get "cols") "downloads,version,release,last-commit,issues,stars,ci") "," }}
 {{ $headerRow := slice (printf `<th>#</th><th data-sort="name">%s</th>` (or (.Get "name") "Name")) }}
 {{- range $cols -}}

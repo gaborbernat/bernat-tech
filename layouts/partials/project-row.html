@@ -8,7 +8,8 @@
 {{ $jetbrainsId := $p.jetbrains_id }}
 {{ $jetbrainsSlug := $p.jetbrains_slug }}
 {{ $noRelease := eq (or $p.no_release "") "true" }}
-{{ $ghOpts := dict }}{{ with getenv "HUGO_GITHUB_TOKEN" }}{{ $ghOpts = dict "headers" (dict "Authorization" (printf "Bearer %s" .)) }}{{ end }}
+{{ $ghToken := or (getenv "HUGO_GITHUB_TOKEN") (getenv "GITHUB_TOKEN") }}
+{{ $ghOpts := dict }}{{ with $ghToken }}{{ $ghOpts = dict "headers" (dict "Authorization" (printf "Bearer %s" .)) }}{{ end }}
 
 {{ $skipData := getenv "HUGO_SKIP_PROJECT_DATA" }}
 

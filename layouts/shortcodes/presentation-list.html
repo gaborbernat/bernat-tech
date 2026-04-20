@@ -1,4 +1,4 @@
-{{- $presentations := .Site.Data.presentations -}}
+{{- $presentations := hugo.Data.presentations -}}
 {{- $years := slice -}}
 {{- range $presentations -}}
   {{- if not (in $years .year) -}}
