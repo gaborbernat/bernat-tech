@@ -1,10 +1,37 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Python on Bernát Gábor — Python packaging, tox, virtualenv &amp; open source</title><link>https://bernat.tech/tags/python/</link><description>Engineering notes from Bernát Gábor — PyPA maintainer of tox, virtualenv, pipx, filelock, and platformdirs. Python packaging, type hints, and supply chain security.</description><generator>Hugo 0.155.3</generator><language>en</language><lastBuildDate>Tue, 10 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://bernat.tech/tags/python/index.xml" rel="self" type="application/rss+xml"/><item><title>Defense in Depth: A Practical Guide to Python Supply Chain Security</title><link>https://bernat.tech/posts/securing-python-supply-chain/</link><pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/securing-python-supply-chain/</guid><description>&lt;div class="alert alert-info"&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Python on Bernát Gábor — Python packaging, tox, virtualenv &amp; open source</title><link>https://bernat.tech/tags/python/</link><description>Engineering notes from Bernát Gábor — PyPA maintainer of tox, virtualenv, pipx, filelock, and platformdirs. Python packaging, type hints, and supply chain security.</description><generator>Hugo 0.160.1</generator><language>en</language><lastBuildDate>Sun, 19 Apr 2026 22:00:00 +0000</lastBuildDate><atom:link href="https://bernat.tech/tags/python/index.xml" rel="self" type="application/rss+xml"/><item><title>PyTexas 2026 Recap: Keynotes, MCP, Free-Threading, PEP 810, Supply Chain</title><link>https://bernat.tech/posts/pytexas-2026-recap/</link><pubDate>Sun, 19 Apr 2026 22:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pytexas-2026-recap/</guid><description>&lt;p&gt;&lt;a href="https://www.pytexas.org/" target="_blank" rel="noopener"&gt;PyTexas&lt;/a&gt;
+is the annual Python conference held in Austin, Texas. The 2026 edition ran April
+17–19 at the &lt;a href="https://library.austintexas.gov/central-library" target="_blank" rel="noopener"&gt;Austin Central Library&lt;/a&gt;
+in downtown Austin.&lt;/p&gt;
+&lt;div class="alert alert-info"&gt;
+&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-info" aria-hidden="true"&gt;&lt;/i&gt; TLDR:&lt;/p&gt;
+&lt;p&gt;PyTexas 2026 ran April 17–19 in Austin. Friday was tutorials, Saturday and Sunday were talks with two keynotes and two
+lightning-talk blocks. A few themes kept coming back across unrelated talks:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Sovereignty.&lt;/strong&gt; The word came up in two different keynotes. Hynek Schlawack: &lt;em&gt;&amp;ldquo;the domain model must be
+sovereign&amp;rdquo;&lt;/em&gt;. Design it first, translate at the edges. Dawn Wages: &lt;em&gt;&amp;ldquo;sovereignty over your stack&amp;rdquo;&lt;/em&gt; as one of her
+three pillars for both model and career specialization.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Agents should write code, not decide what to write.&lt;/strong&gt; Peter Sobot&amp;rsquo;s Seven Stages of AI Grief ended on that line.
+Al Sweigart argued &amp;ldquo;agentic engineering&amp;rdquo; is vibe coding with better marketing, and that almost-right is worse than
+wrong. Maria Silvia Mielniczuk&amp;rsquo;s MCP talk built the same idea into an architecture: models suggest, only the server
+executes. Adam Gordon Bell&amp;rsquo;s running coach split deterministic work (plain Python) from interpretation (LLM). The
+Sunday opener framed it bluntly: when AI ships a bad PR, fix the process, not the model.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Code quality is an input to AI productivity.&lt;/strong&gt; Miguel Vargas&amp;rsquo;s framing: AI agents produce cleaner, safer code in
+codebases that are already clean, safe, and typed, so Ruff, ty, and uv matter more now.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;The supply chain is still the attack surface.&lt;/strong&gt; Christopher Ariza on why &lt;code&gt;pip install&lt;/code&gt; still runs arbitrary code,
+with &lt;code&gt;.pth&lt;/code&gt; files, &lt;code&gt;sitecustomize.py&lt;/code&gt;, and &lt;code&gt;setup.py&lt;/code&gt; as the specific places to pay attention.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;CPython itself is getting faster.&lt;/strong&gt; Jacob Coffee on &lt;a href="https://peps.python.org/pep-0810/" target="_blank" rel="noopener"&gt;PEP 810&lt;/a&gt;
+lazy imports for
+startup wins; Charlie Lin on the free-threaded build and what it takes to make an extension module safe under it.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This post details the takeaways from each talk I attended, in schedule order.&lt;/p&gt;</description><category>python</category><category>pytexas</category><category>conference</category><category>austin</category><category>ai</category><category>llm</category><category>mcp</category><category>keynote</category><category>hynek</category><category>packaging</category><category>supply-chain</category><category>pep-810</category><category>free-threading</category><category>ruff</category><category>uv</category><category>ty</category><category>type-checking</category><category>observability</category><category>cli</category></item><item><title>Defense in Depth: A Practical Guide to Python Supply Chain Security</title><link>https://bernat.tech/posts/securing-python-supply-chain/</link><pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/securing-python-supply-chain/</guid><description>&lt;div class="alert alert-info"&gt;
 &lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-info" aria-hidden="true"&gt;&lt;/i&gt; TLDR:&lt;/p&gt;
 &lt;p&gt;Layer your defenses and don&amp;rsquo;t trust any single control. Use Ruff with security rules to catch bugs in your code before
 they ship. Pin all your dependencies with cryptographic hashes using &lt;code&gt;uv lock&lt;/code&gt; or &lt;code&gt;uv pip compile --generate-hashes&lt;/code&gt;
-so nobody can swap out packages on you. Run &lt;a href="https://github.com/pypa/pip-audit" class="external-link" target="_blank" rel="noopener"&gt;&lt;code&gt;pip-audit&lt;/code&gt;&lt;/a&gt; in CI to catch known CVEs
+so nobody can swap out packages on you. Run &lt;a href="https://github.com/pypa/pip-audit" target="_blank" rel="noopener"&gt;&lt;code&gt;pip-audit&lt;/code&gt;&lt;/a&gt;
+in CI to catch known CVEs
 before they hit production. Generate SBOMs with CycloneDX so when the next Ultralytics-style compromise drops, you can
-answer &amp;ldquo;are we affected?&amp;rdquo; in minutes instead of days.&lt;/p&gt;</description><category>python</category><category>security</category><category>dependencies</category><category>supply-chain</category><category>sbom</category><category>pypi</category><category>pip</category></item><item><title>Version numbers: how to use them?</title><link>https://bernat.tech/posts/version-numbers/</link><pubDate>Sat, 16 May 2020 14:15:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/version-numbers/</guid><description>&lt;p&gt;The &lt;a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" class="external-link" target="_blank" rel="noopener"&gt;DRY principle&lt;/a&gt; (an acronym for don&amp;rsquo;t repeat yourself)
+answer &amp;ldquo;are we affected?&amp;rdquo; in minutes instead of days.&lt;/p&gt;</description><category>python</category><category>security</category><category>dependencies</category><category>supply-chain</category><category>sbom</category><category>pypi</category><category>pip</category></item><item><title>Version numbers: how to use them?</title><link>https://bernat.tech/posts/version-numbers/</link><pubDate>Sat, 16 May 2020 14:15:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/version-numbers/</guid><description>&lt;p&gt;The &lt;a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" target="_blank" rel="noopener"&gt;DRY principle&lt;/a&gt;
+(an acronym for don&amp;rsquo;t repeat yourself)
 encourages software engineers to abstract code into a separate component and reuse it rather than write it over and over
 again. If this happens across the system, the best practice is to put it inside a package that lives on its own (a
 library) and then pull it in from the applications when required.&lt;/p&gt;
@@ -27,10 +54,14 @@ that followed confirmed that many people are not familiar with it. Read on if yo
 Python packaging ecosystem evolved today and where we hope to see it down the line. We expect that even though the
 introduction of the aforementioned python enhancement proposal may cause some discomfort, we will benefit from it in the
 long term.&lt;/p&gt;</description><category>python</category><category>packaging</category><category>pip</category><category>setuptools</category><category>pep517</category><category>pep518</category><category>wheel</category><category>sdist</category></item><item><title>The state of type hints in Python</title><link>https://bernat.tech/posts/the-state-of-type-hints-in-python/</link><pubDate>Wed, 30 May 2018 09:51:55 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/the-state-of-type-hints-in-python/</guid><description>&lt;p&gt;One of the main selling points for Python is that it is dynamically-typed. There is no plan to change this.
-Nevertheless, in September 2014 &lt;a href="https://twitter.com/gvanrossum" class="external-link" target="_blank" rel="noopener"&gt;Guido van Rossum&lt;/a&gt; (Python
-&lt;a href="https://en.wikipedia.org/wiki/Benevolent_dictator_for_life" class="external-link" target="_blank" rel="noopener"&gt;BDFL&lt;/a&gt;) created a python enhancement proposal
-(&lt;a href="https://peps.python.org/pep-0484/" class="external-link" target="_blank" rel="noopener"&gt;PEP-484&lt;/a&gt;) to add type hints to Python. It has been released for general usage a
+Nevertheless, in September 2014 &lt;a href="https://twitter.com/gvanrossum" target="_blank" rel="noopener"&gt;Guido van Rossum&lt;/a&gt;
+(Python
+&lt;a href="https://en.wikipedia.org/wiki/Benevolent_dictator_for_life" target="_blank" rel="noopener"&gt;BDFL&lt;/a&gt;
+) created a python enhancement proposal
+(&lt;a href="https://peps.python.org/pep-0484/" target="_blank" rel="noopener"&gt;PEP-484&lt;/a&gt;
+) to add type hints to Python. It has been released for general usage a
 year later, in September 2015, as part of Python &lt;code&gt;3.5.0&lt;/code&gt;.
-&lt;a href="http://python-history.blogspot.com/2009/01/brief-timeline-of-python.html" class="external-link" target="_blank" rel="noopener"&gt;Twenty-five years into its existence&lt;/a&gt; now
+&lt;a href="http://python-history.blogspot.com/2009/01/brief-timeline-of-python.html" target="_blank" rel="noopener"&gt;Twenty-five years into its existence&lt;/a&gt;
+now
 there was a standard way to add type information to Python code. In this blog post, I&amp;rsquo;ll explore how the system matured,
 how you can use it, and what&amp;rsquo;s next for type hints.&lt;/p&gt;</description><category>mypy</category><category>python</category><category>types</category><category>type-hint</category></item></channel></rss>

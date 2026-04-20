@@ -1,0 +1,770 @@
+<!doctype html><html lang=en><head><title>PyTexas 2026 Recap: Keynotes, MCP, Free-Threading, PEP 810, Supply Chain · Bernát Gábor — Python packaging, tox, virtualenv & open source</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Bernát Gábor"><meta name=description content="Per-talk notes from PyTexas 2026 in Austin: Hynek on domain modeling, Dawn Wages on specialization, MCP security, PEP 810 lazy imports, free-threading, Ruff, ty, uv, supply chain."><meta name=keywords content="python packaging,tox,virtualenv,pipx,pep 517,pep 518,type hints,mypy,python supply chain,sbom,bernat gabor"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://bernat.tech/posts/pytexas-2026-recap/pytexas-2026-duck-mascot-og.webp"><meta name=twitter:title content="PyTexas 2026 Recap: Keynotes, MCP, Free-Threading, PEP 810, Supply Chain"><meta name=twitter:description content="Per-talk notes from PyTexas 2026 in Austin: Hynek on domain modeling, Dawn Wages on specialization, MCP security, PEP 810 lazy imports, free-threading, Ruff, ty, uv, supply chain."><meta property="og:url" content="https://bernat.tech/posts/pytexas-2026-recap/"><meta property="og:site_name" content="Bernát Gábor — Python packaging, tox, virtualenv & open source"><meta property="og:title" content="PyTexas 2026 Recap: Keynotes, MCP, Free-Threading, PEP 810, Supply Chain"><meta property="og:description" content="Per-talk notes from PyTexas 2026 in Austin: Hynek on domain modeling, Dawn Wages on specialization, MCP security, PEP 810 lazy imports, free-threading, Ruff, ty, uv, supply chain."><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-04-19T22:00:00+00:00"><meta property="article:modified_time" content="2026-04-20T09:43:52-05:00"><meta property="article:tag" content="Python"><meta property="article:tag" content="Pytexas"><meta property="article:tag" content="Conference"><meta property="article:tag" content="Austin"><meta property="article:tag" content="Ai"><meta property="article:tag" content="Llm"><meta property="og:image" content="https://bernat.tech/posts/pytexas-2026-recap/pytexas-2026-duck-mascot-og.webp"><meta property="og:image" content="https://bernat.tech/posts/pytexas-2026-recap/pytexas-2026-duck-mascot.webp"><link rel=canonical href=https://bernat.tech/posts/pytexas-2026-recap/><link rel=preload href=/fonts/fa-brands-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-regular-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-solid-900.woff2 as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.4b392a85107b91dbdabc528edf014a6ab1a30cd44cafcd5325c8efe796794fca.css integrity="sha256-SzkqhRB7kdvavFKO3wFKarGjDNRMr81TJcjv55Z5T8o=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.ad48f476275974885bdc03d5251e3cdbe1678c54a63ff772376b0ed2adc468dd.css integrity="sha256-rUj0didZdIhb3APVJR482+FnjFSmP/dyN2sO0q3EaN0=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/custom.min.0f3697d56074288b7733c74c81e49aee7b69c7fa8fa552576aafc54a7c6c796c.css integrity="sha256-DzaX1WB0KIt3M8dMgeSa7ntpx/qPpVJXaq/FSnxseWw=" crossorigin=anonymous media=screen><link rel=icon type=image/svg+xml href=/images/favicon.svg sizes=any><link rel=icon type=image/png href=/img/android-chrome-192x192.png sizes=32x32><link rel=icon type=image/png href=/img/android-chrome-192x192.png sizes=16x16><link rel=apple-touch-icon href=/img/android-chrome-192x192.png><link rel=apple-touch-icon sizes=180x180 href=/img/android-chrome-192x192.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5><link rel=preconnect href=https://github.com crossorigin><link rel=preconnect href=https://img.youtube.com crossorigin><link rel=preconnect href=https://static.cloudflareinsights.com crossorigin><link rel=me href=https://fosstodon.org/@gaborbernat><meta name=twitter:site content="@gjbernat"><meta name=twitter:creator content="@gjbernat"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Bernát Gábor","sameAs":["https://github.com/gaborbernat/","https://twitter.com/gjbernat/","https://bsky.app/profile/gjbernat.bsky.social","https://fosstodon.org/@gaborbernat","https://www.linkedin.com/in/gaborbernat/","https://pypi.org/user/gaborbernat/"],"url":"https://bernat.tech/about/"},"dateModified":"2026-04-20T09:43:52-05:00","datePublished":"2026-04-19T22:00:00Z","description":"Per-talk notes from PyTexas 2026 in Austin: Hynek on domain modeling, Dawn Wages on specialization, MCP security, PEP 810 lazy imports, free-threading, Ruff, ty, uv, supply chain.","headline":"PyTexas 2026 Recap: Keynotes, MCP, Free-Threading, PEP 810, Supply Chain","image":"https://bernat.tech/posts/pytexas-2026-recap/pytexas-2026-duck-mascot-og.webp","inLanguage":"en","keywords":"python, pytexas, conference, austin, ai, llm, mcp, keynote, hynek, packaging, supply-chain, pep-810, free-threading, ruff, uv, ty, type-checking, observability, cli","mainEntityOfPage":{"@id":"https://bernat.tech/posts/pytexas-2026-recap/","@type":"WebPage"},"publisher":{"@type":"Person","name":"Bernát Gábor","sameAs":["https://github.com/gaborbernat/","https://twitter.com/gjbernat/","https://bsky.app/profile/gjbernat.bsky.social","https://fosstodon.org/@gaborbernat","https://www.linkedin.com/in/gaborbernat/","https://pypi.org/user/gaborbernat/"],"url":"https://bernat.tech/about/"},"url":"https://bernat.tech/posts/pytexas-2026-recap/","wordCount":7970}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://bernat.tech/","name":"Home","position":1},{"@type":"ListItem","item":"https://bernat.tech/posts/","name":"Blog","position":2},{"@type":"ListItem","item":"https://bernat.tech/posts/pytexas-2026-recap/","name":"PyTexas 2026 Recap: Keynotes, MCP, Free-Threading, PEP 810, Supply Chain","position":3}]}</script></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><a class=navigation-title href=https://bernat.tech/>Bernát Gábor — Python packaging, tox, virtualenv & open source
+</a><input type=checkbox id=menu-toggle>
+<label class="menu-button float-right" for=menu-toggle><i class="fa-solid fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/posts>Blog</a></li><li class=navigation-item><a class=navigation-link href=/presentations>Presentations</a></li><li class=navigation-item><a class=navigation-link href=/about>About</a></li><li class=navigation-item><a class=navigation-link href=/tags>Tags</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://bernat.tech/posts/pytexas-2026-recap/>PyTexas 2026 Recap: Keynotes, MCP, Free-Threading, PEP 810, Supply Chain</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa-solid fa-calendar" aria-hidden=true></i>
+<time datetime=2026-04-19T22:00:00Z>2026-04-19
+</time></span><span class=last-updated><i class="fa-solid fa-pen-to-square" aria-hidden=true></i>
+Updated
+<time datetime=2026-04-20T09:43:52-05:00>2026-04-20
+</time></span><span class=reading-time><i class="fa-solid fa-clock" aria-hidden=true></i>
+38-minute read</span></div><div class=tags><i class="fa-solid fa-tag" aria-hidden=true></i>
+<span class=tag><a href=/tags/python/>Python</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/pytexas/>Pytexas</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/conference/>Conference</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/austin/>Austin</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/ai/>Ai</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/llm/>Llm</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/mcp/>Mcp</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/keynote/>Keynote</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/hynek/>Hynek</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/packaging/>Packaging</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/supply-chain/>Supply-Chain</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/pep-810/>Pep-810</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/free-threading/>Free-Threading</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/ruff/>Ruff</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/uv/>Uv</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/ty/>Ty</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/type-checking/>Type-Checking</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/observability/>Observability</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/cli/>Cli</a></span></div></div></header><div class="post-wrapper has-toc"><div class=post-content><p><a href=https://www.pytexas.org/ target=_blank rel=noopener>PyTexas</a>
+is the annual Python conference held in Austin, Texas. The 2026 edition ran April
+17–19 at the <a href=https://library.austintexas.gov/central-library target=_blank rel=noopener>Austin Central Library</a>
+in downtown Austin.</p><div class="alert alert-info"><p class=alert-title><i class="fa-solid fa-circle-info" aria-hidden=true></i> TLDR:</p><p>PyTexas 2026 ran April 17–19 in Austin. Friday was tutorials, Saturday and Sunday were talks with two keynotes and two
+lightning-talk blocks. A few themes kept coming back across unrelated talks:</p><ul><li><strong>Sovereignty.</strong> The word came up in two different keynotes. Hynek Schlawack: <em>&ldquo;the domain model must be
+sovereign&rdquo;</em>. Design it first, translate at the edges. Dawn Wages: <em>&ldquo;sovereignty over your stack&rdquo;</em> as one of her
+three pillars for both model and career specialization.</li><li><strong>Agents should write code, not decide what to write.</strong> Peter Sobot&rsquo;s Seven Stages of AI Grief ended on that line.
+Al Sweigart argued &ldquo;agentic engineering&rdquo; is vibe coding with better marketing, and that almost-right is worse than
+wrong. Maria Silvia Mielniczuk&rsquo;s MCP talk built the same idea into an architecture: models suggest, only the server
+executes. Adam Gordon Bell&rsquo;s running coach split deterministic work (plain Python) from interpretation (LLM). The
+Sunday opener framed it bluntly: when AI ships a bad PR, fix the process, not the model.</li><li><strong>Code quality is an input to AI productivity.</strong> Miguel Vargas&rsquo;s framing: AI agents produce cleaner, safer code in
+codebases that are already clean, safe, and typed, so Ruff, ty, and uv matter more now.</li><li><strong>The supply chain is still the attack surface.</strong> Christopher Ariza on why <code>pip install</code> still runs arbitrary code,
+with <code>.pth</code> files, <code>sitecustomize.py</code>, and <code>setup.py</code> as the specific places to pay attention.</li><li><strong>CPython itself is getting faster.</strong> Jacob Coffee on <a href=https://peps.python.org/pep-0810/ target=_blank rel=noopener>PEP 810</a>
+lazy imports for
+startup wins; Charlie Lin on the free-threaded build and what it takes to make an extension module safe under it.</li></ul><p>This post details the takeaways from each talk I attended, in schedule order.</p></div><figure><img src=/posts/pytexas-2026-recap/pytexas-2026-duck-mascot.webp alt="PyTexas 2026 swag: a yellow rubber duck with a cowboy hat and Texas-flag bandana" srcset="/posts/pytexas-2026-recap/pytexas-2026-duck-mascot_hu_ece0963e8317c35.webp 500w" sizes="(min-width: 35em) 1200px, 100vw" width=600 height=600 loading=lazy decoding=async></figure><figure><img src=/posts/pytexas-2026-recap/pytexas-2026-opening-remarks.webp alt="PyTexas 2026 opening remarks with inflatable Buc-ee mascot" srcset="/posts/pytexas-2026-recap/pytexas-2026-opening-remarks_hu_1eefad2fe72c81d3.webp 500w, /posts/pytexas-2026-recap/pytexas-2026-opening-remarks_hu_c5c2061cfd286c04.webp 800w" sizes="(min-width: 35em) 1200px, 100vw" width=1024 height=768 loading=lazy decoding=async></figure><h2 id=friday>Friday
+<a class=heading-link href=#friday><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>Friday was the tutorial day. <strong>Heather Crawford</strong> taught <em>Import is Important: The Secret Life of Python Modules and
+Packages</em> in the morning slot, and I taught
+<a href=https://www.pytexas.org/2026/schedule/ target=_blank rel=noopener><em>Becoming a Better Python Developer with AI</em></a>
+in the afternoon. Slides are at
+<a href=https://gaborbernat.github.io/py-texas-26-workshop/ target=_blank rel=noopener>gaborbernat.github.io/py-texas-26-workshop</a>
+. I plan to write up my
+tutorial as a separate, more detailed post in the coming weeks.</p><h2 id=saturday>Saturday
+<a class=heading-link href=#saturday><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><h3 id=dawn-wages-keynote-fine-tune-your-future>Dawn Wages keynote: Fine-Tune Your Future
+<a class=heading-link href=#dawn-wages-keynote-fine-tune-your-future><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>Subtitle: <em>The case for career and model specialization</em>.</p><figure><img src=/posts/pytexas-2026-recap/dawn-wages-keynote-specialization.webp alt="Dawn Wages' keynote slide on career specialization" srcset="/posts/pytexas-2026-recap/dawn-wages-keynote-specialization_hu_e04a1d487eef11af.webp 500w, /posts/pytexas-2026-recap/dawn-wages-keynote-specialization_hu_8a5ad1aa32af91f0.webp 800w" sizes="(min-width: 35em) 1200px, 100vw" width=1024 height=768 loading=lazy decoding=async></figure><p>Dawn (Director of Community and Developer Relations at <a href=https://www.anaconda.com/ target=_blank rel=noopener>Anaconda</a>
+, former PSF Chair) opened
+with a caveat on the AI productivity narrative: early UC Berkeley research suggests AI intensifies workload rather than
+reducing it. Lower start/stop costs mean tasks fragment and bleed into the breaks your brain needs. She asked the
+audience to drink water.</p><p>The keynote framed an <strong>experimentation loop</strong> as the foundational mental model for engineers, researchers, and
+scientists: plan → design → build → test → release, as a dialogue, not a linear path. Specialization is the reward you
+unlock by running that loop deliberately enough.</p><p>Her analogy carried the rest of the talk: LLM specialization and career specialization are the same shape.</p><pre class=mermaid>flowchart LR
+  classDef model fill:#DBEAFE,stroke:#1E40AF,color:#1E3A8A;
+  classDef career fill:#FEF3C7,stroke:#B45309,color:#78350F;
+  P[Pre-training]:::model --&gt; F[Fine-tuning]:::model --&gt; S[Specialized prompting]:::model
+  GE[Gen. education]:::career --&gt; CS[Core skills]:::career --&gt; EX[Experience]:::career --&gt; AT[Adv. training]:::career --&gt; SP[Specialization]:::career --&gt; AP[Application]:::career --&gt; MA[Mastery]:::career
+</pre><p>Scaling laws say bigger models keep improving while small language models plateau fast, so matching capacity to the
+problem matters more than chasing size. The same U-shaped curve of return applies to human effort.</p><p>She argued for <strong>ontology</strong> as the lever that lets both models and careers compound instead of sprawl. Ontology goes
+further than semantics: where semantics asks what a word means in context (a &ldquo;sidecar&rdquo; might be a drink, a motorcycle
+attachment, or an Azure component), ontology formally defines what entities exist, how they relate, and what rules
+govern them. Tools from the knowledge-graph world (<a href=https://www.w3.org/OWL/ target=_blank rel=noopener>OWL</a>
+, <a href=https://www.w3.org/RDF/ target=_blank rel=noopener>RDF</a>
+,
+<a href=https://www.w3.org/TR/sparql11-overview/ target=_blank rel=noopener>SPARQL</a>
+, triple stores) underpin this, and in multi-agent systems ontologies
+become essential for semantic consistency between agents.</p><p>She walked through specialization techniques on the model side: <a href=https://arxiv.org/abs/2106.09685 target=_blank rel=noopener><strong>LoRA</strong></a>
+(small
+adapters inside transformer layers), full fine-tuning, parameter-efficient methods, ontology-driven data cleaning, world
+models (predicting the next <em>state</em> rather than the next word), <strong>RAG</strong> (retrieval-augmented generation), and SLM
+optimization (knowledge distillation, pruning, quantization, focused fine-tuning).</p><p>Then she mapped each onto careers under three pillars:</p><ol><li><strong>Efficiency through expertise.</strong> The Pareto 80/20 rule: focus on the 20% of skills that deliver 80% of the results.
+A personal knowledge base as your career&rsquo;s RAG. Teaching as distillation (repeat the explanation, deepen the
+mastery). Pruning low-value tasks, requiring that managers say out loud what counts as valuable. Domain flexibility
+from small modular learning in adjacent areas.</li><li><strong>Small iterations, big wins.</strong> Frequent check-ins compound. Design workflows that give you regular feedback instead
+of saving up for one big deliverable.</li><li><strong>Sovereignty over your stack.</strong> In software: your workflow, data, models, and infrastructure. In career: your
+income, reputation, network, and skills. She advocated for local-first AI, and debunked the &ldquo;you need a Mac Mini&rdquo;
+reflex: the point is a contained environment with clear boundaries, not the hardware.</li></ol><p>She closed by reframing specialization as the <strong>&ldquo;art of strategic ignorance&rdquo;</strong>: deliberately choosing what <em>not</em> to
+know, so you can set boundaries, deepen expertise, and protect your energy. Scaling laws apply to humans too: balance
+skills (size), experience (data), and energy/time (compute). &ldquo;Just relax&rdquo; burnout advice is well-intentioned but naive
+under real-world pressure. Build supportive communities (she called them &ldquo;cadre friends&rdquo;).</p><p>Slides: <a href=https://dawnwages.info/pytexas-keynote-26/ target=_blank rel=noopener>dawnwages.info/pytexas-keynote-26</a>
+(also
+<a href=https://bit.ly/pytexas-keynote-26 target=_blank rel=noopener>bit.ly/pytexas-keynote-26</a>
+).</p><h3 id=moshe-zadka-python-as-your-dsl>Moshe Zadka: Python as Your DSL
+<a class=heading-link href=#moshe-zadka-python-as-your-dsl><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>Moshe&rsquo;s thesis: <em>any</em> Python code can serve as a domain-specific language if you design it thoughtfully. The failure
+mode is building &ldquo;fake Python&rdquo;: systems that look like Python but break its rules through runtime magic. Early Django
+did that: it injected names like <code>book_set</code> when you declared a <code>ForeignKey</code>, hid a global <code>db</code> object, and created
+reverse relationships invisible in the source. Editors and linters couldn&rsquo;t resolve them, tests broke outside the
+framework, pickling failed because the classes weren&rsquo;t attached to modules, and users couldn&rsquo;t trust introspection.
+Django eventually ran a <em>magic removal</em> pass for these reasons.</p><p><strong>Why magic is harmful:</strong></p><ul><li><strong>Breaks tooling and discoverability.</strong> IDEs can&rsquo;t resolve injected names. Ctrl-click fails. Linters fight you.</li><li><strong>Undermines reusability.</strong> Code written inside the DSL often can&rsquo;t be reused outside the framework (tests included).</li><li><strong>Prevents debugging.</strong> <code>print</code> and <code>logging</code> become unreliable. Pickling breaks.</li><li><strong>Surprises experienced Pythonistas.</strong> &ldquo;People will assume they can do all the things they do in Python, but they
+can&rsquo;t.&rdquo;</li></ul><p>The better path is a DSL that <em>is</em> valid, idiomatic Python. Moshe&rsquo;s examples:</p><ul><li><a href=https://numpy.org/ target=_blank rel=noopener><strong>NumPy</strong></a>
+: few people call it a DSL, but the slicing syntax (<code>x[0, ..., -1]</code>), broadcasting, and
+operator overloads (<code>+</code>, <code>*</code>, <code>@</code>) make it one. It was influential enough that <code>...</code> became a language literal. Every
+standard Python tool (debuggers, profilers, IDEs, test runners) works on it.</li><li><strong>Stan</strong>: an HTML/XML construction DSL built on context managers and callables.
+<code>with tag('html'): with tag('body'): ...</code> builds the tree using plain <code>with</code> blocks, with no magic imports, and a
+working debugger.</li><li><strong>Modern <a href=https://www.djangoproject.com/ target=_blank rel=noopener>Django</a>
+models</strong>: class attributes stand in for database columns. The
+library still uses metaclasses under the hood, but the interface is transparent: misspelling a relation name raises an
+error at import time.</li><li><a href=https://trypyramid.com/ target=_blank rel=noopener><strong>Pyramid</strong></a>
+routing: <code>@view_config(route_name='home', renderer='string')</code> as a function
+decorator. A configurator scans for decorated functions to assemble the application, which keeps the routes
+discoverable and testable.</li></ul><p><strong>Techniques that do the work without magic:</strong> dunder methods (<code>__call__</code>, <code>__getitem__</code>) for operator-style ergonomics,
+decorators for declarative configuration, context managers for nested scopes, generators for lazy streams, and
+metaclasses for intervention at class creation (used sparingly). For plugin discovery, prefer
+<a href=https://docs.python.org/3/library/importlib.metadata.html target=_blank rel=noopener><code>importlib.metadata.entry_points</code></a>
+or
+<a href=https://pluggy.readthedocs.io/ target=_blank rel=noopener><code>pluggy</code></a>
+over global registration side effects.</p><p><strong>Moshe&rsquo;s principles for a Pythonic DSL:</strong> require explicit imports, stay discoverable (jump-to-definition must work),
+support standard testing and debugging, leverage familiar syntax instead of custom parsers, start small and let users
+fall back to plain Python when the DSL runs out, and don&rsquo;t surprise people who know Python well. Build a DSL when users
+interact with your system through the same three or four patterns repeatedly. Skip it for one-off or highly variable
+tasks.</p><h3 id=adam-gordon-bell-i-built-an-ai-running-coach-that-actually-remembers-my-training>Adam Gordon Bell: I Built an AI Running Coach (That Actually Remembers My Training)
+<a class=heading-link href=#adam-gordon-bell-i-built-an-ai-running-coach-that-actually-remembers-my-training><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><figure><img src=/posts/pytexas-2026-recap/adam-gordon-bell-ai-running-coach.webp alt="Adam Gordon Bell's 2025 Monster of Mazinaw 10K results slide" srcset="/posts/pytexas-2026-recap/adam-gordon-bell-ai-running-coach_hu_dff1d369386d4563.webp 500w, /posts/pytexas-2026-recap/adam-gordon-bell-ai-running-coach_hu_2611e69b72a856bb.webp 800w" sizes="(min-width: 35em) 1200px, 100vw" width=1024 height=768 loading=lazy decoding=async></figure><p>Adam (community engineer at <a href=https://www.pulumi.com/ target=_blank rel=noopener>Pulumi</a>
+) built &ldquo;Momentum Bot&rdquo; to beat his friend Malcolm at the
+2026 Monster&rsquo;s Mazinaw 30K, an ultramarathon through the Canadian Shield. His slide showed the 2025 10K results: Malcolm
+Clarke 12th, Adam Bell 25th. Previous attempts failed because he trained for a few months before the race each year;
+this time he committed to building a coach that would train him year-round.</p><p><strong>Architecture.</strong> <a href=https://www.strava.com/ target=_blank rel=noopener>Strava</a>
+→ <a href=https://aws.amazon.com/lambda/ target=_blank rel=noopener>AWS Lambda</a>
+(cron + webhook) →
+<a href=https://aws.amazon.com/dynamodb/ target=_blank rel=noopener>DynamoDB</a>
+(structured run data) → <a href=https://aws.amazon.com/s3/ target=_blank rel=noopener>S3</a>
+(raw archive) →
+<a href=https://slack.com/ target=_blank rel=noopener>Slack</a>
+. <a href=https://www.onepeloton.com/ target=_blank rel=noopener>Peloton</a>
+has no public API, so his Lambda scrapes his Peloton
+account using a refreshed JWT.</p><pre class=mermaid>flowchart LR
+  classDef input fill:#DBEAFE,stroke:#1E40AF,color:#1E3A8A;
+  classDef compute fill:#FEF3C7,stroke:#B45309,color:#78350F;
+  classDef store fill:#E5E7EB,stroke:#4B5563,color:#1F2937;
+  classDef output fill:#DCFCE7,stroke:#15803D,color:#14532D;
+  Watch[Fitness watch]:::input --&gt; Strava:::input
+  Peloton[Peloton web UI]:::input -- JWT scrape --&gt; Lambda[AWS Lambda]:::compute
+  Strava -- webhook --&gt; Lambda
+  Cron[Daily cron 6am]:::input --&gt; Lambda
+  Lambda --&gt; Dyn[DynamoDB]:::store
+  Lambda --&gt; S3[S3 raw archive]:::store
+  Lambda --&gt; LLM[LLM interpretation and motivation]:::compute
+  LLM --&gt; Slack:::output
+</pre><p>Data arrives second-by-second from multiple sources (fitness watch, Peloton, cadence sensors), gets timestamp-aligned
+and normalized to a columnar per-second format, and rolls up into per-activity stats: time in heart-rate zones, average
+incline, cadence, power, and heart-rate trends.</p><p><strong>The split he kept hammering.</strong> Deterministic work (distances, paces, averages) stays in plain Python. The LLM only
+handles what he&rsquo;d otherwise be doing by reading the data with his eyes: interpretation, motivation, and adaptive
+feedback. This keeps costs down and the system predictable.</p><p><strong>Training philosophy.</strong> Polarized training: 80% low-intensity (Zone 2) for endurance and injury resilience, 20%
+high-intensity (Zone 4+) for speed. Three mid-week runs, one long weekend run, one strength session. The plan shifts
+seasonally (fall volume build, winter treadmill, spring trails).</p><p><strong>Adaptive feedback.</strong> If Adam misses one or two days the coach keeps nudging the plan. After three days it detects a
+&ldquo;fragile motivational state&rdquo; and scales back: <em>&ldquo;Maybe just do a 20-minute run today. We won&rsquo;t even talk about the
+plan.&rdquo;</em> He also wired in <strong>intensive stacking</strong>: restricting Netflix shows (<em>Stranger Things</em>) to treadmill time only.
+The coach learned the pattern and started suggesting, &ldquo;After work, jump on the treadmill and keep watching Stranger
+Things.&rdquo; A <a href=https://slack.com/ target=_blank rel=noopener>Slack</a>
+chat interface lets him respond to sessions (&ldquo;that was a bad idea&rdquo;), which the
+bot stores in S3 via registered function calls, so it doesn&rsquo;t rely on LLM memory.</p><p><strong>Cost.</strong> The whole thing runs on AWS free tier (Lambda fires at most once a day). The only real cost is LLM API calls,
+roughly <strong>$1/month</strong>. Inference uses an open-weight OpenAI OSS model served by an external provider. Coding assistance
+throughout the build came from <a href=https://www.anthropic.com/claude target=_blank rel=noopener>Claude</a>
+.</p><p><strong>Results.</strong> Weekly volume and consistency are both up sharply; visualization graphs (generated via
+<a href=https://www.anthropic.com/claude-code target=_blank rel=noopener>Claude Code</a>
+) show clear upward trends. He admits he gave up on measuring speed
+improvement: sleep, diet, and alcohol produce so much noise that a meaningful trend signal is not reachable with his
+dataset. His invitation to the audience: <em>what could you build with your own data?</em></p><p>Code: <a href=https://github.com/adamgordonbell/ai-running-coach target=_blank rel=noopener>github.com/adamgordonbell/ai-running-coach</a>
+. More from Adam
+on the <a href=https://www.pulumi.com/community/community-engineering/adam-gordon-bell/ target=_blank rel=noopener>Pulumi community page</a>
+.</p><h3 id=maria-silvia-mielniczuk-using-mcp-to-build-safe-auditable-ai-systems-in-python>Maria Silvia Mielniczuk: Using MCP to Build Safe, Auditable AI Systems in Python
+<a class=heading-link href=#maria-silvia-mielniczuk-using-mcp-to-build-safe-auditable-ai-systems-in-python><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><figure><img src=/posts/pytexas-2026-recap/maria-mielniczuk-mcp-security.webp alt="MCP hub-and-spoke architecture vs N×M custom integrations" srcset="/posts/pytexas-2026-recap/maria-mielniczuk-mcp-security_hu_8f7e8b294da052bd.webp 500w, /posts/pytexas-2026-recap/maria-mielniczuk-mcp-security_hu_9b82da1282d79e63.webp 800w" sizes="(min-width: 35em) 1200px, 100vw" width=1024 height=768 loading=lazy decoding=async></figure><p>Maria&rsquo;s framing: when you connect a model to tools, its output stops being text and becomes actions with real-world
+consequences. Building model × tool integrations by hand gets you an N×M explosion of custom glue with high maintenance
+cost, inconsistent interfaces, poor observability, and a larger security surface. She called it the &ldquo;wild west&rdquo; of
+ad-hoc integrations.</p><p><a href=https://modelcontextprotocol.io/ target=_blank rel=noopener><strong>MCP (Model Context Protocol)</strong></a>
+is the open standard for that glue, built on a
+host/client/server architecture:</p><ul><li><strong>Host</strong>: where the model runs and reasoning happens. Contains agent logic but doesn&rsquo;t execute tools itself.</li><li><strong>Client</strong>: manages sessions and transport, converts high-level agent requests into structured JSON events, sanitizes
+inputs.</li><li><strong>Server</strong>: a stateful message processor that routes requests to Python tool functions. Acts as the control plane for
+capability discovery, request validation, policy enforcement, and audit logging.</li></ul><pre class=mermaid>flowchart LR
+  classDef user fill:#DBEAFE,stroke:#1E40AF,color:#1E3A8A;
+  classDef untrusted fill:#FEE2E2,stroke:#B91C1C,color:#7F1D1D;
+  classDef bridge fill:#FEF3C7,stroke:#B45309,color:#78350F;
+  classDef trusted fill:#DCFCE7,stroke:#15803D,color:#14532D;
+  classDef external fill:#E5E7EB,stroke:#4B5563,color:#1F2937;
+  User[User]:::user --&gt; Model
+  subgraph Host[Host: model and agent]
+    Model[LLM reasoning]:::untrusted
+    Agent[Agent logic]:::untrusted
+  end
+  Model --&gt; Client[MCP client]:::bridge
+  Client --&gt; Policy
+  subgraph Server[MCP server: control plane]
+    Policy[Policy and audit]:::trusted
+    Tools[Tools]:::trusted
+    Resources[Resources]:::trusted
+    Prompts[Prompts]:::trusted
+  end
+  Policy --&gt; Tools
+  Tools --&gt; DB[(Database)]:::external
+  Tools --&gt; Email[Email]:::external
+  Tools --&gt; API[External APIs]:::external
+</pre><p><strong>Three MCP primitives</strong> on the server side: <strong>tools</strong> (Python functions that do work, such as a database query or
+sending email), <strong>resources</strong> (context the model needs, such as schemas or configs), and <strong>prompts</strong> (templates that
+guide interaction, including example queries). A database server might expose the schema as a resource, sample SQL as a
+prompt, and the execute function as a tool, so the LLM can discover capabilities without hard-coding.</p><p><strong>The key boundary.</strong> Models suggest actions; only the server executes them. That separation is what gives you
+isolation, observability, and predictability. Every action passes through a central logging point with input validation
+and policy checks.</p><p><strong>Three new threat models in agentic workflows:</strong></p><ol><li><strong>Malicious or untrusted MCP server.</strong> A third-party server claims to offer analytics but probes internal APIs.
+Supply-chain risk similar to malicious <code>pip</code> packages. Mitigate by validating all responses, never trusting external
+servers implicitly.</li><li><strong>Misguided or overzealous agent.</strong> A well-intentioned agent misuses a tool because of faulty reasoning, for instance
+reaching for a log-purging tool and deleting production data. Mitigate with execution limits, rate limiting, and
+contextual policy checks.</li><li><strong>Confused deputy.</strong> A privileged tool is talked into performing an action the user shouldn&rsquo;t be allowed to do.
+Classic privilege escalation via social engineering of the model. Mitigate with server-level policy enforcement based
+on provenance and intent.</li></ol><p>Traditional authn/authz doesn&rsquo;t cover this because agents act on behalf of users across systems where permissions are
+technically valid but contextually inappropriate. The question shifts from &ldquo;who are you&rdquo; to &ldquo;what is happening right
+now&rdquo;.</p><p><strong>Demo.</strong> Maria ran three scenarios against a local setup using Llama 3:</p><ul><li><strong>Happy path</strong>: user asks for customer data, agent retrieves and proposes an update, human approves, server executes.
+Logs capture the full trace.</li><li><strong>Risky data from untrusted source</strong>: fetched data contains suspicious instructional text. Agent flags it; human
+approves anyway (simulating negligence). The server blocks execution on policy: <em>&ldquo;no data from untrusted sources with
+risky provenance can be written to the database&rdquo;</em>. Human approval alone is not enough.</li><li><strong>Email with restricted scope</strong>: agent wants to send to an external domain, human approves, server intercepts and
+redirects to an internal domain because the policy only allows internal email. Server-side policy overrides both the
+agent and the human.</li></ul><p>She compared <strong>FastMCP</strong> (convenient framework, hides JSON plumbing, minimal observability by default) with raw MCP
+(slower to build, exposes protocol details, forces you to design governance). Speed of development should not come at
+the cost of visibility and control.</p><p><strong>Open problems</strong> as MCP systems compose: server-to-server calls (multi-hop workflows that lose end-to-end visibility),
+agent-to-agent delegation (chains of trust, policy propagation), and infinite loops between agents (budget controls and
+loop detection become survival features). <em>&ldquo;As systems grow in composability, governability becomes more critical than
+connectivity.&rdquo;</em></p><p>Demo code: <a href=https://github.com/MS-Mielnic/pytexas-mcp-demo target=_blank rel=noopener>github.com/MS-Mielnic/pytexas-mcp-demo</a>
+.</p><h3 id=dr-james-a-bednar-anaconda-data-visualization-in-python-sponsored>Dr. James A. Bednar (Anaconda): Data Visualization in Python (Sponsored)
+<a class=heading-link href=#dr-james-a-bednar-anaconda-data-visualization-in-python-sponsored><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><figure><img src=/posts/pytexas-2026-recap/james-bednar-python-visualization-pyviz.webp alt="'Python has so many visualization tools!' PyViz.org slide" srcset="/posts/pytexas-2026-recap/james-bednar-python-visualization-pyviz_hu_d89aa07461f7f025.webp 500w, /posts/pytexas-2026-recap/james-bednar-python-visualization-pyviz_hu_94fd235b8adf53b4.webp 800w" sizes="(min-width: 35em) 1200px, 100vw" width=1024 height=768 loading=lazy decoding=async></figure><p>James has been using Python since 2003 and works on <a href=https://pyviz.org/ target=_blank rel=noopener>PyViz</a>
+(a neutral catalog) and
+<a href=https://holoviz.org/ target=_blank rel=noopener>HoloViz</a>
+(his team&rsquo;s opinionated project) at <a href=https://www.anaconda.com/ target=_blank rel=noopener>Anaconda</a>
+. His core
+point: Python has over <strong>175 visualization tools</strong> cataloged on <a href=https://pyviz.org target=_blank rel=noopener>pyviz.org</a>
+, and no individual has
+used more than 25% of them. About 90% remain largely untested by the wider community. R has
+<a href=https://ggplot2.tidyverse.org/ target=_blank rel=noopener>ggplot2</a>
+as the obvious default; Python has a paradox-of-choice problem instead.</p><p><strong>Seven decision dimensions</strong> for narrowing the space:</p><ol><li><strong>Info-viz vs. sci-viz.</strong> Information visualization (bar charts, line graphs with interpretable axes) vs. scientific
+visualization (3D or 4D, spatially embedded, axes optional). Tools are rarely good at both: Python&rsquo;s ecosystem shows
+almost no overlap between the two.</li><li><strong>Type of data.</strong> Statistical/tabular (most Info Viz tools work), array-based (satellite imagery, microscope images,
+simulation grids; needs <a href=https://holoviews.org/ target=_blank rel=noopener>HoloViews</a>
+, <a href=https://xarray.dev/ target=_blank rel=noopener>xarray</a>
+), or specialized (graph
+data → <a href=https://networkx.org/ target=_blank rel=noopener>NetworkX</a>
+, genomic data → bioinformatics libraries).</li><li><strong>Data size.</strong> Legacy tools render each point on its own and break on large datasets, giving you a &ldquo;solid block of
+blue&rdquo;. <a href=https://datashader.org/ target=_blank rel=noopener>Datashader</a>
+(James&rsquo;s team) plots density instead of points, scaling to billions. His
+analogy: if every star in the sky got a dot, the night sky would be white.</li><li><strong>Output target.</strong> Static outputs (PDF, PowerPoint, publications) favor <a href=https://matplotlib.org/ target=_blank rel=noopener>Matplotlib</a>
+.
+Interactive web outputs need JavaScript-backed tools like <a href=https://bokeh.org/ target=_blank rel=noopener>Bokeh</a>
+or
+<a href=https://plotly.com/python/ target=_blank rel=noopener>Plotly</a>
+, which are weak at publication-quality export. Native desktop GUIs
+(<a href=https://www.qt.io/ target=_blank rel=noopener>Qt</a>
+/ <a href=https://docs.python.org/3/library/tkinter.html target=_blank rel=noopener>Tkinter</a>
+) are a third category with few
+good options.</li><li><strong>API design.</strong> Three styles: concise one-liners
+(<a href=https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.plot.html target=_blank rel=noopener><code>pandas.plot()</code></a>
+, convenient but limited),
+verbose object-oriented (Matplotlib&rsquo;s full API, maximum control), and declarative
+(<a href=https://altair-viz.github.io/ target=_blank rel=noopener>Altair</a>
+, HoloViews; you describe the outcome, not the steps).</li><li><strong>Underlying tech stack.</strong> HTML/JS, OpenGL (great 3D, terrible text rendering),
+<a href=https://doc.qt.io/qtforpython/ target=_blank rel=noopener>Qt/PySide</a>
+, or built on top of Matplotlib/Bokeh/Plotly. The base tech determines the
+ceiling. If a library sits on Matplotlib, it inherits the strengths and the constraints.</li><li><strong>Adjacent categories.</strong> Color mapping (<a href=https://matplotlib.org/cmocean/ target=_blank rel=noopener><code>cmocean</code></a>
+,
+<a href=https://colorcet.holoviz.org/ target=_blank rel=noopener><code>colorcet</code></a>
+), table rendering (<a href=https://mwouts.github.io/itables/ target=_blank rel=noopener><code>itables</code></a>
+,
+<a href=https://pandas.pydata.org/ target=_blank rel=noopener><code>pandas</code></a>
+styling), dashboarding (<a href=https://streamlit.io/ target=_blank rel=noopener>Streamlit</a>
+,
+<a href=https://panel.holoviz.org/ target=_blank rel=noopener>Panel</a>
+, <a href=https://dash.plotly.com/ target=_blank rel=noopener>Dash</a>
+). Starts plot-adjacent, ends up app
+development.</li></ol><p><strong>Practical framework.</strong> Start with Matplotlib. Eliminate irrelevant options using the seven dimensions. Don&rsquo;t pick a
+sci-viz tool unless you&rsquo;re doing 3D spatial work. Use <code>pandas.plot()</code> and <a href=https://docs.dask.org/ target=_blank rel=noopener><code>dask.plot()</code></a>
+as
+unified APIs that dispatch to multiple backends (Matplotlib, Plotly, Bokeh) with one syntax. Popularity matters because
+LLMs are trained on popular libraries, so using an obscure one means worse AI code completion unless you wire up
+something custom. Feature comparisons are the <em>last</em> filter, not the first.</p><p><strong>On AI and viz.</strong> Python visualization isn&rsquo;t becoming obsolete just because AI can generate React/D3 one-offs. For
+ad-hoc plots it&rsquo;s great. As a daily workflow, understanding a library still beats iterating on prompts.</p><h3 id=christopher-ariza-why-installing-python-packages-is-still-a-security-risk>Christopher Ariza: Why Installing Python Packages Is Still a Security Risk
+<a class=heading-link href=#christopher-ariza-why-installing-python-packages-is-still-a-security-risk><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>Christopher&rsquo;s thesis: the primary risk of installing Python packages is arbitrary code execution, and every other threat
+follows. That code runs with the user&rsquo;s privileges, which is enough to do damage without root. Transitive dependencies
+carry the same risk as top-level packages and are easy to overlook. For a broader treatment of the defenses in this
+space, see my earlier post on [Python supply chain security](https://bernat.tech/posts/securing-python-supply-chain/).</p><p><strong>Three attack surfaces</strong>:</p><ul><li><strong>Running imported modules</strong>: importing a third-party module executes its code.</li><li><strong>Execution during installation</strong>: <code>setup.py</code> in source distributions, introduced in PEP 229 twenty-six years ago,
+still widely used. 454 of the top 1000 PyPI packages still ship a <code>setup.py</code> because C extensions and legacy build
+systems need it.</li><li><strong>Execution at interpreter startup</strong>: <code>site.main</code> processes <code>.pth</code> files and <code>sitecustomize.py</code> on every Python
+launch. A 2003 change allowed <code>.pth</code> files to contain <code>import</code>-prefixed lines that run through <code>exec()</code> at startup, so
+a one-line <code>.pth</code> file with semicolons is enough for arbitrary code execution at every interpreter invocation.
+Exceptions in these executions are caught and printed, not raised, so failures stay invisible.</li></ul><p><strong>Attack techniques</strong>:</p><ul><li><strong>Compromised maintainer credentials</strong> (the <code>ctx</code> case; PyPI has since shipped domain-resurrection prevention).</li><li><strong>Typosquatting and masquerading</strong> (e.g., a package called <code>brockn-wrapper</code> pretending to wrap a legitimate library).</li><li><strong>Dependency confusion</strong>: a public package shadowing an internal private name so the resolver grabs the attacker&rsquo;s
+version, as in the <code>torch-triton</code> incident.</li><li><strong>Social engineering via fake recruiters or IT support</strong> pushing a &ldquo;coding test&rdquo; package during a job interview.</li></ul><p>Python&rsquo;s standard library alone covers reconnaissance (<code>socket.gethostname</code>, <code>os.getlogin</code>, <code>platform.platform</code>),
+credential and API-key exfiltration (dumping <code>os.environ</code> and <code>.env</code> files, URL-encoded and shipped off), clipboard
+extraction via Tkinter (a favorite for crypto wallet addresses), persistence through shell startup files (a one-line
+append to <code>.bashrc</code> gives you a reverse shell in every new terminal), crypto-mining, and ransomware-style wipers. &ldquo;One
+line with semicolons&rdquo; is the recurring theme.</p><p><strong>Modern abuse patterns</strong>:</p><ul><li>Malicious <code>setup.py</code> with a custom <code>build_py</code> command that writes a <code>.pth</code> file into <code>site-packages</code> during install.</li><li><a href=https://hatch.pypa.io/ target=_blank rel=noopener>Hatch</a>
+&rsquo;s <code>targets.wheel.force_include</code> option can bundle <code>.pth</code> files into a wheel, skipping
+the historical assumption that wheels don&rsquo;t execute code.</li><li>Adversarial wheel modification: unzip a wheel, add a <code>.pth</code>, rezip, republish. Only detectable if you verify hashes.</li></ul><p><strong>Mitigations Christopher recommended</strong>:</p><ul><li><strong>PyPI-side.</strong> <a href=https://pypi.org/ target=_blank rel=noopener>PyPI</a>
+hired its first Safety and Security Engineer in 2023, mandated 2FA in 2024,
+shipped <a href=https://docs.pypi.org/trusted-publishers/ target=_blank rel=noopener>trusted publishing</a>
+, added malware reporting on package pages, and
+runs automated typosquatting detection. The system is open by design; no amount of platform effort removes all risk.</li><li><strong>Avoid <code>site.main</code></strong>. Run <code>python -S</code> to skip <code>.pth</code>, <code>sitecustomize</code>, and <code>usercustomize</code> processing, then add
+<code>site-packages</code> to <code>sys.path</code> manually.</li><li><strong>Lock files with pinned versions and hash validation</strong>, across all transitive dependencies.</li><li><strong>Pre-install research</strong> using <a href=https://libraries.io/ target=_blank rel=noopener>libraries.io</a>
+, <a href=https://snyk.io/ target=_blank rel=noopener>Snyk</a>
+, or similar signals.</li><li><strong>Private mirrors</strong> (<a href=https://jfrog.com/artifactory/ target=_blank rel=noopener>Artifactory</a>
+,
+<a href=https://aws.amazon.com/codeartifact/ target=_blank rel=noopener>CodeArtifact</a>
+) to curate the set of packages available, bounded by user
+circumvention.</li><li><strong>Vulnerability scanners</strong>: <a href=https://docs.github.com/en/code-security/dependabot target=_blank rel=noopener>Dependabot</a>
+,
+<a href=https://github.com/pypa/pip-audit target=_blank rel=noopener><code>pip-audit</code></a>
+. He also introduced his own tool, <strong>Fetor</strong>, a system-wide scanner
+that inspects <code>.pth</code>, <code>sitecustomize.py</code>, and <code>usercustomize.py</code> contents, plus an MCP variant that ensures agents
+install the latest non-vulnerable versions.</li><li><strong>Canary tokens</strong>: fake AWS keys and API tokens dropped in the expected locations on developer machines. If anything
+reads or exfiltrates them, you get an alert. Cheap, proactive, high signal.</li></ul><p><strong>Closing recommendations</strong>: don&rsquo;t install untrusted packages, always pin with hashes, prefer wheels over source
+distributions so <code>setup.py</code> doesn&rsquo;t run, be skeptical of packages that still ship <code>setup.py</code>, audit <code>.pth</code> and
+customization files regularly, and roll out canary tokens organization-wide.</p><h3 id=al-sweigart-failed-experiments-in-vibe-coding>Al Sweigart: Failed Experiments in Vibe Coding
+<a class=heading-link href=#al-sweigart-failed-experiments-in-vibe-coding><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><figure><img src=/posts/pytexas-2026-recap/al-sweigart-vibe-coding.webp alt="Al Sweigart's 'Every Response to AI Criticism' slide" srcset="/posts/pytexas-2026-recap/al-sweigart-vibe-coding_hu_6c92b0d281da996b.webp 500w, /posts/pytexas-2026-recap/al-sweigart-vibe-coding_hu_ca480215455f8ee4.webp 800w" sizes="(min-width: 35em) 1200px, 100vw" width=1024 height=768 loading=lazy decoding=async></figure><figure><img src=/posts/pytexas-2026-recap/al-sweigart-software-works-vs-looks-works.webp alt="Two overlapping circles: a tiny circle labeled 'Software that works' barely intersects a much larger circle labeled 'Software that looks like it works'" srcset="/posts/pytexas-2026-recap/al-sweigart-software-works-vs-looks-works_hu_394eae10bb8515ac.webp 500w, /posts/pytexas-2026-recap/al-sweigart-software-works-vs-looks-works_hu_aefd773c52f976f5.webp 800w, /posts/pytexas-2026-recap/al-sweigart-software-works-vs-looks-works_hu_4b1a6df70f72154f.webp 1200w" sizes="(min-width: 35em) 1200px, 100vw" width=1200 height=779 loading=lazy decoding=async></figure><p>Al wrote <a href=https://automatetheboringstuff.com/ target=_blank rel=noopener><em>Automate the Boring Stuff with Python</em></a>
+. His day job is teaching
+non-programmers to code, so when he says the AI discourse is an information hazard, he has standing. His framing: the
+current claims about AI in software range from &ldquo;AI will replace all developers&rdquo; to &ldquo;AI lets juniors work at senior
+level&rdquo; to &ldquo;AI gives you a 10× or 20× productivity boost&rdquo; to the new &ldquo;non-developers can ship software now.&rdquo; Most of it
+isn&rsquo;t empirically supported.</p><p>He anchored the talk on Andrej Karpathy&rsquo;s original <strong>vibe coding</strong> definition: <em>&ldquo;I accept all always. I don&rsquo;t read the
+diffs anymore. When I get error messages, I just copy-paste them in with no comment usually.&rdquo;</em> Al argued that what is
+now called <em>agentic engineering</em> is indistinguishable from vibe coding in practice, and that calling it something else
+is marketing, not method. He invoked James Randi (the magician who debunked psychics) as a model: skepticism as
+professional duty, because to evaluate a claimed trick you need to understand how the trick could work.</p><p><strong>The empirical part: five esoteric apps</strong> he tried to build with LLMs, first in August 2025 and again in February 2026
+with updated models:</p><ol><li><strong>Borderless African Geography Quiz.</strong> Display a map of Africa <em>without political borders</em> and ask the user to click
+the right country. Early maps looked like &ldquo;potatoes&rdquo;. Later attempts drew a real map by pulling SVG outlines. Hidden
+bug: the app downloaded the map data from a public GitHub repo on first run and cached it. Run it offline once, or
+take the repo down, and the app is permanently broken for new users. A vibe coder would never catch this; only
+someone reading the code would.</li><li><strong>Circular maze generator.</strong> Early outputs were circular in shape but not mazes (every path led to the center).
+February&rsquo;s version looked like it worked; Al didn&rsquo;t inspect the code. &ldquo;Looks good enough&rdquo; is not the same as correct.</li><li><strong>Pinball game in Tkinter.</strong> Terse prompt and verbose prompt produced nearly identical code. Worked, but the ball
+would occasionally move &ldquo;hypersonically&rdquo; out of the shooter because of a hard-coded velocity fudge. His line: <em>&ldquo;Would
+you fly on an airplane that had 99% of its parts?&rdquo;</em></li><li><strong>Lava lamp simulator.</strong> Initial output: static ovals. Breakthrough only happened when the prompt included the term
+<strong>&ldquo;metaball algorithm&rdquo;</strong> by name. Al&rsquo;s point: if you have to know the name of the algorithm, the AI isn&rsquo;t solving the
+problem from the description; it&rsquo;s surfacing what you already know. The &ldquo;you didn&rsquo;t write the prompt right&rdquo; rebuttal
+collapses once you realize the user has to be the domain expert first.</li><li><strong>Combination lock simulator.</strong> August 2025: complete failure. February 2026: sometimes unlocked correctly, sometimes
+not. As Al refined the prompt, the model started editing parts of the code that had already been correct.</li></ol><p><strong>Four recurring rebuttals to any AI criticism</strong>, from his slide:</p><ul><li>&ldquo;You didn&rsquo;t write the prompt right.&rdquo;</li><li>&ldquo;That model is garbage. The new model can do it.&rdquo;</li><li>&ldquo;That problem will be fixed in the next five years.&rdquo; (Al noted the &ldquo;five years&rdquo; timeline is always five years away,
+making it unfalsifiable.)</li><li>&ldquo;Well, I don&rsquo;t have that problem.&rdquo;</li></ul><p>Al looked for functioning apps built by non-developers using AI alone, the thing all the breathless blog posts promise.
+He found maybe half a dozen that were installable and usable. The best was a poker-themed match-3 game, made by someone
+with web development experience who spent two weeks refining it. The rest were minimal or uninstallable.</p><p>He also flagged the legal reality: the terms of service of major AI products disclaim liability even for foreseeable
+damages and frame the output as &ldquo;for entertainment purposes only&rdquo;. He pointed out this is the same disclaimer phone
+psychics use.</p><p><strong>His key line</strong>: <em><strong>almost right is worse than wrong.</strong></em> Wrong is detectable and fixable. Almost right gets shipped,
+rationalized, and carried forward as technical debt, security bugs, or failure modes nobody noticed. To trade off
+reliability against speed sensibly, you need accurate information, not plausible output. The closing question he
+answered: <em>is there a point to understanding things?</em> &ldquo;Yes. Absolutely.&rdquo;</p><p>FYI: Carol Willing followed up in the Discord with a research project Al might enjoy —
+<a href=https://sites.google.com/view/llmwritingdistortion/home target=_blank rel=noopener><em>The LLM Writing Distortion</em></a>
+, which studies how LLM
+assistance reshapes the writing people produce. Adjacent to Al&rsquo;s framing about AI output as plausible rather than
+correct.</p><h3 id=saturday-lightning-talks>Saturday Lightning Talks
+<a class=heading-link href=#saturday-lightning-talks><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><ul><li><p><strong>Ana Eilering</strong> (senior developer relations engineer at <a href=https://www.google.com/ target=_blank rel=noopener>Google</a>
+, speaking independently):
+&ldquo;models are not magic, they are code.&rdquo; LLMs are lists of layers and neurons implemented in Python, and every neuron
+operates as a non-deterministic black-box function. She showed a visual of <a href=https://ai.google.dev/gemma target=_blank rel=noopener>Gemma 2</a>
+&rsquo;s
+neuron activity during a factorial calculation.</p></li><li><p>A <a href=https://www.django-rest-framework.org/ target=_blank rel=noopener>Django Rest Framework</a>
+cautionary tale: a serializer field <code>book_returned</code>
+(boolean column) shared a name root with a model method <code>book_return</code> that updated the database. DRF treats any
+callable with no required arguments as serializable, so every GET request over the list silently ran the method and
+marked books as returned.</p></li><li><p><strong>The Seven Stages of AI Grief</strong> by <strong>Peter Sobot</strong> (Research Engineering Lead, Artist-First AI Music at Spotify),
+describing his own arc with coding agents:</p><ol><li><strong>Denial, &ldquo;Why use this?&rdquo;</strong> &ldquo;These tools are overhyped, my workflow works fine.&rdquo; The coding agent suggests walking
+50 feet to the car wash instead of driving.</li><li><strong>Discovery, &ldquo;Wait, it can do that?&rdquo;</strong> Tools improve with better configuration (more effort, more tokens). The same
+agent, tuned, now reasons: &ldquo;Drive. The car must end up at the car wash.&rdquo;</li><li><strong>Enthusiasm, &ldquo;Let&rsquo;s build something useful.&rdquo;</strong> First productive use: a dashboard generated from Google Calendar
+data to show team availability. Rapid success with minimal effort.</li><li><strong>Over-automation, &ldquo;Let&rsquo;s run multiple agents.&rdquo;</strong> Three Claude Code instances in parallel. Code on screen where an
+agent fetches <a href=https://www.atlassian.com/software/jira target=_blank rel=noopener>Jira</a>
+tickets, implements fixes, and opens pull requests on
+its own.</li><li><strong>AI psychosis, &ldquo;I&rsquo;ve automated my job.&rdquo;</strong> Peak overuse. Full automation of development tasks with minimal human
+oversight. Code generated fast, without planning or quality checks.</li><li><strong>AI shame, &ldquo;What have I done?&rdquo;</strong> Colleagues&rsquo; PR comments start questioning the motivation and reasoning. &ldquo;What&rsquo;s
+the goal here?&rdquo; Embarrassment when the quality and intent behind the code turn out to be absent.</li><li><strong>AI maturity, &ldquo;Productive collaboration.&rdquo;</strong> Regaining control. AI as a collaborator, not a decision-maker. Using
+Cursor to plan code, discuss architecture, and review every line or chunk before approval. The landing insight:
+<em>let agents write your code; don&rsquo;t let them decide what to write.</em></li></ol></li><li><p><strong>Beating <a href=https://en.wikipedia.org/wiki/Timsort target=_blank rel=noopener>Timsort</a>
+</strong>: a two-pointer merge rewritten in C as a Python extension
+module, benchmarked faster than Timsort for the narrow case of merging two already-sorted lists. Tim Peters responded
+on a new account, offered seven improvements, and suggested the name Adammerge instead of Timmerge.</p></li><li><p><strong>Kyle Wakama Jimbo and Jesse</strong>: three <a href=https://discord.com/ target=_blank rel=noopener>Discord</a>
+-controlled LED matrix panels for the venue,
+built in eight days. 165 commits, 70 on one Monday. Components: a Discord bot capturing <code>/ledtext</code> commands, a
+<a href=https://fastapi.tiangolo.com/ target=_blank rel=noopener>FastAPI</a>
+hub, a <a href=https://www.raspberrypi.com/ target=_blank rel=noopener>Raspberry Pi</a>
+(&ldquo;Wrangler&rdquo;) creating a
+private Wi-Fi network because venue Wi-Fi was unstable, three panels, and a PWA frontend. A <code>/panic</code> command shuts off
+all panels instantly.</p></li></ul><h2 id=sunday>Sunday
+<a class=heading-link href=#sunday><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><h3 id=hynek-schlawack-keynote-intentional-software-design>Hynek Schlawack keynote: Intentional Software Design
+<a class=heading-link href=#hynek-schlawack-keynote-intentional-software-design><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><figure><img src=/posts/pytexas-2026-recap/hynek-schlawack-keynote-domain-modeling.webp alt="Hynek Schlawack's 'Business logic' keynote slide" srcset="/posts/pytexas-2026-recap/hynek-schlawack-keynote-domain-modeling_hu_2f4f99bf0f7890d5.webp 500w, /posts/pytexas-2026-recap/hynek-schlawack-keynote-domain-modeling_hu_54605dd1961bd276.webp 800w" sizes="(min-width: 35em) 1200px, 100vw" width=1024 height=768 loading=lazy decoding=async></figure><p>Hynek (PSF fellow, infrastructure and software engineer at Variomedia in Berlin, maintainer of
+<a href=https://www.attrs.org/ target=_blank rel=noopener>attrs</a>
+and <a href=https://www.structlog.org/ target=_blank rel=noopener>structlog</a>
+) framed the keynote around <strong>design
+pressure</strong> (a term he credits to J.B. Rainsberger&rsquo;s talk
+<a href=https://blog.thecodewhisperer.com/permalink/integrated-tests-are-a-scam target=_blank rel=noopener><em>Integrated Tests Are a Scam</em></a>
+): forces that
+change your code unintentionally, like tooling choices, test scope, or organizational constraints. His thesis: ORMs,
+class-based validators, and enthusiastic LLM-generated pull requests are calcifying business logic into compromises it
+didn&rsquo;t choose, and the AI moment is sanding down the pain signals that used to make us notice.</p><p>The opening provocation: <em>&ldquo;The use of object-relational mapping in fast-paced related frameworks ruins your projects.&rdquo;</em>
+He walked it back in the next breath: <a href=https://www.djangoproject.com/ target=_blank rel=noopener>Django</a>
+,
+<a href=https://www.sqlalchemy.org/ target=_blank rel=noopener>SQLAlchemy</a>
+, <a href=https://docs.pydantic.dev/ target=_blank rel=noopener>Pydantic</a>
+and friends are fine tools when you
+are aware of what they do to your code. The talk is about architecture, not tools.</p><p><strong>Testing as positive design pressure.</strong> When tests are painful to write, the pain is a signal about the shape of your
+code. Growing the scope of a test (class → package → end-to-end) hides coupling instead of fixing it. AI code generation
+makes this worse because a model can mock half the universe without feeling the pain that would have forced decoupling.</p><p><strong>Three moves in the argument:</strong></p><ol><li><strong>Business logic is the reason your application exists.</strong> Not the Django views, not the Pydantic schemas, not the
+SQLAlchemy models. The code that decides what to do based on data and business rules. Many engineers have never seen
+explicit business logic in their career because tutorials teach it embedded in a framework.</li><li><strong>Domain, data, and API are three different models with conflicting goals.</strong> A database model is shaped by
+normalization, indexing, and storage performance. An API model is shaped by what&rsquo;s ergonomic for consumers. A domain
+model reflects the problem. Forcing them into one class produces a compromise between two of them, imposed on the
+third. Hynek called this the <em>double impedance mismatch</em>.</li><li><strong>The domain model must be sovereign.</strong> Design it first, from the problem, and translate at the edges. Parse,
+validate, and reshape incoming data at the boundary, keep the core pure.</li></ol><p>He illustrated the domain-first approach with Matt Groer&rsquo;s PyKSC 2024 talk <em>The Rising Sea</em>: an Advent of Code puzzle
+about moving boxes between harbor stacks. The elegant solution starts by modeling <code>Harbor</code>, <code>Stack</code>, and <code>Move</code> classes
+that encapsulate business logic with their data, then keeps the ugly input-parsing code isolated in a separate module
+Matt called <strong>&ldquo;the darkness&rdquo;</strong>. The maxim: <em>structure your data so that the problem solves itself</em>.</p><p>Hynek&rsquo;s worked example: international postal addresses. The &ldquo;one table, all fields nullable&rdquo; database shape is honest
+about storage but useless for business logic, because you end up checking <code>if field is None</code> everywhere. Replace it at
+the edge with tagged unions of per-country classes (<code>USAddress</code>, <code>IEAddress</code>), so a function receiving a <code>USAddress</code>
+knows which fields it can rely on. Make illegal states unrepresentable, and let <a href=https://mypy-lang.org/ target=_blank rel=noopener>mypy</a>
+or
+<a href=https://docs.astral.sh/ty/ target=_blank rel=noopener>ty</a>
+be the buffer between messy input and clean logic.</p><p><strong>Why people don&rsquo;t do this.</strong> He pulled a line from Ed Montgomery&rsquo;s blog post <em>How I Build</em>: <em>&ldquo;It&rsquo;s okay to have
+duplicated domain types for different layers of a project… types near the edge, like API schemas and database tables,
+are inherently less flexible. It&rsquo;s often better to explicitly map types between these layers rather than create a common
+type and allow the least flexible layer to calcify the rest.&rdquo;</em> Hynek called this slide his whole talk in one paragraph.</p><p>He closed on a broader point borrowed from Rich Hickey&rsquo;s
+<a href=https://www.infoq.com/presentations/Simple-Made-Easy/ target=_blank rel=noopener><em>Simple Made Easy</em></a>
+: <strong>easy is not the same as simple</strong>. Raw
+dicts instead of proper classes are easy, not simple. God classes (one big file because you don&rsquo;t want to split it) are
+easy, not simple. Mantras like &ldquo;keep it simple&rdquo; or &ldquo;you aren&rsquo;t gonna need it&rdquo; get misused to justify laziness. The
+current AI moment risks accelerating this because the pain of bad design no longer slows the author down.</p><p>Two verbatim quotes:</p><blockquote><p>I&rsquo;m here to encourage you to have thoughts in the first place.</p></blockquote><blockquote><p>AGI is not around the corner. You may quote me, and it will definitely not save you.</p></blockquote><p>Closing: he thanked his employer Variomedia and his colleague Peter Dominicus, and pointed to his YouTube channel,
+<a href=https://www.youtube.com/@The_Hynek target=_blank rel=noopener>youtube.com/@The_Hynek</a>
+, for longer-form versions of the same ideas. Talk page:
+<a href=https://hynek.me/talks/design-pressure/ target=_blank rel=noopener>hynek.me/talks/design-pressure/</a>
+.</p><h3 id=jacob-coffee-the-bakery-how-pep810-sped-up-my-bread-operations-business>Jacob Coffee: The Bakery, How PEP810 Sped Up My Bread Operations Business
+<a class=heading-link href=#jacob-coffee-the-bakery-how-pep810-sped-up-my-bread-operations-business><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><figure><img src=/posts/pytexas-2026-recap/jacob-coffee-pep-810-lazy-imports.webp alt="Jacob Coffee's PEP 810 'How It Works' lazy-import slide" srcset="/posts/pytexas-2026-recap/jacob-coffee-pep-810-lazy-imports_hu_65ecea105f51834e.webp 500w, /posts/pytexas-2026-recap/jacob-coffee-pep-810-lazy-imports_hu_90c22cdfb3a2f4bf.webp 800w" sizes="(min-width: 35em) 1200px, 100vw" width=1024 height=768 loading=lazy decoding=async></figure><p>Python 3.15 will introduce a <code>lazy</code> import keyword via
+<a href=https://peps.python.org/pep-0810/ target=_blank rel=noopener>PEP 810, Explicit Lazy Imports</a>
+(accepted November 3, 2025). Rather than import a
+module at startup, Python creates a lightweight proxy in the namespace and resolves the real module on first attribute
+access. For the wider context on how Python&rsquo;s import machinery has evolved, see my earlier post on [the state of Python
+packaging](https://bernat.tech/posts/pep-517-and-python-packaging/).</p><p>Real-world numbers he cited:</p><ul><li><strong>Meta</strong> (<a href=https://github.com/facebookincubator/cinder target=_blank rel=noopener>Cinder</a>
+): 70% startup reduction, 40% memory savings.</li><li><strong>HRT</strong>: shorter import times, critical for low-latency trading.</li><li><strong>Microstar&rsquo;s CLI</strong>: 35% faster startup.</li></ul><p>Target use cases: CLI tools (help, completion discovery), <a href=https://pytest.org/ target=_blank rel=noopener>pytest</a>
+discovery, plugin architectures,
+<a href=https://aws.amazon.com/lambda/ target=_blank rel=noopener>AWS Lambda</a>
+cold starts, GUI applications. Caveats: circular imports that used to fail
+at startup will fail at first access instead; modules that configure logging or run side effects on import will behave
+differently. <code>lazy</code> works at module level only. His advice: profile first, target modules that take more than 50ms, skip
+the reflex to rewrite every import, and document which imports are lazy. Demo CLI (the &ldquo;bakery&rdquo;):
+<a href=https://github.com/JacobCoffee/breadctl target=_blank rel=noopener>github.com/JacobCoffee/breadctl</a>
+.</p><h3 id=kassandra-keeton-python-in-the-browser-building-interactive-documentation-with-mkdocs--jupyterlite>Kassandra Keeton: Python in the Browser, Building Interactive Documentation with MkDocs & JupyterLite
+<a class=heading-link href=#kassandra-keeton-python-in-the-browser-building-interactive-documentation-with-mkdocs--jupyterlite><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><figure><img src=/posts/pytexas-2026-recap/kassandra-keeton-jupyterlite-docs.webp alt="Kassandra Keeton's Learning Pyramid slide" srcset="/posts/pytexas-2026-recap/kassandra-keeton-jupyterlite-docs_hu_28910ecd3b577a96.webp 500w, /posts/pytexas-2026-recap/kassandra-keeton-jupyterlite-docs_hu_bcd129885595d12a.webp 800w" sizes="(min-width: 35em) 1200px, 100vw" width=1024 height=768 loading=lazy decoding=async></figure><p>Kassandra (the Prosperous Heart, PyTexas marketing lead) built a 3-day live Python bootcamp at
+<a href=https://www.cisco.com/ target=_blank rel=noopener>Cisco</a>
+that was well-received but didn&rsquo;t scale: learners struggled with environment setup and
+lacked real-time mentorship. Her solution is <a href=https://www.mkdocs.org/ target=_blank rel=noopener>MkDocs</a>
++
+<a href=https://jupyterlite.readthedocs.io/ target=_blank rel=noopener>JupyterLite</a>
++ <a href=https://pyodide.org/ target=_blank rel=noopener>Pyodide</a>
+, which runs Python in the browser
+via <a href=https://webassembly.org/ target=_blank rel=noopener>WebAssembly</a>
+without local installation.</p><p>Three ways to embed JupyterLite in MkDocs:</p><ol><li><strong>Notebooks</strong>: inline rendering of specific notebooks via iframes.</li><li><strong>Lab</strong>: the full <a href=https://jupyter.org/ target=_blank rel=noopener>JupyterLab</a>
+interface embedded in the docs.</li><li><strong>File Browser (Tree)</strong>: browse and open files.</li></ol><p>Configure everything in <code>mkdocs.yml</code> and publish with <code>mkdocs gh-deploy</code>. Her Community Garden project demonstrates
+specification-driven development: Markdown pages carry metadata (requirements, priority, status, doc numbers) and
+build-time scripts generate tables, charts, and status icons, turning the doc site into a lightweight ticketing system.
+Template repo site:
+<a href=https://resume.prosperousheart.com/mkdocs-jupyterlite-template-repo/ target=_blank rel=noopener>resume.prosperousheart.com/mkdocs-jupyterlite-template-repo</a>
+.
+She later clarified on Discord that it&rsquo;s <a href=https://squidfunk.github.io/mkdocs-material/ target=_blank rel=noopener>mkdocs-material</a>
+, not MkDocs
+itself, that <a href=https://zensical.org/about/ target=_blank rel=noopener>Zensical</a>
+is positioned to replace.</p><h3 id=sophia-solomon-introducing-meowpy-observability-for-the-internet-of-living-things>Sophia Solomon: Introducing Meow&rsquo;py, Observability for the Internet of Living Things
+<a class=heading-link href=#sophia-solomon-introducing-meowpy-observability-for-the-internet-of-living-things><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><figure><img src=/posts/pytexas-2026-recap/sophia-solomon-opentelemetry-observability.webp alt="Sophia Solomon's 'Your Journey to Observability' slide" srcset="/posts/pytexas-2026-recap/sophia-solomon-opentelemetry-observability_hu_29d25282e97df235.webp 500w, /posts/pytexas-2026-recap/sophia-solomon-opentelemetry-observability_hu_9ccd8678f1ce4535.webp 800w" sizes="(min-width: 35em) 1200px, 100vw" width=1024 height=768 loading=lazy decoding=async></figure><p>Sophia&rsquo;s framing: observability doesn&rsquo;t have to stop at distributed systems. Living things (wearable trackers,
+GPS-tagged livestock, sensor-monitored houseplants, endangered species tracking) are autonomous and non-deterministic,
+which makes them a good demo target. She ran a virtual cat named Meow&rsquo;py (Whiskers), modeled as a state machine with
+hunger, energy, and bladder, and instrumented it with <a href=https://opentelemetry.io/ target=_blank rel=noopener><strong>OpenTelemetry</strong></a>
+.</p><p>Signals:</p><ul><li><strong>Logs</strong>: discrete events (&ldquo;Whiskers ate 34.9g of food&rdquo;).</li><li><strong>Metrics</strong>: counters (escape attempts, distance traveled) and histograms (nap duration).</li><li><strong>Traces</strong>: spans around each behavior using context managers, enriched with name, position, and movement.</li></ul><p>Data flowed over <a href=https://opentelemetry.io/docs/specs/otlp/ target=_blank rel=noopener>OTLP</a>
+to
+<a href=https://www.elastic.co/observability target=_blank rel=noopener>Elastic Observability</a>
+, which auto-generated dashboards, a service map,
+transaction tracing, alerting (e.g., more than 10 escape attempts per minute), log-to-trace correlation, and ML anomaly
+detection (scalable to real cases like sick livestock on a farm).</p><p>Best practices she called out: semantic conventions, meaningful metric attributes, sampling, batch exporters, and
+monitoring your monitoring. Pitfalls: no sampling strategy, instrumenting after launch, skipping auto-instrumentation
+tests, logging PII, and cosmetic dashboards.</p><h3 id=charlie-lin-tying-up-loose-threads-making-your-project-no-gil-ready>Charlie Lin: Tying Up Loose Threads, Making Your Project No-GIL Ready
+<a class=heading-link href=#charlie-lin-tying-up-loose-threads-making-your-project-no-gil-ready><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><figure><img src=/posts/pytexas-2026-recap/charlie-lin-free-threading.webp alt="Charlie Lin's C API slide on critical sections" srcset="/posts/pytexas-2026-recap/charlie-lin-free-threading_hu_fe7700a8e0fdaff1.webp 500w, /posts/pytexas-2026-recap/charlie-lin-free-threading_hu_86e355aef462fee.webp 800w" sizes="(min-width: 35em) 1200px, 100vw" width=1024 height=768 loading=lazy decoding=async></figure><p>Charlie covered the free-threaded CPython interpreter and what it takes to make an extension safe under it. Changes to
+the runtime: a garbage collector that doesn&rsquo;t rely on linked lists, fine-grained internal locks on built-in <code>dict</code> /
+<code>set</code> / <code>list</code>, modified reference counting to reduce contention, and critical sections (<code>PyBeginCriticalSection</code> /
+<code>PyEndCriticalSection</code>) for per-object locking. <code>PyDict_Next</code> is not thread-safe and must be wrapped in a critical
+section.</p><p>Module initialization:</p><ul><li><strong>Single-phase</strong>: mark <code>Py_DisableGIL</code> in <code>PyModuleDef</code>.</li><li><strong>Multi-phase</strong>: add a <code>PyModuleDef_Slot</code> with <code>Py_mod_gil</code> set to <code>PyGILMode_NotUsed</code>.</li></ul><p>Language and tool support: <a href=https://cython.org/ target=_blank rel=noopener>Cython</a>
+(type annotations for efficient, compatible code),
+<a href=https://pybind11.readthedocs.io/ target=_blank rel=noopener>PyBind11</a>
+(<code>PYBIND11_MODULE(..., m)</code> with the &ldquo;GIL not used&rdquo; flag),
+<a href=https://pyo3.rs/ target=_blank rel=noopener>PyO3</a>
+/<a href=https://www.rust-lang.org/ target=_blank rel=noopener>Rust</a>
+(<code>#[pyfunction(gil = false)]</code> and
+<code>#[pymodule(gil = false)]</code>). <a href=https://www.swig.org/ target=_blank rel=noopener>SWIG</a>
+is not recommended.</p><p>Testing: environment variable <code>PYTHONMALLOC=debug</code> and <code>Py_GIL_DISABLED=1</code>,
+<a href=https://clang.llvm.org/docs/AddressSanitizer.html target=_blank rel=noopener>AddressSanitizer</a>
+and
+<a href=https://clang.llvm.org/docs/ThreadSanitizer.html target=_blank rel=noopener>ThreadSanitizer</a>
+. The <code>cPython-sanity</code> project provides pre-built
+Docker images of CPython with ASan and TSan enabled. Build wheels targeting free-threaded Python using versions ending
+in <code>T</code> (e.g., <code>3.13.0T</code>).</p><p>Community tracker for verified-compatible packages:
+<a href=https://hugovk.dev/free-threaded-wheels/ target=_blank rel=noopener>hugovk.dev/free-threaded-wheels</a>
+. Code examples from the talk:
+<a href=https://gist.github.com/clin1234/429cd977609a758e0e6f71f39789312b target=_blank rel=noopener>gist</a>
+.</p><h3 id=avik-basu-upgrading-python-clis-from-scripts-to-interactive-tools>Avik Basu: Upgrading Python CLIs, From Scripts to Interactive Tools
+<a class=heading-link href=#avik-basu-upgrading-python-clis-from-scripts-to-interactive-tools><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><figure><img src=/posts/pytexas-2026-recap/avik-basu-python-cli-typer-rich-textual.webp alt="Avik Basu's Rich terminal demo with colored drift tables" srcset="/posts/pytexas-2026-recap/avik-basu-python-cli-typer-rich-textual_hu_1571de268a58607b.webp 500w, /posts/pytexas-2026-recap/avik-basu-python-cli-typer-rich-textual_hu_9649d6bae73a7776.webp 800w" sizes="(min-width: 35em) 1200px, 100vw" width=1024 height=768 loading=lazy decoding=async></figure><p>Avik (data scientist at <a href=https://www.intuit.com/ target=_blank rel=noopener>Intuit</a>
+, <a href=https://www.pyopensci.org/ target=_blank rel=noopener>PyOpenSci</a>
+editor) opened with
+the 2013 story of running <a href=https://git-scm.com/ target=_blank rel=noopener><code>git commit</code></a>
+on a fresh <a href=https://ubuntu.com/ target=_blank rel=noopener>Ubuntu</a>
+install, landing
+in <a href=https://www.vim.org/ target=_blank rel=noopener>Vim</a>
+, and spending 30 minutes trying to save and exit. Good CLIs are fast, composable,
+scriptable, universal, and AI-friendly.</p><p>He rebuilt the same tool (an ML model explainability monitor with <code>log</code>, <code>generate report</code>, and <code>watch</code> subcommands)
+three ways:</p><ol><li><a href=https://docs.python.org/3/library/argparse.html target=_blank rel=noopener><strong>argparse</strong></a>
+: standard library, boilerplate-heavy, manual argument
+definition and validation, no conflict hierarchy, text-only output.</li><li><a href=https://typer.tiangolo.com/ target=_blank rel=noopener><strong>Typer</strong></a>
++ <a href=https://rich.readthedocs.io/ target=_blank rel=noopener><strong>Rich</strong></a>
+: type hints become CLI
+definitions, built-in path validation via <code>typer.Argument(exists=True)</code>, priority hierarchy (flag > environment
+variable > default), shell completion, and Rich tables with color-coded output. Demoed with <code>report summary</code> and
+<code>report drift</code> subcommands using PSI (Population Stability Index) to flag drift on features like <code>debt_ratio</code>.</li><li><a href=https://textual.textualize.io/ target=_blank rel=noopener><strong>Textual</strong></a>
+: the <code>watch</code> command opens a full-terminal dashboard that
+auto-refreshes every 5 seconds, with a filter input, a table of feature metrics, and bar charts. Defined as a class
+with CSS-like layout, composed of widgets, with <code>on_mount</code> / <code>set_interval</code> lifecycle hooks and key bindings.</li></ol><p>Production patterns: output JSON so downstream tools can pipe into <a href=https://jqlang.org/ target=_blank rel=noopener><code>jq</code></a>
+, keep <code>--help</code> fast with
+lazy loading or module-level <code>__getattr__</code>, and distribute via <a href=https://pip.pypa.io/ target=_blank rel=noopener>pip</a>
+/
+<a href=https://docs.conda.io/ target=_blank rel=noopener>conda</a>
+/ <a href=https://docs.pex-tool.org/ target=_blank rel=noopener>pex</a>
+/ <a href=https://shiv.readthedocs.io/ target=_blank rel=noopener>shiv</a>
+/
+<a href=https://conda.github.io/conda-pack/ target=_blank rel=noopener>conda-pack</a>
+(and optionally <a href=https://brew.sh/ target=_blank rel=noopener>brew</a>
+or
+<a href=https://learn.microsoft.com/en-us/windows/package-manager/ target=_blank rel=noopener>winget</a>
+for wider reach).</p><p>Slides: <a href=https://github.com/ab93/building-cli-talk/blob/main/slides/slides.pdf target=_blank rel=noopener>github.com/ab93/building-cli-talk</a>
+. Demo
+tool: <a href=https://github.com/ab93/shap-monitor target=_blank rel=noopener>github.com/ab93/shap-monitor</a>
+.
+<a href=https://www.linkedin.com/in/avik-basu/ target=_blank rel=noopener>LinkedIn</a>
+.</p><h3 id=miguel-vargas-lint-fast-type-hard-elevating-python-code-quality-with-modern-ultra-fast-tooling>Miguel Vargas: Lint Fast, Type Hard. Elevating Python Code Quality with Modern, Ultra-Fast Tooling
+<a class=heading-link href=#miguel-vargas-lint-fast-type-hard-elevating-python-code-quality-with-modern-ultra-fast-tooling><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><figure><img src=/posts/pytexas-2026-recap/miguel-vargas-ruff-ty-uv-code-quality.webp alt="Miguel Vargas' three-column Code Quality slide" srcset="/posts/pytexas-2026-recap/miguel-vargas-ruff-ty-uv-code-quality_hu_1b7261bf72ff28c2.webp 500w, /posts/pytexas-2026-recap/miguel-vargas-ruff-ty-uv-code-quality_hu_a9d6e5fe4414191b.webp 800w" sizes="(min-width: 35em) 1200px, 100vw" width=1024 height=768 loading=lazy decoding=async></figure><p>Miguel&rsquo;s framing: AI agents produce cleaner, safer, faster code in codebases that are already clean, well-typed, and
+well-tested. Quality is an input to AI productivity, and without guardrails, AI accelerates technical debt. For
+background on the typing side of this argument, see my earlier post on [the state of type hints in
+Python](https://bernat.tech/posts/the-state-of-type-hints-in-python/).</p><p>Key terms:</p><ul><li><strong>SAST</strong> (Static Application Security Testing): scans code for vulnerabilities like SQL injection and XSS.</li><li><strong>SCA</strong> (Static Code Analysis): bugs, code smells, anti-patterns.</li><li><strong>SCA</strong> (Software Composition Analysis): third-party dependency risk.</li></ul><p>Commercial platforms (<a href=https://www.sonarsource.com/ target=_blank rel=noopener>Sonar</a>
+, <a href=https://snyk.io/ target=_blank rel=noopener>Snyk</a>
+,
+<a href=https://www.veracode.com/ target=_blank rel=noopener>Veracode</a>
+, <a href=https://www.blackduck.com/ target=_blank rel=noopener>Black Duck</a>
+) can exceed $15k/year. Open-source
+alternatives: <a href=https://docs.astral.sh/ruff/ target=_blank rel=noopener>Ruff</a>
+, <a href=https://github.com/microsoft/pyright target=_blank rel=noopener>Pyright</a>
+,
+<a href=https://mypy-lang.org/ target=_blank rel=noopener>Mypy</a>
+, and <a href=https://github.com/pypa/pip-audit target=_blank rel=noopener><code>pip-audit</code></a>
+.</p><p>The toolkit he used comes from <a href=https://astral.sh/ target=_blank rel=noopener>Astral</a>
+(Charlie Marsh&rsquo;s company, which announced on March 19 that
+it is joining OpenAI&rsquo;s Codex team): <strong>uv, Ruff, and ty</strong>, all written in Rust, all 10×–100× faster than the tools they
+replace.</p><ul><li><a href=https://docs.astral.sh/ruff/ target=_blank rel=noopener><strong>Ruff</strong></a>
+: linter and formatter, 900+ rules spanning bugs,
+<a href=https://peps.python.org/pep-0008/ target=_blank rel=noopener>PEP 8</a>
+style, dead code, security (<a href=https://bandit.readthedocs.io/ target=_blank rel=noopener>Bandit</a>
+rules), import sorting (<a href=https://pycqa.github.io/isort/ target=_blank rel=noopener>isort</a>
+), and docstrings. Configurable from <code>pyproject.toml</code>.
+Adopted by <a href=https://fastapi.tiangolo.com/ target=_blank rel=noopener>FastAPI</a>
+, <a href=https://pandas.pydata.org/ target=_blank rel=noopener>pandas</a>
+,
+<a href=https://airflow.apache.org/ target=_blank rel=noopener>Airflow</a>
+, and <a href=https://huggingface.co/ target=_blank rel=noopener>Hugging Face</a>
+.</li><li><a href=https://docs.astral.sh/ty/ target=_blank rel=noopener><strong>ty</strong></a>
+: type checker with gradual adoption, clear error messages, per-rule severity, and
+a built-in language server for <a href=https://code.visualstudio.com/ target=_blank rel=noopener>VS Code</a>
+and
+<a href=https://www.jetbrains.com/pycharm/ target=_blank rel=noopener>PyCharm</a>
+.</li><li><a href=https://docs.astral.sh/uv/ target=_blank rel=noopener><strong>uv</strong></a>
+: Python package and version manager.</li></ul><p>Agentic coding playbook: design workflows at the repo root, define skills for Ruff, ty, and uv, run them after every
+task, enforce with <a href=https://pre-commit.com/ target=_blank rel=noopener>pre-commit</a>
+hooks locally and
+<a href=https://docs.github.com/en/actions target=_blank rel=noopener>GitHub Actions</a>
+in CI. Demo repo:
+<a href=https://github.com/lmiguelvargasf/lint_fast_type_hard target=_blank rel=noopener>github.com/lmiguelvargasf/lint_fast_type_hard</a>
+.</p><h3 id=sunday-lightning-talks>Sunday Lightning Talks
+<a class=heading-link href=#sunday-lightning-talks><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><ul><li><strong>AI snow and guardrails.</strong> Opening talk on the two narratives emerging around heavy AI-agent use in teams: one camp
+says their codebase is &ldquo;full of AI snow&rdquo; and everything is horrible (cue the <a href=https://www.amazon.com/ target=_blank rel=noopener>Amazon</a>
+incident); the other says they&rsquo;re shipping faster and catching more edge cases. The speaker argued both can be right
+at the same time, and the variable is the strength of the software guardrails. Guardrails are &ldquo;rough roads you can&rsquo;t
+escape&rdquo; and scale independent of PR volume; without them, a 4× productivity boost means a 4× boost in bad PRs reaching
+production. When an AI PR causes an incident, the blame goes to the model (<em>&ldquo;the model is the only one who can&rsquo;t
+defend itself&rdquo;</em>) instead of to the process that let it through. The right fix is boring: unit test coverage,
+integration tests, blue-green canaries. His challenge: find one code-review comment you&rsquo;ve given that says &ldquo;don&rsquo;t do
+that&rdquo; and find a way to automate it so it can&rsquo;t ship.</li><li><strong>Andy on spec-driven development with Cursor.</strong> A year into vibe-coding with <a href=https://cursor.com/ target=_blank rel=noopener>Cursor</a>
+, Andy hit
+the wall where each fresh chat forgot his conventions. His fix was <strong>context engineering</strong>: a <code>.cursor/rules</code> file
+pointing Cursor at a <code>specs/</code> folder with feature files, a project constitution, a development process document, and
+Gherkin BDD standards. He demoed &ldquo;Buggy Board&rdquo;, a bug-tracker web app he&rsquo;d been iterating on, adding a <code>creator</code> field
+live on stage by having Cursor read the spec, update the <a href=https://cucumber.io/docs/gherkin/ target=_blank rel=noopener>Gherkin</a>
+scenarios, and
+implement the change end to end. The kicker: the stack was <a href=https://www.typescriptlang.org/ target=_blank rel=noopener>TypeScript</a>
+,
+<a href=https://nodejs.org/ target=_blank rel=noopener>Node</a>
+, <a href=https://react.dev/ target=_blank rel=noopener>React</a>
+, <a href=https://expressjs.com/ target=_blank rel=noopener>Express</a>
+, and
+<a href=https://www.sqlite.org/ target=_blank rel=noopener>SQLite</a>
+, and he&rsquo;d never written React or Express before. His line: <em>&ldquo;if you can describe it,
+you can do it.&rdquo;</em></li><li><strong><a href=https://trislee.github.io/pytexas-network/ target=_blank rel=noopener>Tristan Lee</a>
+</strong>(data journalist): a network visualization of PyTexas
+itself, built the night before. Pipeline: <a href=https://github.com/yt-dlp/yt-dlp target=_blank rel=noopener>yt-dlp</a>
+to download the conference video
+playlist, an ASR model (he used &ldquo;Vidya Therapy&rdquo; for speed) to transcribe, <a href=https://spacy.io/ target=_blank rel=noopener>spaCy</a>
+to extract
+entities, general cleanup (PyTexas is apparently a hard token for ASR), <a href=https://networkx.org/ target=_blank rel=noopener>NetworkX</a>
+for the
+graph, <a href=https://gephi.org/ target=_blank rel=noopener>Gephi</a>
+to lay out the nodes, and <a href=https://www.sigmajs.org/ target=_blank rel=noopener>Sigma.js</a>
+to render. Nodes are
+entities; edges connect two entities mentioned within ten words of each other. Clusters emerged for tooling/packaging,
+APIs, systems and containers, and a &ldquo;Zen of Python&rdquo; cluster. <em>&ldquo;Don&rsquo;t yell at me, I know Gephi and Sigma.js aren&rsquo;t
+Python, but hey, what can we do?&rdquo;</em> Live project:
+<a href=https://trislee.github.io/pytexas-network/ target=_blank rel=noopener>trislee.github.io/pytexas-network</a>
+.</li><li><strong>Al Sweigart on <a href=https://docs.python.org/3/library/turtle.html target=_blank rel=noopener>Turtle</a>
+.</strong> A tour of the standard-library module most
+people forget exists. Seymour Papert at MIT invented Turtle graphics in the &rsquo;70s/&rsquo;80s and every teaching environment
+has copied it since. Al has made the <a href=https://inventwithpython.com/ target=_blank rel=noopener>Simple Turtle Tutorial</a>
+, fractal examples in <em>The
+Recursive Book of Recursion</em>, Escher-style impossible-object generators inspired by Oscar Reutersvärd, <em>Tortuga</em> (a
+translation of <code>turtle.py</code> into non-English languages for accessibility), <em>Turtle SD</em> (shorter aliases), and
+<a href=https://scrollart.org/ target=_blank rel=noopener>scrollart.org</a>
+, where a <code>print</code>-in-a-loop fills the screen, then scrolls upward. Scroll art
+works in every language that has <code>print</code> and <code>random</code>.</li><li><strong>Joshua Cannon, &ldquo;You Ain&rsquo;t God&rdquo;.</strong> A non-technical talk on the way modern tech encourages us to treat ourselves as
+omniscient and omnipotent, illustrated with fake scripture references (<em>&ldquo;I can know anything about anything, for I
+know all things,&rdquo; Google-ations 8:8</em>). He asked the audience to close their eyes and imagine being an astronaut on the
+moon, then a deep-sea diver, then at Disney World with their kids behaving. Then: remember your last actual vacation.
+His frame: accept your finitude. Say no to things you could say yes to. Be honest with yourself and others. Get bored
+and wait. Do hard things because they&rsquo;re hard. The slide was titled <em>Heres what ya are</em> and listed: incongruent,
+contradictory, awkward, emotional, weak, short-sighted, mean, forgetful, obtuse, tired, a failure, and more.</li><li>A lightning talk framed as &ldquo;AI system thinking&rdquo;: Korean-language jokes, a new acronym set including <strong>AI DOS</strong> (AI
+Direct Operating System) and <strong>AASI</strong> (Advanced Advanced Artificial Super Intelligence), and a pitch for a company
+working on a &ldquo;vaccine&rdquo; for the social side effects of AI adoption.</li><li><strong>LLM mental-model talk</strong>: a front-end platform engineer on how Cursor and
+<a href=https://github.com/features/copilot target=_blank rel=noopener>Copilot</a>
+land in teams, and why disappointing results often trace back to a weak
+mental model of what an LLM is. His framing: LLMs are &ldquo;statistical pattern machines&rdquo; whose output is shaped by
+training data, so thinking of the LLM&rsquo;s output as &ldquo;my code&rdquo; misses the point; it&rsquo;s &ldquo;code we&rsquo;ve all contributed.&rdquo; He
+uses <strong>persona prompts</strong> via a Cursor system-prompt Markdown file to pick the voice the model writes in. On screen: a
+slide comparing book covers of Harry Percival&rsquo;s <em>Test-Driven Development with Python</em> (2017), <em>Architecture Patterns
+with Python</em> (2020), and <em>Test-Driven Development with Python, 3rd Edition</em> (2025) to show how the same author&rsquo;s
+thinking evolved across editions. Different personas (e.g., Django-era vs. Laravel-era) produce noticeably different
+code.</li><li>A pitch to come to <a href=https://ep2026.europython.eu/ target=_blank rel=noopener><strong>EuroPython 2026</strong></a>
+this summer, featuring a live Core Dev podcast
+episode with Guido van Rossum, Łukasz Langa, and Pablo Galindo Salgado. A quick audience poll: are your summer plans
+still the same, does Europe sound tempting, have you met someone here you want to talk to again. Most hands went up.</li><li><strong>Laura</strong> (PyTexas organizer; Mason Egger calls her his CFNO): <em>How to Organize the Monkeys and Make Sure They Can
+Peel Bananas</em>, a title someone else signed her up for. Tips from a decade of running community conferences: every
+community conference runs on a razor edge financially (one conference she knows pulled 70% of its revenue in the last
+two weeks); nobody reads emails, the website, or the sponsor prospectus, only the schedule, and only because they&rsquo;re
+going to show up late; every speaker runs over time, except when they don&rsquo;t and finish in ten minutes; everyone loses
+their badge on day two; order more swag than you think because &ldquo;everyone wants a memory&rdquo;; every plan fails, and what
+matters are the people who show up. Her ask of attendees: show up, help, participate, clap, ask questions, volunteer,
+share. Also: PyTexas attendees are weirdly obsessed with bananas.</li><li><strong>Mason Egger</strong> closed the conference.</li></ul><h2 id=hallway-track>Hallway Track
+<a class=heading-link href=#hallway-track><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>Most hallway conversations this year centered on using AI agents better: what worked for whom, which workflows held up
+under real projects, where people were still hitting walls. Hearing how different teams set up context, guardrails, and
+review loops was often more useful than the talks themselves. One new find out of those conversations was
+<a href=https://lumbergh.dev target=_blank rel=noopener>Lumbergh</a>
+, a self-hosted dashboard that streams and coordinates multiple AI coding sessions side
+by side (<a href=https://www.anthropic.com/claude-code target=_blank rel=noopener>Claude Code</a>
+, <a href=https://cursor.com/ target=_blank rel=noopener>Cursor</a>
+,
+<a href=https://aider.chat/ target=_blank rel=noopener>Aider</a>
+), surfaces real-time git activity, and lets you run git operations from a browser. Worth a
+look if you&rsquo;re running more than one agent at a time.</p><figure><img src=/posts/pytexas-2026-recap/lumbergh-terminal-session-manager.webp alt="Slide comparing Gastown (Yegge) and Lumbergh approaches to AI coding visibility" srcset="/posts/pytexas-2026-recap/lumbergh-terminal-session-manager_hu_e737e77ad5912145.webp 500w, /posts/pytexas-2026-recap/lumbergh-terminal-session-manager_hu_2047a56c5376170c.webp 800w" sizes="(min-width: 35em) 1200px, 100vw" width=1024 height=768 loading=lazy decoding=async></figure><h2 id=wrapping-up>Wrapping Up
+<a class=heading-link href=#wrapping-up><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>This was a great conference. Thank you to Mason Egger, Laura, the volunteers in tie-dye shirts, and everyone else who
+kept the whole thing running. Most of the weekend ran smoothly. The dinners on Friday and Saturday were great, in food
+quality and in atmosphere, and the crowd was friendly and open throughout.</p><p>If you&rsquo;re on the fence about next year: PyTexas is a strong single-track conference, and the size fits meeting people
+instead of losing them in a hallway. Worth making the trip.</p><p>One piece of feedback on the format. This year had Open Spaces on both days, which I love in principle. In practice,
+running them alongside the main-stage talks meant Open Spaces attendance looked thinner than the interest warranted.
+Running them in a dedicated block (or without competing with the talks) would let them flourish. Small change, big
+payoff.</p><p>A final thanks to the many attendees, too many to enumerate, who came up to ask questions, share feedback on the Friday
+tutorial, trade notes on AI agents and packaging and everything in between, or just chat in the hallway.</p></div><aside class=post-toc><nav class=toc-content><nav id=TableOfContents><ol><li><a href=#friday>Friday</a></li><li><a href=#saturday>Saturday</a><ol><li><a href=#dawn-wages-keynote-fine-tune-your-future>Dawn Wages keynote: Fine-Tune Your Future</a></li><li><a href=#moshe-zadka-python-as-your-dsl>Moshe Zadka: Python as Your DSL</a></li><li><a href=#adam-gordon-bell-i-built-an-ai-running-coach-that-actually-remembers-my-training>Adam Gordon Bell: I Built an AI Running Coach (That Actually Remembers My Training)</a></li><li><a href=#maria-silvia-mielniczuk-using-mcp-to-build-safe-auditable-ai-systems-in-python>Maria Silvia Mielniczuk: Using MCP to Build Safe, Auditable AI Systems in Python</a></li><li><a href=#dr-james-a-bednar-anaconda-data-visualization-in-python-sponsored>Dr. James A. Bednar (Anaconda): Data Visualization in Python (Sponsored)</a></li><li><a href=#christopher-ariza-why-installing-python-packages-is-still-a-security-risk>Christopher Ariza: Why Installing Python Packages Is Still a Security Risk</a></li><li><a href=#al-sweigart-failed-experiments-in-vibe-coding>Al Sweigart: Failed Experiments in Vibe Coding</a></li><li><a href=#saturday-lightning-talks>Saturday Lightning Talks</a></li></ol></li><li><a href=#sunday>Sunday</a><ol><li><a href=#hynek-schlawack-keynote-intentional-software-design>Hynek Schlawack keynote: Intentional Software Design</a></li><li><a href=#jacob-coffee-the-bakery-how-pep810-sped-up-my-bread-operations-business>Jacob Coffee: The Bakery, How PEP810 Sped Up My Bread Operations Business</a></li><li><a href=#kassandra-keeton-python-in-the-browser-building-interactive-documentation-with-mkdocs--jupyterlite>Kassandra Keeton: Python in the Browser, Building Interactive Documentation with MkDocs & JupyterLite</a></li><li><a href=#sophia-solomon-introducing-meowpy-observability-for-the-internet-of-living-things>Sophia Solomon: Introducing Meow&rsquo;py, Observability for the Internet of Living Things</a></li><li><a href=#charlie-lin-tying-up-loose-threads-making-your-project-no-gil-ready>Charlie Lin: Tying Up Loose Threads, Making Your Project No-GIL Ready</a></li><li><a href=#avik-basu-upgrading-python-clis-from-scripts-to-interactive-tools>Avik Basu: Upgrading Python CLIs, From Scripts to Interactive Tools</a></li><li><a href=#miguel-vargas-lint-fast-type-hard-elevating-python-code-quality-with-modern-ultra-fast-tooling>Miguel Vargas: Lint Fast, Type Hard. Elevating Python Code Quality with Modern, Ultra-Fast Tooling</a></li><li><a href=#sunday-lightning-talks>Sunday Lightning Talks</a></li></ol></li><li><a href=#hallway-track>Hallway Track</a></li><li><a href=#wrapping-up>Wrapping Up</a></li></ol></nav></nav></aside><script>(function(){const t=document.querySelector(".toc-content");if(!t)return;const n=document.querySelectorAll(".post-content h2[id], .post-content h3[id], .post-content h4[id], .post-content h5[id], .post-content h6[id]");if(!n.length)return;const s=new Map;t.querySelectorAll('a[href^="#"]').forEach(function(e){s.set(e.getAttribute("href").slice(1),e)});function i(){const e=window.scrollY,i=e+window.innerHeight,t=[];let s=null,o=1/0;return n.forEach(function(n){const a=n.offsetTop,r=a+n.offsetHeight;if(r>=e&&a<=i){t.push(n.id);const i=Math.abs(a-e);i<o&&(o=i,s=n.id)}}),{visible:t,topmost:s}}function o(){const{visible:e,topmost:t}=i();s.forEach(function(n,s){n.classList.toggle("toc-visible",e.includes(s)),n.classList.toggle("toc-active",s===t)})}let e=!1;window.addEventListener("scroll",function(){e||(window.requestAnimationFrame(function(){o(),e=!1}),e=!0)}),o()})()</script></div><footer><div class=related-posts><h3>Related Posts</h3><ul><li><a href=https://bernat.tech/posts/securing-python-supply-chain/>Defense in Depth: A Practical Guide to Python Supply Chain Security</a>
+<span class=date>- 2026-03-10</span></li><li><a href=https://bernat.tech/posts/growing-pain/>Python packaging - Growing Pains</a>
+<span class=date>- 2019-02-07</span></li><li><a href=https://bernat.tech/posts/pep-517-518/>Python packaging - Past, Present, Future</a>
+<span class=date>- 2019-02-07</span></li><li><a href=https://bernat.tech/posts/pep-517-and-python-packaging/>The state of Python Packaging</a>
+<span class=date>- 2019-02-07</span></li><li><a href=https://bernat.tech/posts/version-numbers/>Version numbers: how to use them?</a>
+<span class=date>- 2020-05-16</span></li></ul></div></footer></article></section></div><footer class=footer><section class=container><b>Opinions are my own</b>.
+<a href=https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml>Updated</a>&nbsp;<time id=footer-ts datetime=2026-04-20T14:43:52.000Z>2026-04-20T14:43:52.000Z&nbsp;UTC</time>
+via <a href=https://github.com/gaborbernat/bernat-tech/commit/3f9410d9ceb732b856491685a54db4219f87976e>3f9410d9c</a>.
+© 2018-2026
+<script defer src=/js/footer.min.d3f865d692fc079096014431769f338c835dbe4e2d0b5891f541d203b10af60e.js integrity="sha256-0/hl1pL8B5CWAUQxdp8zjINdvk4tC1iR9UHSA7EK9g4="></script><script defer src=/js/code-copy.min.00a564933606d3f06a8eef836cbec7a10f3b8d3c0126d0f041ec25622962ea46.js integrity="sha256-AKVkkzYG0/Bqju+DbL7HoQ87jTwBJtDwQewlYili6kY="></script></section></footer><script type=module>
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+
+  const getTheme = () => {
+    const body = document.body;
+
+    
+    if (body.classList.contains('colorscheme-dark')) {
+      return 'dark';
+    }
+
+    
+    if (body.classList.contains('colorscheme-light')) {
+      return 'default';
+    }
+
+    
+    if (body.classList.contains('colorscheme-auto')) {
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'default';
+    }
+
+    
+    return 'default';
+  };
+
+  
+  document.querySelectorAll('pre.mermaid').forEach((diagram) => {
+    diagram.setAttribute('data-mermaid-code', diagram.textContent);
+  });
+
+  
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: getTheme()
+  });
+
+  
+  document.addEventListener('themeChanged', async () => {
+    const newTheme = getTheme();
+
+    
+    mermaid.initialize({ theme: newTheme });
+
+    
+    const diagrams = document.querySelectorAll('pre.mermaid');
+
+    
+    for (const diagram of diagrams) {
+      const code = diagram.getAttribute('data-mermaid-code');
+      const id = 'mermaid-' + Math.random().toString(36).substr(2, 9);
+
+      try {
+        const { svg } = await mermaid.render(id, code);
+        diagram.innerHTML = svg;
+      } catch (err) {
+        console.error('Failed to re-render mermaid diagram:', err);
+      }
+    }
+  });
+</script></main><script src=/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "3ead932f454449a799915b1721c18874"}'></script></body></html>

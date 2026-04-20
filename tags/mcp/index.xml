@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Mcp on Bernát Gábor — Python packaging, tox, virtualenv &amp; open source</title><link>https://bernat.tech/tags/mcp/</link><description>Engineering notes from Bernát Gábor — PyPA maintainer of tox, virtualenv, pipx, filelock, and platformdirs. Python packaging, type hints, and supply chain security.</description><generator>Hugo 0.160.1</generator><language>en</language><lastBuildDate>Sun, 19 Apr 2026 22:00:00 +0000</lastBuildDate><atom:link href="https://bernat.tech/tags/mcp/index.xml" rel="self" type="application/rss+xml"/><item><title>PyTexas 2026 Recap: Keynotes, MCP, Free-Threading, PEP 810, Supply Chain</title><link>https://bernat.tech/posts/pytexas-2026-recap/</link><pubDate>Sun, 19 Apr 2026 22:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pytexas-2026-recap/</guid><description>&lt;p&gt;&lt;a href="https://www.pytexas.org/" target="_blank" rel="noopener"&gt;PyTexas&lt;/a&gt;
+is the annual Python conference held in Austin, Texas. The 2026 edition ran April
+17–19 at the &lt;a href="https://library.austintexas.gov/central-library" target="_blank" rel="noopener"&gt;Austin Central Library&lt;/a&gt;
+in downtown Austin.&lt;/p&gt;
+&lt;div class="alert alert-info"&gt;
+&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-info" aria-hidden="true"&gt;&lt;/i&gt; TLDR:&lt;/p&gt;
+&lt;p&gt;PyTexas 2026 ran April 17–19 in Austin. Friday was tutorials, Saturday and Sunday were talks with two keynotes and two
+lightning-talk blocks. A few themes kept coming back across unrelated talks:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Sovereignty.&lt;/strong&gt; The word came up in two different keynotes. Hynek Schlawack: &lt;em&gt;&amp;ldquo;the domain model must be
+sovereign&amp;rdquo;&lt;/em&gt;. Design it first, translate at the edges. Dawn Wages: &lt;em&gt;&amp;ldquo;sovereignty over your stack&amp;rdquo;&lt;/em&gt; as one of her
+three pillars for both model and career specialization.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Agents should write code, not decide what to write.&lt;/strong&gt; Peter Sobot&amp;rsquo;s Seven Stages of AI Grief ended on that line.
+Al Sweigart argued &amp;ldquo;agentic engineering&amp;rdquo; is vibe coding with better marketing, and that almost-right is worse than
+wrong. Maria Silvia Mielniczuk&amp;rsquo;s MCP talk built the same idea into an architecture: models suggest, only the server
+executes. Adam Gordon Bell&amp;rsquo;s running coach split deterministic work (plain Python) from interpretation (LLM). The
+Sunday opener framed it bluntly: when AI ships a bad PR, fix the process, not the model.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Code quality is an input to AI productivity.&lt;/strong&gt; Miguel Vargas&amp;rsquo;s framing: AI agents produce cleaner, safer code in
+codebases that are already clean, safe, and typed, so Ruff, ty, and uv matter more now.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;The supply chain is still the attack surface.&lt;/strong&gt; Christopher Ariza on why &lt;code&gt;pip install&lt;/code&gt; still runs arbitrary code,
+with &lt;code&gt;.pth&lt;/code&gt; files, &lt;code&gt;sitecustomize.py&lt;/code&gt;, and &lt;code&gt;setup.py&lt;/code&gt; as the specific places to pay attention.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;CPython itself is getting faster.&lt;/strong&gt; Jacob Coffee on &lt;a href="https://peps.python.org/pep-0810/" target="_blank" rel="noopener"&gt;PEP 810&lt;/a&gt;
+lazy imports for
+startup wins; Charlie Lin on the free-threaded build and what it takes to make an extension module safe under it.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This post details the takeaways from each talk I attended, in schedule order.&lt;/p&gt;</description><category>python</category><category>pytexas</category><category>conference</category><category>austin</category><category>ai</category><category>llm</category><category>mcp</category><category>keynote</category><category>hynek</category><category>packaging</category><category>supply-chain</category><category>pep-810</category><category>free-threading</category><category>ruff</category><category>uv</category><category>ty</category><category>type-checking</category><category>observability</category><category>cli</category></item></channel></rss>
