@@ -492,7 +492,7 @@ correct.
   callable with no required arguments as serializable, so every GET request over the list silently ran the method and
   marked books as returned.
 
-- **The Seven Stages of AI Grief** by **Peter Sobot** (Research Engineering Lead, Artist-First AI Music at Spotify),
+- **The Seven Stages of AI Grief** by **Peter Sobot**,
   describing his own arc with coding agents:
 
   1. **Denial, "Why use this?"** "These tools are overhyped, my workflow works fine." The coding agent suggests walking
