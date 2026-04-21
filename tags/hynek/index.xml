@@ -7,9 +7,9 @@ in downtown Austin.&lt;/p&gt;
 &lt;p&gt;PyTexas 2026 ran April 17–19 in Austin. Friday was tutorials, Saturday and Sunday were talks with two keynotes and two
 lightning-talk blocks. A few themes kept coming back across unrelated talks:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Design deliberately.&lt;/strong&gt; A thread across both keynotes. Hynek Schlawack: the domain model is &lt;em&gt;&amp;ldquo;the precious&amp;rdquo;&lt;/em&gt; —
-design it first, translate at the edges. Dawn Wages: ownership over your stack as one of her three pillars for model
-and career specialization.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sovereignty.&lt;/strong&gt; The word came up in two different keynotes. Hynek Schlawack: &lt;em&gt;&amp;ldquo;the domain model must be
+sovereign&amp;rdquo;&lt;/em&gt;. Design it first, translate at the edges. Dawn Wages: &lt;em&gt;&amp;ldquo;sovereignty over your stack&amp;rdquo;&lt;/em&gt; as one of her
+three pillars for both model and career specialization.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Agents should write code, not decide what to write.&lt;/strong&gt; Peter Sobot&amp;rsquo;s Seven Stages of AI Grief ended on that line.
 Al Sweigart argued &amp;ldquo;agentic engineering&amp;rdquo; is vibe coding with better marketing, and that almost-right is worse than
 wrong. Maria Silvia Mielniczuk&amp;rsquo;s MCP talk built the same idea into an architecture: models suggest, only the server
