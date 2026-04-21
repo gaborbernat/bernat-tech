@@ -557,10 +557,10 @@ makes this worse because a model can mock half the universe without feeling the 
    data at the boundary, and keep the domain model *"completely isolated from everything that is not part of the
    domain."*
 
-He illustrated the domain-first approach with Matt Groer's PyKSC 2024 talk *The Rising Sea*: an Advent of Code puzzle
-about moving boxes between harbor stacks. The elegant solution starts by modeling `Harbor`, `Stack`, and `Move` classes
-that encapsulate business logic with their data, then keeps the ugly input-parsing code isolated in a separate module
-Matt called **"the darkness"**. The maxim: *structure your data so that the problem solves itself*.
+He illustrated the domain-first approach with Matt Drury's PyCascades 2024 talk *The Rising Sea*: an Advent of Code
+puzzle about moving boxes between harbor stacks. The elegant solution starts by modeling `Harbor`, `Stack`, and `Move`
+classes that encapsulate business logic with their data, then keeps the ugly input-parsing code isolated in a separate
+module Matt called **"the darkness"**. The maxim: *structure your data so that the problem solves itself*.
 
 Hynek's worked example: international postal addresses. The "one table, all fields nullable" database shape is honest
 about storage but useless for business logic, because you end up checking `if field is None` everywhere. Replace it at
