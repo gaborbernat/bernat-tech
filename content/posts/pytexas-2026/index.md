@@ -406,9 +406,9 @@ line with semicolons" is the recurring theme.
   [CodeArtifact](https://aws.amazon.com/codeartifact/)) to curate the set of packages available, bounded by user
   circumvention.
 - **Vulnerability scanners**: [Dependabot](https://docs.github.com/en/code-security/dependabot),
-  [`pip-audit`](https://github.com/pypa/pip-audit). He also introduced his own tool, **Fetor**, a system-wide scanner
-  that inspects `.pth`, `sitecustomize.py`, and `usercustomize.py` contents, plus an MCP variant that ensures agents
-  install the latest non-vulnerable versions.
+  [`pip-audit`](https://github.com/pypa/pip-audit). He also introduced his own tool,
+  [fetter](https://github.com/fetter-io/fetter-py), a system-wide scanner that inspects `.pth`, `sitecustomize.py`, and
+  `usercustomize.py` contents, plus an MCP variant that ensures agents install the latest non-vulnerable versions.
 - **Canary tokens**: fake AWS keys and API tokens dropped in the expected locations on developer machines. If anything
   reads or exfiltrates them, you get an alert. Cheap, proactive, high signal.
 
