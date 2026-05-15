@@ -388,7 +388,7 @@ accepted in 2023. Current members:
 
 - [Carl Meyer](https://github.com/carljm) — Astral, `ty` *(on stage in person)*
 - [Jelle Zijlstra](https://github.com/JelleZijlstra) — typeshed maintainer, CPython typing module *(on stage in person)*
-- [Rebecca Chen](https://github.com/rchen152) — Google, pytype *(on stage in person)*
+- [Rebecca Chen](https://github.com/rchen152) — Meta, Pyrefly *(on stage in person)*
 - [Jukka Lehtosalo](https://github.com/JukkaL) — mypy lead
 - [Dave Halter](https://github.com/davidhalter) — Jedi, Zuban (joined March 2026 after Eric Traut stepped down)
 
@@ -396,9 +396,12 @@ The panel opened with a state-of-the-world on type checkers. Actively maintained
 [Pyrefly](https://pyrefly.org/) (Meta), [`ty`](https://docs.astral.sh/ty/) (Astral),
 [Zuban](https://github.com/zubanls/zuban) (David Halter),
 [Pycroscope](https://github.com/JelleZijlstra/pycroscope) (Jelle Zijlstra),
-[Pyright](https://github.com/microsoft/pyright) (Microsoft),
-[`mypy`](https://mypy-lang.org/), and [pytype](https://github.com/google/pytype) (Google). Meta's Pyre is no longer
-in active development; it has been superseded by Pyrefly.
+[Pyright](https://github.com/microsoft/pyright) (Microsoft), and [`mypy`](https://mypy-lang.org/). Meta's Pyre is no
+longer in active development; it has been superseded by Pyrefly.
+[pytype](https://github.com/google/pytype) (Google) is being wound down too; Google has announced Python 3.12 as the
+last supported version, and pytype has been dropped from the
+[typing conformance leaderboard](https://htmlpreview.github.io/?https://github.com/python/typing/blob/main/conformance/results/results.html)
+(now covering `mypy`, Pycroscope, Pyrefly, Pyright, `ty`, and Zuban).
 
 Carl Meyer walked through what the council has handled over the past year: PEP recommendations on typing-adjacent
 proposals, plus a longer queue of spec clarifications that did not warrant a full PEP.
