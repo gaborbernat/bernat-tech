@@ -38,6 +38,6 @@ repos:
       - id: yamlfmt
         args: ["--formatter", "max_line_length=120,retain_line_breaks=true"]
   - repo: https://github.com/zizmorcore/zizmor-pre-commit
-    rev: v1.24.1
+    rev: v1.25.0
     hooks:
       - id: zizmor
