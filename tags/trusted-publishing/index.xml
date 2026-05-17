@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Trusted-Publishing on Bernát Gábor — Python packaging, tox, virtualenv &amp; open source</title><link>https://bernat.tech/tags/trusted-publishing/</link><description>Engineering notes from Bernát Gábor — PyPA maintainer of tox, virtualenv, pipx, filelock, and platformdirs. Python packaging, type hints, and supply chain security.</description><generator>Hugo 0.161.1</generator><language>en</language><lastBuildDate>Fri, 15 May 2026 23:00:00 +0000</lastBuildDate><atom:link href="https://bernat.tech/tags/trusted-publishing/index.xml" rel="self" type="application/rss+xml"/><item><title>PyCon US 2026 Packaging Summit Recap</title><link>https://bernat.tech/posts/pycon-us-2026-packaging-summit-recap/</link><pubDate>Fri, 15 May 2026 23:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pycon-us-2026-packaging-summit-recap/</guid><description>&lt;p&gt;The &lt;a href="https://us.pycon.org/2026/events/packaging-summit/" target="_blank" rel="noopener"&gt;PyCon US 2026 Packaging Summit&lt;/a&gt;
+ran Friday May 15, 2026,
+from 1:45 PM to 5:45 PM in Room 201A of the Long Beach Convention Center. Three talks, nine lightning talks, six
+roundtable discussions. Organized by &lt;a href="https://pradyunsg.me/" target="_blank" rel="noopener"&gt;Pradyun Gedam&lt;/a&gt;
+,
+&lt;a href="https://github.com/CAM-Gerlach" target="_blank" rel="noopener"&gt;C.A.M. Gerlach&lt;/a&gt;
+, and &lt;a href="https://github.com/jezdez" target="_blank" rel="noopener"&gt;Jannis Leidel&lt;/a&gt;
+. This recap is for
+anyone who could not be in the room.&lt;/p&gt;
+&lt;div class="alert alert-info"&gt;
+&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-info" aria-hidden="true"&gt;&lt;/i&gt; TLDR:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Emma Smith&amp;rsquo;s revised &lt;a href="https://peps.python.org/pep-0777/" target="_blank" rel="noopener"&gt;PEP 777 (Wheel 2.0)&lt;/a&gt;
+is a minimal change with sub-PEPs
+layered on top; the first sub-PEP proposes Zstandard compression for ~25% smaller wheels.&lt;/li&gt;
+&lt;li&gt;Mike Fiedler brought three PyPI abuse vectors (persistent state, open-ended releases, PyPI as a CDN), framed
+by 3× growth against 1× resources (~24,000 new packages per month, up from ~8,000) and a single full-time
+PyPI safety and security engineer.&lt;/li&gt;
+&lt;li&gt;Mahe Iram Khan argued conda and pip are two parallel ecosystems, not two competing tools.&lt;/li&gt;
+&lt;li&gt;Lightning talks: &lt;a href="https://peps.python.org/pep-0772/" target="_blank" rel="noopener"&gt;PEP 772 Packaging Council&lt;/a&gt;
+approved (Barry Warsaw), mobile
+wheel pipeline live (Malcolm Smith), Coherent + Compile-to-Flit (Jason Coombs), wheel variants for AI
+accelerators and shared malware scanning (Joongi Kim), conda-pypi (Daniel Holth), Nebi (Dharhas Pothina).&lt;/li&gt;
+&lt;li&gt;Roundtables: &lt;a href="https://peps.python.org/pep-0803/" target="_blank" rel="noopener"&gt;PEP 803 abi3t&lt;/a&gt;
+, Wheel 2.0 hardening, cross-platform builds,
+CVE propagation, and &lt;a href="https://github.com/notatallshaw/nab" target="_blank" rel="noopener"&gt;nab&lt;/a&gt;
+(Damian Shaw&amp;rsquo;s pure-Python resolver aimed at
+pip swap-in).&lt;/li&gt;
+&lt;li&gt;Involved in Python packaging? Consider running for the Packaging Council this fall or becoming a voting
+&lt;a href="https://www.python.org/psf/membership/" target="_blank" rel="noopener"&gt;PSF member&lt;/a&gt;
+to nominate and vote.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;&lt;p&gt;For background, here are the packaging-topic PEPs resolved in the year leading up to the summit (January 2025
+through May 2026), newest first.&lt;/p&gt;</description><category>python</category><category>pycon</category><category>pycon-us</category><category>packaging-summit</category><category>packaging</category><category>pypi</category><category>wheel</category><category>pep-777</category><category>pep-694</category><category>pep-772</category><category>pep-817</category><category>pep-825</category><category>pep-803</category><category>conda</category><category>trusted-publishing</category><category>supply-chain</category><category>mobile</category><category>beeware</category><category>wheel-variants</category></item></channel></rss>

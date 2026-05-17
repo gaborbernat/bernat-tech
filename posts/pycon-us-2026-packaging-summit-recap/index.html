@@ -1,0 +1,639 @@
+<!doctype html><html lang=en><head><title>PyCon US 2026 Packaging Summit Recap · Bernát Gábor — Python packaging, tox, virtualenv & open source</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Bernát Gábor"><meta name=description content="Per-talk notes from the PyCon US 2026 Packaging Summit in Long Beach: Emma Smith on Wheel 2.0 and Zstandard compression, Mike Fiedler on PyPI abuse vectors, Mahe Iram Khan on ecosystems, lightning talks on PEP 772, mobile wheels, AI accelerator variants, and the roundtable discussions."><meta name=keywords content="python packaging,tox,virtualenv,pipx,pep 517,pep 518,type hints,mypy,python supply chain,sbom,bernat gabor"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://bernat.tech/posts/pycon-us-2026-packaging-summit-recap/mike-fiedler-pypi-as-cdn.webp"><meta name=twitter:title content="PyCon US 2026 Packaging Summit Recap"><meta name=twitter:description content="Per-talk notes from the PyCon US 2026 Packaging Summit in Long Beach: Emma Smith on Wheel 2.0 and Zstandard compression, Mike Fiedler on PyPI abuse vectors, Mahe Iram Khan on ecosystems, lightning talks on PEP 772, mobile wheels, AI accelerator variants, and the roundtable discussions."><meta property="og:url" content="https://bernat.tech/posts/pycon-us-2026-packaging-summit-recap/"><meta property="og:site_name" content="Bernát Gábor — Python packaging, tox, virtualenv & open source"><meta property="og:title" content="PyCon US 2026 Packaging Summit Recap"><meta property="og:description" content="Per-talk notes from the PyCon US 2026 Packaging Summit in Long Beach: Emma Smith on Wheel 2.0 and Zstandard compression, Mike Fiedler on PyPI abuse vectors, Mahe Iram Khan on ecosystems, lightning talks on PEP 772, mobile wheels, AI accelerator variants, and the roundtable discussions."><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-05-15T23:00:00+00:00"><meta property="article:modified_time" content="2026-05-16T23:31:59-07:00"><meta property="article:tag" content="Python"><meta property="article:tag" content="Pycon"><meta property="article:tag" content="Pycon-Us"><meta property="article:tag" content="Packaging-Summit"><meta property="article:tag" content="Packaging"><meta property="article:tag" content="Pypi"><meta property="og:image" content="https://bernat.tech/posts/pycon-us-2026-packaging-summit-recap/mike-fiedler-pypi-as-cdn.webp"><link rel=canonical href=https://bernat.tech/posts/pycon-us-2026-packaging-summit-recap/><link rel=preload href=/fonts/fa-brands-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-regular-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-solid-900.woff2 as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.4b392a85107b91dbdabc528edf014a6ab1a30cd44cafcd5325c8efe796794fca.css integrity="sha256-SzkqhRB7kdvavFKO3wFKarGjDNRMr81TJcjv55Z5T8o=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.ad48f476275974885bdc03d5251e3cdbe1678c54a63ff772376b0ed2adc468dd.css integrity="sha256-rUj0didZdIhb3APVJR482+FnjFSmP/dyN2sO0q3EaN0=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/custom.min.0f3697d56074288b7733c74c81e49aee7b69c7fa8fa552576aafc54a7c6c796c.css integrity="sha256-DzaX1WB0KIt3M8dMgeSa7ntpx/qPpVJXaq/FSnxseWw=" crossorigin=anonymous media=screen><link rel=icon type=image/svg+xml href=/images/favicon.svg sizes=any><link rel=icon type=image/png href=/img/android-chrome-192x192.png sizes=32x32><link rel=icon type=image/png href=/img/android-chrome-192x192.png sizes=16x16><link rel=apple-touch-icon href=/img/android-chrome-192x192.png><link rel=apple-touch-icon sizes=180x180 href=/img/android-chrome-192x192.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5><link rel=preconnect href=https://github.com crossorigin><link rel=preconnect href=https://img.youtube.com crossorigin><link rel=preconnect href=https://static.cloudflareinsights.com crossorigin><link rel=me href=https://fosstodon.org/@gaborbernat><meta name=twitter:site content="@gjbernat"><meta name=twitter:creator content="@gjbernat"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Bernát Gábor","sameAs":["https://github.com/gaborbernat/","https://twitter.com/gjbernat/","https://bsky.app/profile/gjbernat.bsky.social","https://fosstodon.org/@gaborbernat","https://www.linkedin.com/in/gaborbernat/","https://pypi.org/user/gaborbernat/"],"url":"https://bernat.tech/about/"},"dateModified":"2026-05-16T23:31:59-07:00","datePublished":"2026-05-15T23:00:00Z","description":"Per-talk notes from the PyCon US 2026 Packaging Summit in Long Beach: Emma Smith on Wheel 2.0 and Zstandard compression, Mike Fiedler on PyPI abuse vectors, Mahe Iram Khan on ecosystems, lightning talks on PEP 772, mobile wheels, AI accelerator variants, and the roundtable discussions.","headline":"PyCon US 2026 Packaging Summit Recap","image":"https://bernat.tech/posts/pycon-us-2026-packaging-summit-recap/mike-fiedler-pypi-as-cdn.webp","inLanguage":"en","keywords":"python, pycon, pycon-us, packaging-summit, packaging, pypi, wheel, pep-777, pep-694, pep-772, pep-817, pep-825, pep-803, conda, trusted-publishing, supply-chain, mobile, beeware, wheel-variants","mainEntityOfPage":{"@id":"https://bernat.tech/posts/pycon-us-2026-packaging-summit-recap/","@type":"WebPage"},"publisher":{"@type":"Person","name":"Bernát Gábor","sameAs":["https://github.com/gaborbernat/","https://twitter.com/gjbernat/","https://bsky.app/profile/gjbernat.bsky.social","https://fosstodon.org/@gaborbernat","https://www.linkedin.com/in/gaborbernat/","https://pypi.org/user/gaborbernat/"],"url":"https://bernat.tech/about/"},"url":"https://bernat.tech/posts/pycon-us-2026-packaging-summit-recap/","wordCount":5106}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://bernat.tech/","name":"Home","position":1},{"@type":"ListItem","item":"https://bernat.tech/posts/","name":"Blog","position":2},{"@type":"ListItem","item":"https://bernat.tech/posts/pycon-us-2026-packaging-summit-recap/","name":"PyCon US 2026 Packaging Summit Recap","position":3}]}</script></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><a class=navigation-title href=https://bernat.tech/>Bernát Gábor — Python packaging, tox, virtualenv & open source
+</a><input type=checkbox id=menu-toggle>
+<label class="menu-button float-right" for=menu-toggle><i class="fa-solid fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/posts>Blog</a></li><li class=navigation-item><a class=navigation-link href=/presentations>Presentations</a></li><li class=navigation-item><a class=navigation-link href=/about>About</a></li><li class=navigation-item><a class=navigation-link href=/tags>Tags</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://bernat.tech/posts/pycon-us-2026-packaging-summit-recap/>PyCon US 2026 Packaging Summit Recap</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa-solid fa-calendar" aria-hidden=true></i>
+<time datetime=2026-05-15T23:00:00Z>2026-05-15
+</time></span><span class=last-updated><i class="fa-solid fa-pen-to-square" aria-hidden=true></i>
+Updated
+<time datetime=2026-05-16T23:31:59-07:00>2026-05-16
+</time></span><span class=reading-time><i class="fa-solid fa-clock" aria-hidden=true></i>
+24-minute read</span></div><div class=tags><i class="fa-solid fa-tag" aria-hidden=true></i>
+<span class=tag><a href=/tags/python/>Python</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/pycon/>Pycon</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/pycon-us/>Pycon-Us</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/packaging-summit/>Packaging-Summit</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/packaging/>Packaging</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/pypi/>Pypi</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/wheel/>Wheel</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/pep-777/>Pep-777</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/pep-694/>Pep-694</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/pep-772/>Pep-772</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/pep-817/>Pep-817</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/pep-825/>Pep-825</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/pep-803/>Pep-803</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/conda/>Conda</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/trusted-publishing/>Trusted-Publishing</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/supply-chain/>Supply-Chain</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/mobile/>Mobile</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/beeware/>Beeware</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/wheel-variants/>Wheel-Variants</a></span></div></div></header><div class="post-wrapper has-toc"><div class=post-content><p>The <a href=https://us.pycon.org/2026/events/packaging-summit/ target=_blank rel=noopener>PyCon US 2026 Packaging Summit</a>
+ran Friday May 15, 2026,
+from 1:45 PM to 5:45 PM in Room 201A of the Long Beach Convention Center. Three talks, nine lightning talks, six
+roundtable discussions. Organized by <a href=https://pradyunsg.me/ target=_blank rel=noopener>Pradyun Gedam</a>
+,
+<a href=https://github.com/CAM-Gerlach target=_blank rel=noopener>C.A.M. Gerlach</a>
+, and <a href=https://github.com/jezdez target=_blank rel=noopener>Jannis Leidel</a>
+. This recap is for
+anyone who could not be in the room.</p><div class="alert alert-info"><p class=alert-title><i class="fa-solid fa-circle-info" aria-hidden=true></i> TLDR:</p><ul><li>Emma Smith&rsquo;s revised <a href=https://peps.python.org/pep-0777/ target=_blank rel=noopener>PEP 777 (Wheel 2.0)</a>
+is a minimal change with sub-PEPs
+layered on top; the first sub-PEP proposes Zstandard compression for ~25% smaller wheels.</li><li>Mike Fiedler brought three PyPI abuse vectors (persistent state, open-ended releases, PyPI as a CDN), framed
+by 3× growth against 1× resources (~24,000 new packages per month, up from ~8,000) and a single full-time
+PyPI safety and security engineer.</li><li>Mahe Iram Khan argued conda and pip are two parallel ecosystems, not two competing tools.</li><li>Lightning talks: <a href=https://peps.python.org/pep-0772/ target=_blank rel=noopener>PEP 772 Packaging Council</a>
+approved (Barry Warsaw), mobile
+wheel pipeline live (Malcolm Smith), Coherent + Compile-to-Flit (Jason Coombs), wheel variants for AI
+accelerators and shared malware scanning (Joongi Kim), conda-pypi (Daniel Holth), Nebi (Dharhas Pothina).</li><li>Roundtables: <a href=https://peps.python.org/pep-0803/ target=_blank rel=noopener>PEP 803 abi3t</a>
+, Wheel 2.0 hardening, cross-platform builds,
+CVE propagation, and <a href=https://github.com/notatallshaw/nab target=_blank rel=noopener>nab</a>
+(Damian Shaw&rsquo;s pure-Python resolver aimed at
+pip swap-in).</li><li>Involved in Python packaging? Consider running for the Packaging Council this fall or becoming a voting
+<a href=https://www.python.org/psf/membership/ target=_blank rel=noopener>PSF member</a>
+to nominate and vote.</li></ul></div><p>For background, here are the packaging-topic PEPs resolved in the year leading up to the summit (January 2025
+through May 2026), newest first.</p><p>Accepted or Final:</p><ul><li><a href=https://peps.python.org/pep-0772/ target=_blank rel=noopener>PEP 772 — Packaging Council governance process</a>
+, Accepted 2026-04-16</li><li><a href=https://peps.python.org/pep-0783/ target=_blank rel=noopener>PEP 783 — Emscripten Packaging</a>
+, Accepted 2026-04-06</li><li><a href=https://peps.python.org/pep-0815/ target=_blank rel=noopener>PEP 815 — Deprecate RECORD.jws and RECORD.p7s</a>
+, Final 2026-01-28</li><li><a href=https://peps.python.org/pep-0794/ target=_blank rel=noopener>PEP 794 — Import Name Metadata</a>
+, Accepted 2025-09-05</li><li><a href=https://peps.python.org/pep-0792/ target=_blank rel=noopener>PEP 792 — Project status markers in the simple index</a>
+, Final 2025-07-08</li><li><a href=https://peps.python.org/pep-0770/ target=_blank rel=noopener>PEP 770 — Improving measurability of Python packages with SBOM</a>
+,
+Accepted 2025-04-11</li><li><a href=https://peps.python.org/pep-0751/ target=_blank rel=noopener>PEP 751 — A file format to record Python dependencies for installation reproducibility</a>
+,
+Final 2025-03-31</li><li><a href=https://peps.python.org/pep-0739/ target=_blank rel=noopener>PEP 739 — build-details.json 1.0, a static description file for Python build details</a>
+,
+Accepted 2025-02-05</li></ul><p>Rejected or Withdrawn:</p><ul><li><a href=https://peps.python.org/pep-0708/ target=_blank rel=noopener>PEP 708 — Extending the Repository API to Mitigate Dependency Confusion Attacks</a>
+,
+Rejected 2026-04-02 after three years provisionally accepted, because the required implementation conditions
+(PyPI UI, second-repository support in pip with positive user feedback) were never met</li><li><a href=https://peps.python.org/pep-0763/ target=_blank rel=noopener>PEP 763 — Limiting deletions on PyPI</a>
+, Withdrawn 2025-09-21; the conclusion
+was that PEPs are not the appropriate venue for changes to PyPI&rsquo;s deletion or usage policies</li><li><a href=https://peps.python.org/pep-0759/ target=_blank rel=noopener>PEP 759 — External Wheel Hosting</a>
+, Withdrawn 2025-01-31; the community
+preferred richer multi-index priority and trust controls (pointing toward
+<a href=https://peps.python.org/pep-0766/ target=_blank rel=noopener>PEP 766</a>
+) over external hosting</li></ul><p>Several of these came up during the summit and are referenced inline below.</p><figure><img src=/posts/pycon-us-2026-packaging-summit-recap/pradyun-gedam-welcome.webp alt="Pradyun Gedam at the podium opening the Packaging Summit with the shared HackMD notes URL on screen" srcset="/posts/pycon-us-2026-packaging-summit-recap/pradyun-gedam-welcome_hu_f24af8f65a3e4cd4.webp 500w, /posts/pycon-us-2026-packaging-summit-recap/pradyun-gedam-welcome_hu_1aa5f8288f12270d.webp 800w" sizes="(min-width: 35em) 1200px, 100vw" width=1024 height=768 loading=lazy decoding=async></figure><h2 id=welcome>Welcome
+<a class=heading-link href=#welcome><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>The three organizers opened the summit by sharing the
+<a href=https://hackmd.io/@jezdez/pycon2026-packaging-summit/edit target=_blank rel=noopener>HackMD notes document</a>
+for collaborative live notes, and
+by reminding the room that this is where conversations start; proposals move from here into
+<a href=https://discuss.python.org/c/packaging/14 target=_blank rel=noopener>discuss.python.org</a>
+and the PEP process. The deeper
+<a href=https://hackmd.io/3AUJd0GkRFKHclfzULowTw target=_blank rel=noopener>official notes from the summit</a>
+are the canonical source for anything I
+left out of this recap.</p><h2 id=revisiting-wheel-20-and-better-compression--emma-smith>Revisiting Wheel 2.0 and Better Compression — Emma Smith
+<a class=heading-link href=#revisiting-wheel-20-and-better-compression--emma-smith><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p><a href=https://github.com/emmatyping target=_blank rel=noopener>Emma Smith</a>
+(<a href=https://emmatyping.dev/ target=_blank rel=noopener>emmatyping.dev</a>
+) authored
+<a href=https://peps.python.org/pep-0777/ target=_blank rel=noopener>PEP 777, &ldquo;How to Re-invent the Wheel&rdquo;</a>
+and is a CPython core developer. Slides:
+<a href="https://docs.google.com/presentation/d/1zh-3FkCg2cSMp3QD5oFji5sebeJlu3Hg_d-maYe7Pno/edit?usp=sharing" target=_blank rel=noopener>Google Slides deck</a>
+.
+The prerequisite stdlib work is also hers: she authored
+<a href=https://peps.python.org/pep-0784/ target=_blank rel=noopener>PEP 784 (Adding Zstandard to the standard library)</a>
+and then, in her
+<a href=https://emmatyping.dev/ target=_blank rel=noopener>Decompression is up to 30% faster in CPython 3.15</a>
+post (November 2025), wrote up the
+<code>PyBytesWriter</code>-based decompression rewrite that made zstd decompression 25–30% faster and zlib decompression
+10–15% faster for payloads of at least 1 MiB. That work is what makes a Zstandard-based Wheel 2.0 practical, though
+wide adoption likely waits until <a href=https://devguide.python.org/versions/ target=_blank rel=noopener>Python 3.13 reaches end-of-life in October 2029</a>
+,
+when 3.14+ becomes the oldest supported interpreter and installers can rely on <code>compression.zstd</code> being present
+everywhere.</p><p>The earlier version of PEP 777 added a wheel-version field to the filename so existing installers would skip Wheel
+2.0 outputs. Three objections came back from the community: updates would silently stop on old installers, the
+existing wheel-compatibility schema was felt to be sufficient, and the <code>pip install ./wheel_file.whl</code> path was not
+covered. Emma Smith worked through this with <a href=https://github.com/dstufft target=_blank rel=noopener>Donald Stufft</a>
+and landed on a different
+plan.</p><p>The Python packaging ecosystem is too distributed to migrate coherently, so any all-at-once approach has too many
+downsides. The revised PEP 777 makes the minimum change: wheels stay zip files, and the only hard requirement is
+that <code>dist-info</code> contains a <code>Wheel-Version</code> entry stored or <code>DEFLATE</code>-compressed inside the wheel. Each package
+index (PyPI itself, internal mirrors like <a href=https://jfrog.com/artifactory/ target=_blank rel=noopener>Artifactory</a>
+,
+<a href=https://conda-forge.org/ target=_blank rel=noopener>conda-forge</a>
+wheel builds, alternative indices like
+<a href=https://anaconda.org/ target=_blank rel=noopener>Anaconda.org</a>
+and <a href=https://devpi.net/ target=_blank rel=noopener>devpi</a>
+) decides when to start accepting Wheel 2.0
+uploads. Each further change rides on top as its own sub-PEP, individually motivated, and the full PEP 777 plus its
+sub-PEPs get accepted or rejected together.</p><pre class=mermaid>flowchart TB
+  classDef gate fill:#FEE2E2,stroke:#B91C1C,color:#7F1D1D;
+  classDef parent fill:#DBEAFE,stroke:#1E40AF,color:#1E3A8A;
+  classDef child fill:#DCFCE7,stroke:#15803D,color:#14532D;
+  classDef future fill:#E5E7EB,stroke:#4B5563,color:#1F2937;
+
+  G[All-or-nothing acceptance gate&lt;br/&gt;PEP 777 + every sub-PEP voted as one bundle]:::gate
+  G --&gt; P[PEP 777 — Wheel 2.0 minimal change&lt;br/&gt;Wheel-Version key in dist-info&lt;br/&gt;Data-Format key for the container]:::parent
+  P --&gt; S1[Sub-PEP — Zstandard compression&lt;br/&gt;data.tar.zst inside the outer ZIP]:::child
+  P --&gt; S2[Future sub-PEP — container hardening&lt;br/&gt;tighten allowed ZIP and tar feature set]:::future
+  P --&gt; S3[Future sub-PEP — symlinks, ZIP64,&lt;br/&gt;other follow-on changes]:::future
+</pre><p>The first sub-PEP is <strong>Zstandard compression</strong>. Emma analyzed the top 1,000 most-downloaded projects on PyPI:</p><ul><li>About 25% smaller wheels on average.</li><li>About 100 PB of bandwidth saved across just those 1,000 projects.</li><li>About 36 years of cumulative decompression time saved per month.</li></ul><p>A constraint shaped the rollout: pure-Python installers, including pip, prefer to avoid C dependencies. Emma&rsquo;s path
+around it was to land Zstandard in the standard library, which shipped in Python 3.14 as
+<a href=https://docs.python.org/3/library/compression.zstd.html target=_blank rel=noopener><code>compression.zstd</code></a>
+. The wheel proposal stores
+non-metadata files in a <code>data.tar.zst</code> archive, uncompressed inside the outer zip, and adds a <code>Data-Format</code> key to
+the wheel metadata so future container formats can swap in.</p><pre class=mermaid>flowchart TB
+  classDef meta fill:#FEF3C7,stroke:#B45309,color:#78350F;
+  classDef proj fill:#DCFCE7,stroke:#15803D,color:#14532D;
+
+  subgraph WHL[&#34;mypackage-1.0-py3-none-any.whl — outer ZIP&#34;]
+    direction TB
+    subgraph DI[&#34;mypackage-1.0.dist-info/ — DEFLATE-compressed entries&#34;]
+      direction LR
+      W[WHEEL]:::meta
+      M[METADATA]:::meta
+      R[RECORD]:::meta
+    end
+    subgraph TAR[&#34;data.tar.zst — STORED in the ZIP, no double compression&#34;]
+      direction LR
+      PL[purelib/]:::proj
+      PLT[platlib/]:::proj
+      SC[scripts/]:::proj
+      DT[data/]:::proj
+    end
+  end
+</pre><p>Threads from the Q&amp;A:</p><ul><li><strong>Why not zstd-compressed entries inside the zip?</strong> Per-file compression always loses to whole-archive
+compression, and per-file zstd would create Python-version compatibility issues when installing into an older
+interpreter&rsquo;s environment.</li><li><strong>Compression-differential attacks.</strong> Mike Fiedler raised this. The tentative answer is to verify the declared
+decompressed size in the zstd header against the actual size, which matches what scanners already do.</li><li><strong>Stored entries.</strong> uv reads selected zip entries as stored so it can mmap them. Metadata stays accessible the
+same way; other files go through one extra tar-extraction step.</li><li><strong>Symlinks.</strong> Tar supports them; zip mostly does not. Emma&rsquo;s instinct is to keep symlinks out for now to avoid
+the escape-the-environment surface.</li><li><strong>Reproducibility.</strong> Zstd at the same version and compression level is deterministic; an embedded checksum at the
+end of the stream can be disabled, and Emma agreed it could move into <code>RECORD</code>.</li><li><strong>Timeline.</strong> Provisional acceptance within a year or two of writing, no upper bound on when an index can flip
+the switch. Emma thinks five years is a reasonable expectation for general adoption.</li></ul><p>Daniel Holth added context from
+<a href=https://github.com/conda/conda-package-streaming target=_blank rel=noopener>conda-package-streaming</a>
+: tar inside zip streams cleanly through
+zstd decompression and tar unpacking, whereas a hypothetical inner zip would force decompressing the whole inner
+archive before reading any member.</p><h2 id=limiting-vectors-and-incentives-for-abuse--mike-fiedler>Limiting vectors and incentives for abuse — Mike Fiedler
+<a class=heading-link href=#limiting-vectors-and-incentives-for-abuse--mike-fiedler><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><figure><img src=/posts/pycon-us-2026-packaging-summit-recap/mike-fiedler-pypi-growth.webp alt="Mike Fiedler PyPI is growing differently than it used to slide showing 3.1x more new projects per month, 3.5x more bytes uploaded per month, 2.5x more files and malware reports, 1.6x more active uploaders" srcset="/posts/pycon-us-2026-packaging-summit-recap/mike-fiedler-pypi-growth_hu_3ad7207da8412170.webp 500w, /posts/pycon-us-2026-packaging-summit-recap/mike-fiedler-pypi-growth_hu_b0b4fc811206dd0f.webp 800w" sizes="(min-width: 35em) 1200px, 100vw" width=1024 height=768 loading=lazy decoding=async></figure><p><a href=https://github.com/miketheman target=_blank rel=noopener>Mike Fiedler</a>
+(<a href=https://www.miketheman.net/ target=_blank rel=noopener>miketheman.net</a>
+) is the Safety and
+Security Engineer at the PSF, working full-time on PyPI. Slides:
+<a href="https://www.dropbox.com/scl/fi/kg4fr4gc1t9c27sbbqvig/PyCon-US-2026-Packaging-Summit-Mike-Fiedler.pdf?rlkey=4u3v4n201ja82ugkdydf0jy6f&amp;dl=0" target=_blank rel=noopener>PDF</a>
+.</p><p>He opened with the growth chart above: between December 2024 and April 2026, PyPI saw 3.1× more new projects per
+month, 3.5× more bytes per month, 2.5× more files and malware reports, and 1.6× more active uploaders. Monthly
+new-project count moved from around 8,000 (manageable through reactive moderation) to around 24,000. PyPI holds
+about 36 TB of live storage and roughly the same again in cold storage of deleted files.</p><p>The recurring theme: load on every axis grew roughly 3×, while resources stayed at 1×. Physical infrastructure
+scales with money. The human side does not scale that fast; Mike is still the only full-time PyPI-specific safety
+and security engineer, supported by a network of volunteer reporters and by
+<a href=https://sethmlarson.dev/ target=_blank rel=noopener>Seth Larson</a>
+(PSF Security Developer-in-Residence) on the broader Python ecosystem.
+Some support tickets sit in longer queues than they used to, and reactive moderation alone no longer keeps up with
+the volume. Hence the prevention work below.</p><p>Recent work on the PyPI side:</p><ul><li>Rate limits tightened from 40 new projects per hour to 4 new projects per day per uploader.</li><li>Trusted publishing adoption rose from about 10% to about 30% of new file uploads year over year.</li><li>Project archival lifecycle status (advisory; installers do not act on it yet).</li><li>Pending-publisher cleanup after 30 days of disuse.</li><li>A growing prohibited-name list on the admin side.</li></ul><p>The three vectors Mike wanted to discuss:</p><h3 id=1-persistent-state>1. Persistent state
+<a class=heading-link href=#1-persistent-state><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>Mike&rsquo;s framing: PyPI is a warehouse, and people leave things in the warehouse. Deletions today move files to cold
+storage but the content stays accessible by URL at <code>files.pythonhosted.org</code>. Attackers know this and use the
+trusted hostname to push &ldquo;install from this URL&rdquo; links after the index entry has been removed. People also upload
+non-package content (MP3 collections, ebooks, one project that used PyPI as Dropbox), which has to be removed for
+legal reasons.</p><p>Mike&rsquo;s questions: should the cold-storage layer eventually be garbage-collected; should users be allowed to delete
+or should that move to admin-only; should the quota system stay tied to user-driven deletion when those deletions
+do not actually free space.</p><p>In the discussion I suggested a two-phase delete: mark for deletion, then actually delete after one to six months.
+Mike noted the copyrighted-material case where the legal obligation rules out a long grace window.</p><p>Related sub-thread: unused API tokens. PyPI has over a million user accounts and many of those accounts have
+provisioned API tokens that never got used. The room agreed PyPI should notify and then delete unused tokens, and
+that the trusted-publishing setup flow should offer to delete the corresponding API token at the same time. A few
+voices flagged the migration cost: applying this to existing tokens without an opt-in path could break CI that was
+set up and forgotten years ago.</p><h3 id=2-open-ended-releases>2. Open-ended releases
+<a class=heading-link href=#2-open-ended-releases><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>A pinned version is not always frozen content. A publisher today can upload new files (post-releases, additional
+wheels) to an existing release after the fact, and <code>==1.0.0</code> will pick them up. Mike asked whether to lock releases
+after a window (he suggested seven days) and ask publishers to issue post-releases instead.</p><p>The discussion landed on a tension. Post-releases are useful for back-filling new-Python or new-architecture wheels
+months after a release, and the room wanted to keep that capability available. Two ideas surfaced (any change here
+would need <a href=https://peps.python.org/pep-0440/ target=_blank rel=noopener>PEP 440 (Version Identification and Dependency Specification)</a>
+amended too, not only installer behaviour):</p><ul><li><strong>Stale-release upload as an opt-in.</strong> Today it works by default; flip it so the publisher has to re-open the
+release in the UI, with extra security checks.</li><li><strong>Cooldown windows.</strong> Make a freshly uploaded file scannable but invisible to installers for a day, so malware
+scanners get a head start.</li></ul><p>The bigger change is <a href=https://peps.python.org/pep-0694/ target=_blank rel=noopener>PEP 694, Upload 2.0 API for Python Package Indexes</a>
+, which
+would give publishers staged uploads and atomic publish, and would tie into a sealed-release state.</p><p>Emma noted that <code>==1.0.0</code> already pulls any matching local versions and dot-zero variants, so any change to
+upload-after-release semantics needs the version-specifier spec amended, not just installer behavior.</p><h3 id=3-pypi-as-a-cdn>3. PyPI as a CDN
+<a class=heading-link href=#3-pypi-as-a-cdn><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><figure><img src=/posts/pycon-us-2026-packaging-summit-recap/mike-fiedler-pypi-as-cdn.webp alt="Mike Fiedler PyPI as a CDN slide with three columns Clean Abuse, Turducken Software, and Asserted Not Verified showing 12716 OSS-license projects with no source distribution" srcset="/posts/pycon-us-2026-packaging-summit-recap/mike-fiedler-pypi-as-cdn_hu_ca28c5c313da5f47.webp 500w, /posts/pycon-us-2026-packaging-summit-recap/mike-fiedler-pypi-as-cdn_hu_c0f9ce13a7388e16.webp 800w" sizes="(min-width: 35em) 1200px, 100vw" width=1024 height=768 loading=lazy decoding=async></figure><p>The vector Mike called <em>Turducken Software</em>: a Rust binary installs a Python package that ships a Go binary that
+invokes a Zig compiler. PyPI now hosts Java JARs, Node <code>node_modules</code> directories, and complete language runtimes
+from people who use it as a general content-distribution network. The slide noted 12,716 projects that declare an
+OSS license but ship neither an sdist nor a source-repository link in metadata, around 3% of the OSS-licensed set.</p><p>The open question: where does the community want PyPI to draw the line between &ldquo;Python package that bundles a
+binary&rdquo; and &ldquo;not a Python package at all&rdquo;? Mike asked the room to start thinking about it rather than proposing a
+policy himself.</p><p>He flagged namespaces as a fourth topic that would take four hours on its own, and set it aside for another day.</p><h2 id=encouraging-the-community-to-view-packaging-in-terms-of-ecosystems-not-tools--mahe-iram-khan>Encouraging the community to view Packaging in terms of ecosystems, not tools — Mahe Iram Khan
+<a class=heading-link href=#encouraging-the-community-to-view-packaging-in-terms-of-ecosystems-not-tools--mahe-iram-khan><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p><a href=https://github.com/ForgottenProgramme target=_blank rel=noopener>Mahe Iram Khan</a>
+is a software engineer at
+<a href=https://www.anaconda.com/ target=_blank rel=noopener>Anaconda</a>
+based in Berlin and has maintained <a href=https://github.com/conda/conda target=_blank rel=noopener>conda</a>
+for about four years. The talk grew out of three questions she keeps getting
+asked: what is the difference between conda and pip, when should you use one or the other, and can you mix them.</p><p>Her thesis: conda and pip are best understood as two parallel ecosystems with different origins, not as two
+competing tools. The history sketch:</p><ul><li><a href=https://docs.python.org/3.11/library/distutils.html target=_blank rel=noopener><code>distutils</code></a>
+shipped in the standard library with no
+dependency management, no uninstall, and a release cadence tied to CPython.</li><li><a href=https://setuptools.pypa.io/ target=_blank rel=noopener><code>setuptools</code></a>
+and <a href=https://setuptools.pypa.io/en/latest/deprecated/easy_install.html target=_blank rel=noopener><code>easy_install</code></a>
+(2004) added dependency handling and PyPI integration.</li><li><a href=https://pip.pypa.io/ target=_blank rel=noopener><code>pip</code></a>
+and <a href=https://virtualenv.pypa.io/ target=_blank rel=noopener><code>virtualenv</code></a>
+(2008) added uninstall, better
+error messages, and resolved the day-to-day pain points for most of the community.</li><li><a href=https://github.com/conda/conda target=_blank rel=noopener><code>conda</code></a>
+(2012) was built for the scientific Python community, whose heavy
+non-Python dependencies the pip-era tooling could not handle. It was language-agnostic from day one and combined
+package and environment management in a single tool.</li></ul><pre class=mermaid>flowchart LR
+  classDef stdlib fill:#E5E7EB,stroke:#4B5563,color:#1F2937;
+  classDef pip fill:#DBEAFE,stroke:#1E40AF,color:#1E3A8A;
+  classDef conda fill:#DCFCE7,stroke:#15803D,color:#14532D;
+
+  D[distutils&lt;br/&gt;stdlib&lt;br/&gt;2000-2023]:::stdlib --&gt; S[setuptools&lt;br/&gt;+ easy_install&lt;br/&gt;2004]:::pip
+  S --&gt; P[pip + virtualenv&lt;br/&gt;2008]:::pip
+  S -.scientific Python&lt;br/&gt;needs.-&gt; C[conda&lt;br/&gt;2012&lt;br/&gt;language-agnostic]:::conda
+  P --&gt; UV[poetry 2018&lt;br/&gt;uv 2024&lt;br/&gt;modern pip-ecosystem]:::pip
+  C --&gt; M[mamba 2019&lt;br/&gt;pixi 2023&lt;br/&gt;modern conda-ecosystem]:::conda
+</pre><p>Later tools fall into one ecosystem or the other: <a href=https://python-poetry.org/ target=_blank rel=noopener>poetry</a>
+and
+<a href=https://docs.astral.sh/uv/ target=_blank rel=noopener>uv</a>
+into the pip ecosystem, <a href=https://mamba.readthedocs.io/ target=_blank rel=noopener>mamba</a>
+and
+<a href=https://pixi.sh/ target=_blank rel=noopener>pixi</a>
+into the conda ecosystem. Comparing them across ecosystems produces a lot of the confusion
+users hit when they read packaging advice online.</p><p>Mahe acknowledged the lines are blurry and that this is a personal sense-making frame, not a formal theory. With a
+packaging council on the way (see Barry&rsquo;s lightning talk below), she asked the room how to give new users a clearer
+on-ramp.</p><p>The discussion ran longer than the talk. Threads worth keeping:</p><ul><li><strong>Vendor-neutral on-ramp.</strong> Deborah Nicholson (PSF) noted there is no &ldquo;right way in&rdquo; on python.org for newcomers
+to packaging today and offered PSF funding for someone to build one. The current set of links was added
+piecemeal over the years.</li><li><strong>More than two ecosystems.</strong> A consultant pointed out that <a href=https://ecosyste.ms/ target=_blank rel=noopener>Ecosyste.ms</a>
+treats every
+distribution channel (PyPI, conda, Debian, Nix, Spack, Homebrew) as a separate ecosystem with
+different metadata semantics. Security advisories published on a PyPI package do not propagate to a conda or
+Nix repackaging of the same code, which leaves real CVE-coverage gaps that translation layers between
+ecosystems would close.</li><li><strong>The scientific-community frame.</strong> A long exchange on two framings: can wheels eventually solve the scientific
+use case (multiple compiled languages, hardware variance), or does the conda model exist because PyPI cannot?
+<a href=https://github.com/rgommers target=_blank rel=noopener>Ralf Gommers</a>
+&rsquo; <a href=https://pypackaging-native.github.io/ target=_blank rel=noopener>pypackaging-native</a>
+was
+cited as the reference on this. The wheel-next working group&rsquo;s effort on
+<a href=https://peps.python.org/pep-0817/ target=_blank rel=noopener>PEP 817 wheel variants</a>
+and <a href=https://peps.python.org/pep-0825/ target=_blank rel=noopener>PEP 825</a>
+is the visible bridge being built between the two ecosystems.</li><li><strong>Publishing-side experience.</strong> As an author of a pure-Python CLI tool, you ship to PyPI and you are done; the
+package showing up in Homebrew three months later is somebody else&rsquo;s work. Getting more involved in the various
+places your work is republished is a specialist skill the community does not document well.</li></ul><h2 id=lightning-talks>Lightning talks
+<a class=heading-link href=#lightning-talks><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><h3 id=pep-772-packaging-council-update--barry-warsaw>PEP 772 Packaging Council update — Barry Warsaw
+<a class=heading-link href=#pep-772-packaging-council-update--barry-warsaw><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p><a href=https://peps.python.org/pep-0772/ target=_blank rel=noopener>PEP 772 (Packaging Council)</a>
+is fully approved.
+<a href=https://barry.warsaw.us/ target=_blank rel=noopener>Barry Warsaw</a>
+walked through the elections plan: aligned with the PSF board election in
+the fall, three two-week phases (nominations, voting), two cohorts on a rotating two-year cycle, PSF membership
+required to nominate or be nominated. <a href=https://github.com/deborahgu target=_blank rel=noopener>Deborah Nicholson</a>
+called out the
+spread-the-word problem: not everyone interested is in this room. Barry encouraged everyone present to consider
+running.</p><h3 id=mobile-packaging-update--malcolm-smith>Mobile packaging update — Malcolm Smith
+<a class=heading-link href=#mobile-packaging-update--malcolm-smith><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><figure><img src=/posts/pycon-us-2026-packaging-summit-recap/malcolm-smith-mobile-wheels.webp alt="Malcolm Smith beeware.org/mobile-wheels slide showing Android 11 of 360 packages and iOS 9 of 360 packages with mobile wheel support" srcset="/posts/pycon-us-2026-packaging-summit-recap/malcolm-smith-mobile-wheels_hu_dd587db80c3d351.webp 500w, /posts/pycon-us-2026-packaging-summit-recap/malcolm-smith-mobile-wheels_hu_7cd8cb2f0a31e4c8.webp 800w" sizes="(min-width: 35em) 1200px, 100vw" width=1024 height=768 loading=lazy decoding=async></figure><p>A year on from last summit, <a href=https://github.com/mhsmith target=_blank rel=noopener>Malcolm Smith</a>
+reported the build / host / install
+pipeline is in place. <a href=https://cibuildwheel.pypa.io/ target=_blank rel=noopener>cibuildwheel</a>
+supports Android and iOS, PyPI accepts the new
+wheel tags, and the Python installer ships official support. <a href=https://kivy.org/ target=_blank rel=noopener>Kivy</a>
+joined
+<a href=https://beeware.org/ target=_blank rel=noopener>BeeWare</a>
+in supporting mobile this year. The dashboard above shows 11/360 Android wheels and
+9/360 iOS wheels across the top packages, mostly user-request driven. The BeeWare team is at the sprints Monday and
+Tuesday and happy to help maintainers add mobile support.</p><p>Live tracker: <a href=https://beeware.org/mobile-wheels target=_blank rel=noopener>beeware.org/mobile-wheels</a>
+.</p><h3 id=coherent-system-and-compile-to-flit-bootstrapping--jason-coombs>Coherent System and Compile-to-Flit bootstrapping — Jason Coombs
+<a class=heading-link href=#coherent-system-and-compile-to-flit-bootstrapping--jason-coombs><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p><a href=https://github.com/jaraco target=_blank rel=noopener>Jason Coombs</a>
+(<a href=https://jaraco.com/ target=_blank rel=noopener>jaraco.com</a>
+, GitHub:
+<a href=https://github.com/jaraco target=_blank rel=noopener>@jaraco</a>
+) maintains over 100 packages and built
+the <a href=https://github.com/coherent-oss/system target=_blank rel=noopener>Coherent build system</a>
+to keep that volume sustainable. Highlights:
+automatic dependency inference from imports (overridable but mostly correct by default), automatic author and
+version inference, a lightweight <code>pyproject.toml</code>, and a <a href=https://flit.pypa.io/ target=_blank rel=noopener>Flit</a>
+-based build that keeps the
+whole thing minimal. Dependency inference draws on a <a href=https://www.mongodb.com/ target=_blank rel=noopener>MongoDB</a>
+database derived from PyPI
+that maps imports back to projects.</p><p>The companion trick is <strong>Compile-to-Flit</strong>, Jason&rsquo;s answer to the bootstrap problem for build backends with their
+own dependencies. <a href=https://setuptools.pypa.io/ target=_blank rel=noopener>Setuptools</a>
+solves the problem by vendoring; Flit solves it by
+having no dependencies; <a href=https://hatch.pypa.io/ target=_blank rel=noopener>Hatch</a>
+uses <code>backend-path</code>. Compile-to-Flit takes a backend with N
+dependencies and produces an sdist whose <code>pyproject.toml</code> declares only <code>flit_core</code>, with the metadata concretized
+at sdist build time. Coherent itself has 15 dependencies and would be unworkable to vendor; with Compile-to-Flit the
+sdist stays tiny.</p><p>The known trade-off: users can no longer <code>pip install</code> the project straight from a git checkout and need to consume
+the published sdist instead. Jason is willing to live with that constraint, and is planning to apply the same
+treatment to Setuptools so it can have proper dependencies again.</p><h3 id=wheel-variants-for-ai-accelerators-and-shared-malware-scanning--joongi-kim>Wheel variants for AI accelerators, and shared malware scanning — Joongi Kim
+<a class=heading-link href=#wheel-variants-for-ai-accelerators-and-shared-malware-scanning--joongi-kim><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p><a href=https://github.com/achimnol target=_blank rel=noopener>Joongi Kim</a>
+(GitHub: <a href=https://github.com/achimnol target=_blank rel=noopener>@achimnol</a>
+; CTO at
+<a href=https://www.lablup.com/ target=_blank rel=noopener>Lablup</a>
+, creator of <a href=https://www.backend.ai/ target=_blank rel=noopener>Backend.AI</a>
+) gave back-to-back lightning
+talks on two parallel proposals.</p><p>The first
+(<a href=https://speakerdeck.com/achimnol/pycon-us-2026-packaging-summit-lt-more-variant-more-diversity-for-ai-accelerators target=_blank rel=noopener>slides</a>
+)
+extends the wheel-variants idea (<a href=https://peps.python.org/pep-0817/ target=_blank rel=noopener>PEP 817</a>
+) into container ecosystems. Today
+<a href=https://docs.docker.com/reference/cli/docker/image/pull/ target=_blank rel=noopener><code>docker pull</code></a>
+auto-selects by architecture but not by
+hardware feature, and <a href=https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/ target=_blank rel=noopener>Kubernetes&rsquo; Dynamic Resource Allocation</a>
+makes users configure GPU and vendor-specific matching by hand. Joongi targets not just
+<a href=https://developer.nvidia.com/cuda-zone target=_blank rel=noopener>NVIDIA CUDA</a>
+SM architectures but also
+<a href=https://rebellions.ai/ target=_blank rel=noopener>Rebellions</a>
+and <a href=https://www.furiosa.ai/ target=_blank rel=noopener>Furiosa</a>
+NPUs, and pointed at Backend.AI&rsquo;s
+<a href=https://github.com/lablup/backend.ai target=_blank rel=noopener>Sokovan</a>
+scheduler as an existing implementation of per-node variant
+providers feeding into per-workload variant labels. The design lets compute nodes report their properties to the
+scheduler, which matches them against container-image labels equivalent to the wheel-variant properties pip would
+resolve.</p><p>The second
+(<a href=https://speakerdeck.com/achimnol/pycon-us-2026-packaging-summit-lt-sharing-malware-scanning-results-of-pypi-from-multiple-providers target=_blank rel=noopener>slides</a>
+)
+proposed a way to share malware-scan results across providers. Lablup mirrors all of PyPI (up to roughly 40 TB,
+doubled since 2024) for their Reservoir mirror and runs monthly scans with Ahnlab V3 and <a href=https://www.clamav.net/ target=_blank rel=noopener>ClamAV</a>
+. The proposal is a signed &ldquo;scanned by X on date Y&rdquo; metadata field exposed via
+the index API, modelled on <a href=https://cloud.google.com/assured-open-source-software target=_blank rel=noopener>Google&rsquo;s Assured OSS</a>
+, so no
+single team has to keep up with the upload volume alone. Sign-up happened on-site.</p><h3 id=conda-pypi-reusing-the-pip-stack--daniel-holth>conda-pypi reusing the pip stack — Daniel Holth
+<a class=heading-link href=#conda-pypi-reusing-the-pip-stack--daniel-holth><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p><a href=https://github.com/dholth target=_blank rel=noopener>Daniel Holth</a>
+walked through
+<a href=https://github.com/conda-incubator/conda-pypi target=_blank rel=noopener>conda-pypi</a>
+. Slides:
+<a href=https://dholth.github.io/presentation-conda-pypi-internals/ target=_blank rel=noopener>dholth.github.io/presentation-conda-pypi-internals</a>
+.
+The integration builds on <a href=https://github.com/frostming/unearth target=_blank rel=noopener>unearth</a>
+,
+<a href=https://github.com/pypa/installer target=_blank rel=noopener>pypa/installer</a>
+, and <a href=https://github.com/pypa/build target=_blank rel=noopener>pypa/build</a>
+, and threads
+build requirements through the standard backend interfaces in
+<a href=https://peps.python.org/pep-0517/ target=_blank rel=noopener>PEP 517 (A build-system independent format for source trees)</a>
+and
+<a href=https://peps.python.org/pep-0660/ target=_blank rel=noopener>PEP 660 (Editable installs for pyproject.toml based builds)</a>
+.</p><pre class=mermaid>flowchart LR
+  classDef input fill:#DBEAFE,stroke:#1E40AF,color:#1E3A8A;
+  classDef step fill:#FEF3C7,stroke:#B45309,color:#78350F;
+  classDef output fill:#DCFCE7,stroke:#15803D,color:#14532D;
+
+  PT[pyproject.toml]:::input --&gt; BR[Extract build requires&lt;br/&gt;PEP 517 / PEP 660]:::step
+  BR --&gt; CI[Install build requires&lt;br/&gt;via conda not pip]:::step
+  CI --&gt; RB[&#34;Run the project&#39;s backend&lt;br/&gt;(setuptools / flit / hatchling)&#34;]:::step
+  RB --&gt; W[Wheel artefact]:::step
+  W --&gt; CP[Wrap as conda package&lt;br/&gt;editable installs supported]:::output
+</pre><p>Daniel noted that build backends like setuptools, flit, and hatchling arriving from PyPI in a mixed conda + pip
+environment is a common source of subtle issues; the conda-pypi flow keeps those backends on the conda side.
+Editable installs work end-to-end. pip runs inside the same Python environment it targets; conda runs in a separate
+one. The integration handles the bridge transparently.</p><h3 id=nebi--environment-management-for-teams--dharhas-pothina>Nebi — environment management for teams — Dharhas Pothina
+<a class=heading-link href=#nebi--environment-management-for-teams--dharhas-pothina><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p><a href=https://github.com/nebari-dev/nebi target=_blank rel=noopener>github.com/nebari-dev/nebi</a>
+; web entry point at
+<a href=https://nebi.nebari.dev target=_blank rel=noopener>nebi.nebari.dev</a>
+. <a href=https://github.com/dharhas target=_blank rel=noopener>Dharhas Pothina</a>
+(GitHub:
+<a href=https://github.com/dharhas target=_blank rel=noopener>@dharhas</a>
+; <a href=https://www.openteams.com/ target=_blank rel=noopener>OpenTeams</a>
+) presented a successor to
+<a href=https://conda.store/ target=_blank rel=noopener>conda-store</a>
+for teams
+whose environments live outside the application code. Nebi is a
+server plus CLI built on top of <a href=https://pixi.sh/ target=_blank rel=noopener>Pixi</a>
+that adds version history and rollback, OCI-registry
+distribution (<a href=https://quay.io/ target=_blank rel=noopener>Quay</a>
+, <a href=https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry target=_blank rel=noopener>GHCR</a>
+),
+role-based access control, and named workspace activation. Lock files and spec files
+are versioned together. The long-term goal is reproducible environments for science.</p><h2 id=roundtable-discussions>Roundtable discussions
+<a class=heading-link href=#roundtable-discussions><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>The roundtables ran in parallel. These notes come from the rooms I was in plus the shared notes for the others.</p><h3 id=pep-803--abi3t-stable-abi-for-free-threaded-python--petr-viktorin>PEP 803 — abi3t Stable ABI for free-threaded Python — Petr Viktorin
+<a class=heading-link href=#pep-803--abi3t-stable-abi-for-free-threaded-python--petr-viktorin><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p><a href=https://github.com/encukou target=_blank rel=noopener>Petr Viktorin</a>
+(<a href=https://encukou.cz/ target=_blank rel=noopener>encukou.cz</a>
+) walked through
+<a href=https://peps.python.org/pep-0803/ target=_blank rel=noopener>PEP 803 (abi3t)</a>
+, the Stable ABI for free-threaded CPython.
+The resulting wheel filename looks like
+<code>mypackage-0.1-cp315-abi3.abi3t-manylinux1_x86_64.manylinux_2_5_x86_64.whl</code>. The new bit is the compound ABI tag
+<code>abi3.abi3t</code>, which says the wheel offers the Stable ABI for both the GIL build and the free-threaded build of
+CPython 3.15.</p><pre class=mermaid>flowchart LR
+  classDef name fill:#DBEAFE,stroke:#1E40AF,color:#1E3A8A;
+  classDef ver fill:#FEF3C7,stroke:#B45309,color:#78350F;
+  classDef py fill:#DCFCE7,stroke:#15803D,color:#14532D;
+  classDef abi fill:#FEE2E2,stroke:#B91C1C,color:#7F1D1D;
+  classDef plat fill:#E5E7EB,stroke:#4B5563,color:#1F2937;
+
+  N[mypackage&lt;br/&gt;distribution name]:::name --&gt; V[0.1&lt;br/&gt;version]:::ver
+  V --&gt; Py[cp315&lt;br/&gt;Python tag — CPython 3.15]:::py
+  Py --&gt; A[abi3.abi3t&lt;br/&gt;compound ABI tag&lt;br/&gt;GIL Stable ABI + free-threaded Stable ABI]:::abi
+  A --&gt; Pl[manylinux1_x86_64.manylinux_2_5_x86_64&lt;br/&gt;platform tags]:::plat
+</pre><p>Extension suffixes are <code>.abi3t.so</code> on Linux and macOS (with <code>.abi3.so</code> as a workaround for the 3.13–3.14 window if
+you want both) and <code>.pyd</code> on Windows. pip already supports installing abi3t wheels. Other installers need to
+accept the <code>abi3t</code> tag for free-threaded CPython in the same places they accept <code>abi3</code> today, and build tools need
+to opt in when they want to expose the feature.</p><h3 id=yoda-conditions-in-pep-508-markers>Yoda conditions in PEP 508 markers
+<a class=heading-link href=#yoda-conditions-in-pep-508-markers><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>The marker grammar in <a href=https://peps.python.org/pep-0508/ target=_blank rel=noopener>PEP 508</a>
+and the
+<a href=https://packaging.python.org/en/latest/specifications/dependency-specifiers/ target=_blank rel=noopener>dependency specifiers spec</a>
+is
+underspecified for &ldquo;Yoda-form&rdquo; expressions (<code>'3.13.*' == python_full_version</code>), and the
+<a href=https://packaging.pypa.io/ target=_blank rel=noopener><code>packaging</code></a>
+library does
+not expose the parsed marker tree as a public API. The room agreed an editorial PR against the spec should clarify
+that markers always compare an environment variable on the left with a literal on the right, mention the complexity
+that lets implementations be loose, and add a failing example in the tests. uv does not implement
+<code>'3.13.*' == python_full_version</code>. The <code>~=</code> operator is also confusing in this position.</p><h3 id=wheel-20-and-zstandard-container-hardening>Wheel 2.0 and Zstandard container hardening
+<a class=heading-link href=#wheel-20-and-zstandard-container-hardening><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>Picking up from Emma&rsquo;s talk. Concrete suggestions for tightening what a valid Wheel 2.0 container looks like:</p><ul><li><strong>Restrict the zip and tar feature set.</strong> Parser-differential attacks have come from GNU tar versus POSIX tar
+extensions, both of which most unpackers tolerate. A Wheel 2.0 sub-PEP should pick one and ban the other, and
+ideally specify the outer zip&rsquo;s binary layout exactly (it only ever holds two regular files with specific
+compression methods).</li><li><strong>No hard links, no device files, no resource forks or NTFS streams, no xattrs.</strong></li><li><strong>ZIP64 for large wheels.</strong> The choice between requiring ZIP64 unconditionally or only above a size threshold
+needs to stay compatible with what major build tools can produce.</li><li><strong><code>data.tar.zst</code> or <code>wheel-filename.data.tar.zst</code>.</strong> Daniel Holth&rsquo;s preference: keep the existing <code>.data</code>
+convention so two wheels can be unpacked side-by-side without collision, and list only the tar archive in
+<code>RECORD</code> (not its members), matching existing rules.</li><li><strong>Symlinks.</strong> Tar supports them. The question of whether Wheel 2.0 should allow them inside the data archive
+stayed open; the simplest path is to keep them out.</li><li><strong>Self-describing format key.</strong> Emma agreed the <code>Data-Format</code> field should name the container too (<code>tar-zstd</code>
+rather than <code>zstd</code>), so a later sub-PEP can switch the inner archive format cleanly.</li></ul><h3 id=cross-platform-environments-and-wheel-building>Cross-platform environments and wheel building
+<a class=heading-link href=#cross-platform-environments-and-wheel-building><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>Android, iOS, and Emscripten each landed their own cross-platform wheel-building solution, with significant
+overlap between the three. They all rely on a <code>.pth</code> file that monkey-patches <code>sysconfig</code> and other stdlib modules to simulate
+running on the target platform, because most Python build systems still have no concept of cross-compilation.
+Even for established platforms, cross-compilation matters when CI for the target architecture is limited (Apple
+Silicon before CI vendors caught up; Windows on ARM today). The longer-term path is for build backends
+(<a href=https://setuptools.pypa.io/ target=_blank rel=noopener>setuptools</a>
+, <a href=https://meson-python.readthedocs.io/ target=_blank rel=noopener>meson-python</a>
+,
+<a href=https://hatch.pypa.io/latest/ target=_blank rel=noopener>hatchling</a>
+) to gain native cross-compilation support driven from the Python
+environment. cibuildwheel does this for the platforms it recognizes.</p><h3 id=improving-security-metadata-across-ecosystems>Improving security metadata across ecosystems
+<a class=heading-link href=#improving-security-metadata-across-ecosystems><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>CVEs and malware are different problems. The open work is propagating CVE coverage across repackagings of the
+same project, where each ecosystem has its own naming and version conventions and the
+<a href=https://nvd.nist.gov/ target=_blank rel=noopener>NVD</a>
+, <a href=https://osv.dev/ target=_blank rel=noopener>OSV</a>
+, and <a href=https://github.com/advisories target=_blank rel=noopener>GHSA</a>
+mappings cover
+only part of the surface.</p><p>A single project gets repackaged across many ecosystems, each with its own name and version style:</p><table><thead><tr><th>Ecosystem</th><th>Example package name for <code>requests 2.32.0</code></th></tr></thead><tbody><tr><td>PyPI</td><td><code>requests</code> 2.32.0</td></tr><tr><td>conda-forge</td><td><code>requests</code> 2.32.0</td></tr><tr><td>Debian</td><td><code>python3-requests</code> 2.32.0-1</td></tr><tr><td>Homebrew</td><td><code>python-requests</code> 2.32.0</td></tr><tr><td>Nix</td><td><code>python3.13-requests-2.32.0</code></td></tr></tbody></table><p>A CVE filed against the PyPI name auto-matches the PyPI entry and nothing else; ecosystem-translation work fills
+the gap. <a href=https://peps.python.org/pep-0804/ target=_blank rel=noopener>PEP 804 (External dependency registry and name mapping)</a>
+is the
+closest in-flight proposal; conda recipes can already declare an upstream
+<a href=https://github.com/package-url/purl-spec target=_blank rel=noopener><code>purl</code></a>
+.
+Other notes from the discussion: connect packages via source-repository URL, distinguish patch builds that change
+build recipes from patches that change source code, and consider how <a href=https://slsa.dev/ target=_blank rel=noopener>SLSA</a>
+-style provenance
+carries through dependency chains. Cooldown periods on releases have the opposite cost: they delay vulnerability
+discovery if widely adopted.</p><h3 id=dependency-resolution-and-nab--damian-shaw>Dependency resolution and nab — Damian Shaw
+<a class=heading-link href=#dependency-resolution-and-nab--damian-shaw><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p><a href=https://github.com/notatallshaw/nab target=_blank rel=noopener>github.com/notatallshaw/nab</a>
+. <a href=https://github.com/notatallshaw target=_blank rel=noopener>Damian Shaw</a>
+(GitHub: <a href=https://github.com/notatallshaw target=_blank rel=noopener>@notatallshaw</a>
+) is a pip maintainer. nab is a pure-Python dependency
+resolver based on <a href=https://nex3.medium.com/pubgrub-2fb6470504f target=_blank rel=noopener>PubGrub</a>
+, with the medium-term goal of becoming a
+drop-in swap for pip&rsquo;s current resolver and an available library for other tools. It fixes bugs that uv
+inherits from the <a href=https://github.com/pubgrub-rs/pubgrub target=_blank rel=noopener><code>pubgrub-rs</code></a>
+library, and performance on uncached
+resolves is comparable to uv.</p><p><a href=https://nex3.medium.com/pubgrub-2fb6470504f target=_blank rel=noopener>PubGrub</a>
+is a dependency-resolution algorithm developed by
+<a href=https://github.com/nex3 target=_blank rel=noopener>Natalie Weizenbaum</a>
+for the <a href=https://dart.dev/tools/pub target=_blank rel=noopener>Dart package manager</a>
+. When the
+resolver hits an incompatibility it derives a generalized cause and records it as a permanent fact so the same
+conflict cannot resurface, which both prunes the search space and produces actionable error messages that name the
+conflicting constraints. In the Python ecosystem, <a href=https://docs.astral.sh/uv/ target=_blank rel=noopener>uv</a>
+uses PubGrub via the
+<a href=https://github.com/pubgrub-rs/pubgrub target=_blank rel=noopener><code>pubgrub-rs</code></a>
+Rust crate; pip and <a href=https://pdm-project.org/ target=_blank rel=noopener>PDM</a>
+instead
+use <a href=https://github.com/sarugaku/resolvelib target=_blank rel=noopener>resolvelib</a>
+, which is a backtracking resolver rather than a
+PubGrub-style one.</p><p>Today nab is structured as four pluggable layers: <code>nab-resolver</code> (the PubGrub-based resolver core), <code>nab-python</code>
+(Python-specific resolution), <code>nab-index</code> (PyPI-style index access), and the top-level <code>nab</code> package that wires the
+three together into the CLI.</p><pre class=mermaid>flowchart TB
+  classDef cli fill:#DBEAFE,stroke:#1E40AF,color:#1E3A8A;
+  classDef lib fill:#DCFCE7,stroke:#15803D,color:#14532D;
+
+  CLI[nab — CLI / orchestrator&lt;br/&gt;reads pyproject.toml, writes pylock.toml]:::cli
+  CLI --&gt; R[nab-resolver&lt;br/&gt;PubGrub resolver core]:::lib
+  CLI --&gt; P[nab-python&lt;br/&gt;Python-specific resolution&lt;br/&gt;markers, extras, requirements]:::lib
+  CLI --&gt; I[nab-index&lt;br/&gt;PyPI-style index access&lt;br/&gt;HTTP transport, metadata fetch]:::lib
+</pre><p>As a secondary use case it can also emit <a href=https://peps.python.org/pep-0751/ target=_blank rel=noopener>PEP 751</a>
+lockfiles and leaves
+installation to existing tools; it ships a security-first build policy switch (<code>never</code> / <code>build-local</code> (default) /
+<code>build-remote</code>) for builds during resolution.</p><p>First impression after sitting with the project: nab is impressive for a tool built in about two months. The
+resolver design is solid and performance is competitive with uv on uncached resolves. The lightning-talk slot was
+an introduction; the roundtable focused on what would still need to land before nab could become a pip-side
+resolver alternative, with the lockfile output a useful side benefit.</p><p>My own interest in nab is the <code>pylock.toml</code> generation. I have spent the last few months trying to land PEP 751
+lockfile output in two other places, <a href=https://github.com/astral-sh/uv/pull/14728 target=_blank rel=noopener>uv#14728</a>
+and
+<a href=https://github.com/jazzband/pip-tools/pull/2380 target=_blank rel=noopener>pip-tools#2380</a>
+, and both stalled for different reasons. A fresh
+tool focused on resolution plus PEP 751 output therefore appeals to me. Damian and I worked through the gaps
+together during the roundtable; I <a href="https://github.com/notatallshaw/nab/issues?q=is%3Aissue+author%3Agaborbernat" target=_blank rel=noopener>filed them as tracking issues against the repo</a>
+afterwards. They are the ones that would need to close before I could adopt nab as a drop-in solution for that
+workflow:</p><ul><li><strong>Universal-mode coverage.</strong> Cross-platform lockfiles cannot include PyPy alongside CPython, and ad-hoc
+cross-platform locks need a <code>pyproject.toml</code> edit because there is no CLI flag for the matrix.</li><li><strong>CLI ergonomics.</strong> Common flags from pip and uv (<code>--constraint</code>, <code>--pre</code>, <code>--upgrade-package</code>,
+<code>--verbose</code>/<code>--quiet</code>) are not yet present, and there is no progress feedback or diff summary across re-locks.</li><li><strong>PEP 751 portability.</strong> Reproducibility gaps include missing
+<a href=https://reproducible-builds.org/specs/source-date-epoch/ target=_blank rel=noopener><code>SOURCE_DATE_EPOCH</code></a>
+support, <code>file://</code> URLs that are
+not rewritten to relative paths in the lockfile, and an unpopulated <code>packages.dependencies</code> graph.</li><li><strong>Resolution stability.</strong> No seed-pins from a prior lockfile means unrelated packages can churn on re-lock; some
+dependency-group conflict messages do not name which groups disagree.</li><li><strong>Networking in corporate environments.</strong> Both transports skip proxy environment variables and the OS
+certificate store, which keeps nab from running behind TLS-intercepting proxies.</li><li><strong>Docs.</strong> The current flat guides directory would benefit from restructuring along the
+<a href=https://diataxis.fr/ target=_blank rel=noopener>Diataxis framework</a>
+.</li></ul><p>The project moves quickly. Within roughly 24 hours of filing the issues, Damian had already merged fixes covering
+lockfile portability, PEP 751 spec conformance, the security gaps around auth credentials in lockfile URLs, the
+networking issues, and several CLI ergonomics fixes:
+<a href="https://github.com/notatallshaw/nab/pulls?q=is%3Apr+is%3Amerged" target=_blank rel=noopener>PRs #41, #42, and #43</a>
+closed sixteen tracking
+issues in one batch.</p><h2 id=wrapping-up>Wrapping Up
+<a class=heading-link href=#wrapping-up><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>The format ran tight to schedule, and the roundtables let attendees pick a thread and follow it across several
+ecosystems in one afternoon. As someone who has attended every Packaging Summit since 2019, I felt this year was
+in an especially good mood. There was a lot of laughter, eager collaboration across project boundaries, and the
+audience keeps growing year over year. The community working together to make progress like this is the best part
+of the day, and with the <a href=https://peps.python.org/pep-0772/ target=_blank rel=noopener>Packaging Council</a>
+coming online this fall the same
+pattern should accelerate.</p><p>If you are heavily involved in Python packaging, please consider running for a seat on the council this fall. If
+you have an opinion but not the bandwidth to run, the lighter lift is to
+<a href=https://www.python.org/psf/membership/ target=_blank rel=noopener>become a voting PSF member</a>
+so you can nominate candidates and vote in
+the election. Two paths qualify: Supporting membership ($99/year, with a sliding-scale option) or self-certified
+Contributing membership (free, granted to people who dedicate at least five hours per month volunteering on work
+that advances the PSF&rsquo;s mission, such as maintaining open-source projects, organizing Python events, or serving
+on a PSF working group).</p><p>Thank you to the organizers, to every speaker for putting their work up for discussion, and to everyone who jumped
+into the deletions, post-release, and ecosystem-bridge conversations in the room.</p></div><aside class=post-toc><nav class=toc-content><nav id=TableOfContents><ol><li><a href=#welcome>Welcome</a></li><li><a href=#revisiting-wheel-20-and-better-compression--emma-smith>Revisiting Wheel 2.0 and Better Compression — Emma Smith</a></li><li><a href=#limiting-vectors-and-incentives-for-abuse--mike-fiedler>Limiting vectors and incentives for abuse — Mike Fiedler</a><ol><li><a href=#1-persistent-state>1. Persistent state</a></li><li><a href=#2-open-ended-releases>2. Open-ended releases</a></li><li><a href=#3-pypi-as-a-cdn>3. PyPI as a CDN</a></li></ol></li><li><a href=#encouraging-the-community-to-view-packaging-in-terms-of-ecosystems-not-tools--mahe-iram-khan>Encouraging the community to view Packaging in terms of ecosystems, not tools — Mahe Iram Khan</a></li><li><a href=#lightning-talks>Lightning talks</a><ol><li><a href=#pep-772-packaging-council-update--barry-warsaw>PEP 772 Packaging Council update — Barry Warsaw</a></li><li><a href=#mobile-packaging-update--malcolm-smith>Mobile packaging update — Malcolm Smith</a></li><li><a href=#coherent-system-and-compile-to-flit-bootstrapping--jason-coombs>Coherent System and Compile-to-Flit bootstrapping — Jason Coombs</a></li><li><a href=#wheel-variants-for-ai-accelerators-and-shared-malware-scanning--joongi-kim>Wheel variants for AI accelerators, and shared malware scanning — Joongi Kim</a></li><li><a href=#conda-pypi-reusing-the-pip-stack--daniel-holth>conda-pypi reusing the pip stack — Daniel Holth</a></li><li><a href=#nebi--environment-management-for-teams--dharhas-pothina>Nebi — environment management for teams — Dharhas Pothina</a></li></ol></li><li><a href=#roundtable-discussions>Roundtable discussions</a><ol><li><a href=#pep-803--abi3t-stable-abi-for-free-threaded-python--petr-viktorin>PEP 803 — abi3t Stable ABI for free-threaded Python — Petr Viktorin</a></li><li><a href=#yoda-conditions-in-pep-508-markers>Yoda conditions in PEP 508 markers</a></li><li><a href=#wheel-20-and-zstandard-container-hardening>Wheel 2.0 and Zstandard container hardening</a></li><li><a href=#cross-platform-environments-and-wheel-building>Cross-platform environments and wheel building</a></li><li><a href=#improving-security-metadata-across-ecosystems>Improving security metadata across ecosystems</a></li><li><a href=#dependency-resolution-and-nab--damian-shaw>Dependency resolution and nab — Damian Shaw</a></li></ol></li><li><a href=#wrapping-up>Wrapping Up</a></li></ol></nav></nav></aside><script>(function(){const t=document.querySelector(".toc-content");if(!t)return;const n=document.querySelectorAll(".post-content h2[id], .post-content h3[id], .post-content h4[id], .post-content h5[id], .post-content h6[id]");if(!n.length)return;const s=new Map;t.querySelectorAll('a[href^="#"]').forEach(function(e){s.set(e.getAttribute("href").slice(1),e)});function i(){const e=window.scrollY,i=e+window.innerHeight,t=[];let s=null,o=1/0;return n.forEach(function(n){const a=n.offsetTop,r=a+n.offsetHeight;if(r>=e&&a<=i){t.push(n.id);const i=Math.abs(a-e);i<o&&(o=i,s=n.id)}}),{visible:t,topmost:s}}function o(){const{visible:e,topmost:t}=i();s.forEach(function(n,s){n.classList.toggle("toc-visible",e.includes(s)),n.classList.toggle("toc-active",s===t)})}let e=!1;window.addEventListener("scroll",function(){e||(window.requestAnimationFrame(function(){o(),e=!1}),e=!0)}),o()})()</script></div><footer><div class=related-posts><h3>Related Posts</h3><ul><li><a href=https://bernat.tech/posts/pycon-us-2026-typing-summit-recap/>PyCon US 2026 Typing Summit Recap</a>
+<span class=date>- 2026-05-14</span></li><li><a href=https://bernat.tech/posts/pytexas-2026-recap/>PyTexas 2026 Recap</a>
+<span class=date>- 2026-04-19</span></li><li><a href=https://bernat.tech/posts/securing-python-supply-chain/>Defense in Depth: A Practical Guide to Python Supply Chain Security</a>
+<span class=date>- 2026-03-10</span></li><li><a href=https://bernat.tech/posts/pep-517-and-python-packaging/>The state of Python Packaging</a>
+<span class=date>- 2019-02-07</span></li><li><a href=https://bernat.tech/posts/growing-pain/>Python packaging - Growing Pains</a>
+<span class=date>- 2019-02-07</span></li></ul></div></footer></article></section></div><footer class=footer><section class=container><b>Opinions are my own</b>.
+<a href=https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml>Updated</a>&nbsp;<time id=footer-ts datetime=2026-05-17T06:31:59.000Z>2026-05-17T06:31:59.000Z&nbsp;UTC</time>
+via <a href=https://github.com/gaborbernat/bernat-tech/commit/af547b79cd9183a7899b508a0706dee086eff943>af547b79c</a>.
+© 2018-2026
+<script defer src=/js/footer.min.d3f865d692fc079096014431769f338c835dbe4e2d0b5891f541d203b10af60e.js integrity="sha256-0/hl1pL8B5CWAUQxdp8zjINdvk4tC1iR9UHSA7EK9g4="></script><script defer src=/js/code-copy.min.00a564933606d3f06a8eef836cbec7a10f3b8d3c0126d0f041ec25622962ea46.js integrity="sha256-AKVkkzYG0/Bqju+DbL7HoQ87jTwBJtDwQewlYili6kY="></script></section></footer><script type=module>
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+
+  const getTheme = () => {
+    const body = document.body;
+
+    
+    if (body.classList.contains('colorscheme-dark')) {
+      return 'dark';
+    }
+
+    
+    if (body.classList.contains('colorscheme-light')) {
+      return 'default';
+    }
+
+    
+    if (body.classList.contains('colorscheme-auto')) {
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'default';
+    }
+
+    
+    return 'default';
+  };
+
+  
+  document.querySelectorAll('pre.mermaid').forEach((diagram) => {
+    diagram.setAttribute('data-mermaid-code', diagram.textContent);
+  });
+
+  
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: getTheme()
+  });
+
+  
+  document.addEventListener('themeChanged', async () => {
+    const newTheme = getTheme();
+
+    
+    mermaid.initialize({ theme: newTheme });
+
+    
+    const diagrams = document.querySelectorAll('pre.mermaid');
+
+    
+    for (const diagram of diagrams) {
+      const code = diagram.getAttribute('data-mermaid-code');
+      const id = 'mermaid-' + Math.random().toString(36).substr(2, 9);
+
+      try {
+        const { svg } = await mermaid.render(id, code);
+        diagram.innerHTML = svg;
+      } catch (err) {
+        console.error('Failed to re-render mermaid diagram:', err);
+      }
+    }
+  });
+</script></main><script src=/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "3ead932f454449a799915b1721c18874"}'></script></body></html>
