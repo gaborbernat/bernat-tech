@@ -497,37 +497,6 @@ blanket wraps real `threading` primitives rather than reimplementing them. When 
 Lock, it calls the real `threading.Lock.acquire()` underneath. When you call `condition.wait()`, the real
 `threading.Condition.wait()` executes, with all its semantics around releasing and reacquiring the underlying lock.
 
-```mermaid
-flowchart TB
-    subgraph User["Your Code"]
-        Call["lock.acquire()"]
-    end
-
-    subgraph Blanket["blanket Layer"]
-        TX[Create Transaction]
-        Block[Park at BLOCKED]
-        Unblock[Wait for scheduler]
-    end
-
-    subgraph Real["Real threading.Lock"]
-        Acquire["threading.Lock.acquire()"]
-    end
-
-    Call --> TX --> Block --> Unblock
-    Unblock -->|"scheduler says GO"| Acquire
-    Acquire -->|"returns"| Done[Transaction RETURNED]
-
-    style User fill:#3b82f6,stroke:#2563eb,color:#fff
-    style Blanket fill:#f59e0b,stroke:#d97706,color:#fff
-    style Real fill:#059669,stroke:#047857,color:#fff
-    style Call fill:#3b82f6,stroke:#2563eb,color:#fff
-    style TX fill:#f59e0b,stroke:#d97706,color:#fff
-    style Block fill:#f59e0b,stroke:#d97706,color:#fff
-    style Unblock fill:#f59e0b,stroke:#d97706,color:#fff
-    style Acquire fill:#059669,stroke:#047857,color:#fff
-    style Done fill:#50b432,stroke:#3d8a26,color:#fff
-```
-
 If a testing framework reimplements `Lock.acquire()` and gets some edge case wrong, your tests pass but production
 breaks. blanket avoids this entirely. The semantics come straight from CPython's `threading` module.
 
@@ -721,30 +690,6 @@ with scenario:
 ### High-level: per-primitive helpers
 
 Where you'll spend most of your time:
-
-```mermaid
-flowchart LR
-    subgraph Lock["Lock / RLock"]
-        L1["relay(B, A, C)<br><i>Chain acquisition order</i>"]
-        L2["assign(A, B)<br><i>Transfer lock ownership</i>"]
-    end
-
-    subgraph Cond["Condition / Event / Barrier"]
-        C1["cycle(W1, W2, Notifier)<br><i>Wait/notify orchestration</i>"]
-    end
-
-    subgraph Sem["Semaphore"]
-        S1["allocate(A, B, C)<br><i>Ordered acquire/release</i>"]
-    end
-
-    style Lock fill:#3b82f6,stroke:#2563eb,color:#fff
-    style Cond fill:#059669,stroke:#047857,color:#fff
-    style Sem fill:#8b5cf6,stroke:#7c3aed,color:#fff
-    style L1 fill:#3b82f6,stroke:#2563eb,color:#fff
-    style L2 fill:#3b82f6,stroke:#2563eb,color:#fff
-    style C1 fill:#059669,stroke:#047857,color:#fff
-    style S1 fill:#8b5cf6,stroke:#7c3aed,color:#fff
-```
 
 ## Tutorial: real-world examples
 
@@ -1239,27 +1184,6 @@ checks consistency guarantees. Different level (distributed nodes vs. threads in
 declare a failure scenario, force it, verify correctness.
 
 ### Where blanket fits
-
-```mermaid
-quadrantChart
-    title Concurrency Testing Tools: Approach vs Scope
-    x-axis "Manual Declaration" --> "Automated Exploration"
-    y-axis "Single Process" --> "Distributed"
-
-    quadrant-1 Automated + Distributed
-    quadrant-2 Manual + Distributed
-    quadrant-3 Manual + Single Process
-    quadrant-4 Automated + Single Process
-
-    Jepsen: [0.7, 0.9]
-    Loom: [0.8, 0.3]
-    Shuttle: [0.9, 0.3]
-    Coyote: [0.75, 0.35]
-    Lincheck: [0.85, 0.4]
-    blanket: [0.15, 0.25]
-    Go Race: [0.6, 0.2]
-    Hypothesis: [0.65, 0.45]
-```
 
 blanket doesn't explore interleavings automatically, detect races at runtime, or generate scenarios. It lets you declare
 a specific interleaving by hand and guarantees it executes that way every time.
