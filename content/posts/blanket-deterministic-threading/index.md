@@ -70,7 +70,8 @@ for thread in threads:
     thread.join()
 ```
 
-With the GIL: `counter` probably equals 2,000. Without: it doesn't.
+With the GIL: `counter` probably equals 2,000. Without: it's some unpredictable number below 2,000 -- two threads read
+the same value, both increment it, and one write clobbers the other.
 
 As the GIL fades, Python developers face the same concurrency challenges that Rust, Go, Java, and C++ developers have
 dealt with for decades. Those ecosystems built tooling: [Loom](https://github.com/tokio-rs/loom) and
