@@ -92,72 +92,197 @@ Before we can test multithreaded code, we need to understand the tools threads u
 ### Lock
 
 A [`Lock`](https://docs.python.org/3/library/threading.html#threading.Lock) is the most basic primitive. At any moment
-it is either _unlocked_ or _locked_. A thread locks it with `acquire()` and unlocks it with `release()`. If a second
-thread calls `acquire()` while the lock is held, it blocks -- sits idle -- until the first thread calls `release()`.
-This guarantees that only one thread runs a critical section at a time.
+it is either _unlocked_ or _locked_. Only one thread can hold it at a time. Any other thread calling `acquire()` while
+the lock is held blocks -- sits idle -- until the holder calls `release()`.
+
+A web server tracking active requests needs a lock to safely update the counter from multiple threads:
+
+```python
+import threading
+
+active_requests: int = 0
+request_lock = threading.Lock()
+
+
+def handle_request() -> None:
+    global active_requests
+    with request_lock:  # acquire() on entry, release() on exit
+        active_requests += 1
+    # ... process request ...
+    with request_lock:
+        active_requests -= 1
+```
+
+Without the lock, two threads can both read `active_requests = 5`, both compute `6`, and both write `6` -- one increment
+is lost. `with lock:` calls `acquire()` on entry and `release()` on exit, even if an exception is raised.
 
 ```mermaid
 sequenceDiagram
-    box rgba(59,130,246,0.15) Thread A
-        participant A as Thread A
+    box rgba(59,130,246,0.15) Request handler 1
+        participant H1 as handler-1
     end
-    box rgba(109,40,217,0.15) Thread B
-        participant B as Thread B
+    box rgba(109,40,217,0.15) Request handler 2
+        participant H2 as handler-2
     end
     box rgba(185,28,28,0.15) Lock
-        participant L as Lock
+        participant L as request_lock
     end
 
-    A->>L: acquire() ✓ locked
-    B->>L: acquire() → blocks, waiting
-    Note over A: critical section
-    A->>L: release()
-    Note over B: unblocks, acquires
-    B->>L: acquire() ✓ locked
-    Note over B: critical section
-    B->>L: release()
+    H1->>L: acquire() ✓ locked
+    H2->>L: acquire() → blocks
+    Note over H1: active_requests += 1
+    H1->>L: release()
+    Note over H2: unblocks, acquires
+    H2->>L: acquire() ✓ locked
+    Note over H2: active_requests += 1
+    H2->>L: release()
 ```
-
-The Python idiom `with lock:` automatically calls `acquire()` on entry and `release()` on exit, even if an exception is
-raised.
 
 ### Barrier
 
 A [`Barrier(n)`](https://docs.python.org/3/library/threading.html#threading.Barrier) makes `n` threads wait until all of
-them have called `barrier.wait()`. The first `n - 1` arrivals block. When the last thread arrives, all `n` are released
-simultaneously. It is a rendezvous point: no one proceeds until everyone is ready.
+them have called `barrier.wait()`. The first `n - 1` arrivals block. When the last arrives, all `n` are released at
+once. It is a rendezvous point: no one proceeds until everyone is ready.
+
+A data pipeline that runs three parallel preprocessing steps before the merge phase:
+
+```python
+import threading
+
+merge_barrier = threading.Barrier(3)
+
+
+def preprocess_shard(shard_id: int, data: list[str]) -> list[str]:
+    # ... expensive transformation ...
+    results = [line.upper() for line in data]
+    merge_barrier.wait()  # wait for all three shards to finish
+    return results  # all shards proceed to merge simultaneously
+```
 
 ```mermaid
 sequenceDiagram
-    box rgba(59,130,246,0.15) Threads
-        participant A as Thread A
-        participant B as Thread B
-        participant C as Thread C
+    box rgba(59,130,246,0.15) Shard workers
+        participant S1 as shard-1
+        participant S2 as shard-2
+        participant S3 as shard-3
     end
     box rgba(185,28,28,0.15) Barrier(3)
-        participant Bar as Barrier
+        participant Bar as merge_barrier
     end
 
-    A->>Bar: wait() → blocks (1/3)
-    C->>Bar: wait() → blocks (2/3)
-    B->>Bar: wait() → all 3 arrived, opens
-    Bar-->>A: released
-    Bar-->>C: released
-    Bar-->>B: released
+    S1->>Bar: wait() → blocks (1/3)
+    S3->>Bar: wait() → blocks (2/3)
+    S2->>Bar: wait() → all 3 done, opens
+    Bar-->>S1: released → merge
+    Bar-->>S3: released → merge
+    Bar-->>S2: released → merge
 ```
 
-### Other primitives
+### RLock
 
-The `threading` module also provides:
+An [`RLock`](https://docs.python.org/3/library/threading.html#threading.RLock) (reentrant lock) is a Lock that the
+_same_ thread can acquire multiple times without deadlocking itself. It tracks an internal count: each `acquire()`
+increments it, each `release()` decrements it, and the lock is fully released only when the count reaches zero.
 
-- **`Event`** -- a flag one thread sets and others wait on. `event.wait()` blocks until `event.set()` is called.
-- **`Condition`** -- a lock plus a notification channel. Threads `wait()` for a predicate, others `notify()` when state
-  changes. Used in producer-consumer patterns.
-- **`Semaphore(n)`** -- a counter that allows up to `n` threads to hold it concurrently. Useful for limiting concurrent
-  access to a resource pool.
+Useful when a locked method calls another method that also needs the lock:
 
-blanket wraps all seven primitives (`Lock`, `RLock`, `Condition`, `Barrier`, `Event`, `Semaphore`, `BoundedSemaphore`)
-with the same interface, so your worker code needs no changes.
+```python
+import threading
+
+account_lock = threading.RLock()
+
+
+def transfer(amount: int) -> None:
+    with account_lock:
+        validate(amount)  # also acquires account_lock -- fine with RLock
+
+
+def validate(amount: int) -> None:
+    with account_lock:  # reentrant: same thread, count goes 2 → 1 on exit
+        if amount <= 0:
+            raise ValueError("amount must be positive")
+```
+
+With a plain `Lock`, the second `acquire()` inside `validate` would deadlock because the same thread already holds it.
+
+### Event
+
+An [`Event`](https://docs.python.org/3/library/threading.html#threading.Event) is a boolean flag shared between threads.
+It starts unset. Any thread can call `event.wait()` to block until the flag is set; another thread calls `event.set()`
+to unblock all waiters at once. `event.clear()` resets it.
+
+A background configuration loader that signals workers when startup is complete:
+
+```python
+import threading
+
+config_ready = threading.Event()
+config: dict[str, str] = {}
+
+
+def loader() -> None:
+    config.update({"db_host": "localhost", "db_port": "5432"})
+    config_ready.set()  # unblocks all waiting workers
+
+
+def worker(name: str) -> None:
+    config_ready.wait()  # blocks until loader calls set()
+    print(f"{name} connecting to {config['db_host']}")
+```
+
+### Condition
+
+A [`Condition`](https://docs.python.org/3/library/threading.html#threading.Condition) combines a lock with a
+notification mechanism. Threads call `wait()` to release the lock and sleep until another thread calls `notify()` or
+`notify_all()`. Used in producer-consumer patterns where consumers sleep when the queue is empty.
+
+```python
+import threading
+from collections import deque
+
+queue: deque[str] = deque()
+queue_condition = threading.Condition()
+
+
+def producer() -> None:
+    with queue_condition:
+        queue.append("task")
+        queue_condition.notify()  # wake one waiting consumer
+
+
+def consumer() -> None:
+    with queue_condition:
+        while not queue:
+            queue_condition.wait()  # release lock, sleep, reacquire on wake
+        task = queue.popleft()
+    print(f"processing {task}")
+```
+
+### Semaphore
+
+A [`Semaphore(n)`](https://docs.python.org/3/library/threading.html#threading.Semaphore) maintains an internal counter
+starting at `n`. `acquire()` decrements it (blocking when it reaches zero); `release()` increments it. Up to `n` threads
+can hold it simultaneously. A `BoundedSemaphore` is the same but raises an error if `release()` is called more times
+than `acquire()`, preventing bugs where the counter drifts above the initial value.
+
+A connection pool that limits concurrent database connections to 5:
+
+```python
+import threading
+
+connection_semaphore = threading.Semaphore(5)
+
+
+def query_database(sql: str) -> str:
+    with connection_semaphore:  # blocks if 5 connections already active
+        # ... execute query ...
+        return "result"
+```
+
+---
+
+blanket wraps all seven primitives with the same interface your production code already uses, so worker threads need no
+changes.
 
 ## The problem with testing threads
 
@@ -267,9 +392,9 @@ timeline
     2026 : Python 3.15 — stable ABI (abi3t), new threading utils, Tachyon profiler
 ```
 
-Larry Hastings knows this problem well. His [Gilectomy project](https://github.com/larryhastings/gilectomy), started
-years before PEP 703, was one of the earliest serious attempts to remove the GIL from CPython. He's been thinking about
-"what happens when Python threads actually run in parallel" longer than almost anyone.
+Larry Hastings' [Gilectomy project](https://github.com/larryhastings/gilectomy), started years before PEP 703, was an
+early experimental attempt to remove the GIL from CPython -- which gives him a practical grounding in the concurrency
+problems free-threading introduces.
 
 ## Enter blanket
 
