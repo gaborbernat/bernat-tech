@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "highlight": "node scripts/highlight.mjs"
+  },
+  "devDependencies": {
+    "glob": "^11.0.0",
+    "shiki": "^3.7.0"
+  }
+}

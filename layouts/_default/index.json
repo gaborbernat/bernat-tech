@@ -6,7 +6,7 @@
   "feed_url": {{ (printf "%sindex.json" .Site.BaseURL) | jsonify }},
   "description": {{ .Site.Params.description | jsonify }},
   "authors": [{ "name": {{ .Site.Params.author | jsonify }} }],
-  "language": {{ .Site.LanguageCode | jsonify }},
+  "language": {{ .Site.Language.Locale | jsonify }},
   "items": [
     {{- range $i, $p := $pages -}}
     {{- if $i }},{{ end }}

@@ -1,6 +1,6 @@
 baseURL = "https://bernat.tech"
 title = "Bernát Gábor — Python packaging, tox, virtualenv & open source"
-languageCode = "en"
+locale = "en-US"
 defaultContentLanguage = "en"
 enableRobotsTXT = true
 enableEmoji = true
@@ -9,9 +9,6 @@ disableHugoGeneratorInject = true
 ignoreLogs = ["warning-goldmark-raw-html"]
 
 pagination.pagerSize = 20
-pygmentsStyle = "bw"
-pygmentsCodeFences = true
-pygmentsCodeFencesGuessSyntax = true
 
 [params]
 author = "Bernát Gábor"
@@ -139,7 +136,7 @@ weight = 10
 home = ["HTML", "RSS", "JSON"]
 
 [languages.en]
-languageName = ":uk:"
+label = ":us:"
 
 [markup.goldmark.renderer]
 unsafe = false
@@ -164,18 +161,11 @@ startLevel = 2
 [caches.getresource]
 maxAge = "30m"
 
-[sitemap]
-changefreq = "weekly"
-filename = "sitemap.xml"
-priority = 0.5
-
 [imaging]
-quality = 100
-resampleFilter = "Lanczos"
-hint = "photo"
+quality = 95
 
-[imaging.exif]
-includeFields = ""
+[imaging.webp]
+hint = "photo"
 
 [module]
 [[module.imports]]

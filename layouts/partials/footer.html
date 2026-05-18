@@ -20,6 +20,42 @@
     <script defer src="{{ $codeCopyJs.RelPermalink }}" integrity="{{ $codeCopyJs.Data.Integrity }}"></script>
   </section>
 </footer>
+{{ if and hugo.IsServer (.Page.Store.Get "hasCode") }}
+<script type="module">
+  import { codeToHtml } from 'https://esm.sh/shiki@3.7.0';
+
+  const getThemeKey = () => {
+    const body = document.body;
+    if (body.classList.contains('colorscheme-dark')) return 'dark';
+    if (body.classList.contains('colorscheme-light')) return 'light';
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  };
+
+  const themes = { light: 'catppuccin-latte', dark: 'catppuccin-mocha' };
+
+  async function highlightAll() {
+    const blocks = document.querySelectorAll('pre code[class*="language-"]');
+    for (const el of blocks) {
+      const lang = el.className.match(/language-(\w+)/)?.[1] || 'text';
+      const html = await codeToHtml(el.textContent, { lang, themes, defaultColor: false });
+      el.closest('.code-block-wrapper').innerHTML = html;
+    }
+    const inlines = document.querySelectorAll('code:not(pre code)');
+    for (const el of inlines) {
+      const text = el.textContent;
+      if (!/[.()\[\]=:]/.test(text)) continue;
+      const html = await codeToHtml(text, { lang: 'python', themes, defaultColor: false });
+      const tmp = document.createElement('div');
+      tmp.innerHTML = html;
+      const spans = tmp.querySelector('code')?.innerHTML;
+      if (spans) { el.innerHTML = spans; el.classList.add('shiki-inline'); }
+    }
+  }
+
+  highlightAll();
+  document.addEventListener('themeChanged', highlightAll);
+</script>
+{{ end }}
 {{ if .Page.Store.Get "hasMermaid" }}
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';

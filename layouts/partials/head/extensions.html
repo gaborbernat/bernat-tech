@@ -36,7 +36,7 @@
   "url" .Site.BaseURL
   "name" .Site.Title
   "description" .Site.Params.description
-  "inLanguage" .Site.LanguageCode
+  "inLanguage" .Site.Language.Locale
   "author" $author
   "potentialAction" (dict
     "@type" "SearchAction"
@@ -50,13 +50,8 @@
 {{- end }}
 
 {{- if and (eq .Kind "page") (eq .Section "posts") }}
-{{- $img := "" -}}
-{{- with .Params.image -}}
-  {{- $img = printf "%s%s" $.Permalink . -}}
-{{- end -}}
 {{- $desc := .Description | default .Summary | plainify -}}
-<script type="application/ld+json">
-{{- dict
+{{- $post := dict
   "@context" "https://schema.org"
   "@type" "BlogPosting"
   "headline" .Title
@@ -67,11 +62,15 @@
   "keywords" (delimit .Params.tags ", ")
   "author" $author
   "publisher" $author
-  "image" $img
   "url" .Permalink
   "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink)
-  "inLanguage" .Site.LanguageCode
-  | jsonify | safeJS -}}
+  "inLanguage" .Site.Language.Locale
+-}}
+{{- with .Params.image -}}
+  {{- $post = merge $post (dict "image" (printf "%s%s" $.Permalink .)) -}}
+{{- end -}}
+<script type="application/ld+json">
+{{- $post | jsonify | safeJS -}}
 </script>
 <script type="application/ld+json">
 {{- dict

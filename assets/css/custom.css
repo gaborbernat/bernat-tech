@@ -430,11 +430,6 @@ body.colorscheme-dark .toc-content a.toc-active {
   }
 }
 
-/* Light mode code block background */
-.chroma {
-  background-color: #ebedf0;
-}
-
 /* Code copy button */
 .code-block-wrapper {
   position: relative;
@@ -502,9 +497,68 @@ body.colorscheme-dark .code-copy-button.copied {
   }
 }
 
+/* Shiki dual-theme: light by default, dark via color scheme */
+.shiki,
+.shiki span {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+}
+body.colorscheme-dark .shiki,
+body.colorscheme-dark .shiki span {
+  color: var(--shiki-dark);
+  background-color: var(--shiki-dark-bg);
+}
+@media (prefers-color-scheme: dark) {
+  body.colorscheme-auto .shiki,
+  body.colorscheme-auto .shiki span {
+    color: var(--shiki-dark);
+    background-color: var(--shiki-dark-bg);
+  }
+}
+.shiki {
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+code.shiki-inline {
+  background: transparent;
+}
+code.shiki-inline span {
+  color: var(--shiki-light);
+}
+body.colorscheme-dark code.shiki-inline span {
+  color: var(--shiki-dark);
+}
+@media (prefers-color-scheme: dark) {
+  body.colorscheme-auto code.shiki-inline span {
+    color: var(--shiki-dark);
+  }
+}
+
 /* Cap mermaid diagrams so they fit on screen */
 pre.mermaid svg,
 .mermaid svg {
   max-height: 600px;
   height: auto;
+}
+
+/* Tighter tables in post content */
+.content table:not(.project-table) td,
+.content table:not(.project-table) th {
+  border: 1px solid rgba(128, 128, 128, 0.25);
+  padding: 2px 6px;
+  font-size: 0.9em;
+}
+.content table:not(.project-table) th {
+  font-weight: 600;
+}
+body.colorscheme-dark .content table:not(.project-table) td,
+body.colorscheme-dark .content table:not(.project-table) th {
+  border-color: rgba(128, 128, 128, 0.3);
+}
+@media (prefers-color-scheme: dark) {
+  body.colorscheme-auto .content table:not(.project-table) td,
+  body.colorscheme-auto .content table:not(.project-table) th {
+    border-color: rgba(128, 128, 128, 0.3);
+  }
 }

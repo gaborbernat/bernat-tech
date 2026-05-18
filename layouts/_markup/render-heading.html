@@ -3,8 +3,7 @@
   Some posts authored section headings as `# ...`; rendering them verbatim would
   emit multiple h1 elements per page, hurting accessibility and SERP outline.
 */ -}}
-{{- $level := .Level -}}
-{{- if eq $level 1 -}}{{- $level = 2 -}}{{- end -}}
+{{- $level := math.Min 6 (add .Level 1) -}}
 <h{{ $level }} id="{{ .Anchor | safeURL }}">
   {{ .Text | safeHTML }}
   <a class="heading-link" href="#{{ .Anchor | safeURL }}">

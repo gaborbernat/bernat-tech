@@ -1,3 +1,4 @@
+exclude: ^_vendor/|^node_modules/
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
@@ -16,14 +17,13 @@ repos:
     rev: "v3.8.3"
     hooks:
       - id: prettier
-        exclude: layouts/.*|.*\.md$|.*\.ya?ml$
+        exclude: layouts/.*|.*\.md$|.*\.ya?ml$|package-lock\.json$
         args: ["--print-width=120", "--prose-wrap=always"]
   - repo: https://github.com/executablebooks/mdformat
     rev: 1.0.0
     hooks:
       - id: mdformat
         args: ["--wrap", "120", "--number"]
-        exclude: "^themes/"
         additional_dependencies:
           - mdformat-beautysh
           - mdformat-simple-breaks

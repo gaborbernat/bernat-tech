@@ -1,0 +1,33 @@
+{{- $u := urls.Parse .Destination -}}
+{{- $src := $u.String -}}
+{{- $img := false -}}
+{{- if not $u.IsAbs -}}
+  {{- with or (.Page.Resources.Get $u.Path) (resources.Get $u.Path) -}}
+    {{- $img = . -}}
+    {{- $src = .RelPermalink -}}
+  {{- end -}}
+{{- end -}}
+{{- $alt := .Text | default .Title -}}
+{{- if $img -}}
+  {{- $sizes := "(min-width: 35em) 1200px, 100vw" -}}
+  {{- $widths := slice 500 800 1200 -}}
+  {{- $webpSet := slice -}}
+  {{- range $w := $widths -}}
+    {{- if ge $img.Width $w -}}
+      {{- $webp := $img.Resize (printf "%dx webp" $w) -}}
+      {{- $webpSet = $webpSet | append (printf "%s %dw" $webp.RelPermalink $w) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if len $webpSet }}
+  <img src="{{ $src }}" alt="{{ $alt }}"
+    srcset="{{ delimit $webpSet ", " }}" sizes="{{ $sizes }}"
+    width="{{ $img.Width }}" height="{{ $img.Height }}"
+    loading="lazy" decoding="async">
+  {{- else }}
+  <img src="{{ $src }}" alt="{{ $alt }}"
+    width="{{ $img.Width }}" height="{{ $img.Height }}"
+    loading="lazy" decoding="async">
+  {{- end }}
+{{- else -}}
+  <img src="{{ $src }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+{{- end -}}

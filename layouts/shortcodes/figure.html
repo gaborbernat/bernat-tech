@@ -20,8 +20,8 @@
     {{- $widths := slice 500 800 1200 -}}
     {{- $webpSet := slice -}}
     {{- range $w := $widths -}}
-      {{- if ge $img.Width (string $w) -}}
-        {{- $webp := $img.Resize (printf "%dx webp q100" $w) -}}
+      {{- if ge $img.Width $w -}}
+        {{- $webp := $img.Resize (printf "%dx webp" $w) -}}
         {{- $webpSet = $webpSet | append (printf "%s %dw" $webp.RelPermalink $w) -}}
       {{- end -}}
     {{- end -}}
