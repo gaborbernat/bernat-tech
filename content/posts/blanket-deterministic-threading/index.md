@@ -52,7 +52,6 @@ Code that was "accidentally thread-safe" will start exhibiting real data races:
 ```python
 counter: int = 0
 
-
 def increment() -> None:
     global counter
     for _ in range(1_000_000):
@@ -82,17 +81,13 @@ import threading
 lock = threading.Lock()
 barrier = threading.Barrier(3)
 
-
 def worker(name: str) -> None:
     with lock:
         print(f"worker {name} got the lock")
     barrier.wait()
     print(f"worker {name} is past the barrier")
 
-
-threads: list[threading.Thread] = [
-    threading.Thread(target=worker, args=(n,)) for n in ("A", "B", "C")
-]
+threads: list[threading.Thread] = [threading.Thread(target=worker, args=(n,)) for n in ("A", "B", "C")]
 random.shuffle(threads)
 for thread in threads:
     thread.start()
@@ -220,13 +215,11 @@ scenario = blanket.Scenario()
 lock = scenario.Lock()
 barrier = scenario.Barrier(3)
 
-
 def worker(name: str) -> None:
     with lock:
         print(f"worker {name} got the lock")
     barrier.wait()
     print(f"worker {name} is past the barrier")
-
 
 thread_a: Thread = Thread(target=worker, args=("A",))
 thread_b: Thread = Thread(target=worker, args=("B",))
@@ -462,9 +455,7 @@ You can wait on threads, transactions, bound methods, or signal tokens:
 from blanket import Call, Reached, State, Terminated
 
 with scenario:
-    signaled: set[object] = scenario.wait(
-        Call(lock.acquire, thread_a), Terminated(thread_b)
-    )
+    signaled: set[object] = scenario.wait(Call(lock.acquire, thread_a), Terminated(thread_b))
 ```
 
 ### Middle-level: park, skip, finish, and drivers
@@ -540,13 +531,11 @@ pool_lock = scenario.Lock()
 connections: list[str] = ["conn_1", "conn_2"]
 handed_out: list[str] = []
 
-
 def get_connection(handler_name: str) -> None:
     with pool_lock:
         if connections:
             conn = connections.pop(0)
             handed_out.append(f"{handler_name}={conn}")
-
 
 handler_a: Thread = scenario.thread(get_connection, "handler_a")
 handler_b: Thread = scenario.thread(get_connection, "handler_b")
@@ -605,20 +594,17 @@ scenario = blanket.Scenario()
 users_lock = scenario.Lock()
 orders_lock = scenario.Lock()
 
-
 def migrate_users() -> None:
     users_lock.acquire()
     if orders_lock.acquire(timeout=1.0):
         orders_lock.release()
     users_lock.release()
 
-
 def migrate_orders() -> None:
     orders_lock.acquire()
     if users_lock.acquire(timeout=1.0):
         users_lock.release()
     orders_lock.release()
-
 
 users_task: Thread = scenario.thread(migrate_users)
 orders_task: Thread = scenario.thread(migrate_orders)
@@ -652,20 +638,16 @@ scenario = blanket.Scenario()
 ready = scenario.Event()
 startup_order: list[str] = []
 
-
 def schema_migrator() -> None:
     ready.wait()
     startup_order.append("migration")
-
 
 def http_listener() -> None:
     ready.wait()
     startup_order.append("http")
 
-
 def config_loader() -> None:
     ready.set()
-
 
 migrator: Thread = scenario.thread(schema_migrator)
 listener: Thread = scenario.thread(http_listener)
@@ -695,11 +677,9 @@ scenario = blanket.Scenario()
 sync_point = scenario.Barrier(3)
 reduce_input: list[str] = []
 
-
 def process_shard(shard_id: str) -> None:
     sync_point.wait()
     reduce_input.append(shard_id)
-
 
 shard_a: Thread = scenario.thread(process_shard, "shard_a")
 shard_b: Thread = scenario.thread(process_shard, "shard_b")
@@ -728,12 +708,10 @@ scenario = blanket.Scenario()
 pool_lock = scenario.Lock()
 used_fallback: bool = False
 
-
 def get_or_create_connection() -> None:
     global used_fallback
     if not pool_lock.acquire(timeout=5.0):
         used_fallback = True
-
 
 pool_lock.acquire()  # simulate a long-running transaction holding the lock
 
@@ -794,19 +772,15 @@ import threading
 
 from blanket.injector import Location, inject_call
 
-
 def update_cache(cache: dict[str, str], key: str, value: str) -> None:
     old: str | None = cache.get(key)
     new_value: str = f"{old}_{value}" if old else value
     cache[key] = new_value  # race between the read above and this write
 
-
 checkpoint = threading.Event()
-
 
 def pause() -> None:
     checkpoint.wait()
-
 
 loc = Location.text(update_cache, "cache[key] = new_value")
 patched_update = inject_call(pause, loc)
@@ -1026,7 +1000,6 @@ import threading
 from collections import OrderedDict
 from typing import Any
 
-
 class ThreadSafeLRUCache:
     def __init__(self, max_size: int) -> None:
         self._lock: threading.Lock = threading.Lock()
@@ -1057,7 +1030,6 @@ from threading import Thread
 
 import blanket
 
-
 def test_write_before_read() -> None:
     scenario = blanket.Scenario()
     lock = scenario.Lock()
@@ -1085,7 +1057,6 @@ def test_write_before_read() -> None:
         lock_api.unblock(lock.release, getter_thread)
 
     assert results["read"] == "new"
-
 
 def test_eviction_order() -> None:
     scenario = blanket.Scenario()
@@ -1115,7 +1086,6 @@ def test_eviction_order() -> None:
         lock_api.unblock(lock.release, writer_d)
 
     assert list(cache.keys()) == ["c", "d"]
-
 
 def test_read_prevents_eviction() -> None:
     scenario = blanket.Scenario()

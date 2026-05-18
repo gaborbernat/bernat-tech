@@ -91,7 +91,6 @@ the example that follows, the input must be of type `str`, passing in `None` thr
 def transform(arg):
     return "transformed value {}".format(arg.upper())
 
-
 # if arg would be type hinted as str the type linter could warn that this is an invalid call
 transform(None)
 ```
@@ -103,10 +102,8 @@ cases too, where such mismatches get harder and harder to see; such as nested fu
 def construct(param=None):
     return None if param is None else ""
 
-
 def append(arg):
     return arg + " appended"
-
 
 transform(append(construct()))
 ```
@@ -127,13 +124,11 @@ from datetime import datetime
 from typing import List
 from pydantic import BaseModel, ValidationError
 
-
 class User(BaseModel):
     id: int
     name = "John Doe"
     signup_ts: datetime = None
     friends: List[int] = []
-
 
 external_data = {"id": "123", "signup_ts": "2017-06-01 12:22", "friends": [1, 2, 3]}
 user = User(**external_data)
@@ -350,7 +345,6 @@ from magic import RunSate
 
 HasGetSetMutable = Union[Dict, List]
 
-
 @contextmanager
 def swap_in_state(
     state,  # type: State
@@ -372,7 +366,6 @@ from typing import Generator, Tuple, Optional, Dict, List
 from magic import RunSate
 
 HasGetSetMutable = Union[Dict, List]  # pylint: disable=invalid-name
-
 
 @contextmanager
 def swap_in_state(
@@ -409,7 +402,6 @@ and instead, add another file with `pyi` extension right beside it:
 ```python
 # a.pyi alongside a.py
 from typing import List
-
 
 class A(object):
     elements = ...  # type: List[int]
@@ -577,7 +569,6 @@ laid down in [PEP-544 ~ Protocols](https://peps.python.org/pep-0544/).
 ```python
 KEY = TypeVar("KEY", contravariant=true)
 
-
 # this is a protocol having a generic type as an argument
 # it has a class variable of type var, and a getter with the same key type
 class MagicGetter(Protocol[KEY], Sized):
@@ -585,10 +576,8 @@ class MagicGetter(Protocol[KEY], Sized):
 
     def __getitem__(self, item: KEY) -> int: ...
 
-
 def func_int(param: MagicGetter[int]) -> int:
     return param["a"] * 2
-
 
 def func_str(param: MagicGetter[str]) -> str:
     return "{}".format(param["a"])
@@ -611,7 +600,6 @@ Here's a quick implementation of the `repr` dunder method for a class:
 ```python
 from __future__ import unicode_literals
 
-
 class A(object):
     def __repr__(self) -> str:
         return "A({})".format(self.full_name)
@@ -624,7 +612,6 @@ Python 2 and 3. You need to add runtime logic to do the right thing:
 
 ```python
 from __future__ import unicode_literals
-
 
 class A(object):
     def __repr__(self) -> str:
@@ -666,20 +653,16 @@ type, and only a given output type is returned. So, in this case:
 ```python
 from typing import overload
 
-
 @overload
 def magic(i: int) -> int:
     pass
-
 
 @overload
 def magic(i: str) -> str:
     pass
 
-
 def magic(i: Union[int, str]) -> Union[int, str]:
     return i * 2
-
 
 def other_func() -> int:
     result = magic(2)
@@ -721,7 +704,6 @@ want the `builtin.float`:
 if typing.TYPE_CHECKING:
     import builtins
 
-
 class A(object):
     def float(self):
         # type: () -> builtins.float
@@ -741,17 +723,14 @@ correct type is passed, and the base is abstract, so this seems an agreeable des
 from abc import ABCMeta, abstractmethod
 from typing import Union
 
-
 class A(metaclass=ABCMeta):
     @abstractmethod
     def func(self, key):  # type: (Union[int, str]) -> str
         raise NotImplementedError
 
-
 class B(A):
     def func(self, key):  # type: (int) -> str
         return str(key)
-
 
 class C(A):
     def func(self, key):  # type: (str) -> str
@@ -773,17 +752,14 @@ in the function arguments; you can only extend what you cover, but not to constr
 from abc import ABCMeta, abstractmethod
 from typing import Union
 
-
 class A(metaclass=ABCMeta):
     @abstractmethod
     def func(self, key):  # type: (Union[int, str]) -> str
         raise NotImplementedError
 
-
 class B(A):
     def func(self, key):  # type: (Union[int, str, bool]) -> str
         return str(key)
-
 
 class C(A):
     def func(self, key):  # type: (Union[int, str, List]) -> str
@@ -799,7 +775,6 @@ class A:
     @classmethod
     def magic(cls, a: int) -> "A":
         return cls()
-
 
 class B(A):
     @classmethod
@@ -838,7 +813,6 @@ example. Now take what we learned to take a look at the following:
 class A:
     def __init__(self, a: int) -> None:
         pass
-
 
 class B(A):
     def __init__(self, a: int, b: bool) -> None:
@@ -879,7 +853,13 @@ Remember you have some tools at hand that help you discover, understand and perh
   ```python
   a = [4]
   reveal_type(a)  # -> error: Revealed type is 'builtins.list[builtins.int*]'
+
   ```
+
+```
+
+```
+
 - use `cast` to force a given type:
   ```python
   from typing import List, cast
@@ -888,11 +868,19 @@ Remember you have some tools at hand that help you discover, understand and perh
   b = cast(List[int], a)  # passes fine
   c = cast(List[str], a)  # type: List[str] # passes fine (no runtime check)
   reveal_type(c)  # -> error: Revealed type is 'builtins.list[builtins.str]'
+
   ```
+
+````
+
 - use the type ignore marker to disable an error in a line:
   ```python
   x = confusing_function()  # type: ignore # see mypy/issues/1167
-  ```
+
+```
+
+````
+
 - ask the community; expose a minimal reproducible version of the problem under the python/typing community (the Gitter
   chat is no longer active).
 

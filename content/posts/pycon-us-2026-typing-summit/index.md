@@ -89,7 +89,7 @@ def choose[A](a1: A, a2: A) -> A:
 def partial[X, Y, Z](fn: Callable[[X, Y], Z], x: X) -> Callable[[Y], Z]: ...
 
 p = partial(choose, None)
-p(2)        # type checker: error. argument 2 is not None.
+p(2)  # type checker: error. argument 2 is not None.
 p("hello")  # ditto.
 ```
 
@@ -290,14 +290,19 @@ The PEP introduces three core constructs:
 1. **Conditional types.**
    ```python
    T if typing.IsAssignable[T, list] else list[T]
+
    ```
+
+````
    A ternary over a subtype check, in the same family as
    [TypeScript's conditional types](https://www.typescriptlang.org/docs/handbook/2/conditional-types.html) but adapted
    to Python's typing model.
 2. **Unpacked comprehensions.** Iterate over a tuple type, transform each element, splice the result back in:
    ```python
    tuple[*[E | None for E in typing.Iter[T]]]
-   ```
+
+````
+
 3. **Type operators.** A library of primitives for inspecting and constructing types: `IsAssignable`, `GetArg`,
    `Members`, `NewProtocol`, `NewTypedDict`, and others, covering callable inspection, tuple slicing, union iteration,
    attribute access, and class-decorator annotations. Roughly twenty in the current draft.
