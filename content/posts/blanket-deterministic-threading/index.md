@@ -119,23 +119,31 @@ is lost. `with lock:` calls `acquire()` on entry and `release()` on exit, even i
 ```mermaid
 sequenceDiagram
     box rgba(59,130,246,0.15) Request handler 1
-        participant H1 as handler-1
+        participant A as handler-1
     end
     box rgba(109,40,217,0.15) Request handler 2
-        participant H2 as handler-2
+        participant B as handler-2
     end
     box rgba(185,28,28,0.15) Lock
         participant L as request_lock
     end
 
-    H1->>L: acquire() ✓ locked
-    H2->>L: acquire() → blocks
-    Note over H1: active_requests += 1
-    H1->>L: release()
-    Note over H2: unblocks, acquires
-    H2->>L: acquire() ✓ locked
-    Note over H2: active_requests += 1
-    H2->>L: release()
+    A->>L: acquire()
+    activate L
+    B->>L: acquire() (blocks)
+    rect rgba(59,130,246,0.08)
+        Note over A,L: handler-1 in critical section
+        A->>L: release()
+        deactivate L
+    end
+    Note over B: unblocked
+    B->>L: acquire()
+    activate L
+    rect rgba(109,40,217,0.08)
+        Note over B,L: handler-2 in critical section
+        B->>L: release()
+        deactivate L
+    end
 ```
 
 ### Barrier
@@ -166,16 +174,16 @@ sequenceDiagram
         participant S2 as shard-2
         participant S3 as shard-3
     end
-    box rgba(185,28,28,0.15) Barrier(3)
+    box rgba(185,28,28,0.15) Barrier
         participant Bar as merge_barrier
     end
 
-    S1->>Bar: wait() → blocks (1/3)
-    S3->>Bar: wait() → blocks (2/3)
-    S2->>Bar: wait() → all 3 done, opens
-    Bar-->>S1: released → merge
-    Bar-->>S3: released → merge
-    Bar-->>S2: released → merge
+    S1->>Bar: wait() - blocks (1/3)
+    S3->>Bar: wait() - blocks (2/3)
+    S2->>Bar: wait() - all arrived, opens
+    Bar-->>S1: released
+    Bar-->>S3: released
+    Bar-->>S2: released
 ```
 
 ### RLock
@@ -790,9 +798,9 @@ sequenceDiagram
     end
 
     Note over S: with scenario:
-    HB->>P: acquire() → BLOCKED
-    HA->>P: acquire() → BLOCKED
-    HC->>P: acquire() → BLOCKED
+    HB->>P: acquire() - BLOCKED
+    HA->>P: acquire() - BLOCKED
+    HC->>P: acquire() - BLOCKED
 
     S->>HB: unblock via relay
     HB->>P: acquire() succeeds
@@ -872,17 +880,17 @@ sequenceDiagram
         participant OL as orders_lock
     end
 
-    S->>UT: assign(users_task) → acquires users_lock
-    S->>OT: assign(orders_task) → acquires orders_lock
+    S->>UT: assign(users_task) - acquires users_lock
+    S->>OT: assign(orders_task) - acquires orders_lock
 
-    UT->>OL: acquire(timeout=1.0) → BLOCKED
-    OT->>UL: acquire(timeout=1.0) → BLOCKED
+    UT->>OL: acquire(timeout=1.0) - BLOCKED
+    OT->>UL: acquire(timeout=1.0) - BLOCKED
     Note over UT,OT: Deadlock: each holds one lock, wants the other
 
     S->>UT: expire() + unblock()
     Note over UT: timeout fires, returns False
-    S->>UT: finish → releases users_lock
-    S->>OT: finish → acquires users_lock, releases both
+    S->>UT: finish - releases users_lock
+    S->>OT: finish - acquires users_lock, releases both
 ```
 
 ### Service startup: controlling initialization order
@@ -942,9 +950,9 @@ sequenceDiagram
         participant E as ready event
     end
 
-    M->>E: wait() → sleeping
-    L->>E: wait() → sleeping
-    C->>E: set() → wakes both
+    M->>E: wait() - sleeping
+    L->>E: wait() - sleeping
+    C->>E: set() - wakes both
 
     Note over S: cyc.wake(migrator, listener)
     S->>M: resume first
@@ -1089,42 +1097,12 @@ patched_update = inject_call(pause, loc)
 Testing concurrent code has been tackled differently across ecosystems. Understanding where blanket fits helps you know
 when to reach for it versus something else.
 
-```mermaid
-flowchart LR
-    subgraph Discovery["Bug Discovery"]
-        direction TB
-        Loom["Loom — Rust"]
-        Shuttle["Shuttle — Rust/AWS"]
-        CHESS["CHESS — Microsoft"]
-        Coyote["Coyote — .NET"]
-        Lincheck["Lincheck — JVM"]
-    end
-
-    subgraph Detection["Runtime Detection"]
-        direction TB
-        GoRace["Go Race Detector"]
-        TSan["ThreadSanitizer — C/C++"]
-    end
-
-    subgraph Deterministic["Deterministic Control"]
-        direction TB
-        Blanket["blanket — Python"]
-        KotlinTest["coroutines-test — Kotlin"]
-        ThreadWeaver["Thread Weaver — Java"]
-    end
-
-    subgraph Generation["Scenario Generation"]
-        direction TB
-        Hypothesis["Hypothesis — Python"]
-        Jepsen["Jepsen — Distributed"]
-    end
-
-    style Discovery fill:#dc2626,stroke:#b91c1c,color:#fff
-    style Detection fill:#f59e0b,stroke:#d97706,color:#fff
-    style Deterministic fill:#059669,stroke:#047857,color:#fff
-    style Generation fill:#6366f1,stroke:#4f46e5,color:#fff
-    style Blanket fill:#50b432,stroke:#3d8a26,color:#fff
-```
+| Approach                  | Tools                                                                                                                                                                                                                    | How it works                                                                                                     |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| **Bug discovery**         | [Loom](https://github.com/tokio-rs/loom) (Rust), [Shuttle](https://github.com/awslabs/shuttle) (Rust/AWS), [Coyote](https://microsoft.github.io/coyote/) (.NET), [Lincheck](https://github.com/JetBrains/lincheck) (JVM) | Run the test many times with different scheduling choices to systematically find interleavings that trigger bugs |
+| **Runtime detection**     | [Go Race Detector](https://go.dev/blog/race-detector), [ThreadSanitizer](https://github.com/google/sanitizers) (C/C++)                                                                                                   | Instrument memory accesses and flag races as they happen in real runs                                            |
+| **Deterministic control** | **blanket** (Python), [kotlinx-coroutines-test](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/) (Kotlin), [Thread Weaver](https://github.com/google/thread-weaver) (Java)                        | Declare the exact interleaving you want; the tool guarantees it executes that way                                |
+| **Scenario generation**   | [Hypothesis](https://hypothesis.readthedocs.io/en/latest/stateful.html) (Python), [Jepsen](https://jepsen.io/) (distributed systems)                                                                                     | Generate test programs automatically from state machine rules or fault injection                                 |
 
 ### Stateless model checkers
 
@@ -1295,23 +1273,25 @@ Testing a thread-safe LRU cache:
 ```python
 import threading
 from collections import OrderedDict
-from typing import Any
+from typing import Generic, TypeVar
+
+V = TypeVar("V")
 
 
-class ThreadSafeLRUCache:
+class ThreadSafeLRUCache(Generic[V]):
     def __init__(self, max_size: int) -> None:
         self._lock: threading.Lock = threading.Lock()
-        self._cache: OrderedDict[str, Any] = OrderedDict()
+        self._cache: OrderedDict[str, V] = OrderedDict()
         self._max_size: int = max_size
 
-    def get(self, key: str) -> Any | None:
+    def get(self, key: str) -> V | None:
         with self._lock:
             if key in self._cache:
                 self._cache.move_to_end(key)
                 return self._cache[key]
             return None
 
-    def put(self, key: str, value: Any) -> None:
+    def put(self, key: str, value: V) -> None:
         with self._lock:
             if key in self._cache:
                 self._cache.move_to_end(key)
@@ -1432,41 +1412,13 @@ the [bytecode](https://pypi.org/project/bytecode/) package.
 
 ### The shape of every blanket test
 
-```mermaid
-flowchart TB
-    subgraph Setup["1. Setup (before scenario)"]
-        S1["Create Scenario"]
-        S2["Create primitives"]
-        S3["Define worker functions"]
-        S4["Create threads"]
-    end
+Every blanket test follows three phases:
 
-    subgraph Schedule["2. Schedule (inside with scenario:)"]
-        SC1["Main thread = scheduler"]
-        SC2["Use high-level API"]
-        SC3["Control execution order"]
-    end
-
-    subgraph Assert["3. Assert (after scenario)"]
-        A1["Verify results"]
-        A2["Check state"]
-    end
-
-    Setup --> Schedule --> Assert
-
-    style Setup fill:#3b82f6,stroke:#2563eb,color:#fff
-    style Schedule fill:#059669,stroke:#047857,color:#fff
-    style Assert fill:#f59e0b,stroke:#d97706,color:#fff
-    style S1 fill:#3b82f6,stroke:#2563eb,color:#fff
-    style S2 fill:#3b82f6,stroke:#2563eb,color:#fff
-    style S3 fill:#3b82f6,stroke:#2563eb,color:#fff
-    style S4 fill:#3b82f6,stroke:#2563eb,color:#fff
-    style SC1 fill:#059669,stroke:#047857,color:#fff
-    style SC2 fill:#059669,stroke:#047857,color:#fff
-    style SC3 fill:#059669,stroke:#047857,color:#fff
-    style A1 fill:#f59e0b,stroke:#d97706,color:#fff
-    style A2 fill:#f59e0b,stroke:#d97706,color:#fff
-```
+1. **Setup** -- create a `Scenario`, create the primitives, define worker functions, create threads (use
+   `scenario.thread()` for managed threads that start and join automatically).
+2. **Schedule** -- enter `with scenario:`. Your main thread becomes the scheduler. Call the high-level API (`relay`,
+   `cycle`, `allocate`) to control execution order.
+3. **Assert** -- after exiting `with scenario:`, blanket has joined all managed threads. Check results.
 
 ### Quick reference
 
