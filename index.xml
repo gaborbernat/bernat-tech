@@ -1,296 +1,294 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Bernát Gábor — Python packaging, tox, virtualenv &amp; open source</title><link>https://bernat.tech/</link><description>Engineering notes from Bernát Gábor — PyPA maintainer of tox, virtualenv, pipx, filelock, and platformdirs. Python packaging, type hints, and supply chain security.</description><generator>Hugo 0.161.1</generator><language>en</language><lastBuildDate>Fri, 15 May 2026 23:00:00 +0000</lastBuildDate><atom:link href="https://bernat.tech/index.xml" rel="self" type="application/rss+xml"/><item><title>PyCon US 2026 Packaging Summit Recap</title><link>https://bernat.tech/posts/pycon-us-2026-packaging-summit-recap/</link><pubDate>Fri, 15 May 2026 23:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pycon-us-2026-packaging-summit-recap/</guid><description>&lt;p&gt;The &lt;a href="https://us.pycon.org/2026/events/packaging-summit/" target="_blank" rel="noopener"&gt;PyCon US 2026 Packaging Summit&lt;/a&gt;
-ran Friday May 15, 2026,
-from 1:45 PM to 5:45 PM in Room 201A of the Long Beach Convention Center. Three talks, nine lightning talks, six
-roundtable discussions. Organized by &lt;a href="https://pradyunsg.me/" target="_blank" rel="noopener"&gt;Pradyun Gedam&lt;/a&gt;
-,
-&lt;a href="https://github.com/CAM-Gerlach" target="_blank" rel="noopener"&gt;C.A.M. Gerlach&lt;/a&gt;
-, and &lt;a href="https://github.com/jezdez" target="_blank" rel="noopener"&gt;Jannis Leidel&lt;/a&gt;
-. This recap is for
-anyone who could not be in the room.&lt;/p&gt;
-&lt;div class="alert alert-info"&gt;
-&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-info" aria-hidden="true"&gt;&lt;/i&gt; TLDR:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Emma Smith&amp;rsquo;s revised &lt;a href="https://peps.python.org/pep-0777/" target="_blank" rel="noopener"&gt;PEP 777 (Wheel 2.0)&lt;/a&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Bernát Gábor — Python packaging, tox, virtualenv &amp; open source</title><link>https://bernat.tech/</link><description>Engineering notes from Bernát Gábor — PyPA maintainer of tox, virtualenv, pipx, filelock, and platformdirs. Python packaging, type hints, and supply chain security.</description><generator>Hugo 0.161.1</generator><language>en-US</language><lastBuildDate>Fri, 15 May 2026 23:00:00 +0000</lastBuildDate><atom:link href="https://bernat.tech/index.xml" rel="self" type="application/rss+xml"/><item><title>PyCon US 2026 Packaging Summit Recap</title><link>https://bernat.tech/posts/pycon-us-2026-packaging-summit-recap/</link><pubDate>Fri, 15 May 2026 23:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pycon-us-2026-packaging-summit-recap/</guid><description>&amp;lt;p&amp;gt;The &amp;lt;a href=&amp;#34;https://us.pycon.org/2026/events/packaging-summit/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;PyCon US 2026 Packaging Summit&amp;lt;/a&amp;gt;
+ran Friday May 15, 2026, from
+1:45 PM to 5:45 PM in Room 201A of the Long Beach Convention Center. Three talks, nine lightning talks, six roundtable
+discussions. Organized by &amp;lt;a href=&amp;#34;https://pradyunsg.me/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;Pradyun Gedam&amp;lt;/a&amp;gt;
+, &amp;lt;a href=&amp;#34;https://github.com/CAM-Gerlach&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;C.A.M. Gerlach&amp;lt;/a&amp;gt;
+, and
+&amp;lt;a href=&amp;#34;https://github.com/jezdez&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;Jannis Leidel&amp;lt;/a&amp;gt;
+. This recap is for anyone who could not be in the room.&amp;lt;/p&amp;gt;
+&amp;lt;div class=&amp;#34;alert alert-info&amp;#34;&amp;gt;
+&amp;lt;p class=&amp;#34;alert-title&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-circle-info&amp;#34; aria-hidden=&amp;#34;true&amp;#34;&amp;gt;&amp;lt;/i&amp;gt; TLDR:&amp;lt;/p&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;Emma Smith&amp;amp;rsquo;s revised &amp;lt;a href=&amp;#34;https://peps.python.org/pep-0777/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;PEP 777 (Wheel 2.0)&amp;lt;/a&amp;gt;
 is a minimal change with sub-PEPs
-layered on top; the first sub-PEP proposes Zstandard compression for ~25% smaller wheels.&lt;/li&gt;
-&lt;li&gt;Mike Fiedler brought three PyPI abuse vectors (persistent state, open-ended releases, PyPI as a CDN), framed
-by 3× growth against 1× resources (~24,000 new packages per month, up from ~8,000) and a single full-time
-PyPI safety and security engineer.&lt;/li&gt;
-&lt;li&gt;Mahe Iram Khan argued conda and pip are two parallel ecosystems, not two competing tools.&lt;/li&gt;
-&lt;li&gt;Lightning talks: &lt;a href="https://peps.python.org/pep-0772/" target="_blank" rel="noopener"&gt;PEP 772 Packaging Council&lt;/a&gt;
+layered on top; the first sub-PEP proposes Zstandard compression for ~25% smaller wheels.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Mike Fiedler brought three PyPI abuse vectors (persistent state, open-ended releases, PyPI as a CDN), framed by 3×
+growth against 1× resources (~24,000 new packages per month, up from ~8,000) and a single full-time PyPI safety and
+security engineer.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Mahe Iram Khan argued conda and pip are two parallel ecosystems, not two competing tools.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Lightning talks: &amp;lt;a href=&amp;#34;https://peps.python.org/pep-0772/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;PEP 772 Packaging Council&amp;lt;/a&amp;gt;
 approved (Barry Warsaw), mobile
-wheel pipeline live (Malcolm Smith), Coherent + Compile-to-Flit (Jason Coombs), wheel variants for AI
-accelerators and shared malware scanning (Joongi Kim), conda-pypi (Daniel Holth), Nebi (Dharhas Pothina).&lt;/li&gt;
-&lt;li&gt;Roundtables: &lt;a href="https://peps.python.org/pep-0803/" target="_blank" rel="noopener"&gt;PEP 803 abi3t&lt;/a&gt;
-, Wheel 2.0 hardening, cross-platform builds,
-CVE propagation, and &lt;a href="https://github.com/notatallshaw/nab" target="_blank" rel="noopener"&gt;nab&lt;/a&gt;
-(Damian Shaw&amp;rsquo;s pure-Python resolver aimed at
-pip swap-in).&lt;/li&gt;
-&lt;li&gt;Involved in Python packaging? Consider running for the Packaging Council this fall or becoming a voting
-&lt;a href="https://www.python.org/psf/membership/" target="_blank" rel="noopener"&gt;PSF member&lt;/a&gt;
-to nominate and vote.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;&lt;p&gt;For background, here are the packaging-topic PEPs resolved in the year leading up to the summit (January 2025
-through May 2026), newest first.&lt;/p&gt;</description><category>python</category><category>pycon</category><category>pycon-us</category><category>packaging-summit</category><category>packaging</category><category>pypi</category><category>wheel</category><category>pep-777</category><category>pep-694</category><category>pep-772</category><category>pep-817</category><category>pep-825</category><category>pep-803</category><category>conda</category><category>trusted-publishing</category><category>supply-chain</category><category>mobile</category><category>beeware</category><category>wheel-variants</category></item><item><title>PyCon US 2026 Typing Summit Recap</title><link>https://bernat.tech/posts/pycon-us-2026-typing-summit-recap/</link><pubDate>Thu, 14 May 2026 23:30:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pycon-us-2026-typing-summit-recap/</guid><description>&lt;p&gt;The &lt;a href="https://us.pycon.org/2026/events/typing-summit/" target="_blank" rel="noopener"&gt;PyCon US 2026 Typing Summit&lt;/a&gt;
+wheel pipeline live (Malcolm Smith), Coherent + Compile-to-Flit (Jason Coombs), wheel variants for AI accelerators
+and shared malware scanning (Joongi Kim), conda-pypi (Daniel Holth), Nebi (Dharhas Pothina).&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Roundtables: &amp;lt;a href=&amp;#34;https://peps.python.org/pep-0803/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;PEP 803 abi3t&amp;lt;/a&amp;gt;
+, Wheel 2.0 hardening, cross-platform builds, CVE
+propagation, and &amp;lt;a href=&amp;#34;https://github.com/notatallshaw/nab&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;nab&amp;lt;/a&amp;gt;
+(Damian Shaw&amp;amp;rsquo;s pure-Python resolver aimed at pip
+swap-in).&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Involved in Python packaging? Consider running for the Packaging Council this fall or becoming a voting
+&amp;lt;a href=&amp;#34;https://www.python.org/psf/membership/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;PSF member&amp;lt;/a&amp;gt;
+to nominate and vote.&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;&amp;lt;p&amp;gt;For background, here are the packaging-topic PEPs resolved in the year leading up to the summit (January 2025 through
+May 2026), newest first.&amp;lt;/p&amp;gt;</description><category>python</category><category>pycon</category><category>pycon-us</category><category>packaging-summit</category><category>packaging</category><category>pypi</category><category>wheel</category><category>pep-777</category><category>pep-694</category><category>pep-772</category><category>pep-817</category><category>pep-825</category><category>pep-803</category><category>conda</category><category>trusted-publishing</category><category>supply-chain</category><category>mobile</category><category>beeware</category><category>wheel-variants</category></item><item><title>PyCon US 2026 Typing Summit Recap</title><link>https://bernat.tech/posts/pycon-us-2026-typing-summit-recap/</link><pubDate>Thu, 14 May 2026 23:30:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pycon-us-2026-typing-summit-recap/</guid><description>&amp;lt;p&amp;gt;The &amp;lt;a href=&amp;#34;https://us.pycon.org/2026/events/typing-summit/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;PyCon US 2026 Typing Summit&amp;lt;/a&amp;gt;
 ran Thursday May 14, 2026, from 1 PM
-to 5 PM in Room 201A of the Long Beach Convention Center, the day before the main conference started. Eight talks
-plus a Typing Council Q&amp;amp;A, single track. This recap is for anyone who could not be in the room.&lt;/p&gt;
-&lt;div class="alert alert-info"&gt;
-&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-info" aria-hidden="true"&gt;&lt;/i&gt; TLDR:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Guido van Rossum argued that &lt;a href="https://peps.python.org/pep-0484/" target="_blank" rel="noopener"&gt;PEP 484&lt;/a&gt;
-&amp;rsquo;s no-new-syntax rule is already broken
-in practice and that the field should weigh user pain over power features, citing the
-&lt;a href="https://engineering.fb.com/2025/12/22/developer-tools/python-typing-survey-2025-code-quality-flexibility-typing-adoption/" target="_blank" rel="noopener"&gt;2025 Python Typing Survey&lt;/a&gt;
-.&lt;/li&gt;
-&lt;li&gt;Jelle Zijlstra proposed adding intersection and restricted-negation types to the typing spec, with an
-inhabitation check as the load-bearing new rule.&lt;/li&gt;
-&lt;li&gt;Michael Sullivan presented &lt;a href="https://peps.python.org/pep-0827/" target="_blank" rel="noopener"&gt;PEP 827&lt;/a&gt;
-(Vercel) for type manipulation, modelled
-on TypeScript&amp;rsquo;s conditional and mapped types.&lt;/li&gt;
-&lt;li&gt;Douglas Creager showed how &lt;code&gt;ty&lt;/code&gt; represents generic-call constraints internally with ternary decision diagrams,
-and a third solver strategy that fixes a 9-line &lt;code&gt;partial(choose, None)&lt;/code&gt; example every production checker today
-gets wrong.&lt;/li&gt;
-&lt;li&gt;Conner Nilsen presented a Pyrefly experiment with AI coding agents: type checking moves success on well-typed
-Meta code from 79.6% to 83.9% with 21% fewer steps; no measurable help on lightly-typed SWE-bench Verified.&lt;/li&gt;
-&lt;li&gt;Avik Chaudhuri demoed tensor-shape types in Pyrefly, blocked in practice by
-&lt;a href="https://peps.python.org/pep-0695/" target="_blank" rel="noopener"&gt;PEP 695&lt;/a&gt;
-&amp;rsquo;s eager evaluation of type parameters.&lt;/li&gt;
-&lt;li&gt;Jia Chen presented a Lean 4 formalization (Featherweight Python) with mechanized soundness and decidability
-proofs; AI assistants turned what used to take years into weeks.&lt;/li&gt;
-&lt;li&gt;The Typing Council panel (Carl Meyer, Jelle Zijlstra, Rebecca Chen on stage) opened the floor to attendee
-questions on governance, error-code consistency, metaprogramming, and the spec direction.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;&lt;h2 id="experiments-with-ai-agents-and-pyrefly-type-errors--conner-nilsen"&gt;
+to 5 PM in Room 201A of the Long Beach Convention Center, the day before the main conference started. Eight talks plus a
+Typing Council Q&amp;amp;amp;A, single track. This recap is for anyone who could not be in the room.&amp;lt;/p&amp;gt;
+&amp;lt;div class=&amp;#34;alert alert-info&amp;#34;&amp;gt;
+&amp;lt;p class=&amp;#34;alert-title&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-circle-info&amp;#34; aria-hidden=&amp;#34;true&amp;#34;&amp;gt;&amp;lt;/i&amp;gt; TLDR:&amp;lt;/p&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;Guido van Rossum argued that &amp;lt;a href=&amp;#34;https://peps.python.org/pep-0484/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;PEP 484&amp;lt;/a&amp;gt;
+&amp;amp;rsquo;s no-new-syntax rule is already broken in
+practice and that the field should weigh user pain over power features, citing the
+&amp;lt;a href=&amp;#34;https://engineering.fb.com/2025/12/22/developer-tools/python-typing-survey-2025-code-quality-flexibility-typing-adoption/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;2025 Python Typing Survey&amp;lt;/a&amp;gt;
+.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Jelle Zijlstra proposed adding intersection and restricted-negation types to the typing spec, with an inhabitation
+check as the load-bearing new rule.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Michael Sullivan presented &amp;lt;a href=&amp;#34;https://peps.python.org/pep-0827/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;PEP 827&amp;lt;/a&amp;gt;
+(Vercel) for type manipulation, modelled on
+TypeScript&amp;amp;rsquo;s conditional and mapped types.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Douglas Creager showed how &amp;lt;code&amp;gt;ty&amp;lt;/code&amp;gt; represents generic-call constraints internally with ternary decision diagrams, and a
+third solver strategy that fixes a 9-line &amp;lt;code&amp;gt;partial(choose, None)&amp;lt;/code&amp;gt; example every production checker today gets wrong.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Conner Nilsen presented a Pyrefly experiment with AI coding agents: type checking moves success on well-typed Meta
+code from 79.6% to 83.9% with 21% fewer steps; no measurable help on lightly-typed SWE-bench Verified.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Avik Chaudhuri demoed tensor-shape types in Pyrefly, blocked in practice by
+&amp;lt;a href=&amp;#34;https://peps.python.org/pep-0695/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;PEP 695&amp;lt;/a&amp;gt;
+&amp;amp;rsquo;s eager evaluation of type parameters.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Jia Chen presented a Lean 4 formalization (Featherweight Python) with mechanized soundness and decidability proofs;
+AI assistants turned what used to take years into weeks.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;The Typing Council panel (Carl Meyer, Jelle Zijlstra, Rebecca Chen on stage) opened the floor to attendee questions
+on governance, error-code consistency, metaprogramming, and the spec direction.&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;&amp;lt;h3 id=&amp;#34;experiments-with-ai-agents-and-pyrefly-type-errors--conner-nilsen&amp;#34;&amp;gt;
 Experiments with AI agents and Pyrefly type errors — Conner Nilsen
-&lt;a class="heading-link" href="#experiments-with-ai-agents-and-pyrefly-type-errors--conner-nilsen"&gt;
-&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
-&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
-&lt;/a&gt;
-&lt;/h2&gt;
-&lt;figure&gt;
-&lt;img src="https://bernat.tech/posts/pycon-us-2026-typing-summit-recap/conner-nilsen-pyrefly-ai-experiments.webp" alt="Conner Nilsen Findings slide on providing feedback to the agent at higher frequencies"
-srcset="https://bernat.tech/posts/pycon-us-2026-typing-summit-recap/conner-nilsen-pyrefly-ai-experiments_hu_89461527b1bb5279.webp 500w, https://bernat.tech/posts/pycon-us-2026-typing-summit-recap/conner-nilsen-pyrefly-ai-experiments_hu_f706c2b038af956b.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"
-width="1024" height="768"
-loading="lazy" decoding="async"&gt;
-&lt;/figure&gt;
-&lt;p&gt;Conner (Meta, &lt;a href="https://pyrefly.org/" target="_blank" rel="noopener"&gt;Pyrefly&lt;/a&gt;
-team) presented two questions: (1) does giving an AI coding agent a
-type checker help it finish tasks, and (2) does it prevent the agent from re-introducing old bugs while fixing new
-ones? His team ran two benchmarks with and without type-checker feedback and tracked three metrics: success rate,
-number of steps to completion, and wall-clock duration.&lt;/p&gt;</description><category>python</category><category>pycon</category><category>pycon-us</category><category>typing-summit</category><category>typing</category><category>type-hints</category><category>pyrefly</category><category>ty</category><category>astral</category><category>openai</category><category>meta</category><category>vercel</category><category>pep-827</category><category>intersection-types</category><category>constraint-sets</category><category>lean</category><category>tensor-types</category><category>pytorch</category><category>typing-council</category><category>guido</category></item><item><title>PyTexas 2026 Recap</title><link>https://bernat.tech/posts/pytexas-2026-recap/</link><pubDate>Sun, 19 Apr 2026 22:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pytexas-2026-recap/</guid><description>&lt;p&gt;&lt;a href="https://www.pytexas.org/" target="_blank" rel="noopener"&gt;PyTexas&lt;/a&gt;
+&amp;lt;a class=&amp;#34;heading-link&amp;#34; href=&amp;#34;#experiments-with-ai-agents-and-pyrefly-type-errors--conner-nilsen&amp;#34;&amp;gt;
+&amp;lt;i class=&amp;#34;fa-solid fa-link&amp;#34; aria-hidden=&amp;#34;true&amp;#34; title=&amp;#34;Link to heading&amp;#34;&amp;gt;&amp;lt;/i&amp;gt;
+&amp;lt;span class=&amp;#34;sr-only&amp;#34;&amp;gt;Link to heading&amp;lt;/span&amp;gt;
+&amp;lt;/a&amp;gt;
+&amp;lt;/h3&amp;gt;
+&amp;lt;figure&amp;gt;
+&amp;lt;img src=&amp;#34;/posts/pycon-us-2026-typing-summit-recap/conner-nilsen-pyrefly-ai-experiments.webp&amp;#34; alt=&amp;#34;Conner Nilsen Findings slide on providing feedback to the agent at higher frequencies&amp;#34;
+srcset=&amp;#34;/posts/pycon-us-2026-typing-summit-recap/conner-nilsen-pyrefly-ai-experiments_hu_2a398d6ed4e790a1.webp 500w, /posts/pycon-us-2026-typing-summit-recap/conner-nilsen-pyrefly-ai-experiments_hu_df504a8aa730041c.webp 800w&amp;#34; sizes=&amp;#34;(min-width: 35em) 1200px, 100vw&amp;#34;
+width=&amp;#34;1024&amp;#34; height=&amp;#34;768&amp;#34;
+loading=&amp;#34;lazy&amp;#34; decoding=&amp;#34;async&amp;#34;&amp;gt;
+&amp;lt;/figure&amp;gt;
+&amp;lt;p&amp;gt;Conner (Meta, &amp;lt;a href=&amp;#34;https://pyrefly.org/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;Pyrefly&amp;lt;/a&amp;gt;
+team) presented two questions: (1) does giving an AI coding agent a type
+checker help it finish tasks, and (2) does it prevent the agent from re-introducing old bugs while fixing new ones? His
+team ran two benchmarks with and without type-checker feedback and tracked three metrics: success rate, number of steps
+to completion, and wall-clock duration.&amp;lt;/p&amp;gt;</description><category>python</category><category>pycon</category><category>pycon-us</category><category>typing-summit</category><category>typing</category><category>type-hints</category><category>pyrefly</category><category>ty</category><category>astral</category><category>openai</category><category>meta</category><category>vercel</category><category>pep-827</category><category>intersection-types</category><category>constraint-sets</category><category>lean</category><category>tensor-types</category><category>pytorch</category><category>typing-council</category><category>guido</category></item><item><title>PyTexas 2026 Recap</title><link>https://bernat.tech/posts/pytexas-2026-recap/</link><pubDate>Sun, 19 Apr 2026 22:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pytexas-2026-recap/</guid><description>&amp;lt;p&amp;gt;&amp;lt;a href=&amp;#34;https://www.pytexas.org/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;PyTexas&amp;lt;/a&amp;gt;
 is the annual Python conference held in Austin, Texas. The 2026 edition ran April
-17–19 at the &lt;a href="https://library.austintexas.gov/central-library" target="_blank" rel="noopener"&gt;Austin Central Library&lt;/a&gt;
-in downtown Austin.&lt;/p&gt;
-&lt;div class="alert alert-info"&gt;
-&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-info" aria-hidden="true"&gt;&lt;/i&gt; TLDR:&lt;/p&gt;
-&lt;p&gt;PyTexas 2026 ran April 17–19 in Austin. Friday was tutorials, Saturday and Sunday were talks with two keynotes and two
-lightning-talk blocks. A few themes kept coming back across unrelated talks:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Design deliberately.&lt;/strong&gt; A thread across both keynotes. Hynek Schlawack: the domain model is &lt;em&gt;&amp;ldquo;the precious&amp;rdquo;&lt;/em&gt; —
+17–19 at the &amp;lt;a href=&amp;#34;https://library.austintexas.gov/central-library&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;Austin Central Library&amp;lt;/a&amp;gt;
+in downtown Austin.&amp;lt;/p&amp;gt;
+&amp;lt;div class=&amp;#34;alert alert-info&amp;#34;&amp;gt;
+&amp;lt;p class=&amp;#34;alert-title&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-circle-info&amp;#34; aria-hidden=&amp;#34;true&amp;#34;&amp;gt;&amp;lt;/i&amp;gt; TLDR:&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;PyTexas 2026 ran April 17–19 in Austin. Friday was tutorials, Saturday and Sunday were talks with two keynotes and two
+lightning-talk blocks. A few themes kept coming back across unrelated talks:&amp;lt;/p&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Design deliberately.&amp;lt;/strong&amp;gt; A thread across both keynotes. Hynek Schlawack: the domain model is &amp;lt;em&amp;gt;&amp;amp;ldquo;the precious&amp;amp;rdquo;&amp;lt;/em&amp;gt; —
 design it first, translate at the edges. Dawn Wages: ownership over your stack as one of her three pillars for model
-and career specialization.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Agents should write code, not decide what to write.&lt;/strong&gt; Peter Sobot&amp;rsquo;s Seven Stages of AI Grief ended on that line.
-Al Sweigart argued &amp;ldquo;agentic engineering&amp;rdquo; is vibe coding with better marketing, and that almost-right is worse than
-wrong. Maria Silvia Mielniczuk&amp;rsquo;s MCP talk built the same idea into an architecture: models suggest, only the server
-executes. Adam Gordon Bell&amp;rsquo;s running coach split deterministic work (plain Python) from interpretation (LLM). The
-Sunday opener framed it bluntly: when AI ships a bad PR, fix the process, not the model.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Code quality is an input to AI productivity.&lt;/strong&gt; Miguel Vargas&amp;rsquo;s framing: AI agents produce cleaner, safer code in
-codebases that are already clean, safe, and typed, so Ruff, ty, and uv matter more now.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;The supply chain is still the attack surface.&lt;/strong&gt; Christopher Ariza on why &lt;code&gt;pip install&lt;/code&gt; still runs arbitrary code,
-with &lt;code&gt;.pth&lt;/code&gt; files, &lt;code&gt;sitecustomize.py&lt;/code&gt;, and &lt;code&gt;setup.py&lt;/code&gt; as the specific places to pay attention.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;CPython itself is getting faster.&lt;/strong&gt; Jacob Coffee on &lt;a href="https://peps.python.org/pep-0810/" target="_blank" rel="noopener"&gt;PEP 810&lt;/a&gt;
+and career specialization.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Agents should write code, not decide what to write.&amp;lt;/strong&amp;gt; Peter Sobot&amp;amp;rsquo;s Seven Stages of AI Grief ended on that line.
+Al Sweigart argued &amp;amp;ldquo;agentic engineering&amp;amp;rdquo; is vibe coding with better marketing, and that almost-right is worse than
+wrong. Maria Silvia Mielniczuk&amp;amp;rsquo;s MCP talk built the same idea into an architecture: models suggest, only the server
+executes. Adam Gordon Bell&amp;amp;rsquo;s running coach split deterministic work (plain Python) from interpretation (LLM). The
+Sunday opener framed it bluntly: when AI ships a bad PR, fix the process, not the model.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Code quality is an input to AI productivity.&amp;lt;/strong&amp;gt; Miguel Vargas&amp;amp;rsquo;s framing: AI agents produce cleaner, safer code in
+codebases that are already clean, safe, and typed, so Ruff, ty, and uv matter more now.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;The supply chain is still the attack surface.&amp;lt;/strong&amp;gt; Christopher Ariza on why &amp;lt;code&amp;gt;pip install&amp;lt;/code&amp;gt; still runs arbitrary code,
+with &amp;lt;code&amp;gt;.pth&amp;lt;/code&amp;gt; files, &amp;lt;code&amp;gt;sitecustomize.py&amp;lt;/code&amp;gt;, and &amp;lt;code&amp;gt;setup.py&amp;lt;/code&amp;gt; as the specific places to pay attention.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;CPython itself is getting faster.&amp;lt;/strong&amp;gt; Jacob Coffee on &amp;lt;a href=&amp;#34;https://peps.python.org/pep-0810/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;PEP 810&amp;lt;/a&amp;gt;
 lazy imports for
-startup wins; Charlie Lin on the free-threaded build and what it takes to make an extension module safe under it.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;This post details the takeaways from each talk I attended, in schedule order.&lt;/p&gt;</description><category>python</category><category>pytexas</category><category>conference</category><category>austin</category><category>ai</category><category>llm</category><category>mcp</category><category>keynote</category><category>hynek</category><category>packaging</category><category>supply-chain</category><category>pep-810</category><category>free-threading</category><category>ruff</category><category>uv</category><category>ty</category><category>type-checking</category><category>observability</category><category>cli</category></item><item><title>Defense in Depth: A Practical Guide to Python Supply Chain Security</title><link>https://bernat.tech/posts/securing-python-supply-chain/</link><pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/securing-python-supply-chain/</guid><description>&lt;div class="alert alert-info"&gt;
-&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-info" aria-hidden="true"&gt;&lt;/i&gt; TLDR:&lt;/p&gt;
-&lt;p&gt;Layer your defenses and don&amp;rsquo;t trust any single control. Use Ruff with security rules to catch bugs in your code before
-they ship. Pin all your dependencies with cryptographic hashes using &lt;code&gt;uv lock&lt;/code&gt; or &lt;code&gt;uv pip compile --generate-hashes&lt;/code&gt;
-so nobody can swap out packages on you. Run &lt;a href="https://github.com/pypa/pip-audit" target="_blank" rel="noopener"&gt;&lt;code&gt;pip-audit&lt;/code&gt;&lt;/a&gt;
+startup wins; Charlie Lin on the free-threaded build and what it takes to make an extension module safe under it.&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;p&amp;gt;This post details the takeaways from each talk I attended, in schedule order.&amp;lt;/p&amp;gt;</description><category>python</category><category>pytexas</category><category>conference</category><category>austin</category><category>ai</category><category>llm</category><category>mcp</category><category>keynote</category><category>hynek</category><category>packaging</category><category>supply-chain</category><category>pep-810</category><category>free-threading</category><category>ruff</category><category>uv</category><category>ty</category><category>type-checking</category><category>observability</category><category>cli</category></item><item><title>Defense in Depth: A Practical Guide to Python Supply Chain Security</title><link>https://bernat.tech/posts/securing-python-supply-chain/</link><pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/securing-python-supply-chain/</guid><description>&amp;lt;div class=&amp;#34;alert alert-info&amp;#34;&amp;gt;
+&amp;lt;p class=&amp;#34;alert-title&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-circle-info&amp;#34; aria-hidden=&amp;#34;true&amp;#34;&amp;gt;&amp;lt;/i&amp;gt; TLDR:&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;Layer your defenses and don&amp;amp;rsquo;t trust any single control. Use Ruff with security rules to catch bugs in your code before
+they ship. Pin all your dependencies with cryptographic hashes using &amp;lt;code&amp;gt;uv lock&amp;lt;/code&amp;gt; or &amp;lt;code&amp;gt;uv pip compile --generate-hashes&amp;lt;/code&amp;gt;
+so nobody can swap out packages on you. Run &amp;lt;a href=&amp;#34;https://github.com/pypa/pip-audit&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;&amp;lt;code&amp;gt;pip-audit&amp;lt;/code&amp;gt;&amp;lt;/a&amp;gt;
 in CI to catch known CVEs
 before they hit production. Generate SBOMs with CycloneDX so when the next Ultralytics-style compromise drops, you can
-answer &amp;ldquo;are we affected?&amp;rdquo; in minutes instead of days.&lt;/p&gt;</description><category>python</category><category>security</category><category>dependencies</category><category>supply-chain</category><category>sbom</category><category>pypi</category><category>pip</category></item><item><title>Version numbers: how to use them?</title><link>https://bernat.tech/posts/version-numbers/</link><pubDate>Sat, 16 May 2020 14:15:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/version-numbers/</guid><description>&lt;p&gt;The &lt;a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" target="_blank" rel="noopener"&gt;DRY principle&lt;/a&gt;
-(an acronym for don&amp;rsquo;t repeat yourself)
+answer &amp;amp;ldquo;are we affected?&amp;amp;rdquo; in minutes instead of days.&amp;lt;/p&amp;gt;</description><category>python</category><category>security</category><category>dependencies</category><category>supply-chain</category><category>sbom</category><category>pypi</category><category>pip</category></item><item><title>Version numbers: how to use them?</title><link>https://bernat.tech/posts/version-numbers/</link><pubDate>Sat, 16 May 2020 14:15:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/version-numbers/</guid><description>&amp;lt;p&amp;gt;The &amp;lt;a href=&amp;#34;https://en.wikipedia.org/wiki/Don%27t_repeat_yourself&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;DRY principle&amp;lt;/a&amp;gt;
+(an acronym for don&amp;amp;rsquo;t repeat yourself)
 encourages software engineers to abstract code into a separate component and reuse it rather than write it over and over
 again. If this happens across the system, the best practice is to put it inside a package that lives on its own (a
-library) and then pull it in from the applications when required.&lt;/p&gt;
-&lt;p&gt;As most of us can&amp;rsquo;t think of every feature that the library might offer or what bugs it might contain, these packages
+library) and then pull it in from the applications when required.&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;As most of us can&amp;amp;rsquo;t think of every feature that the library might offer or what bugs it might contain, these packages
 tend to evolve. Therefore, we need some mechanism to encode these evolutions of the library, and most commonly, this is
-a version number.&lt;/p&gt;</description><category>python</category><category>version</category><category>semver</category><category>calver</category><category>0ver</category></item><item><title>Python packaging - Growing Pains</title><link>https://bernat.tech/posts/growing-pain/</link><pubDate>Thu, 07 Feb 2019 13:41:03 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/growing-pain/</guid><description>&lt;p&gt;In my previous two posts, I&amp;rsquo;ve gone over [what package types python has](https://bernat.tech/posts/pep-517-and-python-packaging/),
+a version number.&amp;lt;/p&amp;gt;</description><category>python</category><category>version</category><category>semver</category><category>calver</category><category>0ver</category></item><item><title>Python packaging - Growing Pains</title><link>https://bernat.tech/posts/growing-pain/</link><pubDate>Thu, 07 Feb 2019 13:41:03 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/growing-pain/</guid><description>&amp;lt;p&amp;gt;In my previous two posts, I&amp;amp;rsquo;ve gone over [what package types python has](https://bernat.tech/posts/pep-517-and-python-packaging/),
 and [how the package building works](https://bernat.tech/posts/pep-517-518/), especially with the introduction of the PEP-517/518.
 Although the changes were primarily to make things more robust, we did run into a few issues while implementing it and
 releasing it. This post will go over a few, hopefully serving as lessons learned for all of us and presenting some
-interesting problems to solve in the future.&lt;/p&gt;</description><category>python</category><category>packaging</category><category>pip</category><category>setuptools</category><category>pep517</category><category>pep518</category></item><item><title>Python packaging - Past, Present, Future</title><link>https://bernat.tech/posts/pep-517-518/</link><pubDate>Thu, 07 Feb 2019 13:40:59 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pep-517-518/</guid><description>&lt;p&gt;Have you ever wondered what happens exactly when you run pip install? This post will give you a detailed overview of the
-steps involved in the past, and how it all changes with the adoption of PEP-517 and PEP-518.&lt;/p&gt;
-&lt;p&gt;[In my previous post](https://bernat.tech/posts/pep-517-and-python-packaging/) I&amp;rsquo;ve described how it&amp;rsquo;s possible to install three
+interesting problems to solve in the future.&amp;lt;/p&amp;gt;</description><category>python</category><category>packaging</category><category>pip</category><category>setuptools</category><category>pep517</category><category>pep518</category></item><item><title>Python packaging - Past, Present, Future</title><link>https://bernat.tech/posts/pep-517-518/</link><pubDate>Thu, 07 Feb 2019 13:40:59 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pep-517-518/</guid><description>&amp;lt;p&amp;gt;Have you ever wondered what happens exactly when you run pip install? This post will give you a detailed overview of the
+steps involved in the past, and how it all changes with the adoption of PEP-517 and PEP-518.&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;[In my previous post](https://bernat.tech/posts/pep-517-and-python-packaging/) I&amp;amp;rsquo;ve described how it&amp;amp;rsquo;s possible to install three
 types of content: source tree, source distribution, and wheels. Only the last two types are uploaded to PyPI, the
 central Python repository. However, one could get its hands on a source tree (by feeding, for example, a git protocol
 for pip). The advantage of wheels over the others is that it does not require any build operation to happen on the user
-machine; it&amp;rsquo;s just downloading and extract.&lt;/p&gt;</description><category>python</category><category>pip</category><category>install</category><category>packaging</category><category>setuptools</category><category>pep517</category><category>pep518</category></item><item><title>The state of Python Packaging</title><link>https://bernat.tech/posts/pep-517-and-python-packaging/</link><pubDate>Thu, 07 Feb 2019 13:40:54 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pep-517-and-python-packaging/</guid><description>&lt;p&gt;pip 19.0 has been released on 22nd January 2019. On the feature list, most notably, it now supports PEP-517, which by
-default is turned &lt;strong&gt;on&lt;/strong&gt; when that the project has a &lt;code&gt;pyproject.toml&lt;/code&gt; at the root folder. The PEP in question has been
+machine; it&amp;amp;rsquo;s just downloading and extract.&amp;lt;/p&amp;gt;</description><category>python</category><category>pip</category><category>install</category><category>packaging</category><category>setuptools</category><category>pep517</category><category>pep518</category></item><item><title>The state of Python Packaging</title><link>https://bernat.tech/posts/pep-517-and-python-packaging/</link><pubDate>Thu, 07 Feb 2019 13:40:54 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pep-517-and-python-packaging/</guid><description>&amp;lt;p&amp;gt;pip 19.0 has been released on 22nd January 2019. On the feature list, most notably, it now supports PEP-517, which by
+default is turned &amp;lt;strong&amp;gt;on&amp;lt;/strong&amp;gt; when that the project has a &amp;lt;code&amp;gt;pyproject.toml&amp;lt;/code&amp;gt; at the root folder. The PEP in question has been
 created in 2015 and accepted in 2017. Even though it took a while until pip implemented it, the release and the issues
 that followed confirmed that many people are not familiar with it. Read on if you want to get a picture of how the
 Python packaging ecosystem evolved today and where we hope to see it down the line. We expect that even though the
 introduction of the aforementioned python enhancement proposal may cause some discomfort, we will benefit from it in the
-long term.&lt;/p&gt;</description><category>python</category><category>packaging</category><category>pip</category><category>setuptools</category><category>pep517</category><category>pep518</category><category>wheel</category><category>sdist</category></item><item><title>The state of type hints in Python</title><link>https://bernat.tech/posts/the-state-of-type-hints-in-python/</link><pubDate>Wed, 30 May 2018 09:51:55 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/the-state-of-type-hints-in-python/</guid><description>&lt;p&gt;One of the main selling points for Python is that it is dynamically-typed. There is no plan to change this.
-Nevertheless, in September 2014 &lt;a href="https://twitter.com/gvanrossum" target="_blank" rel="noopener"&gt;Guido van Rossum&lt;/a&gt;
+long term.&amp;lt;/p&amp;gt;</description><category>python</category><category>packaging</category><category>pip</category><category>setuptools</category><category>pep517</category><category>pep518</category><category>wheel</category><category>sdist</category></item><item><title>The state of type hints in Python</title><link>https://bernat.tech/posts/the-state-of-type-hints-in-python/</link><pubDate>Wed, 30 May 2018 09:51:55 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/the-state-of-type-hints-in-python/</guid><description>&amp;lt;p&amp;gt;One of the main selling points for Python is that it is dynamically-typed. There is no plan to change this.
+Nevertheless, in September 2014 &amp;lt;a href=&amp;#34;https://twitter.com/gvanrossum&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;Guido van Rossum&amp;lt;/a&amp;gt;
 (Python
-&lt;a href="https://en.wikipedia.org/wiki/Benevolent_dictator_for_life" target="_blank" rel="noopener"&gt;BDFL&lt;/a&gt;
+&amp;lt;a href=&amp;#34;https://en.wikipedia.org/wiki/Benevolent_dictator_for_life&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;BDFL&amp;lt;/a&amp;gt;
 ) created a python enhancement proposal
-(&lt;a href="https://peps.python.org/pep-0484/" target="_blank" rel="noopener"&gt;PEP-484&lt;/a&gt;
+(&amp;lt;a href=&amp;#34;https://peps.python.org/pep-0484/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;PEP-484&amp;lt;/a&amp;gt;
 ) to add type hints to Python. It has been released for general usage a
-year later, in September 2015, as part of Python &lt;code&gt;3.5.0&lt;/code&gt;.
-&lt;a href="http://python-history.blogspot.com/2009/01/brief-timeline-of-python.html" target="_blank" rel="noopener"&gt;Twenty-five years into its existence&lt;/a&gt;
+year later, in September 2015, as part of Python &amp;lt;code&amp;gt;3.5.0&amp;lt;/code&amp;gt;.
+&amp;lt;a href=&amp;#34;http://python-history.blogspot.com/2009/01/brief-timeline-of-python.html&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;Twenty-five years into its existence&amp;lt;/a&amp;gt;
 now
-there was a standard way to add type information to Python code. In this blog post, I&amp;rsquo;ll explore how the system matured,
-how you can use it, and what&amp;rsquo;s next for type hints.&lt;/p&gt;</description><category>mypy</category><category>python</category><category>types</category><category>type-hint</category></item><item><title>About Bernát Gábor</title><link>https://bernat.tech/about/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/about/</guid><description>&lt;h2 id="bernát-gábor-from--living-in-los-angeles-"&gt;
+there was a standard way to add type information to Python code. In this blog post, I&amp;amp;rsquo;ll explore how the system matured,
+how you can use it, and what&amp;amp;rsquo;s next for type hints.&amp;lt;/p&amp;gt;</description><category>mypy</category><category>python</category><category>types</category><category>type-hint</category></item><item><title>About Bernát Gábor</title><link>https://bernat.tech/about/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/about/</guid><description>&amp;lt;h3 id=&amp;#34;bernát-gábor-from--living-in-los-angeles-&amp;#34;&amp;gt;
 Bernát Gábor (from 🇭🇺🇷🇴🇬🇧), living in Los Angeles 🇺🇸
-&lt;a class="heading-link" href="#bern%c3%a1t-g%c3%a1bor-from--living-in-los-angeles-"&gt;
-&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
-&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
-&lt;/a&gt;
-&lt;/h2&gt;
-&lt;p class="social-badges"&gt;&lt;a href="https://github.com/gaborbernat/" aria-label="GitHub"&gt;&lt;i class="fa fa-github fa-2x"&gt;&lt;/i&gt; GitHub&lt;/a&gt;&lt;a href="https://github.com/sponsors/gaborbernat" aria-label="GitHub Sponsor"&gt;&lt;i class="fa fa-heart fa-2x"&gt;&lt;/i&gt; GitHub Sponsor&lt;/a&gt;&lt;a href="https://twitter.com/gjbernat/" aria-label="Twitter"&gt;&lt;i class="fa fa-twitter fa-2x"&gt;&lt;/i&gt; Twitter&lt;/a&gt;&lt;a href="https://bsky.app/profile/gjbernat.bsky.social" aria-label="Bluesky"&gt;&lt;i class="fa-brands fa-bluesky fa-2x"&gt;&lt;/i&gt; Bluesky&lt;/a&gt;&lt;a href="https://fosstodon.org/@gaborbernat" aria-label="Mastodon"&gt;&lt;i class="fa-brands fa-mastodon fa-2x"&gt;&lt;/i&gt; Mastodon&lt;/a&gt;&lt;a href="https://pypi.org/user/gaborbernat/" aria-label="PyPI"&gt;&lt;i class="fa-brands fa-python fa-2x"&gt;&lt;/i&gt; PyPI&lt;/a&gt;&lt;a href="https://www.linkedin.com/in/gaborbernat/" aria-label="Linkedin"&gt;&lt;i class="fa fa-linkedin fa-2x"&gt;&lt;/i&gt; Linkedin&lt;/a&gt;&lt;a href="mailto:gaborjbernat@gmail.com" aria-label="Google Mail"&gt;&lt;i class="fa fa-envelope fa-2x"&gt;&lt;/i&gt; Google Mail&lt;/a&gt;&lt;a href="https://www.twitch.tv/gaborbernat" aria-label="Twitch"&gt;&lt;i class="fa fa-twitch fa-2x"&gt;&lt;/i&gt; Twitch&lt;/a&gt;&lt;a href="https://instagram.com/gabor_bernat" aria-label="Instagram"&gt;&lt;i class="fa fa-instagram fa-2x"&gt;&lt;/i&gt; Instagram&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;I work at &lt;a href="https://www.bloomberg.com/company/values/tech-at-bloomberg/" target="_blank" rel="noopener"&gt;Bloomberg US - Los Angeles&lt;/a&gt;
+&amp;lt;a class=&amp;#34;heading-link&amp;#34; href=&amp;#34;#bern%c3%a1t-g%c3%a1bor-from--living-in-los-angeles-&amp;#34;&amp;gt;
+&amp;lt;i class=&amp;#34;fa-solid fa-link&amp;#34; aria-hidden=&amp;#34;true&amp;#34; title=&amp;#34;Link to heading&amp;#34;&amp;gt;&amp;lt;/i&amp;gt;
+&amp;lt;span class=&amp;#34;sr-only&amp;#34;&amp;gt;Link to heading&amp;lt;/span&amp;gt;
+&amp;lt;/a&amp;gt;
+&amp;lt;/h3&amp;gt;
+&amp;lt;p class=&amp;#34;social-badges&amp;#34;&amp;gt;&amp;lt;a href=&amp;#34;https://github.com/gaborbernat/&amp;#34; aria-label=&amp;#34;GitHub&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa fa-github fa-2x&amp;#34;&amp;gt;&amp;lt;/i&amp;gt; GitHub&amp;lt;/a&amp;gt;&amp;lt;a href=&amp;#34;https://github.com/sponsors/gaborbernat&amp;#34; aria-label=&amp;#34;GitHub Sponsor&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa fa-heart fa-2x&amp;#34;&amp;gt;&amp;lt;/i&amp;gt; GitHub Sponsor&amp;lt;/a&amp;gt;&amp;lt;a href=&amp;#34;https://twitter.com/gjbernat/&amp;#34; aria-label=&amp;#34;Twitter&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa fa-twitter fa-2x&amp;#34;&amp;gt;&amp;lt;/i&amp;gt; Twitter&amp;lt;/a&amp;gt;&amp;lt;a href=&amp;#34;https://bsky.app/profile/gjbernat.bsky.social&amp;#34; aria-label=&amp;#34;Bluesky&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-brands fa-bluesky fa-2x&amp;#34;&amp;gt;&amp;lt;/i&amp;gt; Bluesky&amp;lt;/a&amp;gt;&amp;lt;a href=&amp;#34;https://fosstodon.org/@gaborbernat&amp;#34; aria-label=&amp;#34;Mastodon&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-brands fa-mastodon fa-2x&amp;#34;&amp;gt;&amp;lt;/i&amp;gt; Mastodon&amp;lt;/a&amp;gt;&amp;lt;a href=&amp;#34;https://pypi.org/user/gaborbernat/&amp;#34; aria-label=&amp;#34;PyPI&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-brands fa-python fa-2x&amp;#34;&amp;gt;&amp;lt;/i&amp;gt; PyPI&amp;lt;/a&amp;gt;&amp;lt;a href=&amp;#34;https://www.linkedin.com/in/gaborbernat/&amp;#34; aria-label=&amp;#34;Linkedin&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa fa-linkedin fa-2x&amp;#34;&amp;gt;&amp;lt;/i&amp;gt; Linkedin&amp;lt;/a&amp;gt;&amp;lt;a href=&amp;#34;mailto:gaborjbernat@gmail.com&amp;#34; aria-label=&amp;#34;Google Mail&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa fa-envelope fa-2x&amp;#34;&amp;gt;&amp;lt;/i&amp;gt; Google Mail&amp;lt;/a&amp;gt;&amp;lt;a href=&amp;#34;https://www.twitch.tv/gaborbernat&amp;#34; aria-label=&amp;#34;Twitch&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa fa-twitch fa-2x&amp;#34;&amp;gt;&amp;lt;/i&amp;gt; Twitch&amp;lt;/a&amp;gt;&amp;lt;a href=&amp;#34;https://instagram.com/gabor_bernat&amp;#34; aria-label=&amp;#34;Instagram&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa fa-instagram fa-2x&amp;#34;&amp;gt;&amp;lt;/i&amp;gt; Instagram&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;I work at &amp;lt;a href=&amp;#34;https://www.bloomberg.com/company/values/tech-at-bloomberg/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;Bloomberg US - Los Angeles&amp;lt;/a&amp;gt;
 within the Developer
 Experience organizations Artifact Repository Hosting team. I am the primary maintainer (and author) for the following
-&lt;a href="https://en.wikipedia.org/wiki/Open_source" target="_blank" rel="noopener"&gt;open-source projects&lt;/a&gt;
-:&lt;/p&gt;</description></item><item><title>Presentations by Bernát Gábor</title><link>https://bernat.tech/presentations/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/presentations/</guid><description>&lt;p&gt;I&amp;rsquo;m a regular speaker at (Python) conferences. Here you&amp;rsquo;ll find a list of my recorded presentations. You can also find a
-&lt;a href="https://www.youtube.com/playlist?list=PLYWe9Aw9Owsod3Orf-pDqABD--r7mlho7" target="_blank" rel="noopener"&gt;YouTube playlist&lt;/a&gt;
-with all of them.&lt;/p&gt;
-&lt;nav class="toc"&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="#year-2025"&gt;2025&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="#python-meets-crab-py-us-25"&gt;Python meets the crab - Friendship at first sight? - PyCon US 2025&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#python-meets-crab-pytexas-25"&gt;Python meets the crab - Friendship at first sight? - PyTexas 2025&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href="#year-2024"&gt;2024&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="#lessons-learned-europython-24"&gt;Lessons learned maintaining open source Python projects - EuroPython 2024&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#lessons-learned-py-texas-24"&gt;Lessons learned maintaining open source Python projects - PyTexas 2024&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href="#year-2023"&gt;2023&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="#tox4-lightning-py-con-us-23"&gt;What&amp;#39;s new in tox 4? (lightning talk) - PyCon US 2023&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href="#year-2022"&gt;2022&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="#editables-us-22"&gt;How we standardized editable installs PEP 660 vs PEP 662 - PyCon US 2022&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href="#year-2021"&gt;2021&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="#tox-4-us-21"&gt;tox 4 (lightning talk) - PyCon US 2021&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#py-packaging-us-21"&gt;Python packaging demystified (tutorial) - PyCon US 2021&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#virtualenv-deep-dive-21"&gt;Virtualenv - A Deep Dive - PyCharm Webinar 2021&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href="#year-2020"&gt;2020&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="#virtualenv-rewrite-eu-20"&gt;Lessons from the Trenches: rewriting and re-releasing virtualenv - EuroPython 2020&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href="#year-2019"&gt;2019&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="#status-quo-of-virtual-environments-eu-19"&gt;status quo of virtual environments - EuroPython 2019&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#best-package-library-lon-19"&gt;How to best package your library? - PyLondinium 2019&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#type-hinting-and-mypy-us-19"&gt;Type hinting (and mypy) - PyCon US 2019&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href="#year-2018"&gt;2018&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="#standardize-testing-eu-18"&gt;Standardize Testing in Python - EuroPython 2018&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#type-hints-snake-pit-lon-18"&gt;Type hints inside the snake pit - PyLondinium 2018&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/nav&gt;
-&lt;h2 id="year-2025"&gt;2025&lt;/h2&gt;
-&lt;h3 id="python-meets-crab-py-us-25"&gt;🐍 🦀 Python meets the crab - Friendship at first sight? - PyCon US 2025 - &lt;a href="https://gaborbernat.github.io/python-meets-crab/"&gt;slides&lt;/a&gt;&lt;a class="heading-link" href="#python-meets-crab-py-us-25"&gt;&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;&lt;/a&gt;
-&lt;/h3&gt;&lt;div class="youtube-lazy" data-src="https://www.youtube-nocookie.com/embed/CqOZdTFb4io?autoplay=1"&gt;
-&lt;img src="https://img.youtube.com/vi/CqOZdTFb4io/hqdefault.jpg" alt="YouTube video thumbnail" loading="lazy" decoding="async"&gt;
-&lt;button class="youtube-play" aria-label="Play video"&gt;&lt;svg viewBox="0 0 68 48"&gt;&lt;path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/&gt;&lt;path d="M45 24L27 14v20" fill="#fff"/&gt;&lt;/svg&gt;&lt;/button&gt;
-&lt;/div&gt;
-&lt;h3 id="python-meets-crab-pytexas-25"&gt;Python meets the crab - Friendship at first sight? - PyTexas 2025 - &lt;a href="https://gaborbernat.github.io/python-meets-crab/"&gt;slides&lt;/a&gt;&lt;a class="heading-link" href="#python-meets-crab-pytexas-25"&gt;&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;&lt;/a&gt;
-&lt;/h3&gt;&lt;div class="youtube-lazy" data-src="https://www.youtube-nocookie.com/embed/krJZmNvUqK4?autoplay=1"&gt;
-&lt;img src="https://img.youtube.com/vi/krJZmNvUqK4/hqdefault.jpg" alt="YouTube video thumbnail" loading="lazy" decoding="async"&gt;
-&lt;button class="youtube-play" aria-label="Play video"&gt;&lt;svg viewBox="0 0 68 48"&gt;&lt;path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/&gt;&lt;path d="M45 24L27 14v20" fill="#fff"/&gt;&lt;/svg&gt;&lt;/button&gt;
-&lt;/div&gt;
-&lt;h2 id="year-2024"&gt;2024&lt;/h2&gt;
-&lt;h3 id="lessons-learned-europython-24"&gt;Lessons learned maintaining open source Python projects - EuroPython 2024 - &lt;a href="https://gaborbernat.github.io/europython-24/"&gt;slides&lt;/a&gt;&lt;a class="heading-link" href="#lessons-learned-europython-24"&gt;&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;&lt;/a&gt;
-&lt;/h3&gt;&lt;div class="youtube-lazy" data-src="https://www.youtube-nocookie.com/embed/4qmuZQYxdrU?autoplay=1"&gt;
-&lt;img src="https://img.youtube.com/vi/4qmuZQYxdrU/hqdefault.jpg" alt="YouTube video thumbnail" loading="lazy" decoding="async"&gt;
-&lt;button class="youtube-play" aria-label="Play video"&gt;&lt;svg viewBox="0 0 68 48"&gt;&lt;path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/&gt;&lt;path d="M45 24L27 14v20" fill="#fff"/&gt;&lt;/svg&gt;&lt;/button&gt;
-&lt;/div&gt;
-&lt;h3 id="lessons-learned-py-texas-24"&gt;Lessons learned maintaining open source Python projects - PyTexas 2024 - &lt;a href="https://gaborbernat.github.io/py-texas-24/"&gt;slides&lt;/a&gt;&lt;a class="heading-link" href="#lessons-learned-py-texas-24"&gt;&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;&lt;/a&gt;
-&lt;/h3&gt;&lt;div class="youtube-lazy" data-src="https://www.youtube-nocookie.com/embed/rcSLOqwpJk8?autoplay=1"&gt;
-&lt;img src="https://img.youtube.com/vi/rcSLOqwpJk8/hqdefault.jpg" alt="YouTube video thumbnail" loading="lazy" decoding="async"&gt;
-&lt;button class="youtube-play" aria-label="Play video"&gt;&lt;svg viewBox="0 0 68 48"&gt;&lt;path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/&gt;&lt;path d="M45 24L27 14v20" fill="#fff"/&gt;&lt;/svg&gt;&lt;/button&gt;
-&lt;/div&gt;
-&lt;h2 id="year-2023"&gt;2023&lt;/h2&gt;
-&lt;h3 id="tox4-lightning-py-con-us-23"&gt;What&amp;#39;s new in tox 4? - lightning talk - PyCon US 2023 - &lt;a href="https://gaborbernat.github.io/pycon-us-23-lighting/"&gt;slides&lt;/a&gt;&lt;a class="heading-link" href="#tox4-lightning-py-con-us-23"&gt;&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;&lt;/a&gt;
-&lt;/h3&gt;&lt;div class="youtube-lazy" data-src="https://www.youtube-nocookie.com/embed/95tjPYvbJc0?autoplay=1&amp;amp;start=480"&gt;
-&lt;img src="https://img.youtube.com/vi/95tjPYvbJc0/hqdefault.jpg" alt="YouTube video thumbnail" loading="lazy" decoding="async"&gt;
-&lt;button class="youtube-play" aria-label="Play video"&gt;&lt;svg viewBox="0 0 68 48"&gt;&lt;path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/&gt;&lt;path d="M45 24L27 14v20" fill="#fff"/&gt;&lt;/svg&gt;&lt;/button&gt;
-&lt;/div&gt;
-&lt;h2 id="year-2022"&gt;2022&lt;/h2&gt;
-&lt;h3 id="editables-us-22"&gt;How we standardized editable installs PEP 660 vs PEP 662 - PyCon US 2022 - &lt;a href="https://gaborbernat.github.io/pep-660-662-2022/#/"&gt;slides&lt;/a&gt;&lt;a class="heading-link" href="#editables-us-22"&gt;&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;&lt;/a&gt;
-&lt;/h3&gt;&lt;div class="youtube-lazy" data-src="https://www.youtube-nocookie.com/embed/Z_-PuPwN6ZI?autoplay=1&amp;amp;start=5"&gt;
-&lt;img src="https://img.youtube.com/vi/Z_-PuPwN6ZI/hqdefault.jpg" alt="YouTube video thumbnail" loading="lazy" decoding="async"&gt;
-&lt;button class="youtube-play" aria-label="Play video"&gt;&lt;svg viewBox="0 0 68 48"&gt;&lt;path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/&gt;&lt;path d="M45 24L27 14v20" fill="#fff"/&gt;&lt;/svg&gt;&lt;/button&gt;
-&lt;/div&gt;
-&lt;h2 id="year-2021"&gt;2021&lt;/h2&gt;
-&lt;h3 id="tox-4-us-21"&gt;tox 4 - lightning talk - PyCon US 2021 - &lt;a href="https://gaborbernat.github.io/pycon-us-21-lighting/#/"&gt;slides&lt;/a&gt;&lt;a class="heading-link" href="#tox-4-us-21"&gt;&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;&lt;/a&gt;
-&lt;/h3&gt;&lt;div class="youtube-lazy" data-src="https://www.youtube-nocookie.com/embed/5zEn3Jta2Dg?autoplay=1&amp;amp;start=389"&gt;
-&lt;img src="https://img.youtube.com/vi/5zEn3Jta2Dg/hqdefault.jpg" alt="YouTube video thumbnail" loading="lazy" decoding="async"&gt;
-&lt;button class="youtube-play" aria-label="Play video"&gt;&lt;svg viewBox="0 0 68 48"&gt;&lt;path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/&gt;&lt;path d="M45 24L27 14v20" fill="#fff"/&gt;&lt;/svg&gt;&lt;/button&gt;
-&lt;/div&gt;
-&lt;h3 id="py-packaging-us-21"&gt;Python packaging demystified - tutorial - PyCon US 2021 - &lt;a href="https://gaborbernat.github.io/packaging-tutorial-pycon-us-21/#/"&gt;slides&lt;/a&gt;&lt;a class="heading-link" href="#py-packaging-us-21"&gt;&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;&lt;/a&gt;
-&lt;/h3&gt;&lt;div class="youtube-lazy" data-src="https://www.youtube-nocookie.com/embed/ApDThpsr2Fw?autoplay=1&amp;amp;start=5"&gt;
-&lt;img src="https://img.youtube.com/vi/ApDThpsr2Fw/hqdefault.jpg" alt="YouTube video thumbnail" loading="lazy" decoding="async"&gt;
-&lt;button class="youtube-play" aria-label="Play video"&gt;&lt;svg viewBox="0 0 68 48"&gt;&lt;path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/&gt;&lt;path d="M45 24L27 14v20" fill="#fff"/&gt;&lt;/svg&gt;&lt;/button&gt;
-&lt;/div&gt;
-&lt;h3 id="virtualenv-deep-dive-21"&gt;Virtualenv - A Deep Dive - PyCharm Webinar 2021&lt;a class="heading-link" href="#virtualenv-deep-dive-21"&gt;&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;&lt;/a&gt;
-&lt;/h3&gt;&lt;div class="youtube-lazy" data-src="https://www.youtube-nocookie.com/embed/O9_MJHDkej8?autoplay=1&amp;amp;start=7"&gt;
-&lt;img src="https://img.youtube.com/vi/O9_MJHDkej8/hqdefault.jpg" alt="YouTube video thumbnail" loading="lazy" decoding="async"&gt;
-&lt;button class="youtube-play" aria-label="Play video"&gt;&lt;svg viewBox="0 0 68 48"&gt;&lt;path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/&gt;&lt;path d="M45 24L27 14v20" fill="#fff"/&gt;&lt;/svg&gt;&lt;/button&gt;
-&lt;/div&gt;
-&lt;h2 id="year-2020"&gt;2020&lt;/h2&gt;
-&lt;h3 id="virtualenv-rewrite-eu-20"&gt;Lessons from the Trenches: rewriting and re-releasing virtualenv - EuroPython 2020 - &lt;a href="https://gaborbernat.github.io/virtualenv-rewrite-eupy20/"&gt;slides&lt;/a&gt;&lt;a class="heading-link" href="#virtualenv-rewrite-eu-20"&gt;&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;&lt;/a&gt;
-&lt;/h3&gt;&lt;div class="youtube-lazy" data-src="https://www.youtube-nocookie.com/embed/l9A0a8qZgOs?autoplay=1&amp;amp;start=27"&gt;
-&lt;img src="https://img.youtube.com/vi/l9A0a8qZgOs/hqdefault.jpg" alt="YouTube video thumbnail" loading="lazy" decoding="async"&gt;
-&lt;button class="youtube-play" aria-label="Play video"&gt;&lt;svg viewBox="0 0 68 48"&gt;&lt;path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/&gt;&lt;path d="M45 24L27 14v20" fill="#fff"/&gt;&lt;/svg&gt;&lt;/button&gt;
-&lt;/div&gt;
-&lt;h2 id="year-2019"&gt;2019&lt;/h2&gt;
-&lt;h3 id="status-quo-of-virtual-environments-eu-19"&gt;status quo of virtual environments - EuroPython 2019 - &lt;a href="https://gaborbernat.github.io/euro_python_2019/#/"&gt;slides&lt;/a&gt;&lt;a class="heading-link" href="#status-quo-of-virtual-environments-eu-19"&gt;&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;&lt;/a&gt;
-&lt;/h3&gt;&lt;div class="youtube-lazy" data-src="https://www.youtube-nocookie.com/embed/o1Vue9CWRxU?autoplay=1&amp;amp;start=4"&gt;
-&lt;img src="https://img.youtube.com/vi/o1Vue9CWRxU/hqdefault.jpg" alt="YouTube video thumbnail" loading="lazy" decoding="async"&gt;
-&lt;button class="youtube-play" aria-label="Play video"&gt;&lt;svg viewBox="0 0 68 48"&gt;&lt;path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/&gt;&lt;path d="M45 24L27 14v20" fill="#fff"/&gt;&lt;/svg&gt;&lt;/button&gt;
-&lt;/div&gt;
-&lt;h3 id="best-package-library-lon-19"&gt;How to best package your library? - PyLondinium 2019 - &lt;a href="https://gaborbernat.github.io/pylondinium2019/#/"&gt;slides&lt;/a&gt;&lt;a class="heading-link" href="#best-package-library-lon-19"&gt;&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;&lt;/a&gt;
-&lt;/h3&gt;&lt;div class="youtube-lazy" data-src="https://www.youtube-nocookie.com/embed/OSnRl8yF9a4?autoplay=1&amp;amp;start=17"&gt;
-&lt;img src="https://img.youtube.com/vi/OSnRl8yF9a4/hqdefault.jpg" alt="YouTube video thumbnail" loading="lazy" decoding="async"&gt;
-&lt;button class="youtube-play" aria-label="Play video"&gt;&lt;svg viewBox="0 0 68 48"&gt;&lt;path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/&gt;&lt;path d="M45 24L27 14v20" fill="#fff"/&gt;&lt;/svg&gt;&lt;/button&gt;
-&lt;/div&gt;
-&lt;h3 id="type-hinting-and-mypy-us-19"&gt;Type hinting (and mypy) - PyCon US 2019 - &lt;a href="https://gaborbernat.github.io/pycon-us-2019/#/"&gt;slides&lt;/a&gt;&lt;a class="heading-link" href="#type-hinting-and-mypy-us-19"&gt;&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;&lt;/a&gt;
-&lt;/h3&gt;&lt;div class="youtube-lazy" data-src="https://www.youtube-nocookie.com/embed/hTrjTAPnA_k?autoplay=1&amp;amp;start=47"&gt;
-&lt;img src="https://img.youtube.com/vi/hTrjTAPnA_k/hqdefault.jpg" alt="YouTube video thumbnail" loading="lazy" decoding="async"&gt;
-&lt;button class="youtube-play" aria-label="Play video"&gt;&lt;svg viewBox="0 0 68 48"&gt;&lt;path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/&gt;&lt;path d="M45 24L27 14v20" fill="#fff"/&gt;&lt;/svg&gt;&lt;/button&gt;
-&lt;/div&gt;
-&lt;h2 id="year-2018"&gt;2018&lt;/h2&gt;
-&lt;h3 id="standardize-testing-eu-18"&gt;Standardize Testing in Python - EuroPython 2018 - &lt;a href="https://gaborbernat.github.io/pycon-eu-2018/#/"&gt;slides&lt;/a&gt;&lt;a class="heading-link" href="#standardize-testing-eu-18"&gt;&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;&lt;/a&gt;
-&lt;/h3&gt;&lt;div class="youtube-lazy" data-src="https://www.youtube-nocookie.com/embed/SFqna5ilqig?autoplay=1&amp;amp;start=8"&gt;
-&lt;img src="https://img.youtube.com/vi/SFqna5ilqig/hqdefault.jpg" alt="YouTube video thumbnail" loading="lazy" decoding="async"&gt;
-&lt;button class="youtube-play" aria-label="Play video"&gt;&lt;svg viewBox="0 0 68 48"&gt;&lt;path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/&gt;&lt;path d="M45 24L27 14v20" fill="#fff"/&gt;&lt;/svg&gt;&lt;/button&gt;
-&lt;/div&gt;
-&lt;h3 id="type-hints-snake-pit-lon-18"&gt;Type hints inside the snake pit - PyLondinium 2018 - &lt;a href="https://gaborbernat.github.io/pylondinium18/"&gt;slides&lt;/a&gt;&lt;a class="heading-link" href="#type-hints-snake-pit-lon-18"&gt;&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;&lt;/a&gt;
-&lt;/h3&gt;&lt;div class="youtube-lazy" data-src="https://www.youtube-nocookie.com/embed/DzRlR3BFCko?autoplay=1"&gt;
-&lt;img src="https://img.youtube.com/vi/DzRlR3BFCko/hqdefault.jpg" alt="YouTube video thumbnail" loading="lazy" decoding="async"&gt;
-&lt;button class="youtube-play" aria-label="Play video"&gt;&lt;svg viewBox="0 0 68 48"&gt;&lt;path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/&gt;&lt;path d="M45 24L27 14v20" fill="#fff"/&gt;&lt;/svg&gt;&lt;/button&gt;
-&lt;/div&gt;
-&lt;script defer src="https://bernat.tech/js/youtube-lazy.min.fb31fc213cc2026f7de09fa23e21e8cf5575ac22537e1b9e73952f4fbed59071.js" integrity="sha256-&amp;#43;zH8ITzCAm994J&amp;#43;iPiHoz1V1rCJTfhuec5UvT77VkHE="&gt;&lt;/script&gt;</description></item></channel></rss>
+&amp;lt;a href=&amp;#34;https://en.wikipedia.org/wiki/Open_source&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;open-source projects&amp;lt;/a&amp;gt;
+:&amp;lt;/p&amp;gt;</description></item><item><title>Presentations by Bernát Gábor</title><link>https://bernat.tech/presentations/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/presentations/</guid><description>&amp;lt;p&amp;gt;I&amp;amp;rsquo;m a regular speaker at (Python) conferences. Here you&amp;amp;rsquo;ll find a list of my recorded presentations. You can also find a
+&amp;lt;a href=&amp;#34;https://www.youtube.com/playlist?list=PLYWe9Aw9Owsod3Orf-pDqABD--r7mlho7&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;YouTube playlist&amp;lt;/a&amp;gt;
+with all of them.&amp;lt;/p&amp;gt;
+&amp;lt;nav class=&amp;#34;toc&amp;#34;&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#year-2025&amp;#34;&amp;gt;2025&amp;lt;/a&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#python-meets-crab-py-us-25&amp;#34;&amp;gt;Python meets the crab - Friendship at first sight? - PyCon US 2025&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#python-meets-crab-pytexas-25&amp;#34;&amp;gt;Python meets the crab - Friendship at first sight? - PyTexas 2025&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#year-2024&amp;#34;&amp;gt;2024&amp;lt;/a&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#lessons-learned-europython-24&amp;#34;&amp;gt;Lessons learned maintaining open source Python projects - EuroPython 2024&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#lessons-learned-py-texas-24&amp;#34;&amp;gt;Lessons learned maintaining open source Python projects - PyTexas 2024&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#year-2023&amp;#34;&amp;gt;2023&amp;lt;/a&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#tox4-lightning-py-con-us-23&amp;#34;&amp;gt;What&amp;amp;#39;s new in tox 4? (lightning talk) - PyCon US 2023&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#year-2022&amp;#34;&amp;gt;2022&amp;lt;/a&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#editables-us-22&amp;#34;&amp;gt;How we standardized editable installs PEP 660 vs PEP 662 - PyCon US 2022&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#year-2021&amp;#34;&amp;gt;2021&amp;lt;/a&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#tox-4-us-21&amp;#34;&amp;gt;tox 4 (lightning talk) - PyCon US 2021&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#py-packaging-us-21&amp;#34;&amp;gt;Python packaging demystified (tutorial) - PyCon US 2021&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#virtualenv-deep-dive-21&amp;#34;&amp;gt;Virtualenv - A Deep Dive - PyCharm Webinar 2021&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#year-2020&amp;#34;&amp;gt;2020&amp;lt;/a&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#virtualenv-rewrite-eu-20&amp;#34;&amp;gt;Lessons from the Trenches: rewriting and re-releasing virtualenv - EuroPython 2020&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#year-2019&amp;#34;&amp;gt;2019&amp;lt;/a&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#status-quo-of-virtual-environments-eu-19&amp;#34;&amp;gt;status quo of virtual environments - EuroPython 2019&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#best-package-library-lon-19&amp;#34;&amp;gt;How to best package your library? - PyLondinium 2019&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#type-hinting-and-mypy-us-19&amp;#34;&amp;gt;Type hinting (and mypy) - PyCon US 2019&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#year-2018&amp;#34;&amp;gt;2018&amp;lt;/a&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#standardize-testing-eu-18&amp;#34;&amp;gt;Standardize Testing in Python - EuroPython 2018&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#type-hints-snake-pit-lon-18&amp;#34;&amp;gt;Type hints inside the snake pit - PyLondinium 2018&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/nav&amp;gt;
+&amp;lt;h2 id=&amp;#34;year-2025&amp;#34;&amp;gt;2025&amp;lt;/h2&amp;gt;
+&amp;lt;h3 id=&amp;#34;python-meets-crab-py-us-25&amp;#34;&amp;gt;🐍 🦀 Python meets the crab - Friendship at first sight? - PyCon US 2025 - &amp;lt;a href=&amp;#34;https://gaborbernat.github.io/python-meets-crab/&amp;#34;&amp;gt;slides&amp;lt;/a&amp;gt;&amp;lt;a class=&amp;#34;heading-link&amp;#34; href=&amp;#34;#python-meets-crab-py-us-25&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-link&amp;#34; aria-hidden=&amp;#34;true&amp;#34; title=&amp;#34;Link to heading&amp;#34;&amp;gt;&amp;lt;/i&amp;gt;&amp;lt;span class=&amp;#34;sr-only&amp;#34;&amp;gt;Link to heading&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;/h3&amp;gt;&amp;lt;div class=&amp;#34;youtube-lazy&amp;#34; data-src=&amp;#34;https://www.youtube-nocookie.com/embed/CqOZdTFb4io?autoplay=1&amp;#34;&amp;gt;
+&amp;lt;img src=&amp;#34;https://img.youtube.com/vi/CqOZdTFb4io/hqdefault.jpg&amp;#34; alt=&amp;#34;YouTube video thumbnail&amp;#34; loading=&amp;#34;lazy&amp;#34; decoding=&amp;#34;async&amp;#34;&amp;gt;
+&amp;lt;button class=&amp;#34;youtube-play&amp;#34; aria-label=&amp;#34;Play video&amp;#34;&amp;gt;&amp;lt;svg viewBox=&amp;#34;0 0 68 48&amp;#34;&amp;gt;&amp;lt;path d=&amp;#34;M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z&amp;#34; fill=&amp;#34;red&amp;#34;/&amp;gt;&amp;lt;path d=&amp;#34;M45 24L27 14v20&amp;#34; fill=&amp;#34;#fff&amp;#34;/&amp;gt;&amp;lt;/svg&amp;gt;&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;h3 id=&amp;#34;python-meets-crab-pytexas-25&amp;#34;&amp;gt;Python meets the crab - Friendship at first sight? - PyTexas 2025 - &amp;lt;a href=&amp;#34;https://gaborbernat.github.io/python-meets-crab/&amp;#34;&amp;gt;slides&amp;lt;/a&amp;gt;&amp;lt;a class=&amp;#34;heading-link&amp;#34; href=&amp;#34;#python-meets-crab-pytexas-25&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-link&amp;#34; aria-hidden=&amp;#34;true&amp;#34; title=&amp;#34;Link to heading&amp;#34;&amp;gt;&amp;lt;/i&amp;gt;&amp;lt;span class=&amp;#34;sr-only&amp;#34;&amp;gt;Link to heading&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;/h3&amp;gt;&amp;lt;div class=&amp;#34;youtube-lazy&amp;#34; data-src=&amp;#34;https://www.youtube-nocookie.com/embed/krJZmNvUqK4?autoplay=1&amp;#34;&amp;gt;
+&amp;lt;img src=&amp;#34;https://img.youtube.com/vi/krJZmNvUqK4/hqdefault.jpg&amp;#34; alt=&amp;#34;YouTube video thumbnail&amp;#34; loading=&amp;#34;lazy&amp;#34; decoding=&amp;#34;async&amp;#34;&amp;gt;
+&amp;lt;button class=&amp;#34;youtube-play&amp;#34; aria-label=&amp;#34;Play video&amp;#34;&amp;gt;&amp;lt;svg viewBox=&amp;#34;0 0 68 48&amp;#34;&amp;gt;&amp;lt;path d=&amp;#34;M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z&amp;#34; fill=&amp;#34;red&amp;#34;/&amp;gt;&amp;lt;path d=&amp;#34;M45 24L27 14v20&amp;#34; fill=&amp;#34;#fff&amp;#34;/&amp;gt;&amp;lt;/svg&amp;gt;&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;h2 id=&amp;#34;year-2024&amp;#34;&amp;gt;2024&amp;lt;/h2&amp;gt;
+&amp;lt;h3 id=&amp;#34;lessons-learned-europython-24&amp;#34;&amp;gt;Lessons learned maintaining open source Python projects - EuroPython 2024 - &amp;lt;a href=&amp;#34;https://gaborbernat.github.io/europython-24/&amp;#34;&amp;gt;slides&amp;lt;/a&amp;gt;&amp;lt;a class=&amp;#34;heading-link&amp;#34; href=&amp;#34;#lessons-learned-europython-24&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-link&amp;#34; aria-hidden=&amp;#34;true&amp;#34; title=&amp;#34;Link to heading&amp;#34;&amp;gt;&amp;lt;/i&amp;gt;&amp;lt;span class=&amp;#34;sr-only&amp;#34;&amp;gt;Link to heading&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;/h3&amp;gt;&amp;lt;div class=&amp;#34;youtube-lazy&amp;#34; data-src=&amp;#34;https://www.youtube-nocookie.com/embed/4qmuZQYxdrU?autoplay=1&amp;#34;&amp;gt;
+&amp;lt;img src=&amp;#34;https://img.youtube.com/vi/4qmuZQYxdrU/hqdefault.jpg&amp;#34; alt=&amp;#34;YouTube video thumbnail&amp;#34; loading=&amp;#34;lazy&amp;#34; decoding=&amp;#34;async&amp;#34;&amp;gt;
+&amp;lt;button class=&amp;#34;youtube-play&amp;#34; aria-label=&amp;#34;Play video&amp;#34;&amp;gt;&amp;lt;svg viewBox=&amp;#34;0 0 68 48&amp;#34;&amp;gt;&amp;lt;path d=&amp;#34;M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z&amp;#34; fill=&amp;#34;red&amp;#34;/&amp;gt;&amp;lt;path d=&amp;#34;M45 24L27 14v20&amp;#34; fill=&amp;#34;#fff&amp;#34;/&amp;gt;&amp;lt;/svg&amp;gt;&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;h3 id=&amp;#34;lessons-learned-py-texas-24&amp;#34;&amp;gt;Lessons learned maintaining open source Python projects - PyTexas 2024 - &amp;lt;a href=&amp;#34;https://gaborbernat.github.io/py-texas-24/&amp;#34;&amp;gt;slides&amp;lt;/a&amp;gt;&amp;lt;a class=&amp;#34;heading-link&amp;#34; href=&amp;#34;#lessons-learned-py-texas-24&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-link&amp;#34; aria-hidden=&amp;#34;true&amp;#34; title=&amp;#34;Link to heading&amp;#34;&amp;gt;&amp;lt;/i&amp;gt;&amp;lt;span class=&amp;#34;sr-only&amp;#34;&amp;gt;Link to heading&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;/h3&amp;gt;&amp;lt;div class=&amp;#34;youtube-lazy&amp;#34; data-src=&amp;#34;https://www.youtube-nocookie.com/embed/rcSLOqwpJk8?autoplay=1&amp;#34;&amp;gt;
+&amp;lt;img src=&amp;#34;https://img.youtube.com/vi/rcSLOqwpJk8/hqdefault.jpg&amp;#34; alt=&amp;#34;YouTube video thumbnail&amp;#34; loading=&amp;#34;lazy&amp;#34; decoding=&amp;#34;async&amp;#34;&amp;gt;
+&amp;lt;button class=&amp;#34;youtube-play&amp;#34; aria-label=&amp;#34;Play video&amp;#34;&amp;gt;&amp;lt;svg viewBox=&amp;#34;0 0 68 48&amp;#34;&amp;gt;&amp;lt;path d=&amp;#34;M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z&amp;#34; fill=&amp;#34;red&amp;#34;/&amp;gt;&amp;lt;path d=&amp;#34;M45 24L27 14v20&amp;#34; fill=&amp;#34;#fff&amp;#34;/&amp;gt;&amp;lt;/svg&amp;gt;&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;h2 id=&amp;#34;year-2023&amp;#34;&amp;gt;2023&amp;lt;/h2&amp;gt;
+&amp;lt;h3 id=&amp;#34;tox4-lightning-py-con-us-23&amp;#34;&amp;gt;What&amp;amp;#39;s new in tox 4? - lightning talk - PyCon US 2023 - &amp;lt;a href=&amp;#34;https://gaborbernat.github.io/pycon-us-23-lighting/&amp;#34;&amp;gt;slides&amp;lt;/a&amp;gt;&amp;lt;a class=&amp;#34;heading-link&amp;#34; href=&amp;#34;#tox4-lightning-py-con-us-23&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-link&amp;#34; aria-hidden=&amp;#34;true&amp;#34; title=&amp;#34;Link to heading&amp;#34;&amp;gt;&amp;lt;/i&amp;gt;&amp;lt;span class=&amp;#34;sr-only&amp;#34;&amp;gt;Link to heading&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;/h3&amp;gt;&amp;lt;div class=&amp;#34;youtube-lazy&amp;#34; data-src=&amp;#34;https://www.youtube-nocookie.com/embed/95tjPYvbJc0?autoplay=1&amp;amp;amp;start=480&amp;#34;&amp;gt;
+&amp;lt;img src=&amp;#34;https://img.youtube.com/vi/95tjPYvbJc0/hqdefault.jpg&amp;#34; alt=&amp;#34;YouTube video thumbnail&amp;#34; loading=&amp;#34;lazy&amp;#34; decoding=&amp;#34;async&amp;#34;&amp;gt;
+&amp;lt;button class=&amp;#34;youtube-play&amp;#34; aria-label=&amp;#34;Play video&amp;#34;&amp;gt;&amp;lt;svg viewBox=&amp;#34;0 0 68 48&amp;#34;&amp;gt;&amp;lt;path d=&amp;#34;M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z&amp;#34; fill=&amp;#34;red&amp;#34;/&amp;gt;&amp;lt;path d=&amp;#34;M45 24L27 14v20&amp;#34; fill=&amp;#34;#fff&amp;#34;/&amp;gt;&amp;lt;/svg&amp;gt;&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;h2 id=&amp;#34;year-2022&amp;#34;&amp;gt;2022&amp;lt;/h2&amp;gt;
+&amp;lt;h3 id=&amp;#34;editables-us-22&amp;#34;&amp;gt;How we standardized editable installs PEP 660 vs PEP 662 - PyCon US 2022 - &amp;lt;a href=&amp;#34;https://gaborbernat.github.io/pep-660-662-2022/#/&amp;#34;&amp;gt;slides&amp;lt;/a&amp;gt;&amp;lt;a class=&amp;#34;heading-link&amp;#34; href=&amp;#34;#editables-us-22&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-link&amp;#34; aria-hidden=&amp;#34;true&amp;#34; title=&amp;#34;Link to heading&amp;#34;&amp;gt;&amp;lt;/i&amp;gt;&amp;lt;span class=&amp;#34;sr-only&amp;#34;&amp;gt;Link to heading&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;/h3&amp;gt;&amp;lt;div class=&amp;#34;youtube-lazy&amp;#34; data-src=&amp;#34;https://www.youtube-nocookie.com/embed/Z_-PuPwN6ZI?autoplay=1&amp;amp;amp;start=5&amp;#34;&amp;gt;
+&amp;lt;img src=&amp;#34;https://img.youtube.com/vi/Z_-PuPwN6ZI/hqdefault.jpg&amp;#34; alt=&amp;#34;YouTube video thumbnail&amp;#34; loading=&amp;#34;lazy&amp;#34; decoding=&amp;#34;async&amp;#34;&amp;gt;
+&amp;lt;button class=&amp;#34;youtube-play&amp;#34; aria-label=&amp;#34;Play video&amp;#34;&amp;gt;&amp;lt;svg viewBox=&amp;#34;0 0 68 48&amp;#34;&amp;gt;&amp;lt;path d=&amp;#34;M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z&amp;#34; fill=&amp;#34;red&amp;#34;/&amp;gt;&amp;lt;path d=&amp;#34;M45 24L27 14v20&amp;#34; fill=&amp;#34;#fff&amp;#34;/&amp;gt;&amp;lt;/svg&amp;gt;&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;h2 id=&amp;#34;year-2021&amp;#34;&amp;gt;2021&amp;lt;/h2&amp;gt;
+&amp;lt;h3 id=&amp;#34;tox-4-us-21&amp;#34;&amp;gt;tox 4 - lightning talk - PyCon US 2021 - &amp;lt;a href=&amp;#34;https://gaborbernat.github.io/pycon-us-21-lighting/#/&amp;#34;&amp;gt;slides&amp;lt;/a&amp;gt;&amp;lt;a class=&amp;#34;heading-link&amp;#34; href=&amp;#34;#tox-4-us-21&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-link&amp;#34; aria-hidden=&amp;#34;true&amp;#34; title=&amp;#34;Link to heading&amp;#34;&amp;gt;&amp;lt;/i&amp;gt;&amp;lt;span class=&amp;#34;sr-only&amp;#34;&amp;gt;Link to heading&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;/h3&amp;gt;&amp;lt;div class=&amp;#34;youtube-lazy&amp;#34; data-src=&amp;#34;https://www.youtube-nocookie.com/embed/5zEn3Jta2Dg?autoplay=1&amp;amp;amp;start=389&amp;#34;&amp;gt;
+&amp;lt;img src=&amp;#34;https://img.youtube.com/vi/5zEn3Jta2Dg/hqdefault.jpg&amp;#34; alt=&amp;#34;YouTube video thumbnail&amp;#34; loading=&amp;#34;lazy&amp;#34; decoding=&amp;#34;async&amp;#34;&amp;gt;
+&amp;lt;button class=&amp;#34;youtube-play&amp;#34; aria-label=&amp;#34;Play video&amp;#34;&amp;gt;&amp;lt;svg viewBox=&amp;#34;0 0 68 48&amp;#34;&amp;gt;&amp;lt;path d=&amp;#34;M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z&amp;#34; fill=&amp;#34;red&amp;#34;/&amp;gt;&amp;lt;path d=&amp;#34;M45 24L27 14v20&amp;#34; fill=&amp;#34;#fff&amp;#34;/&amp;gt;&amp;lt;/svg&amp;gt;&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;h3 id=&amp;#34;py-packaging-us-21&amp;#34;&amp;gt;Python packaging demystified - tutorial - PyCon US 2021 - &amp;lt;a href=&amp;#34;https://gaborbernat.github.io/packaging-tutorial-pycon-us-21/#/&amp;#34;&amp;gt;slides&amp;lt;/a&amp;gt;&amp;lt;a class=&amp;#34;heading-link&amp;#34; href=&amp;#34;#py-packaging-us-21&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-link&amp;#34; aria-hidden=&amp;#34;true&amp;#34; title=&amp;#34;Link to heading&amp;#34;&amp;gt;&amp;lt;/i&amp;gt;&amp;lt;span class=&amp;#34;sr-only&amp;#34;&amp;gt;Link to heading&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;/h3&amp;gt;&amp;lt;div class=&amp;#34;youtube-lazy&amp;#34; data-src=&amp;#34;https://www.youtube-nocookie.com/embed/ApDThpsr2Fw?autoplay=1&amp;amp;amp;start=5&amp;#34;&amp;gt;
+&amp;lt;img src=&amp;#34;https://img.youtube.com/vi/ApDThpsr2Fw/hqdefault.jpg&amp;#34; alt=&amp;#34;YouTube video thumbnail&amp;#34; loading=&amp;#34;lazy&amp;#34; decoding=&amp;#34;async&amp;#34;&amp;gt;
+&amp;lt;button class=&amp;#34;youtube-play&amp;#34; aria-label=&amp;#34;Play video&amp;#34;&amp;gt;&amp;lt;svg viewBox=&amp;#34;0 0 68 48&amp;#34;&amp;gt;&amp;lt;path d=&amp;#34;M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z&amp;#34; fill=&amp;#34;red&amp;#34;/&amp;gt;&amp;lt;path d=&amp;#34;M45 24L27 14v20&amp;#34; fill=&amp;#34;#fff&amp;#34;/&amp;gt;&amp;lt;/svg&amp;gt;&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;h3 id=&amp;#34;virtualenv-deep-dive-21&amp;#34;&amp;gt;Virtualenv - A Deep Dive - PyCharm Webinar 2021&amp;lt;a class=&amp;#34;heading-link&amp;#34; href=&amp;#34;#virtualenv-deep-dive-21&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-link&amp;#34; aria-hidden=&amp;#34;true&amp;#34; title=&amp;#34;Link to heading&amp;#34;&amp;gt;&amp;lt;/i&amp;gt;&amp;lt;span class=&amp;#34;sr-only&amp;#34;&amp;gt;Link to heading&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;/h3&amp;gt;&amp;lt;div class=&amp;#34;youtube-lazy&amp;#34; data-src=&amp;#34;https://www.youtube-nocookie.com/embed/O9_MJHDkej8?autoplay=1&amp;amp;amp;start=7&amp;#34;&amp;gt;
+&amp;lt;img src=&amp;#34;https://img.youtube.com/vi/O9_MJHDkej8/hqdefault.jpg&amp;#34; alt=&amp;#34;YouTube video thumbnail&amp;#34; loading=&amp;#34;lazy&amp;#34; decoding=&amp;#34;async&amp;#34;&amp;gt;
+&amp;lt;button class=&amp;#34;youtube-play&amp;#34; aria-label=&amp;#34;Play video&amp;#34;&amp;gt;&amp;lt;svg viewBox=&amp;#34;0 0 68 48&amp;#34;&amp;gt;&amp;lt;path d=&amp;#34;M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z&amp;#34; fill=&amp;#34;red&amp;#34;/&amp;gt;&amp;lt;path d=&amp;#34;M45 24L27 14v20&amp;#34; fill=&amp;#34;#fff&amp;#34;/&amp;gt;&amp;lt;/svg&amp;gt;&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;h2 id=&amp;#34;year-2020&amp;#34;&amp;gt;2020&amp;lt;/h2&amp;gt;
+&amp;lt;h3 id=&amp;#34;virtualenv-rewrite-eu-20&amp;#34;&amp;gt;Lessons from the Trenches: rewriting and re-releasing virtualenv - EuroPython 2020 - &amp;lt;a href=&amp;#34;https://gaborbernat.github.io/virtualenv-rewrite-eupy20/&amp;#34;&amp;gt;slides&amp;lt;/a&amp;gt;&amp;lt;a class=&amp;#34;heading-link&amp;#34; href=&amp;#34;#virtualenv-rewrite-eu-20&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-link&amp;#34; aria-hidden=&amp;#34;true&amp;#34; title=&amp;#34;Link to heading&amp;#34;&amp;gt;&amp;lt;/i&amp;gt;&amp;lt;span class=&amp;#34;sr-only&amp;#34;&amp;gt;Link to heading&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;/h3&amp;gt;&amp;lt;div class=&amp;#34;youtube-lazy&amp;#34; data-src=&amp;#34;https://www.youtube-nocookie.com/embed/l9A0a8qZgOs?autoplay=1&amp;amp;amp;start=27&amp;#34;&amp;gt;
+&amp;lt;img src=&amp;#34;https://img.youtube.com/vi/l9A0a8qZgOs/hqdefault.jpg&amp;#34; alt=&amp;#34;YouTube video thumbnail&amp;#34; loading=&amp;#34;lazy&amp;#34; decoding=&amp;#34;async&amp;#34;&amp;gt;
+&amp;lt;button class=&amp;#34;youtube-play&amp;#34; aria-label=&amp;#34;Play video&amp;#34;&amp;gt;&amp;lt;svg viewBox=&amp;#34;0 0 68 48&amp;#34;&amp;gt;&amp;lt;path d=&amp;#34;M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z&amp;#34; fill=&amp;#34;red&amp;#34;/&amp;gt;&amp;lt;path d=&amp;#34;M45 24L27 14v20&amp;#34; fill=&amp;#34;#fff&amp;#34;/&amp;gt;&amp;lt;/svg&amp;gt;&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;h2 id=&amp;#34;year-2019&amp;#34;&amp;gt;2019&amp;lt;/h2&amp;gt;
+&amp;lt;h3 id=&amp;#34;status-quo-of-virtual-environments-eu-19&amp;#34;&amp;gt;status quo of virtual environments - EuroPython 2019 - &amp;lt;a href=&amp;#34;https://gaborbernat.github.io/euro_python_2019/#/&amp;#34;&amp;gt;slides&amp;lt;/a&amp;gt;&amp;lt;a class=&amp;#34;heading-link&amp;#34; href=&amp;#34;#status-quo-of-virtual-environments-eu-19&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-link&amp;#34; aria-hidden=&amp;#34;true&amp;#34; title=&amp;#34;Link to heading&amp;#34;&amp;gt;&amp;lt;/i&amp;gt;&amp;lt;span class=&amp;#34;sr-only&amp;#34;&amp;gt;Link to heading&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;/h3&amp;gt;&amp;lt;div class=&amp;#34;youtube-lazy&amp;#34; data-src=&amp;#34;https://www.youtube-nocookie.com/embed/o1Vue9CWRxU?autoplay=1&amp;amp;amp;start=4&amp;#34;&amp;gt;
+&amp;lt;img src=&amp;#34;https://img.youtube.com/vi/o1Vue9CWRxU/hqdefault.jpg&amp;#34; alt=&amp;#34;YouTube video thumbnail&amp;#34; loading=&amp;#34;lazy&amp;#34; decoding=&amp;#34;async&amp;#34;&amp;gt;
+&amp;lt;button class=&amp;#34;youtube-play&amp;#34; aria-label=&amp;#34;Play video&amp;#34;&amp;gt;&amp;lt;svg viewBox=&amp;#34;0 0 68 48&amp;#34;&amp;gt;&amp;lt;path d=&amp;#34;M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z&amp;#34; fill=&amp;#34;red&amp;#34;/&amp;gt;&amp;lt;path d=&amp;#34;M45 24L27 14v20&amp;#34; fill=&amp;#34;#fff&amp;#34;/&amp;gt;&amp;lt;/svg&amp;gt;&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;h3 id=&amp;#34;best-package-library-lon-19&amp;#34;&amp;gt;How to best package your library? - PyLondinium 2019 - &amp;lt;a href=&amp;#34;https://gaborbernat.github.io/pylondinium2019/#/&amp;#34;&amp;gt;slides&amp;lt;/a&amp;gt;&amp;lt;a class=&amp;#34;heading-link&amp;#34; href=&amp;#34;#best-package-library-lon-19&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-link&amp;#34; aria-hidden=&amp;#34;true&amp;#34; title=&amp;#34;Link to heading&amp;#34;&amp;gt;&amp;lt;/i&amp;gt;&amp;lt;span class=&amp;#34;sr-only&amp;#34;&amp;gt;Link to heading&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;/h3&amp;gt;&amp;lt;div class=&amp;#34;youtube-lazy&amp;#34; data-src=&amp;#34;https://www.youtube-nocookie.com/embed/OSnRl8yF9a4?autoplay=1&amp;amp;amp;start=17&amp;#34;&amp;gt;
+&amp;lt;img src=&amp;#34;https://img.youtube.com/vi/OSnRl8yF9a4/hqdefault.jpg&amp;#34; alt=&amp;#34;YouTube video thumbnail&amp;#34; loading=&amp;#34;lazy&amp;#34; decoding=&amp;#34;async&amp;#34;&amp;gt;
+&amp;lt;button class=&amp;#34;youtube-play&amp;#34; aria-label=&amp;#34;Play video&amp;#34;&amp;gt;&amp;lt;svg viewBox=&amp;#34;0 0 68 48&amp;#34;&amp;gt;&amp;lt;path d=&amp;#34;M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z&amp;#34; fill=&amp;#34;red&amp;#34;/&amp;gt;&amp;lt;path d=&amp;#34;M45 24L27 14v20&amp;#34; fill=&amp;#34;#fff&amp;#34;/&amp;gt;&amp;lt;/svg&amp;gt;&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;h3 id=&amp;#34;type-hinting-and-mypy-us-19&amp;#34;&amp;gt;Type hinting (and mypy) - PyCon US 2019 - &amp;lt;a href=&amp;#34;https://gaborbernat.github.io/pycon-us-2019/#/&amp;#34;&amp;gt;slides&amp;lt;/a&amp;gt;&amp;lt;a class=&amp;#34;heading-link&amp;#34; href=&amp;#34;#type-hinting-and-mypy-us-19&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-link&amp;#34; aria-hidden=&amp;#34;true&amp;#34; title=&amp;#34;Link to heading&amp;#34;&amp;gt;&amp;lt;/i&amp;gt;&amp;lt;span class=&amp;#34;sr-only&amp;#34;&amp;gt;Link to heading&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;/h3&amp;gt;&amp;lt;div class=&amp;#34;youtube-lazy&amp;#34; data-src=&amp;#34;https://www.youtube-nocookie.com/embed/hTrjTAPnA_k?autoplay=1&amp;amp;amp;start=47&amp;#34;&amp;gt;
+&amp;lt;img src=&amp;#34;https://img.youtube.com/vi/hTrjTAPnA_k/hqdefault.jpg&amp;#34; alt=&amp;#34;YouTube video thumbnail&amp;#34; loading=&amp;#34;lazy&amp;#34; decoding=&amp;#34;async&amp;#34;&amp;gt;
+&amp;lt;button class=&amp;#34;youtube-play&amp;#34; aria-label=&amp;#34;Play video&amp;#34;&amp;gt;&amp;lt;svg viewBox=&amp;#34;0 0 68 48&amp;#34;&amp;gt;&amp;lt;path d=&amp;#34;M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z&amp;#34; fill=&amp;#34;red&amp;#34;/&amp;gt;&amp;lt;path d=&amp;#34;M45 24L27 14v20&amp;#34; fill=&amp;#34;#fff&amp;#34;/&amp;gt;&amp;lt;/svg&amp;gt;&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;h2 id=&amp;#34;year-2018&amp;#34;&amp;gt;2018&amp;lt;/h2&amp;gt;
+&amp;lt;h3 id=&amp;#34;standardize-testing-eu-18&amp;#34;&amp;gt;Standardize Testing in Python - EuroPython 2018 - &amp;lt;a href=&amp;#34;https://gaborbernat.github.io/pycon-eu-2018/#/&amp;#34;&amp;gt;slides&amp;lt;/a&amp;gt;&amp;lt;a class=&amp;#34;heading-link&amp;#34; href=&amp;#34;#standardize-testing-eu-18&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-link&amp;#34; aria-hidden=&amp;#34;true&amp;#34; title=&amp;#34;Link to heading&amp;#34;&amp;gt;&amp;lt;/i&amp;gt;&amp;lt;span class=&amp;#34;sr-only&amp;#34;&amp;gt;Link to heading&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;/h3&amp;gt;&amp;lt;div class=&amp;#34;youtube-lazy&amp;#34; data-src=&amp;#34;https://www.youtube-nocookie.com/embed/SFqna5ilqig?autoplay=1&amp;amp;amp;start=8&amp;#34;&amp;gt;
+&amp;lt;img src=&amp;#34;https://img.youtube.com/vi/SFqna5ilqig/hqdefault.jpg&amp;#34; alt=&amp;#34;YouTube video thumbnail&amp;#34; loading=&amp;#34;lazy&amp;#34; decoding=&amp;#34;async&amp;#34;&amp;gt;
+&amp;lt;button class=&amp;#34;youtube-play&amp;#34; aria-label=&amp;#34;Play video&amp;#34;&amp;gt;&amp;lt;svg viewBox=&amp;#34;0 0 68 48&amp;#34;&amp;gt;&amp;lt;path d=&amp;#34;M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z&amp;#34; fill=&amp;#34;red&amp;#34;/&amp;gt;&amp;lt;path d=&amp;#34;M45 24L27 14v20&amp;#34; fill=&amp;#34;#fff&amp;#34;/&amp;gt;&amp;lt;/svg&amp;gt;&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;h3 id=&amp;#34;type-hints-snake-pit-lon-18&amp;#34;&amp;gt;Type hints inside the snake pit - PyLondinium 2018 - &amp;lt;a href=&amp;#34;https://gaborbernat.github.io/pylondinium18/&amp;#34;&amp;gt;slides&amp;lt;/a&amp;gt;&amp;lt;a class=&amp;#34;heading-link&amp;#34; href=&amp;#34;#type-hints-snake-pit-lon-18&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-link&amp;#34; aria-hidden=&amp;#34;true&amp;#34; title=&amp;#34;Link to heading&amp;#34;&amp;gt;&amp;lt;/i&amp;gt;&amp;lt;span class=&amp;#34;sr-only&amp;#34;&amp;gt;Link to heading&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;/h3&amp;gt;&amp;lt;div class=&amp;#34;youtube-lazy&amp;#34; data-src=&amp;#34;https://www.youtube-nocookie.com/embed/DzRlR3BFCko?autoplay=1&amp;#34;&amp;gt;
+&amp;lt;img src=&amp;#34;https://img.youtube.com/vi/DzRlR3BFCko/hqdefault.jpg&amp;#34; alt=&amp;#34;YouTube video thumbnail&amp;#34; loading=&amp;#34;lazy&amp;#34; decoding=&amp;#34;async&amp;#34;&amp;gt;
+&amp;lt;button class=&amp;#34;youtube-play&amp;#34; aria-label=&amp;#34;Play video&amp;#34;&amp;gt;&amp;lt;svg viewBox=&amp;#34;0 0 68 48&amp;#34;&amp;gt;&amp;lt;path d=&amp;#34;M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z&amp;#34; fill=&amp;#34;red&amp;#34;/&amp;gt;&amp;lt;path d=&amp;#34;M45 24L27 14v20&amp;#34; fill=&amp;#34;#fff&amp;#34;/&amp;gt;&amp;lt;/svg&amp;gt;&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;script defer src=&amp;#34;/js/youtube-lazy.min.fb31fc213cc2026f7de09fa23e21e8cf5575ac22537e1b9e73952f4fbed59071.js&amp;#34; integrity=&amp;#34;sha256-&amp;amp;#43;zH8ITzCAm994J&amp;amp;#43;iPiHoz1V1rCJTfhuec5UvT77VkHE=&amp;#34;&amp;gt;&amp;lt;/script&amp;gt;</description></item></channel></rss>

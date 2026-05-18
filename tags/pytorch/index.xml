@@ -1,48 +1,47 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pytorch on Bernát Gábor — Python packaging, tox, virtualenv &amp; open source</title><link>https://bernat.tech/tags/pytorch/</link><description>Engineering notes from Bernát Gábor — PyPA maintainer of tox, virtualenv, pipx, filelock, and platformdirs. Python packaging, type hints, and supply chain security.</description><generator>Hugo 0.161.1</generator><language>en</language><lastBuildDate>Thu, 14 May 2026 23:30:00 +0000</lastBuildDate><atom:link href="https://bernat.tech/tags/pytorch/index.xml" rel="self" type="application/rss+xml"/><item><title>PyCon US 2026 Typing Summit Recap</title><link>https://bernat.tech/posts/pycon-us-2026-typing-summit-recap/</link><pubDate>Thu, 14 May 2026 23:30:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pycon-us-2026-typing-summit-recap/</guid><description>&lt;p&gt;The &lt;a href="https://us.pycon.org/2026/events/typing-summit/" target="_blank" rel="noopener"&gt;PyCon US 2026 Typing Summit&lt;/a&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pytorch on Bernát Gábor — Python packaging, tox, virtualenv &amp; open source</title><link>https://bernat.tech/tags/pytorch/</link><description>Engineering notes from Bernát Gábor — PyPA maintainer of tox, virtualenv, pipx, filelock, and platformdirs. Python packaging, type hints, and supply chain security.</description><generator>Hugo 0.161.1</generator><language>en-US</language><lastBuildDate>Thu, 14 May 2026 23:30:00 +0000</lastBuildDate><atom:link href="https://bernat.tech/tags/pytorch/index.xml" rel="self" type="application/rss+xml"/><item><title>PyCon US 2026 Typing Summit Recap</title><link>https://bernat.tech/posts/pycon-us-2026-typing-summit-recap/</link><pubDate>Thu, 14 May 2026 23:30:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pycon-us-2026-typing-summit-recap/</guid><description>&amp;lt;p&amp;gt;The &amp;lt;a href=&amp;#34;https://us.pycon.org/2026/events/typing-summit/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;PyCon US 2026 Typing Summit&amp;lt;/a&amp;gt;
 ran Thursday May 14, 2026, from 1 PM
-to 5 PM in Room 201A of the Long Beach Convention Center, the day before the main conference started. Eight talks
-plus a Typing Council Q&amp;amp;A, single track. This recap is for anyone who could not be in the room.&lt;/p&gt;
-&lt;div class="alert alert-info"&gt;
-&lt;p class="alert-title"&gt;&lt;i class="fa-solid fa-circle-info" aria-hidden="true"&gt;&lt;/i&gt; TLDR:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Guido van Rossum argued that &lt;a href="https://peps.python.org/pep-0484/" target="_blank" rel="noopener"&gt;PEP 484&lt;/a&gt;
-&amp;rsquo;s no-new-syntax rule is already broken
-in practice and that the field should weigh user pain over power features, citing the
-&lt;a href="https://engineering.fb.com/2025/12/22/developer-tools/python-typing-survey-2025-code-quality-flexibility-typing-adoption/" target="_blank" rel="noopener"&gt;2025 Python Typing Survey&lt;/a&gt;
-.&lt;/li&gt;
-&lt;li&gt;Jelle Zijlstra proposed adding intersection and restricted-negation types to the typing spec, with an
-inhabitation check as the load-bearing new rule.&lt;/li&gt;
-&lt;li&gt;Michael Sullivan presented &lt;a href="https://peps.python.org/pep-0827/" target="_blank" rel="noopener"&gt;PEP 827&lt;/a&gt;
-(Vercel) for type manipulation, modelled
-on TypeScript&amp;rsquo;s conditional and mapped types.&lt;/li&gt;
-&lt;li&gt;Douglas Creager showed how &lt;code&gt;ty&lt;/code&gt; represents generic-call constraints internally with ternary decision diagrams,
-and a third solver strategy that fixes a 9-line &lt;code&gt;partial(choose, None)&lt;/code&gt; example every production checker today
-gets wrong.&lt;/li&gt;
-&lt;li&gt;Conner Nilsen presented a Pyrefly experiment with AI coding agents: type checking moves success on well-typed
-Meta code from 79.6% to 83.9% with 21% fewer steps; no measurable help on lightly-typed SWE-bench Verified.&lt;/li&gt;
-&lt;li&gt;Avik Chaudhuri demoed tensor-shape types in Pyrefly, blocked in practice by
-&lt;a href="https://peps.python.org/pep-0695/" target="_blank" rel="noopener"&gt;PEP 695&lt;/a&gt;
-&amp;rsquo;s eager evaluation of type parameters.&lt;/li&gt;
-&lt;li&gt;Jia Chen presented a Lean 4 formalization (Featherweight Python) with mechanized soundness and decidability
-proofs; AI assistants turned what used to take years into weeks.&lt;/li&gt;
-&lt;li&gt;The Typing Council panel (Carl Meyer, Jelle Zijlstra, Rebecca Chen on stage) opened the floor to attendee
-questions on governance, error-code consistency, metaprogramming, and the spec direction.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;&lt;h2 id="experiments-with-ai-agents-and-pyrefly-type-errors--conner-nilsen"&gt;
+to 5 PM in Room 201A of the Long Beach Convention Center, the day before the main conference started. Eight talks plus a
+Typing Council Q&amp;amp;amp;A, single track. This recap is for anyone who could not be in the room.&amp;lt;/p&amp;gt;
+&amp;lt;div class=&amp;#34;alert alert-info&amp;#34;&amp;gt;
+&amp;lt;p class=&amp;#34;alert-title&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-circle-info&amp;#34; aria-hidden=&amp;#34;true&amp;#34;&amp;gt;&amp;lt;/i&amp;gt; TLDR:&amp;lt;/p&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;Guido van Rossum argued that &amp;lt;a href=&amp;#34;https://peps.python.org/pep-0484/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;PEP 484&amp;lt;/a&amp;gt;
+&amp;amp;rsquo;s no-new-syntax rule is already broken in
+practice and that the field should weigh user pain over power features, citing the
+&amp;lt;a href=&amp;#34;https://engineering.fb.com/2025/12/22/developer-tools/python-typing-survey-2025-code-quality-flexibility-typing-adoption/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;2025 Python Typing Survey&amp;lt;/a&amp;gt;
+.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Jelle Zijlstra proposed adding intersection and restricted-negation types to the typing spec, with an inhabitation
+check as the load-bearing new rule.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Michael Sullivan presented &amp;lt;a href=&amp;#34;https://peps.python.org/pep-0827/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;PEP 827&amp;lt;/a&amp;gt;
+(Vercel) for type manipulation, modelled on
+TypeScript&amp;amp;rsquo;s conditional and mapped types.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Douglas Creager showed how &amp;lt;code&amp;gt;ty&amp;lt;/code&amp;gt; represents generic-call constraints internally with ternary decision diagrams, and a
+third solver strategy that fixes a 9-line &amp;lt;code&amp;gt;partial(choose, None)&amp;lt;/code&amp;gt; example every production checker today gets wrong.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Conner Nilsen presented a Pyrefly experiment with AI coding agents: type checking moves success on well-typed Meta
+code from 79.6% to 83.9% with 21% fewer steps; no measurable help on lightly-typed SWE-bench Verified.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Avik Chaudhuri demoed tensor-shape types in Pyrefly, blocked in practice by
+&amp;lt;a href=&amp;#34;https://peps.python.org/pep-0695/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;PEP 695&amp;lt;/a&amp;gt;
+&amp;amp;rsquo;s eager evaluation of type parameters.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Jia Chen presented a Lean 4 formalization (Featherweight Python) with mechanized soundness and decidability proofs;
+AI assistants turned what used to take years into weeks.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;The Typing Council panel (Carl Meyer, Jelle Zijlstra, Rebecca Chen on stage) opened the floor to attendee questions
+on governance, error-code consistency, metaprogramming, and the spec direction.&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;&amp;lt;h3 id=&amp;#34;experiments-with-ai-agents-and-pyrefly-type-errors--conner-nilsen&amp;#34;&amp;gt;
 Experiments with AI agents and Pyrefly type errors — Conner Nilsen
-&lt;a class="heading-link" href="#experiments-with-ai-agents-and-pyrefly-type-errors--conner-nilsen"&gt;
-&lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"&gt;&lt;/i&gt;
-&lt;span class="sr-only"&gt;Link to heading&lt;/span&gt;
-&lt;/a&gt;
-&lt;/h2&gt;
-&lt;figure&gt;
-&lt;img src="https://bernat.tech/posts/pycon-us-2026-typing-summit-recap/conner-nilsen-pyrefly-ai-experiments.webp" alt="Conner Nilsen Findings slide on providing feedback to the agent at higher frequencies"
-srcset="https://bernat.tech/posts/pycon-us-2026-typing-summit-recap/conner-nilsen-pyrefly-ai-experiments_hu_89461527b1bb5279.webp 500w, https://bernat.tech/posts/pycon-us-2026-typing-summit-recap/conner-nilsen-pyrefly-ai-experiments_hu_f706c2b038af956b.webp 800w" sizes="(min-width: 35em) 1200px, 100vw"
-width="1024" height="768"
-loading="lazy" decoding="async"&gt;
-&lt;/figure&gt;
-&lt;p&gt;Conner (Meta, &lt;a href="https://pyrefly.org/" target="_blank" rel="noopener"&gt;Pyrefly&lt;/a&gt;
-team) presented two questions: (1) does giving an AI coding agent a
-type checker help it finish tasks, and (2) does it prevent the agent from re-introducing old bugs while fixing new
-ones? His team ran two benchmarks with and without type-checker feedback and tracked three metrics: success rate,
-number of steps to completion, and wall-clock duration.&lt;/p&gt;</description><category>python</category><category>pycon</category><category>pycon-us</category><category>typing-summit</category><category>typing</category><category>type-hints</category><category>pyrefly</category><category>ty</category><category>astral</category><category>openai</category><category>meta</category><category>vercel</category><category>pep-827</category><category>intersection-types</category><category>constraint-sets</category><category>lean</category><category>tensor-types</category><category>pytorch</category><category>typing-council</category><category>guido</category></item></channel></rss>
+&amp;lt;a class=&amp;#34;heading-link&amp;#34; href=&amp;#34;#experiments-with-ai-agents-and-pyrefly-type-errors--conner-nilsen&amp;#34;&amp;gt;
+&amp;lt;i class=&amp;#34;fa-solid fa-link&amp;#34; aria-hidden=&amp;#34;true&amp;#34; title=&amp;#34;Link to heading&amp;#34;&amp;gt;&amp;lt;/i&amp;gt;
+&amp;lt;span class=&amp;#34;sr-only&amp;#34;&amp;gt;Link to heading&amp;lt;/span&amp;gt;
+&amp;lt;/a&amp;gt;
+&amp;lt;/h3&amp;gt;
+&amp;lt;figure&amp;gt;
+&amp;lt;img src=&amp;#34;/posts/pycon-us-2026-typing-summit-recap/conner-nilsen-pyrefly-ai-experiments.webp&amp;#34; alt=&amp;#34;Conner Nilsen Findings slide on providing feedback to the agent at higher frequencies&amp;#34;
+srcset=&amp;#34;/posts/pycon-us-2026-typing-summit-recap/conner-nilsen-pyrefly-ai-experiments_hu_2a398d6ed4e790a1.webp 500w, /posts/pycon-us-2026-typing-summit-recap/conner-nilsen-pyrefly-ai-experiments_hu_df504a8aa730041c.webp 800w&amp;#34; sizes=&amp;#34;(min-width: 35em) 1200px, 100vw&amp;#34;
+width=&amp;#34;1024&amp;#34; height=&amp;#34;768&amp;#34;
+loading=&amp;#34;lazy&amp;#34; decoding=&amp;#34;async&amp;#34;&amp;gt;
+&amp;lt;/figure&amp;gt;
+&amp;lt;p&amp;gt;Conner (Meta, &amp;lt;a href=&amp;#34;https://pyrefly.org/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;Pyrefly&amp;lt;/a&amp;gt;
+team) presented two questions: (1) does giving an AI coding agent a type
+checker help it finish tasks, and (2) does it prevent the agent from re-introducing old bugs while fixing new ones? His
+team ran two benchmarks with and without type-checker feedback and tracked three metrics: success rate, number of steps
+to completion, and wall-clock duration.&amp;lt;/p&amp;gt;</description><category>python</category><category>pycon</category><category>pycon-us</category><category>typing-summit</category><category>typing</category><category>type-hints</category><category>pyrefly</category><category>ty</category><category>astral</category><category>openai</category><category>meta</category><category>vercel</category><category>pep-827</category><category>intersection-types</category><category>constraint-sets</category><category>lean</category><category>tensor-types</category><category>pytorch</category><category>typing-council</category><category>guido</category></item></channel></rss>
