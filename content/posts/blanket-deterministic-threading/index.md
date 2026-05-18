@@ -45,9 +45,9 @@ only triggers under a specific thread interleaving, read on.
 
 [PEP 703](https://peps.python.org/pep-0703/) -- _Making the Global Interpreter Lock Optional in CPython_ -- removes the
 [GIL](https://docs.python.org/3/glossary.html#term-GIL), the lock that has historically forced Python to run only one
-thread at a time. Without it, threads can execute in parallel on multiple cores. The change is not just about speed: it
-rewires CPython's internals -- biased reference counting, per-object locking,
-[mimalloc](https://github.com/microsoft/mimalloc) replacing
+thread at a time. Without it, threads can execute in parallel on multiple cores -- this mode is called **free-threaded
+Python**. The change is not just about speed: it rewires CPython's internals -- biased reference counting, per-object
+locking, [mimalloc](https://github.com/microsoft/mimalloc) replacing
 [pymalloc](https://docs.python.org/3/c-api/memory.html#the-pymalloc-allocator), stop-the-world GC pauses.
 
 Code that was "accidentally thread-safe" will start exhibiting real data races:
