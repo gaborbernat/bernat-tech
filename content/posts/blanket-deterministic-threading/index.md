@@ -33,8 +33,9 @@ At [PyCon US 2026](https://us.pycon.org/2026/schedule/presentation/51),
 [Argument Clinic](https://peps.python.org/pep-0436/) (the C preprocessor that generates argument parsing code across
 CPython), release manager for Python 3.4 and 3.5, and the person behind the original
 [Gilectomy](https://github.com/larryhastings/gilectomy) experiment) presented
-[blanket](https://github.com/larryhastings/blanket). The talk, _Conquer multithreaded Python with Blanket_, addressed a
-problem every multithreaded developer has hit: how do you write a test that reliably reproduces a race condition?
+[blanket](https://github.com/larryhastings/blanket). The talk,
+[_Conquer multithreaded Python with Blanket_](https://us.pycon.org/2026/schedule/presentation/51), addressed a problem
+every multithreaded developer has hit: how do you write a test that reliably reproduces a race condition?
 
 This post walks through what blanket does, why it matters right now, how it works under the hood, and how to start using
 it. If you've ever stared at a flaky test that "only fails on CI" or tried to get coverage on an `except` branch that
