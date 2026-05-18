@@ -564,11 +564,17 @@ assert handed_out == ["handler_b=conn_1", "handler_a=conn_2"]
 
 ```mermaid
 sequenceDiagram
-    participant S as Scheduler
-    participant HB as handler_b
-    participant HA as handler_a
-    participant HC as handler_c
-    participant P as pool_lock
+    box rgba(5,150,105,0.15) Scheduler
+        participant S as Scheduler
+    end
+    box rgba(109,40,217,0.15) Handlers
+        participant HB as handler_b
+        participant HA as handler_a
+        participant HC as handler_c
+    end
+    box rgba(185,28,28,0.15) Pool
+        participant P as pool_lock
+    end
 
     Note over S: with scenario:
     HB->>P: acquire() → BLOCKED
@@ -639,6 +645,33 @@ with scenario:
     scenario.finish(orders_task)
 ```
 
+```mermaid
+sequenceDiagram
+    box rgba(5,150,105,0.15) Scheduler
+        participant S as Scheduler
+    end
+    box rgba(59,130,246,0.15) Migration tasks
+        participant UT as users_task
+        participant OT as orders_task
+    end
+    box rgba(185,28,28,0.15) Locks
+        participant UL as users_lock
+        participant OL as orders_lock
+    end
+
+    S->>UT: assign(users_task) → acquires users_lock
+    S->>OT: assign(orders_task) → acquires orders_lock
+
+    UT->>OL: acquire(timeout=1.0) → BLOCKED
+    OT->>UL: acquire(timeout=1.0) → BLOCKED
+    Note over UT,OT: Deadlock: each holds one lock, wants the other
+
+    S->>UT: expire() + unblock()
+    Note over UT: timeout fires, returns False
+    S->>UT: finish → releases users_lock
+    S->>OT: finish → acquires users_lock, releases both
+```
+
 ### Service startup: controlling initialization order
 
 A service spawns background workers that block on a "ready" event until configuration loads. A race in the health check
@@ -681,6 +714,31 @@ assert startup_order == ["migration", "http"]
 
 `cycle` drives `migrator` and `listener` into `ready.wait()`, then drives `loader` through `ready.set()` (waking both),
 and gives you control over who resumes first. Without blanket the wake order is OS-determined.
+
+```mermaid
+sequenceDiagram
+    box rgba(5,150,105,0.15) Scheduler
+        participant S as Scheduler
+    end
+    box rgba(109,40,217,0.15) Workers
+        participant M as migrator
+        participant L as listener
+        participant C as config_loader
+    end
+    box rgba(245,158,11,0.15) Event
+        participant E as ready event
+    end
+
+    M->>E: wait() → sleeping
+    L->>E: wait() → sleeping
+    C->>E: set() → wakes both
+
+    Note over S: cyc.wake(migrator, listener)
+    S->>M: resume first
+    Note over M: startup_order.append("migration")
+    S->>L: resume second
+    Note over L: startup_order.append("http")
+```
 
 ### Map-reduce: controlling shard completion order
 
@@ -752,7 +810,7 @@ assert used_fallback is True
 `tx.expire()` forces the timeout to fire immediately. `tx.disregard()` does the opposite -- pretends no timeout was
 specified.
 
-### Example 6: monkey-patching code you don't own
+### Monkey-patching code you don't own
 
 When the code under test creates its own locks internally, `inject` swaps them for blanket primitives so you can still
 control scheduling:
