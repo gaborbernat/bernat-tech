@@ -34,15 +34,14 @@ publishing to PyPI as an open-source maintainer and managing thousands of depend
 post covers practical approaches to securing your Python supply chain. For a broader threat model across all ecosystems,
 the
 [CNCF Software Supply Chain Security Whitepaper](https://tag-security.cncf.io/community/working-groups/supply-chain-security/supply-chain-security-paper-v2/Software_Supply_Chain_Practices_whitepaper_v2.pdf)
-is an excellent primer. Here we'll focus on Python-specific defenses — writing secure code, managing dependencies,
+is an excellent primer. Here we'll focus on Python-specific defenses: writing secure code, managing dependencies,
 scanning for vulnerabilities, and verifying package authenticity.
 
 ## Why This Matters
 
-Here's the scale we're dealing with: PyPI hosts over 743,000 packages as of March 2026, and that number grows daily.
-Your average Python project typically pulls in dozens of transitive dependencies - packages you never explicitly chose
-but depend on anyway because your dependencies need them. And here's the kicker: security patches consistently lag
-behind vulnerability discovery, sometimes by weeks or months.
+PyPI hosts over 743,000 packages as of March 2026, and that number grows daily. Your average Python project pulls in
+dozens of transitive dependencies, packages you never explicitly chose but depend on anyway because your dependencies
+need them. Security patches consistently lag behind vulnerability discovery, sometimes by weeks or months.
 
 The flow from developers to your application:
 
@@ -65,7 +64,7 @@ flowchart TB
     linkStyle 7 stroke:#dc2626
 ```
 
-Notice all those red arrows? Each represents a potential attack vector. Real incidents demonstrate why this matters.
+Each red arrow is a potential attack vector. Real incidents show the consequences.
 
 ### Real Attacks, Real Impact
 
@@ -127,9 +126,8 @@ flask v3.1.0
     └── markupsafe v3.0.2
 ```
 
-See what happened? You asked for one package (Flask), but you got seven. Look at MarkupSafe at the bottom - it's a
-transitive dependency pulled in by both Jinja2 and Werkzeug. You never explicitly installed it. You probably don't even
-know what it does. But if it has a vulnerability, your application is vulnerable.
+You asked for one package (Flask) and got seven. MarkupSafe at the bottom is a transitive dependency pulled in by both
+Jinja2 and Werkzeug. You never explicitly installed it, and if it has a vulnerability, your application is vulnerable.
 
 With 50+ transitive dependencies per project on average, your attack surface is massive compared to what appears in your
 requirements file.
@@ -138,11 +136,11 @@ Now let's build your defense strategy, starting with your own code.
 
 ## Secure Your Own Code First
 
-Supply chain attacks don't just come from external dependencies — your own code can create the entry points. A hardcoded
+Supply chain attacks don't come only from external dependencies. Your own code can create the entry points. A hardcoded
 PyPI token in your source code, once pushed to a repository, gives an attacker everything they need to compromise your
 account and publish malicious packages under your name. Beyond secrets, common security bugs hide in everyday code
-patterns that look perfectly fine during code review — and humans miss these under time pressure. Catching them
-automatically with a linter is the first layer of defense.
+patterns that look fine during code review, and humans miss these under time pressure. Catching them automatically with
+a linter is the first layer of defense.
 
 ### The Forever Secret
 
@@ -163,7 +161,7 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 ```
 
 Git never forgets. When you commit a secret, it lives in your repository's history forever. Deleting it in a later
-commit doesn't help — anyone with repository access (or an old clone) can extract those credentials. Attackers routinely
+commit doesn't help. Anyone with repository access (or an old clone) can extract those credentials. Attackers routinely
 trawl git histories for secrets, and a leaked PyPI token or cloud credential is often the first step in a supply chain
 compromise.
 
@@ -206,7 +204,7 @@ whole application grinds to a halt because you forgot one parameter.
 
 ### Catch These With Ruff
 
-[Ruff](https://docs.astral.sh/ruff/) is a blazingly fast Python linter that includes comprehensive security rules from
+[Ruff](https://docs.astral.sh/ruff/) is a fast Python linter that includes comprehensive security rules from
 [Bandit](https://bandit.readthedocs.io/en/latest/). You can learn more in the
 [Ruff security rules documentation](https://docs.astral.sh/ruff/rules/#flake8-bandit-s). Configure it in
 `pyproject.toml`:
@@ -218,8 +216,8 @@ line-length = 120
 lint.select = ["E", "F", "S"]
 ```
 
-The security rules (`["S"]`) alone provide significant value — they're the Bandit checks that catch hardcoded secrets,
-weak crypto, and unsafe deserialization. Once your codebase is clean, expand to all rules:
+The security rules (`["S"]`) alone catch a lot: they're the Bandit checks that flag hardcoded secrets, weak crypto, and
+unsafe deserialization. Once your codebase is clean, expand to all rules:
 
 ```toml
 # Aspirational: enable everything and selectively ignore
@@ -262,13 +260,13 @@ Add Ruff to your editor and CI pipeline - it'll save your forgetful self.
 
 ## Manage Your Dependencies
 
-Now let's talk about managing the code you didn't write — your dependencies. This is where supply chain attacks actually
-happen. The [OpenSSF Secure Supply Chain Consumption Framework (S2C2F)](https://github.com/ossf/s2c2f) provides a
-structured maturity model for how organizations should consume open source software.
+Now let's talk about managing the code you didn't write: your dependencies. This is where supply chain attacks happen.
+The [OpenSSF Secure Supply Chain Consumption Framework (S2C2F)](https://github.com/ossf/s2c2f) provides a structured
+maturity model for how organizations should consume open source software.
 
 ### Choose Dependencies Carefully
 
-Before adding a dependency, consider whether you need it at all. Every dependency expands your attack surface — fewer
+Before adding a dependency, consider whether you need it at all. Every dependency expands your attack surface. Fewer
 dependencies means fewer opportunities for compromise. When you do add one, evaluate the publisher's security posture
 using the [OpenSSF Scorecard](https://securityscorecards.dev/), which grades projects on practices like branch
 protection, signed releases, dependency update tooling, and vulnerability disclosure. A low score doesn't mean "don't
@@ -322,9 +320,9 @@ sequenceDiagram
 With hash pinning, the second install would fail because the file's hash no longer matches what was recorded. **Hash
 pinned** (`flask==3.1.1 --hash=sha256:d667207822...`) is secure - it creates a cryptographic fingerprint of the package
 file. During installation, pip recalculates the hash and compares it to what you specified. If they don't match,
-installation fails immediately. Note that PyPI does not allow re-uploading an existing filename — once
-`flask-3.1.1.tar.gz` is uploaded, that specific file is immutable. However, an attacker could still upload additional
-distribution files for the same version.
+installation fails. Note that PyPI does not allow re-uploading an existing filename: once `flask-3.1.1.tar.gz` is
+uploaded, that specific file is immutable. However, an attacker could still upload additional distribution files for the
+same version.
 
 What does hash pinning protect against? It ensures you only install the exact artifact you locked, and it detects
 tampering in transit, in caches, or in mirrors.
@@ -340,7 +338,7 @@ where different installers could extract different content from the same wheel f
 
 [uv](https://docs.astral.sh/uv/) makes hash pinning effortless by generating lockfiles with cryptographic hashes by
 default. It also creates isolated virtual environments automatically, limiting the blast radius if a dependency turns
-out to be malicious — a compromised package can't affect other projects or system-level resources. See the
+out to be malicious, since a compromised package can't affect other projects or system-level resources. See the
 [uv lockfile documentation](https://docs.astral.sh/uv/concepts/projects/#lockfile) for details:
 
 ```bash
@@ -373,12 +371,12 @@ same version number, the hash won't match and installation fails. Read more abou
 > explicitly. A single unhashed line silently disables verification for that package. Tools like
 > `uv pip compile --generate-hashes` avoid this by always generating hashes for every dependency.
 
-Hash-pinned lockfiles are a significant step toward **reproducible builds** — given the same lockfile, every install
-pulls the same artifacts. Full reproducibility also depends on deterministic build scripts and environments, but pinning
-the dependency layer removes one of the biggest sources of variation. `uv lock` captures exact versions, hashes, and
-platform markers, getting you most of the way there.
+Hash-pinned lockfiles move you toward **reproducible builds**: given the same lockfile, every install pulls the same
+artifacts. Full reproducibility also depends on deterministic build scripts and environments, but pinning the dependency
+layer removes one of the biggest sources of variation. `uv lock` captures exact versions, hashes, and platform markers,
+getting you most of the way there.
 
-Looking ahead, [PEP 751](https://peps.python.org/pep-0751/) defines `pylock.toml` — a standardized, tool-agnostic lock
+Looking ahead, [PEP 751](https://peps.python.org/pep-0751/) defines `pylock.toml`, a standardized, tool-agnostic lock
 file format. Unlike tool-specific formats (`uv.lock`, `poetry.lock`), any tool can produce or consume it. Notably,
 `pylock.toml` supports recording
 [attestation identities](https://packaging.python.org/en/latest/specifications/index-hosted-attestations/) directly in
@@ -525,7 +523,7 @@ policies, see the
 [VEX](https://www.cisa.gov/resources-tools/resources/minimum-requirements-vulnerability-exploitability-exchange-vex)
 (Vulnerability Exploitability eXchange) is an emerging standard where software producers can declare whether a specific
 CVE actually affects their shipped product. VEX adoption in the Python ecosystem is still early, but it's worth knowing
-about — especially if you're triaging a long list of pip-audit findings and need to prioritize what actually matters.
+about, especially if you're triaging a long list of pip-audit findings and need to prioritize what matters.
 
 ### Integrate Into CI/CD
 
@@ -740,8 +738,8 @@ phish any maintainer's password - they stole thousands of API tokens directly fr
     # Stolen once = permanent access
 ```
 
-The problem is obvious when you think about it. This token sits in your CI secrets indefinitely. If an attacker
-compromises your repository or your CI system, they get permanent access to publish packages under your name.
+This token sits in your CI secrets indefinitely. If an attacker compromises your repository or CI system, they get
+permanent access to publish packages under your name.
 
 ### The New Way: Trusted Publishing
 
@@ -789,7 +787,7 @@ provenance tracking through Sigstore transparency logs.
 OIDC alone isn't a silver bullet though. If an attacker can modify your workflow file (via a compromised dependency, a
 malicious PR merged without review, or a GitHub Actions supply chain attack like GhostAction), they can trigger a
 legitimate OIDC token exchange and publish malicious packages through your trusted pipeline. Protect your workflows by
-pinning Actions to commit SHAs instead of tags (as shown above — the `# v4.3.1` comment preserves readability),
+pinning Actions to commit SHAs instead of tags (as shown above; the `# v4.3.1` comment preserves readability),
 configuring a GitHub Actions
 [deployment environment](https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-deployments/managing-environments-for-deployment)
 with required reviewers so the publish job needs manual approval before the OIDC token exchange, restricting who can
@@ -837,10 +835,10 @@ Add it to your pre-commit hooks to catch issues before they're pushed:
 
 ```yaml
 # .pre-commit-config.yaml
-- repo: https://github.com/zizmorcore/zizmor-pre-commit
-  rev: v1.22.0
-  hooks:
-  - id: zizmor
+  - repo: https://github.com/zizmorcore/zizmor-pre-commit
+    rev: v1.22.0
+    hooks:
+      - id: zizmor
 ```
 
 Or run it in CI to audit workflows on every PR. The
@@ -851,7 +849,7 @@ SARIF:
 name: Audit GitHub Actions
 on:
   push:
-    branches: ["main"]
+    branches: [main]
   pull_request:
 
 permissions: {}
@@ -1178,8 +1176,7 @@ seconds of installation.
 
 ## Your Roadmap
 
-Supply chain security can seem overwhelming, but you don't need to implement everything at once. A practical roadmap
-prioritized by impact and ease of implementation:
+You don't need to implement everything at once. A practical roadmap prioritized by impact and ease of implementation:
 
 ```mermaid
 graph TD
@@ -1247,10 +1244,8 @@ Supply chain security isn't a single solution but a layered approach:
 - **Response**: SBOMs enable rapid incident response.
 - **Defense**: Attestations and delayed ingestion add additional protection layers.
 
-Each layer provides defense against different attack vectors. Together, they create a robust security posture that
-protects your applications from the evolving threat landscape. The tooling is mature and available today. Start small,
-get the basics right, then expand. Even implementing just Phase 1 will significantly improve your security posture. The
-only question is: when will you start?
+Each layer defends against different attack vectors. Together, they create a security posture where if one fails, others
+catch it. The tooling is mature and available today. Start small, get the basics right, then expand.
 
 ## References
 
@@ -1303,7 +1298,7 @@ only question is: when will you start?
   SLSA
 - [SPDX](https://spdx.dev/) - Alternative SBOM standard (Linux Foundation)
 - [CNCF Software Supply Chain Security Whitepaper](https://tag-security.cncf.io/community/working-groups/supply-chain-security/supply-chain-security-paper-v2/Software_Supply_Chain_Practices_whitepaper_v2.pdf)
-  -- Comprehensive supply chain threat model primer
+  — Comprehensive supply chain threat model primer
 - [OpenSSF Scorecard](https://securityscorecards.dev/) - Automated security health assessment for open source projects
 - [S2C2F](https://github.com/ossf/s2c2f) - Secure Supply Chain Consumption Framework
 - [VEX](https://www.cisa.gov/resources-tools/resources/minimum-requirements-vulnerability-exploitability-exchange-vex) -

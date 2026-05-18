@@ -29,16 +29,16 @@ title = "Taming Threads: Deterministic Multithreaded Testing in Python with blan
 >   -- perfect for regression tests of known bugs and for achieving full coverage of rare code paths.
 
 At [PyCon US 2026](https://us.pycon.org/2026/schedule/presentation/51),
-[Larry Hastings](https://github.com/larryhastings) -- CPython core developer, creator of
+[Larry Hastings](https://github.com/larryhastings) (CPython core developer, creator of
 [Argument Clinic](https://peps.python.org/pep-0436/) (the C preprocessor that generates argument parsing code across
 CPython), release manager for Python 3.4 and 3.5, and the person behind the original
-[Gilectomy](https://github.com/larryhastings/gilectomy) experiment -- presented
+[Gilectomy](https://github.com/larryhastings/gilectomy) experiment) presented
 [blanket](https://github.com/larryhastings/blanket). The talk, _Conquer multithreaded Python with Blanket_, addressed a
 problem every multithreaded developer has hit: how do you write a test that reliably reproduces a race condition?
 
 This post walks through what blanket does, why it matters right now, how it works under the hood, and how to start using
 it. If you've ever stared at a flaky test that "only fails on CI" or tried to get coverage on an `except` branch that
-only triggers under a specific thread interleaving -- read on.
+only triggers under a specific thread interleaving, read on.
 
 ## Why now
 
@@ -51,6 +51,7 @@ Code that was "accidentally thread-safe" will start exhibiting real data races:
 
 ```python
 counter: int = 0
+
 
 def increment() -> None:
     global counter
@@ -81,13 +82,17 @@ import threading
 lock = threading.Lock()
 barrier = threading.Barrier(3)
 
+
 def worker(name: str) -> None:
     with lock:
         print(f"worker {name} got the lock")
     barrier.wait()
     print(f"worker {name} is past the barrier")
 
-threads: list[threading.Thread] = [threading.Thread(target=worker, args=(n,)) for n in ("A", "B", "C")]
+
+threads: list[threading.Thread] = [
+    threading.Thread(target=worker, args=(n,)) for n in ("A", "B", "C")
+]
 random.shuffle(threads)
 for thread in threads:
     thread.start()
@@ -215,11 +220,13 @@ scenario = blanket.Scenario()
 lock = scenario.Lock()
 barrier = scenario.Barrier(3)
 
+
 def worker(name: str) -> None:
     with lock:
         print(f"worker {name} got the lock")
     barrier.wait()
     print(f"worker {name} is past the barrier")
+
 
 thread_a: Thread = Thread(target=worker, args=("A",))
 thread_b: Thread = Thread(target=worker, args=("B",))
@@ -263,8 +270,8 @@ have no idea they're being orchestrated.
 
 ## Wrapping, not reimplementing
 
-blanket **wraps** real `threading` primitives rather than reimplementing them. When you call `lock.acquire()` on a
-blanket Lock, it calls the real `threading.Lock.acquire()` underneath. When you call `condition.wait()`, the real
+blanket wraps real `threading` primitives rather than reimplementing them. When you call `lock.acquire()` on a blanket
+Lock, it calls the real `threading.Lock.acquire()` underneath. When you call `condition.wait()`, the real
 `threading.Condition.wait()` executes, with all its semantics around releasing and reacquiring the underlying lock.
 
 ```mermaid
@@ -299,7 +306,7 @@ flowchart TB
 ```
 
 If a testing framework reimplements `Lock.acquire()` and gets some edge case wrong, your tests pass but production
-breaks. blanket avoids this entirely -- the semantics come straight from CPython's `threading` module.
+breaks. blanket avoids this entirely. The semantics come straight from CPython's `threading` module.
 
 > _blanket has no opinion about what synchronization primitives mean. It does no reimplementation. Every
 > `lock.acquire()` is a real `threading.Lock.acquire()` underneath._
@@ -410,7 +417,7 @@ tell: blanket uppercases the hex ID. A real lock shows `0x78c990475650`; a blank
 
 blanket's API has three layers, each built on the one below. The high-level helpers handle common patterns in one call.
 When those don't fit, drop to the middle level for manual step-by-step control. The low level exposes raw transactions
-and signal-based waiting for cases that need surgical precision.
+and signal-based waiting for cases that need more precision.
 
 ```mermaid
 flowchart LR
@@ -455,7 +462,9 @@ You can wait on threads, transactions, bound methods, or signal tokens:
 from blanket import Call, Reached, State, Terminated
 
 with scenario:
-    signaled: set[object] = scenario.wait(Call(lock.acquire, thread_a), Terminated(thread_b))
+    signaled: set[object] = scenario.wait(
+        Call(lock.acquire, thread_a), Terminated(thread_b)
+    )
 ```
 
 ### Middle-level: park, skip, finish, and drivers
@@ -531,11 +540,13 @@ pool_lock = scenario.Lock()
 connections: list[str] = ["conn_1", "conn_2"]
 handed_out: list[str] = []
 
+
 def get_connection(handler_name: str) -> None:
     with pool_lock:
         if connections:
             conn = connections.pop(0)
             handed_out.append(f"{handler_name}={conn}")
+
 
 handler_a: Thread = scenario.thread(get_connection, "handler_a")
 handler_b: Thread = scenario.thread(get_connection, "handler_b")
@@ -594,17 +605,20 @@ scenario = blanket.Scenario()
 users_lock = scenario.Lock()
 orders_lock = scenario.Lock()
 
+
 def migrate_users() -> None:
     users_lock.acquire()
     if orders_lock.acquire(timeout=1.0):
         orders_lock.release()
     users_lock.release()
 
+
 def migrate_orders() -> None:
     orders_lock.acquire()
     if users_lock.acquire(timeout=1.0):
         users_lock.release()
     orders_lock.release()
+
 
 users_task: Thread = scenario.thread(migrate_users)
 orders_task: Thread = scenario.thread(migrate_orders)
@@ -638,16 +652,20 @@ scenario = blanket.Scenario()
 ready = scenario.Event()
 startup_order: list[str] = []
 
+
 def schema_migrator() -> None:
     ready.wait()
     startup_order.append("migration")
+
 
 def http_listener() -> None:
     ready.wait()
     startup_order.append("http")
 
+
 def config_loader() -> None:
     ready.set()
+
 
 migrator: Thread = scenario.thread(schema_migrator)
 listener: Thread = scenario.thread(http_listener)
@@ -677,9 +695,11 @@ scenario = blanket.Scenario()
 sync_point = scenario.Barrier(3)
 reduce_input: list[str] = []
 
+
 def process_shard(shard_id: str) -> None:
     sync_point.wait()
     reduce_input.append(shard_id)
+
 
 shard_a: Thread = scenario.thread(process_shard, "shard_a")
 shard_b: Thread = scenario.thread(process_shard, "shard_b")
@@ -708,10 +728,12 @@ scenario = blanket.Scenario()
 pool_lock = scenario.Lock()
 used_fallback: bool = False
 
+
 def get_or_create_connection() -> None:
     global used_fallback
     if not pool_lock.acquire(timeout=5.0):
         used_fallback = True
+
 
 pool_lock.acquire()  # simulate a long-running transaction holding the lock
 
@@ -772,15 +794,19 @@ import threading
 
 from blanket.injector import Location, inject_call
 
+
 def update_cache(cache: dict[str, str], key: str, value: str) -> None:
     old: str | None = cache.get(key)
     new_value: str = f"{old}_{value}" if old else value
     cache[key] = new_value  # race between the read above and this write
 
+
 checkpoint = threading.Event()
+
 
 def pause() -> None:
     checkpoint.wait()
+
 
 loc = Location.text(update_cache, "cache[key] = new_value")
 patched_update = inject_call(pause, loc)
@@ -979,8 +1005,8 @@ quadrantChart
     Hypothesis: [0.65, 0.45]
 ```
 
-blanket doesn't explore interleavings automatically, detect races at runtime, or generate scenarios. It lets you
-**declare a specific interleaving by hand** and guarantees it executes that way every time.
+blanket doesn't explore interleavings automatically, detect races at runtime, or generate scenarios. It lets you declare
+a specific interleaving by hand and guarantees it executes that way every time.
 
 Best for:
 
@@ -988,8 +1014,8 @@ Best for:
 - **Coverage of rare code paths.** Force the sequence that triggers that one `except` branch.
 - **Documentation of concurrency contracts.** A blanket test reads like a specification.
 
-The trade-off: you have to know what scenario to test. blanket won't discover bugs -- it reproduces ones you understand.
-Ideal workflow: an SMC tool _finds_ bugs, blanket _pins_ them as regression tests.
+The trade-off: you have to know what scenario to test. blanket won't discover bugs, it reproduces ones you understand.
+Ideal workflow: an SMC tool finds bugs, blanket pins them as regression tests.
 
 ## A complete test suite example
 
@@ -999,6 +1025,7 @@ Testing a thread-safe LRU cache:
 import threading
 from collections import OrderedDict
 from typing import Any
+
 
 class ThreadSafeLRUCache:
     def __init__(self, max_size: int) -> None:
@@ -1030,6 +1057,7 @@ from threading import Thread
 
 import blanket
 
+
 def test_write_before_read() -> None:
     scenario = blanket.Scenario()
     lock = scenario.Lock()
@@ -1057,6 +1085,7 @@ def test_write_before_read() -> None:
         lock_api.unblock(lock.release, getter_thread)
 
     assert results["read"] == "new"
+
 
 def test_eviction_order() -> None:
     scenario = blanket.Scenario()
@@ -1086,6 +1115,7 @@ def test_eviction_order() -> None:
         lock_api.unblock(lock.release, writer_d)
 
     assert list(cache.keys()) == ["c", "d"]
+
 
 def test_read_prevents_eviction() -> None:
     scenario = blanket.Scenario()

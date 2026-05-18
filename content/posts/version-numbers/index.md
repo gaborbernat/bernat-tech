@@ -38,9 +38,9 @@ pictures from my Yorkshire Terrier puppy, Silky. Without further ado (#ToT!!!)
 
 ## Semantic and ZeroVer
 
-So, which should you use? Historically, the go-to answer has been semantic versioning. This is defined as a three-number
-string (separated with a period) in the format of `MAJOR.MINOR.PATCH`. Usually, it starts with `0.1.0`. Then depending
-on the type of change you make to the library, you increment one of these and set subsequent numbers to zero:
+So, which should you use? Historically, the go-to answer has been semantic versioning. This is a three-number string
+(separated with a period) in the format of `MAJOR.MINOR.PATCH`. Usually, it starts with `0.1.0`. Then depending on the
+type of change you make to the library, you increment one of these and set subsequent numbers to zero:
 
 - `MAJOR` version if you make backward-incompatible changes,
 - `MINOR` version if you add a new feature,
@@ -67,18 +67,17 @@ project. This is great because:
 - your application will keep building and working in the future as it did today because the significant version pin
   protects you from pulling in versions whose API would not match.
 
-Does this uphold in practice? For me, [Hynek Schlawack](https://hynek.me/) pointed out first that it does not.
-Initially, in some [tweets](https://twitter.com/llanga/status/1253962015846121472), and then in more detail within a
-talk held at a [Remote Python Pizza](https://remote.python.pizza/) conference. Looking back at my experience with this,
-I tend to agree.
+Does this uphold in practice? [Hynek Schlawack](https://hynek.me/) pointed out first that it does not, initially in some
+[tweets](https://twitter.com/llanga/status/1253962015846121472), and then in more detail in a talk at
+[Remote Python Pizza](https://remote.python.pizza/). Looking back at my experience, I agree.
 
 {{< figure src="silky_sit.webp" alt="Silky sitting" >}}
 
 ## What's the problem with semantic versioning?
 
-On paper, semantic versioning seems to be addressing all we need to encode the evolution and state of our library. I
-think the issue is not with the semantic versioning standard itself; indeed, people would like to follow it. However,
-**most library maintainers/developers out there don't have enough resources to follow semantic versioning**.
+On paper, semantic versioning addresses everything we need to encode the evolution and state of our library. The issue
+is not with the standard itself; people would like to follow it. However, **most library maintainers/developers out
+there don't have enough resources to follow semantic versioning**.
 
 Maintaining a library is very time-consuming. I can attest to that, as I have maintained two myself for a few years now:
 tox (3) and virtualenv (2). My experience is within the Python ecosystem, but I can imagine other languages are similar.
@@ -207,9 +206,8 @@ can quickly determine that it will be supported up to April 2025.
 
 ## A better way to handle API evolution?
 
-Semantic versioning uses the major version to defend against breaking changes, and at the same offers maintainers the
-freedom to evolve the library without breaking users. Nevertheless, as we could see above in practice, this does not
-seem to work that well, as it causes you not to pull in bug fixes/security updates while also introducing version
+Semantic versioning uses the major version to defend against breaking changes while offering maintainers the freedom to
+evolve the library. In practice, this causes you to miss bug fixes/security updates while also introducing version
 conflicts. Do we have a better tool at hand for this?
 
 Hynek suggests instead clear, time-window based deprecation policies, and as an optional sprinkle on top, warning
@@ -236,27 +234,25 @@ A patch version bump indicates no significant change is expected, and users shou
 or major version bump shows that the upgrade might introduce significant changes, and that users should set aside a
 considerable amount of time when bumping such dependencies.
 
-I operate slightly differently in the sense that I don't diff releases. Instead, I tend to **upgrade without version
-constraints**. If the CI fails, I don't merge it; rather I investigate the failure when I have free time on my hands.
-Lessons from the trenches suggest that **the only way to ensure an upgrade of any magnitude does not break you is to
-have a comprehensive test suite.** Ideally, your test framework can collect and report whenever and where your code is
-calling deprecated functions ([for example pytest](https://docs.pytest.org/en/latest/warnings.html#warnings-capture)).
+I operate differently: I don't diff releases, I **upgrade without version constraints**. If CI fails, I don't merge; I
+investigate the failure when I have free time. **The only way to ensure an upgrade of any magnitude does not break you
+is to have a comprehensive test suite.** Your test framework should collect and report whenever your code calls
+deprecated functions ([for example pytest](https://docs.pytest.org/en/latest/warnings.html#warnings-capture)).
 
 {{< figure src="silky_wise.webp" alt="Silky looking wise" >}}
 
 ## Summary
 
-Is semantic versioning irrevocably broken? Should it never be used? I don't think so. It still makes a lot of sense
-where there are ample resources to maintain multiple versions in parallel. A great example of this is Django. However,
-it feels less practical for projects that have just a few maintainers.
+Is semantic versioning irrevocably broken? No. It still makes sense where there are ample resources to maintain multiple
+versions in parallel, like Django. It feels less practical for projects with just a few maintainers.
 
 In this case, it often leads to opting people out of bug fixes and security updates. It also encourages version
 conflicts in environments that can't have multiple versions of the same library, as is the case with Python.
 Furthermore, it makes it a lot harder for developers to learn from their mistakes and evolve the API to a better place.
 Rotten old design decisions will pull down the library for years to come.
 
-A better solution at hand can be using CalVer and a time-window based warning system to evolve the API and remove old
-interfaces. Does it solve all problems? Absolutely not.
+A better solution is CalVer with a time-window based warning system to evolve the API and remove old interfaces. It
+doesn't solve all problems.
 
 One thing it makes harder is library rewrites. For example, consider
 [virtualenv'](https://pypi.org/project/virtualenv/20.0.20/#history)s recent rewrite. Version 20 introduced a completely

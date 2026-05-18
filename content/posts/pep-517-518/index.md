@@ -10,31 +10,31 @@ tags = [ "python", "pip", "install", "packaging", "setuptools", "pep517", "pep51
 title = "Python packaging - Past, Present, Future"
 +++
 
-Have you ever wondered what happens exactly when you run pip install? This post will give you a detailed overview of the
-steps involved in the past, and how it all changes with the adoption of PEP-517 and PEP-518.
+Have you ever wondered what happens when you run pip install? This post gives a detailed overview of the steps involved
+in the past, and how it all changes with the adoption of PEP-517 and PEP-518.
 
 \[In my previous post\]({{< ref "pep-517-and-python-packaging" >}}) I've described how it's possible to install three
 types of content: source tree, source distribution, and wheels. Only the last two types are uploaded to PyPI, the
 central Python repository. However, one could get its hands on a source tree (by feeding, for example, a git protocol
 for pip). The advantage of wheels over the others is that it does not require any build operation to happen on the user
-machine; it's just downloading and extract.
+machine; it's a download and extract.
 
 ## Building python packages
 
 Now independent of where the build happens (user or the developer machine), you still need to build the package (either
-the sdist or wheel). To do this, you need some builders in place. Historically, the need for third-party packages
-manifested itself early on. Following the principle that Python has batteries included in the year 2000 with Python 1.6,
-the [distutils](https://packaging.python.org/key_projects/#distutils) package was added to the Python standard library.
-It introduced the concept of the `setup.py` file containing the build logic and is triggered via `python setup.py cmd`.
+the sdist or wheel). To do this, you need some builders in place. The need for third-party packages manifested early on.
+Following the principle that Python has batteries included, in the year 2000 with Python 1.6, the
+[distutils](https://packaging.python.org/key_projects/#distutils) package was added to the Python standard library. It
+introduced the concept of the `setup.py` file containing the build logic and is triggered via `python setup.py cmd`.
 
 It allowed users to package code as libraries but did not have features such as declaration and automatic installation
-of dependencies. Furthermore, its improvement lifecycle was directly tied to the core interpreter release cycle. In 2004
-`setuptools` was created, built on top of `distutils`, and extended with other excellent features. It quickly became so
-prevalent that most python installations started to provide it together with the core interpreter itself.
+of dependencies. Its improvement lifecycle was tied to the core interpreter release cycle. In 2004 `setuptools` was
+created, built on top of `distutils`, and extended with other excellent features. It became so prevalent that most
+python installations started to provide it together with the core interpreter itself.
 
-Back in those days, all packages were source distributions. Wheel distributions came along a lot later, in 2014.
-_distutils_ was created back when only a few highly proficient people did the packaging. It is very flexible and
-imperative; you write a python script to modify every step in the package generation process.
+Back in those days, all packages were source distributions. Wheel distributions came along later, in 2014. _distutils_
+was created when only a few proficient people did the packaging. It is flexible and imperative; you write a python
+script to modify every step in the package generation process.
 
 The downside of this, though, is that it's anything but easy to learn and understand. This started to become more and
 more an issue as Python grew in popularity and we had more and more users who were less proficient in the inner workings
@@ -58,15 +58,15 @@ upload).
 
 When pip ran the `python setup.py install`, it did so with the python interpreter for which it was installing the
 package. As such the build operation had access to all third-party packages already available inside that interpreter.
-Most notably, it used exactly the _setuptools_ version that was installed on the host python interpreter. If a package
-used a _setuptools_ feature available on a newer release than currently installed, the only way one could complete the
-installation was to update first the installed _setuptools._
+It used the _setuptools_ version installed on the host python interpreter. If a package used a _setuptools_ feature
+available on a newer release than the one installed, the only way to complete the installation was to update
+_setuptools_ first.
 
-This potentially can cause problems if a new release contained a bug that broke other packages. It is especially
-troublesome on systems where the users can't alter installed packages. Then there was also the problem of what happens
-when the builder (e.g., setuptools) wants to use other helper packages, such as cython.
+This can cause problems if a new release contains a bug that breaks other packages. It is troublesome on systems where
+users can't alter installed packages. Then there was the problem of what happens when the builder (e.g., setuptools)
+wants to use other helper packages, such as cython.
 
-If any of these helpers were missing the build usually just broke with a failed to import package error:
+If any of these helpers were missing the build broke with a failed to import package error:
 
 ```Python
       File "setup_build.py", line 99, in run
@@ -103,13 +103,13 @@ requires = [
 ]
 ```
 
-Furthermore, this also allows for whoever does the packaging to be explicit about what minimum versions they require for
-the packaging and these can be quickly provisioned via pip transparently on the user machines.
+This also allows whoever does the packaging to be explicit about what minimum versions they require for the packaging,
+and these can be provisioned via pip on the user machines.
 
 The same mechanism can also be used when generating the source distribution or the wheel on the developers' machine.
-When one invokes the `pip wheel . --no-deps` command that will automatically create in the background an isolated python
-that satisfies the build systems dependencies, and then call inside that environment the `python setup.py bdist_wheel`
-or `python setup.py sdist` command.
+Running `pip wheel . --no-deps` creates in the background an isolated python that satisfies the build systems
+dependencies, and then calls inside that environment the `python setup.py bdist_wheel` or `python setup.py sdist`
+command.
 
 {{< figure src="jump_pug.webp" alt="Jumping pug" >}}
 
@@ -119,10 +119,10 @@ Now there's one more problem here, though. Note all these operations still go th
 years ago, aka executing `setup.py`. The whole ecosystem still builds on the top of the _distutils_ and _setuptools_
 interface that cannot change much due to trying to preserving backward compatibility.
 
-Also, executing arbitrary user-side Python code during packaging though is dangerous, leading to subtle errors hard to
-debug by less experienced users. Imperative build systems were great for flexibility twenty years ago when we were not
-aware of all the use cases. Still, now that we have a good understanding, we can probably make very robust and easy
-package builders for various use cases.
+Executing arbitrary user-side Python code during packaging is dangerous, leading to subtle errors hard to debug by less
+experienced users. Imperative build systems were great for flexibility twenty years ago when we were not aware of all
+the use cases. Now that we have a good understanding, we can make robust and easy package builders for various use
+cases.
 
 To quote [Paul Ganssle](https://twitter.com/pganssle) (maintainer of `setuptools`and `dateutil` on this):
 
@@ -162,8 +162,8 @@ requires = ["flit"]
 build-backend = "flit.api:main"
 ```
 
-The above code effectively means for the frontend that you can get hold of the backend by running the above code inside
-the isolated python environment:
+The above code means for the frontend that you can get hold of the backend by running the above code inside the isolated
+python environment:
 
 ```python
 import flit.api
@@ -225,5 +225,5 @@ proposals were deemed good enough to benefit the most, but some less mainstream 
 If your use case is such, don't worry the PEPs are open to enhancement at any point if we deem required. \[In my next
 post of this series here\]({{< ref "growing-pain" >}}) I'll go over some of the pain points the community bumped into
 while releasing these two PEPs. These should serve as lessons learned and show that there's still some work to be done.
-It's not everything perfect yet. However, we're getting better. Join the packaging community if you can help out, and
-let's make things better together!
+Things aren't perfect yet, but we're getting better. Join the packaging community if you can help out, and let's make
+things better together!

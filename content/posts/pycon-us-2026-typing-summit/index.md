@@ -86,7 +86,9 @@ running a Python snippet through several type checkers side by side. Slides:
 def choose[A](a1: A, a2: A) -> A:
     return random.choice([a1, a2])
 
+
 def partial[X, Y, Z](fn: Callable[[X, Y], Z], x: X) -> Callable[[Y], Z]: ...
+
 
 p = partial(choose, None)
 p(2)  # type checker: error. argument 2 is not None.
@@ -290,7 +292,6 @@ The PEP introduces three core constructs:
 1. **Conditional types.**
    ```python
    T if typing.IsAssignable[T, list] else list[T]
-
    ```
 
 ````
@@ -342,7 +343,7 @@ of touch with everyday pain, and are the discussions going in circles. Slides:
 His starting point was Jukka Lehtosalo's original principle for [`mypy`](https://mypy-lang.org/): *useful, not perfect*.
 Balance false positives against false negatives, and accept unsound behaviour when the sound option would make typical
 user code too complicated or noisy. Guido asked whether that principle still anchors the field, or whether the
-discussion has drifted toward type-theoretical purity at the expense of users.
+discussion has drifted toward type-theoretical purity at users' expense.
 
 From there he worked through three areas where he thinks the drift shows up. Intersection types are the first: the field
 is already debating type manipulation in PEP 827, yet the last major discussion of intersections died off after a long
@@ -386,11 +387,11 @@ to weight user pain over power features in the next round of proposals, since th
 The Typing Council itself exists under [PEP 729, Typing Governance Process](https://peps.python.org/pep-0729/), accepted
 in 2023. Current members:
 
-- [Carl Meyer](https://github.com/carljm) — Astral, `ty` *(on stage in person)*
-- [Jelle Zijlstra](https://github.com/JelleZijlstra) — typeshed maintainer, CPython typing module *(on stage in person)*
-- [Rebecca Chen](https://github.com/rchen152) — Meta, Pyrefly *(on stage in person)*
-- [Jukka Lehtosalo](https://github.com/JukkaL) — mypy lead
-- [Dave Halter](https://github.com/davidhalter) — Jedi, Zuban (joined March 2026 after Eric Traut stepped down)
+- [Carl Meyer](https://github.com/carljm), Astral, `ty` *(on stage in person)*
+- [Jelle Zijlstra](https://github.com/JelleZijlstra), typeshed maintainer, CPython typing module *(on stage in person)*
+- [Rebecca Chen](https://github.com/rchen152), Meta, Pyrefly *(on stage in person)*
+- [Jukka Lehtosalo](https://github.com/JukkaL), mypy lead
+- [Dave Halter](https://github.com/davidhalter), Jedi, Zuban (joined March 2026 after Eric Traut stepped down)
 
 The panel opened with a state-of-the-world on type checkers. Actively maintained: [Pyrefly](https://pyrefly.org/)
 (Meta), [`ty`](https://docs.astral.sh/ty/) (Astral), [Zuban](https://github.com/zubanls/zuban) (David Halter),
@@ -477,8 +478,8 @@ has not been taken; that is the same question Doug Creager left open earlier in 
 
 ## Wrapping Up
 
-Four hours, eight talks, one Q&A panel, single track. The same audience stayed in the room across talks, so the
-questions built on what came earlier.
+Four hours, eight talks, one Q&A panel, single track. The same audience stayed for all talks, so questions built on what
+came earlier.
 
 Thank you to the program organizers, to the Typing Council members who sat on the panel, and to every speaker for
 sharing their work and answering questions.

@@ -13,10 +13,9 @@ title = "The state of Python Packaging"
 pip 19.0 has been released on 22nd January 2019. On the feature list, most notably, it now supports PEP-517, which by
 default is turned **on** when that the project has a `pyproject.toml` at the root folder. The PEP in question has been
 created in 2015 and accepted in 2017. Even though it took a while until pip implemented it, the release and the issues
-that followed confirmed that many people are not familiar with it. Read on if you want to get a picture of how the
-Python packaging ecosystem evolved today and where we hope to see it down the line. We expect that even though the
-introduction of the aforementioned python enhancement proposal may cause some discomfort, we will benefit from it in the
-long term.
+that followed confirmed that many people are not familiar with it. Read on if you want a picture of how the Python
+packaging ecosystem evolved today and where we hope to see it down the line. The introduction of this python enhancement
+proposal may cause some discomfort, but we will benefit from it in the long term.
 
 I joined the Python open-source community around three years ago (though I have used it for more than 8 years). I've
 remarked that the Python packaging has a reputation of a somewhat black box from the early days. There are many unknown
@@ -35,12 +34,11 @@ systems (`pip`, `setuptools`, so no `conda` or operating system-specific package
 
 # An example project
 
-To tell this story, I'll need to tell how to distribute python packages; more specifically, explain how to package
-installation worked in the past and how we hope it will work in the future. To have a concrete example of what to
-demonstrate, let me introduce my excellent example library: `pugs`. This library reasonably simple: it generates a
-single package called `pugs` containing only a single module called `logic`. The logic is to generate random quotes, you
-guessed right, about _pugs_. Here's a simple example structure of it viewed as a source tree (also available under
-[gaborbernat/pugs](https://github.com/gaborbernat/pugs)):
+To tell this story, I need to explain how python package distribution works, how package installation worked in the
+past, and how we hope it will work in the future. To have a concrete example of what to demonstrate, let me introduce my
+example library: `pugs`. This library is reasonably simple: it generates a single package called `pugs` containing only
+a single module called `logic`. The logic generates random quotes about _pugs_. Here's a simple example structure of it
+viewed as a source tree (also available under [gaborbernat/pugs](https://github.com/gaborbernat/pugs)):
 
 ```bash
 pugs-project

@@ -12,23 +12,22 @@ title = "Python packaging - Growing Pains"
 
 In my previous two posts, I've gone over \[what package types python has\]({{< ref "pep-517-and-python-packaging" >}}),
 and \[how the package building works\]({{< ref "pep-517-518" >}}), especially with the introduction of the PEP-517/518.
-Although the changes were primarily to make things more robust, we did run into a few issues while implementing it and
-releasing it. This post will go over a few, hopefully serving as lessons learned for all of us and presenting some
+Although the changes were meant to make things more robust, we did run into a few issues while implementing and
+releasing them. The following are a few of those, serving as lessons learned for all of us and presenting some
 interesting problems to solve in the future.
 
-Looking at the changes of PEP-517 and PEP-518, one can identify those build backends (aka setuptools, flit) had very
-little to do, only also to expose their functionality via a Python module. Most heavy work is on the build frontend,
-which now needs to generate the isolated Python and then invoke the build backends in a new way. When we're talking
-about build frontends nowadays, our options are mostly pip or poetry (and tox for developers).
+Looking at the changes of PEP-517 and PEP-518, build backends (aka setuptools, flit) had very little to do, only to
+expose their functionality via a Python module. Most heavy work falls on the build frontend, which now needs to generate
+the isolated Python and then invoke the build backends in a new way. Build frontends today are pip or poetry (and tox
+for developers).
 
 These projects are maintained by the community, by a handful of active developers, in their free time. They are not
-getting paid for it, and they need to be careful to consider the myriad ways these tools are used. Considering this,
-it's not much of a surprise it took almost two years after the PEP acceptance to come out with a first implementation.
-Planning, testing, and implementation have been going on for over a year in the background.
+getting paid for it, and they need to be careful to consider the myriad ways these tools are used. Given this, it's not
+much of a surprise it took almost two years after the PEP acceptance to come out with a first implementation. Planning,
+testing, and implementation have been going on for over a year in the background.
 
-Against all the preparations, though, inevitably, the first release did break a few packages, mostly where people
-performed some operations that caught the maintainers by surprise. Let's try to understand a few of these examples and
-how did they get addressed.
+Against all the preparations, the first release did break a few packages, mostly where people performed operations that
+caught the maintainers by surprise. Let's understand a few of these examples and how they got addressed.
 
 {{< figure src="stand_pug.webp" alt="Standing pug" >}}
 
@@ -41,10 +40,10 @@ started to take advantage of this right away (such as [towncrier](https://pypi.o
 [black](https://pypi.org/project/black/), etc.).
 
 When [pip 18.0 (released 2018 July 22](https://pip.pypa.io/en/stable/news/#id61)) added support for PEP-518 packages
-using the `pyproject.toml` initially broke, as the PEP-518 mandated that all packages having the `pyproject.toml`
-**must** specify the `build-backend` section. But packages beforehand used it only as a configuration file for these
-other projects since they didn't specify it pre-emptively; when pip ran into these files, it just raised errors
-complaining of invalid `pyproject.toml` files.
+using the `pyproject.toml` broke, as PEP-518 mandated that all packages having the `pyproject.toml` **must** specify the
+`build-backend` section. But packages beforehand used it only as a configuration file for these other projects since
+they didn't specify it pre-emptively; when pip ran into these files, it raised errors complaining of invalid
+`pyproject.toml` files.
 
 ## PEP-517
 
@@ -59,15 +58,15 @@ virtual environments need the same wheel, we don't keep rebuilding it but instea
 operation also takes advantage of this.
 
 This becomes troublesome, though, when you disable the cache. Now there's no target folder where to build the wheel. So
-the build itself fails [see the attached issue.](https://github.com/pypa/pip/issues/6158) The problem manifested early,
-though, but en masse, as most CI systems run with this option turned on. Just a day later pip 19.0.1 fixed this.
+the build itself fails [see the attached issue.](https://github.com/pypa/pip/issues/6158) The problem manifested early
+but en masse, as most CI systems run with this option turned on. A day later pip 19.0.1 fixed this.
 
 ### `pyproject.toml` not being included into setuptools
 
-It turns out there's more work on the build backend than just expose their API as described in PEP-517. The backend also
-needs to ensure that `pyproject.toml` is attached to the built source package. Otherwise, the build backend on the user
-machine will not be able to use it. [setuptools 1650](https://github.com/pypa/setuptools/pull/1650) will fix this for
-setuptools. One can include `pyproject.toml` by specifying it inside `MANIFEST.in` on earlier versions.
+There's more work on the build backend than exposing their API as described in PEP-517. The backend also needs to ensure
+that `pyproject.toml` is attached to the built source package. Otherwise, the build backend on the user machine will not
+be able to use it. [setuptools 1650](https://github.com/pypa/setuptools/pull/1650) will fix this for setuptools. One can
+include `pyproject.toml` by specifying it inside `MANIFEST.in` on earlier versions.
 
 {{< figure src="chair_pug.webp" alt="Pug on chair" >}}
 
@@ -83,25 +82,24 @@ as `from mypy.version import __version__ as version` from both the `setup.py` an
 when someone calls a python script, the current working directory is automatically attached to the `sys.path` (so you
 can import stuff exposed underneath it).
 
-This behavior of adding the current working directory though was never mandated. It was more of a side-effect as calling
-the build via `python setup.py sdist`. As this behavior is a side-effect (not a guarantee) all projects that import from
-their `setup.py` should explicitly add the scripts folder to the `sys.path`, at the start of the build.
+Adding the current working directory was never mandated. It was a side-effect of calling the build via
+`python setup.py sdist`. Because this behavior is a side-effect (not a guarantee), all projects that import from their
+`setup.py` should add the scripts folder to the `sys.path` at the start of the build.
 
-It's up for debate if importing the built package during the packaging (when it's not yet built/distributed) is a good
-idea or not (though the Python Packaging group is leaning towards it's not). Nevertheless, the fact of the matter is
-that when `setuptools` exposed its interface via the `setuptools.build_meta`, it chooses not to add the current working
-directory to the system path.
+Whether importing the built package during the packaging (when it's not yet built/distributed) is a good idea remains
+debatable (though the Python Packaging group leans towards "no"). When `setuptools` exposed its interface via
+`setuptools.build_meta`, it chose not to add the current working directory to the system path.
 
 The PEP never mandates for the frontend to do this addition, as most build backend (declarative by nature) will never
-need this. Such functionality was deemed to be under the responsibility of the front end. `setuptools` respectively
-think if users want this functionality, they should be explicit in their `setup.py` and prepend the respective path to
-the `sys.path` manually.
+need this. Such functionality was deemed to be under the responsibility of the front end. `setuptools` maintainers think
+if users want this functionality, they should be explicit in their `setup.py` and prepend the respective path to the
+`sys.path`.
 
-To simplify the pip code base pip decided to opt in into PEP-517 all people having a `pyproject.toml` into the
-`setuptools` backend. Now with this issue even packages that haven't opted in to PEP-517 started to break. To fix this,
-`setuptools` added a new build backend (`setuptools.build_meta:__legacy__`) designed to be used by frontends as a
-default when the build backend is left unspecified; when projects add the `build-backend` key, they will have to also
-change their `setup.py` to either add the source root to their `sys.path` or avoid importing from the source root.
+To simplify its code base, pip decided to opt all people having a `pyproject.toml` into the `setuptools` backend. With
+this issue even packages that hadn't opted in to PEP-517 started to break. To fix this, `setuptools` added a new build
+backend (`setuptools.build_meta:__legacy__`) designed to be used by frontends as a default when the build backend is
+left unspecified; when projects add the `build-backend` key, they will have to also change their `setup.py` to either
+add the source root to their `sys.path` or avoid importing from the source root.
 
 ### self bootstrapping backends
 
@@ -123,15 +121,15 @@ cons, so if you're interested, make sure to head over the
 
 ## Conclusion
 
-Packaging is hard. Improving a packaging system without any breakage where users can write and run arbitrary code during
-the packaging in their free time is probably impossible. With PEP-518, though now build dependencies are explicit and
-build environments easy to create. With PEP-517, we can start moving into a more declarative packaging namespace that
-allows less space for users to make mistakes and provide better messages when things inevitably go wrong. Granted, as we
-go through these changes, some packages might break, and we might disallow some practices that worked until now. We
-(PyPa maintainers) don't do it in bad faith, so when errors do pop up please do fill in a detailed error report with
-what went wrong, how you tried to use it, and what is your use case.
+Packaging is hard. Improving a packaging system without breakage where users can write and run arbitrary code during the
+packaging in their free time is near impossible. With PEP-518, build dependencies are explicit and build environments
+easy to create. With PEP-517, we can start moving into a more declarative packaging namespace that allows less space for
+users to make mistakes and provides better messages when things go wrong. As we go through these changes, some packages
+might break, and we might disallow some practices that worked until now. We (PyPa maintainers) don't do it in bad faith,
+so when errors pop up please fill in a detailed error report with what went wrong, how you tried to use it, and what
+your use case is.
 
-We're trying to improve the packaging ecosystem genuinely. As such, we've created the
+We're trying to improve the packaging ecosystem. We've created the
 [integration-test](https://github.com/pypa/integration-test) repository, as an effort to ensure that in the future, we
 can catch at least some of these edge cases before they land on your machine. If you have any suggestion or requirements
 for any part of the packaging feel free to start a discussion on the

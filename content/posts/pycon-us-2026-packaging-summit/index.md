@@ -84,9 +84,8 @@ The prerequisite stdlib work is also hers: she authored
 [Decompression is up to 30% faster in CPython 3.15](https://emmatyping.dev/) post (November 2025), wrote up the
 `PyBytesWriter`-based decompression rewrite that made zstd decompression 25–30% faster and zlib decompression 10–15%
 faster for payloads of at least 1 MiB. That work is what makes a Zstandard-based Wheel 2.0 practical, though wide
-adoption likely waits until [Python 3.13 reaches end-of-life in October 2029](https://devguide.python.org/versions/),
-when 3.14+ becomes the oldest supported interpreter and installers can rely on `compression.zstd` being present
-everywhere.
+adoption waits until [Python 3.13 reaches end-of-life in October 2029](https://devguide.python.org/versions/), when
+3.14+ becomes the oldest supported interpreter and installers can rely on `compression.zstd` being present everywhere.
 
 The earlier version of PEP 777 added a wheel-version field to the filename so existing installers would skip Wheel 2.0
 outputs. Three objections came back from the community: updates would silently stop on old installers, the existing
@@ -121,8 +120,8 @@ The first sub-PEP is **Zstandard compression**. Emma analyzed the top 1,000 most
 - About 100 PB of bandwidth saved across just those 1,000 projects.
 - About 36 years of cumulative decompression time saved per month.
 
-A constraint shaped the rollout: pure-Python installers, including pip, prefer to avoid C dependencies. Emma's path
-around it was to land Zstandard in the standard library, which shipped in Python 3.14 as
+A constraint shaped the rollout: pure-Python installers, including pip, prefer to avoid C dependencies. Emma landed
+Zstandard in the standard library, which shipped in Python 3.14 as
 [`compression.zstd`](https://docs.python.org/3/library/compression.zstd.html). The wheel proposal stores non-metadata
 files in a `data.tar.zst` archive, uncompressed inside the outer zip, and adds a `Data-Format` key to the wheel metadata
 so future container formats can swap in.
@@ -415,7 +414,7 @@ flowchart LR
 Daniel noted that build backends like setuptools, flit, and hatchling arriving from PyPI in a mixed conda + pip
 environment is a common source of subtle issues; the conda-pypi flow keeps those backends on the conda side. Editable
 installs work end-to-end. pip runs inside the same Python environment it targets; conda runs in a separate one. The
-integration handles the bridge transparently.
+integration handles the bridge without manual intervention.
 
 ### Nebi — environment management for teams — Dharhas Pothina
 
@@ -594,11 +593,11 @@ in one batch.
 
 ## Wrapping Up
 
-The format ran tight to schedule, and the roundtables let attendees pick a thread and follow it across several
-ecosystems in one afternoon. As someone who has attended every Packaging Summit since 2019, I felt this year was in an
-especially good mood. There was a lot of laughter, eager collaboration across project boundaries, and the audience keeps
-growing year over year. The community working together to make progress like this is the best part of the day, and with
-the [Packaging Council](https://peps.python.org/pep-0772/) coming online this fall the same pattern should accelerate.
+The format ran tight to schedule. The roundtables let attendees pick a thread and follow it across several ecosystems in
+one afternoon. As someone who has attended every Packaging Summit since 2019, this year felt like the best one yet.
+There was a lot of laughter, eager collaboration across project boundaries, and the audience keeps growing year over
+year. With the [Packaging Council](https://peps.python.org/pep-0772/) coming online this fall, that pattern should
+accelerate.
 
 If you are heavily involved in Python packaging, please consider running for a seat on the council this fall. If you
 have an opinion but not the bandwidth to run, the lighter lift is to

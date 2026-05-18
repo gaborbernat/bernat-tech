@@ -28,8 +28,7 @@ admiration for these animals, and hey, nothing like some cute animals to help di
 
 ## What it was designed to do?
 
-First, let's see why do we need type hints in Python. There are multiple advantages of this, and I'll try to enumerate
-it in their order of importance:
+Let's see why we need type hints in Python. There are multiple advantages, enumerated in order of importance:
 
 ### 1. Easier to reason about code
 
@@ -481,9 +480,9 @@ However, it has serious flaws in the form of:
 
 {{< figure src="deep_dive.webp" width="700" alt="Seal diving deep" >}}
 
-Let's dive into the specifics, though. For an exhaustive list of what type of information you can add, please see the
-[official documentation](https://docs.python.org/3/library/typing.html). Here I'll do a quick 3-minute overview for you
-to get the idea of it. There are two types of type categories: nominal types and duck types (protocols).
+For an exhaustive list of what type information you can add, see the
+[official documentation](https://docs.python.org/3/library/typing.html). Here's a quick overview of the two type
+categories: nominal types and duck types (protocols).
 
 ### 1. Nominal type
 
@@ -886,7 +885,7 @@ Remember you have some tools at hand that help you discover, understand and perh
 
 # Tools
 
-Here's a non-exhaustive list of tools built around the type hint system.
+A non-exhaustive list of tools built around the type hint system:
 
 ## type checkers
 
@@ -965,17 +964,14 @@ You can get the following output:
 
 # Conclusion
 
-So at the end of this long blog post, you may ask: is it worth using type hints, or when should one use them? I think
-type hinting is at the end of the day virtually the same as your unit tests, just expressed differently in code. They
-provide a standard (and re-usable for other goals) way to test the input and output types of your codebase.
+Is it worth using type hints, and when? Type hinting is the same as unit tests, expressed differently in code. Both
+provide a standard way to verify the input and output behavior of your codebase.
 
-Therefore, type hints **should be used whenever the unit test is worth writing.** This can be even just ten lines of
-code if you need to maintain it later. Similarly, you should start adding type hints whenever you start writing unit
-tests. The only place when I would not add them is when I don't write unit tests, such REPL lines, or throw away
-one-time usage scripts.
+Type hints **should be used whenever a unit test is worth writing.** That can be ten lines of code if you need to
+maintain it later. Start adding type hints when you start writing unit tests. The only place to skip them is where you
+wouldn't write tests: REPL lines or throw-away scripts.
 
-Remember that, similar to unit tests, while it does makes your codebase contain an extra number of lines, at the end of
-the day, all the code you add is code that is automatically checked and enforced to be correct. It acts as a safety net
-to ensure that things keep working when you change things around later on, so probably worth paying this extra cost.
+Similar to tests, adding type hints grows your codebase, but all the code you add is automatically checked and enforced.
+It acts as a safety net when you change things around later.
 
 {{< figure src="thats_all_folks.webp" width="700" alt="Seal waving goodbye" >}}

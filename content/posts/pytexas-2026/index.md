@@ -475,7 +475,7 @@ rationalized, and carried forward as technical debt, security bugs, or failure m
 reliability against speed sensibly, you need accurate information, not plausible output. The closing question he
 answered: *is there a point to understanding things?* "Yes. Absolutely."
 
-FYI: Carol Willing followed up in the Discord with a research project Al might enjoy —
+FYI: Carol Willing followed up in the Discord with a research project Al might enjoy,
 [*The LLM Writing Distortion*](https://sites.google.com/view/llmwritingdistortion/home), which studies how LLM
 assistance reshapes the writing people produce. Adjacent to Al's framing about AI output as plausible rather than
 correct.
@@ -532,8 +532,8 @@ Hynek (PSF fellow, infrastructure and software engineer at Variomedia in Berlin,
 pressure** (a term he credits to J.B. Rainsberger's talk
 [*Integrated Tests Are a Scam*](https://blog.thecodewhisperer.com/permalink/integrated-tests-are-a-scam)): forces that
 change your code unintentionally, like tooling choices, test scope, or organizational constraints. His thesis: ORMs,
-class-based validators, and LLM-generated pull requests are calcifying business logic into compromises it didn't choose
-— and with every implementation one prompt away, we have lost *"an important pain signal of bad design."*
+class-based validators, and LLM-generated pull requests are calcifying business logic into compromises it didn't choose,
+and with every implementation one prompt away, we have lost *"an important pain signal of bad design."*
 
 The opening provocation: *"The use of object-relational mapping in fast-paced related frameworks ruins your projects."*
 He walked it back in the next breath: [Django](https://www.djangoproject.com/),
@@ -552,7 +552,7 @@ makes this worse because a model can mock half the universe without feeling the 
 2. **Domain, data, and API are three different models with conflicting goals.** A database model is shaped by
    normalization, indexing, and storage performance. An API model is shaped by what's ergonomic for consumers. A domain
    model reflects the problem. Forcing them into one class produces a compromise between two of them, imposed on the
-   third — not one impedance mismatch but two.
+   third, producing two impedance mismatches instead of one.
 3. **The domain model is *"the precious."*** Design it first, from the problem. Validate at the edges, reshape incoming
    data at the boundary, and keep the domain model *"completely isolated from everything that is not part of the
    domain."*
@@ -854,12 +854,12 @@ look if you're running more than one agent at a time.
 
 ## Wrapping Up
 
-This was a great conference. Thank you to Mason Egger, Laura, the volunteers in tie-dye shirts, and everyone else who
-kept the whole thing running. Most of the weekend ran smoothly. The dinners on Friday and Saturday were great, in food
-quality and in atmosphere, and the crowd was friendly and open throughout.
+Thank you to Mason Egger, Laura, the volunteers in tie-dye shirts, and everyone else who kept the whole thing running.
+Most of the weekend ran smoothly. The dinners on Friday and Saturday were excellent, and the crowd was friendly
+throughout.
 
-If you're on the fence about next year: PyTexas is a strong single-track conference, and the size fits meeting people
-instead of losing them in a hallway. Worth making the trip.
+PyTexas is a strong single-track conference, and the size fits meeting people instead of losing them in a hallway. Worth
+making the trip.
 
 One piece of feedback on the format. This year had Open Spaces on both days, which I love in principle. In practice,
 running them alongside the main-stage talks meant Open Spaces attendance looked thinner than the interest warranted.
