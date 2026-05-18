@@ -502,9 +502,9 @@ tests, logging PII, and cosmetic dashboards.</p><h4 id=charlie-lin-tying-up-loos
 the runtime: a garbage collector that doesn&rsquo;t rely on linked lists, fine-grained internal locks on built-in <code>dict</code> /
 <code>set</code> / <code>list</code>, modified reference counting to reduce contention, and critical sections (<code>PyBeginCriticalSection</code> /
 <code>PyEndCriticalSection</code>) for per-object locking. <code>PyDict_Next</code> is not thread-safe and must be wrapped in a critical
-section.</p><p>Module initialization:</p><ul><li><strong>Single-phase</strong>: call <code>PyUnstable_Module_SetGIL</code> in the extension module&rsquo;s entry point <code>PyInit_&lt;module name></code>:<div class=code-block-wrapper><pre><code class=language-c>#ifdef Py_GIL_DISABLED
-    PyUnstable_Module_SetGIL(m, Py_MOD_GIL_NOT_USED);
-#endif</code></pre></div></li><li><strong>Multi-phase</strong>: add a <code>PyModuleDef_Slot</code> with <code>Py_mod_gil</code> set to <code>Py_MOD_GIL_NOT_USED</code>.</li></ul><p>Language and tool support: <a href=https://cython.org/ target=_blank rel="noopener noreferrer">Cython</a>
+section.</p><p>Module initialization:</p><ul><li><strong>Single-phase</strong>: call <code>PyUnstable_Module_SetGIL</code> in the extension module&rsquo;s entry point <code>PyInit_&lt;module name></code>:<div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span>#ifdef Py_GIL_DISABLED</span></span>
+<span class="line"><span>    PyUnstable_Module_SetGIL(m, Py_MOD_GIL_NOT_USED);</span></span>
+<span class="line"><span>#endif</span></span></code></pre></div></li><li><strong>Multi-phase</strong>: add a <code>PyModuleDef_Slot</code> with <code>Py_mod_gil</code> set to <code>Py_MOD_GIL_NOT_USED</code>.</li></ul><p>Language and tool support: <a href=https://cython.org/ target=_blank rel="noopener noreferrer">Cython</a>
 (type annotations for efficient, compatible code),
 <a href=https://pybind11.readthedocs.io/ target=_blank rel="noopener noreferrer">PyBind11</a>
 (<a href=https://pybind11.readthedocs.io/en/stable/advanced/misc.html#free-threading-support target=_blank rel="noopener noreferrer">free-threading support</a>

