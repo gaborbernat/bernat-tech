@@ -18,7 +18,7 @@ const LANGS = [
   "html",
   "css",
 ];
-const CODE_BLOCK_RE = /<pre><code class="language-(\w+)">([\s\S]*?)<\/code><\/pre>/g;
+const CODE_BLOCK_RE = /<pre><code class=["']?language-(\w+)["']?>([\s\S]*?)<\/code><\/pre>/g;
 const INLINE_CODE_RE = /<code>([^<]*?[.()\[\]=:][^<]*?)<\/code>/g;
 
 const highlighter = await createHighlighter({ themes: Object.values(THEMES), langs: LANGS });

@@ -22,7 +22,7 @@
 </footer>
 {{ if and hugo.IsServer (.Page.Store.Get "hasCode") }}
 <script type="module">
-  import { codeToHtml } from 'https://esm.sh/shiki@3.7.0';
+  import { codeToHtml } from 'https://esm.sh/shiki@3.23.0';
 
   const getThemeKey = () => {
     const body = document.body;

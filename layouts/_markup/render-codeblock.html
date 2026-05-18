@@ -1,6 +1,6 @@
 <div class="code-block-wrapper">
 <pre><code class="language-{{ .Type }}">
-{{- .Inner | safeHTML -}}
+{{- .Inner | htmlEscape | safeHTML -}}
 </code></pre>
 </div>
 {{ .Page.Store.Set "hasCode" true }}

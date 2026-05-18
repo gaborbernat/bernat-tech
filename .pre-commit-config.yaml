@@ -25,9 +25,9 @@ repos:
       - id: mdformat
         args: ["--wrap", "120", "--number"]
         additional_dependencies:
-          - mdformat-beautysh
-          - mdformat-simple-breaks
-          - mdformat-hugo
+          - mdformat-beautysh>=1
+          - mdformat-simple-breaks>=0.1
+          - mdformat-hugo>=0.1
   - repo: https://github.com/rhysd/actionlint
     rev: "v1.7.12"
     hooks:

@@ -25,7 +25,6 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-          submodules: true
       - name: Read Hugo version
         run: echo "HUGO_VERSION=$(cat .hugo-version)" >> "$GITHUB_ENV"
       - name: Setup Hugo
@@ -35,8 +34,7 @@ jobs:
           extended: true
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: 22
-          cache: npm
+          node-version: 26
       - run: npm ci
       - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         with:
