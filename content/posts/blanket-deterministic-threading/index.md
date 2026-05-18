@@ -178,9 +178,11 @@ sequenceDiagram
         participant Bar as merge_barrier
     end
 
-    S1->>Bar: wait() - blocks (1/3)
-    S3->>Bar: wait() - blocks (2/3)
-    S2->>Bar: wait() - all arrived, opens
+    S1->>Bar: wait()
+    activate Bar
+    S3->>Bar: wait()
+    S2->>Bar: wait() (last arrival, opens)
+    deactivate Bar
     Bar-->>S1: released
     Bar-->>S3: released
     Bar-->>S2: released
@@ -880,17 +882,20 @@ sequenceDiagram
         participant OL as orders_lock
     end
 
-    S->>UT: assign(users_task) - acquires users_lock
-    S->>OT: assign(orders_task) - acquires orders_lock
+    S->>UL: assign users_task
+    activate UL
+    S->>OL: assign orders_task
+    activate OL
 
-    UT->>OL: acquire(timeout=1.0) - BLOCKED
-    OT->>UL: acquire(timeout=1.0) - BLOCKED
+    UT->>OL: acquire(timeout=1.0) (BLOCKED)
+    OT->>UL: acquire(timeout=1.0) (BLOCKED)
     Note over UT,OT: Deadlock: each holds one lock, wants the other
 
     S->>UT: expire() + unblock()
     Note over UT: timeout fires, returns False
-    S->>UT: finish - releases users_lock
-    S->>OT: finish - acquires users_lock, releases both
+    deactivate UL
+    S->>OT: finish
+    deactivate OL
 ```
 
 ### Service startup: controlling initialization order
@@ -950,9 +955,11 @@ sequenceDiagram
         participant E as ready event
     end
 
-    M->>E: wait() - sleeping
-    L->>E: wait() - sleeping
-    C->>E: set() - wakes both
+    M->>E: wait()
+    activate E
+    L->>E: wait()
+    C->>E: set() (wakes both)
+    deactivate E
 
     Note over S: cyc.wake(migrator, listener)
     S->>M: resume first
