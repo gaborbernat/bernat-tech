@@ -16,10 +16,10 @@ title = "Taming Threads: Deterministic Multithreaded Testing in Python with blan
 > - **The solution:** [blanket](https://pypi.org/project/blanket/) wraps real `threading` primitives (Lock, Condition,
 >   Event, Barrier, Semaphore) and lets your test act as the scheduler, controlling exactly which thread proceeds at
 >   each step.
-> - **Why now:** free-threaded Python (no GIL) shipped experimentally in 3.13, is
->   [officially supported in 3.14](https://docs.python.org/3.14/whatsnew/3.14.html), and keeps maturing in
->   [3.15](https://docs.python.org/3.15/whatsnew/3.15.html). Code that was "accidentally thread-safe" under the GIL will
->   start exhibiting real concurrency bugs.
+> - **Why now:** free-threaded Python (no [GIL](https://docs.python.org/3/glossary.html#term-GIL)) shipped
+>   experimentally in 3.13, is [officially supported in 3.14](https://docs.python.org/3.14/whatsnew/3.14.html), and
+>   keeps maturing in [3.15](https://docs.python.org/3.15/whatsnew/3.15.html). Code that was "accidentally thread-safe"
+>   under the GIL will start exhibiting real concurrency bugs.
 > - **How it works:** every method call on a blanket primitive becomes a _transaction_ that parks at a _scheduler
 >   block_. Your test unblocks transactions in whatever order you want, making execution 100% deterministic.
 > - **What makes it different:** unlike stateless model checkers ([Loom](https://github.com/tokio-rs/loom),
@@ -44,8 +44,9 @@ only triggers under a specific thread interleaving, read on.
 ## Why now
 
 [PEP 703](https://peps.python.org/pep-0703/) didn't just make "threads go faster." It's a fundamental change to Python's
-concurrency model: biased reference counting, per-object locking instead of the global GIL,
-[mimalloc](https://github.com/microsoft/mimalloc) replacing
+concurrency model: biased reference counting, per-object locking instead of the global
+[GIL](https://docs.python.org/3/glossary.html#term-GIL) (the lock that serializes Python bytecode execution across
+threads), [mimalloc](https://github.com/microsoft/mimalloc) replacing
 [pymalloc](https://docs.python.org/3/c-api/memory.html#the-pymalloc-allocator), stop-the-world GC pauses.
 
 Code that was "accidentally thread-safe" will start exhibiting real data races:
