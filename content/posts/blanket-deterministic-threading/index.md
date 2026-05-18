@@ -83,6 +83,82 @@ Python's concurrency testing story has been thin because the GIL made it less ur
 [blanket](https://github.com/larryhastings/blanket) is the first serious entry in what will need to become a richer
 ecosystem.
 
+## Synchronization primitives
+
+Before we can test multithreaded code, we need to understand the tools threads use to coordinate. Python's
+[`threading`](https://docs.python.org/3/library/threading.html) module provides several **synchronization primitives**
+-- objects that let threads signal each other and take turns accessing shared state.
+
+### Lock
+
+A [`Lock`](https://docs.python.org/3/library/threading.html#threading.Lock) is the most basic primitive. At any moment
+it is either _unlocked_ or _locked_. A thread locks it with `acquire()` and unlocks it with `release()`. If a second
+thread calls `acquire()` while the lock is held, it blocks -- sits idle -- until the first thread calls `release()`.
+This guarantees that only one thread runs a critical section at a time.
+
+```mermaid
+sequenceDiagram
+    box rgba(59,130,246,0.15) Thread A
+        participant A as Thread A
+    end
+    box rgba(109,40,217,0.15) Thread B
+        participant B as Thread B
+    end
+    box rgba(185,28,28,0.15) Lock
+        participant L as Lock
+    end
+
+    A->>L: acquire() ✓ locked
+    B->>L: acquire() → blocks, waiting
+    Note over A: critical section
+    A->>L: release()
+    Note over B: unblocks, acquires
+    B->>L: acquire() ✓ locked
+    Note over B: critical section
+    B->>L: release()
+```
+
+The Python idiom `with lock:` automatically calls `acquire()` on entry and `release()` on exit, even if an exception is
+raised.
+
+### Barrier
+
+A [`Barrier(n)`](https://docs.python.org/3/library/threading.html#threading.Barrier) makes `n` threads wait until all of
+them have called `barrier.wait()`. The first `n - 1` arrivals block. When the last thread arrives, all `n` are released
+simultaneously. It is a rendezvous point: no one proceeds until everyone is ready.
+
+```mermaid
+sequenceDiagram
+    box rgba(59,130,246,0.15) Threads
+        participant A as Thread A
+        participant B as Thread B
+        participant C as Thread C
+    end
+    box rgba(185,28,28,0.15) Barrier(3)
+        participant Bar as Barrier
+    end
+
+    A->>Bar: wait() → blocks (1/3)
+    C->>Bar: wait() → blocks (2/3)
+    B->>Bar: wait() → all 3 arrived, opens
+    Bar-->>A: released
+    Bar-->>C: released
+    Bar-->>B: released
+```
+
+### Other primitives
+
+The `threading` module also provides:
+
+- **`Event`** -- a flag one thread sets and others wait on. `event.wait()` blocks until `event.set()` is called.
+- **`Condition`** -- a lock plus a notification channel. Threads `wait()` for a predicate, others `notify()` when state
+  changes. Used in producer-consumer patterns.
+- **`Semaphore(n)`** -- a counter that allows up to `n` threads to hold it concurrently. Useful for limiting concurrent
+  access to a resource pool.
+
+blanket wraps all seven primitives (`Lock`, `RLock`, `Condition`, `Barrier`, `Event`, `Semaphore`, `BoundedSemaphore`)
+with the same interface, so your worker code needs no changes.
+
 ## The problem with testing threads
 
 Three threads share a lock and a barrier:
