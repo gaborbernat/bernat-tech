@@ -387,7 +387,7 @@ sequenceDiagram
         participant Q2 as query-2
         participant Q3 as query-3
     end
-    box rgba(185,28,28,0.15) Semaphore(2)
+    box rgba(185,28,28,0.15) Semaphore
         participant S as connection_sem
     end
 
@@ -411,7 +411,7 @@ sequenceDiagram
         participant C2 as caller-2
         participant C3 as caller-3
     end
-    box rgba(185,28,28,0.15) BoundedSemaphore(2)
+    box rgba(185,28,28,0.15) BoundedSemaphore
         participant BS as rate_limiter
     end
 
