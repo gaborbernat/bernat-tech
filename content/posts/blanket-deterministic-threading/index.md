@@ -215,6 +215,26 @@ def validate(amount: int) -> None:
 
 With a plain `Lock`, the second `acquire()` inside `validate` would deadlock because the same thread already holds it.
 
+```mermaid
+sequenceDiagram
+    box rgba(59,130,246,0.15) Same thread
+        participant T as transfer()
+        participant V as validate()
+    end
+    box rgba(185,28,28,0.15) RLock
+        participant R as account_lock
+    end
+
+    T->>R: acquire() (count: 0→1)
+    activate R
+    T->>V: calls validate()
+    V->>R: acquire() (count: 1→2)
+    Note over R: same thread, no block
+    V->>R: release() (count: 2→1)
+    T->>R: release() (count: 1→0)
+    deactivate R
+```
+
 ### Event
 
 An [`Event`](https://docs.python.org/3/library/threading.html#threading.Event) is a boolean flag shared between threads.
@@ -238,6 +258,29 @@ def loader() -> None:
 def worker(name: str) -> None:
     config_ready.wait()  # blocks until loader calls set()
     print(f"{name} connecting to {config['db_host']}")
+```
+
+```mermaid
+sequenceDiagram
+    box rgba(109,40,217,0.15) Workers
+        participant W1 as worker-1
+        participant W2 as worker-2
+    end
+    box rgba(185,28,28,0.15) Event
+        participant E as config_ready
+    end
+    box rgba(5,150,105,0.15) Loader
+        participant L as loader()
+    end
+
+    W1->>E: wait() (blocks)
+    activate E
+    W2->>E: wait() (blocks)
+    L->>E: set()
+    deactivate E
+    Note over W1,W2: both unblocked simultaneously
+    W1->>W1: connect to db
+    W2->>W2: connect to db
 ```
 
 ### Condition
@@ -268,12 +311,35 @@ def consumer() -> None:
     print(f"processing {task}")
 ```
 
+```mermaid
+sequenceDiagram
+    box rgba(109,40,217,0.15) Consumer
+        participant C as consumer()
+    end
+    box rgba(5,150,105,0.15) Producer
+        participant P as producer()
+    end
+    box rgba(185,28,28,0.15) Condition
+        participant Cond as queue_condition
+    end
+
+    C->>Cond: acquire()
+    C->>Cond: wait() (queue empty, releases lock)
+    activate Cond
+    P->>Cond: acquire()
+    P->>Cond: append task
+    P->>Cond: notify()
+    P->>Cond: release()
+    deactivate Cond
+    Note over C: re-acquires lock, sees task
+    C->>Cond: release()
+```
+
 ### Semaphore
 
 A [`Semaphore(n)`](https://docs.python.org/3/library/threading.html#threading.Semaphore) maintains an internal counter
 starting at `n`. `acquire()` decrements it (blocking when it reaches zero); `release()` increments it. Up to `n` threads
-can hold it simultaneously. A `BoundedSemaphore` is the same but raises an error if `release()` is called more times
-than `acquire()`, preventing bugs where the counter drifts above the initial value.
+can hold it simultaneously.
 
 A connection pool that limits concurrent database connections to 5:
 
@@ -287,6 +353,80 @@ def query_database(sql: str) -> str:
     with connection_semaphore:  # blocks if 5 connections already active
         # ... execute query ...
         return "result"
+```
+
+### BoundedSemaphore
+
+A [`BoundedSemaphore(n)`](https://docs.python.org/3/library/threading.html#threading.BoundedSemaphore) is identical to
+`Semaphore` except it raises a `ValueError` if `release()` is called more times than `acquire()`. A plain `Semaphore`
+silently lets the counter drift above the initial value, which can mask bugs where a thread releases a resource it never
+acquired. `BoundedSemaphore` catches that immediately.
+
+A rate limiter that prevents more than 2 concurrent API calls:
+
+```python
+import threading
+
+rate_limiter = threading.BoundedSemaphore(2)
+
+
+def call_api(endpoint: str) -> str:
+    with rate_limiter:
+        # ... at most 2 threads here at once ...
+        return "response"
+
+
+# A bug: releasing without a matching acquire
+rate_limiter.release()  # raises ValueError: semaphore released too many times
+```
+
+```mermaid
+sequenceDiagram
+    box rgba(59,130,246,0.15) Queries
+        participant Q1 as query-1
+        participant Q2 as query-2
+        participant Q3 as query-3
+    end
+    box rgba(185,28,28,0.15) Semaphore(2)
+        participant S as connection_sem
+    end
+
+    Q1->>S: acquire() (count: 2→1)
+    activate S
+    Q2->>S: acquire() (count: 1→0)
+    Q3->>S: acquire() (blocks, count=0)
+    Note over Q1: executes query
+    Q1->>S: release() (count: 0→1)
+    Note over Q3: unblocked
+    Q3->>S: acquire() (count: 1→0)
+    Q2->>S: release() (count: 0→1)
+    Q3->>S: release() (count: 1→2)
+    deactivate S
+```
+
+```mermaid
+sequenceDiagram
+    box rgba(59,130,246,0.15) Callers
+        participant C1 as caller-1
+        participant C2 as caller-2
+        participant C3 as caller-3
+    end
+    box rgba(185,28,28,0.15) BoundedSemaphore(2)
+        participant BS as rate_limiter
+    end
+
+    C1->>BS: acquire() (count: 2→1)
+    activate BS
+    C2->>BS: acquire() (count: 1→0)
+    C3->>BS: acquire() (blocks)
+    C1->>BS: release() (count: 0→1)
+    Note over C3: unblocked
+    C3->>BS: acquire() (count: 1→0)
+    C2->>BS: release() (count: 0→1)
+    C3->>BS: release() (count: 1→2)
+    deactivate BS
+    C1->>BS: release() (count would exceed 2)
+    Note over BS: ValueError raised immediately
 ```
 
 ---
