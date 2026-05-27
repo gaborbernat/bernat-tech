@@ -454,7 +454,7 @@ flowchart LR
   A --> Pl[manylinux1_x86_64.manylinux_2_5_x86_64<br/>platform tags]:::plat
 ```
 
-Extension suffixes are `.abi3t.so` on Linux and macOS (with `.abi3.so` as a workaround for the 3.13–3.14 window if you
+Extension suffixes are `.abi3t.so` on Linux and macOS (with `.so` as a workaround for the 3.13–3.14 window if you
 want both) and `.pyd` on Windows. pip already supports installing abi3t wheels. Other installers need to accept the
 `abi3t` tag for free-threaded CPython in the same places they accept `abi3` today, and build tools need to opt in when
 they want to expose the feature.
