@@ -63,7 +63,8 @@ Rejected or Withdrawn:
 
 Several of these came up during the summit and are referenced inline below.
 
-{{< figure src="pradyun-gedam-welcome.webp" width="900" alt="Pradyun Gedam at the podium opening the Packaging Summit with the shared HackMD notes URL on screen" >}}
+{{< figure src="pradyun-gedam-welcome.webp" width="900" alt="Pradyun Gedam at the podium opening the Packaging Summit
+with the shared HackMD notes URL on screen" >}}
 
 ## Welcome
 
@@ -171,7 +172,9 @@ decompressing the whole inner archive before reading any member.
 
 ## Limiting vectors and incentives for abuse — Mike Fiedler
 
-{{< figure src="mike-fiedler-pypi-growth.webp" width="900" alt="Mike Fiedler PyPI is growing differently than it used to slide showing 3.1x more new projects per month, 3.5x more bytes uploaded per month, 2.5x more files and malware reports, 1.6x more active uploaders" >}}
+{{< figure src="mike-fiedler-pypi-growth.webp" width="900" alt="Mike Fiedler PyPI is growing differently than it used to
+slide showing 3.1x more new projects per month, 3.5x more bytes uploaded per month, 2.5x more files and malware reports,
+1.6x more active uploaders" >}}
 
 [Mike Fiedler](https://github.com/miketheman) ([miketheman.net](https://www.miketheman.net/)) is the Safety and Security
 Engineer at the PSF, working full-time on PyPI. Slides:
@@ -242,7 +245,9 @@ upload-after-release semantics needs the version-specifier spec amended, not jus
 
 ### 3. PyPI as a CDN
 
-{{< figure src="mike-fiedler-pypi-as-cdn.webp" width="900" alt="Mike Fiedler PyPI as a CDN slide with three columns Clean Abuse, Turducken Software, and Asserted Not Verified showing 12716 OSS-license projects with no source distribution" >}}
+{{< figure src="mike-fiedler-pypi-as-cdn.webp" width="900" alt="Mike Fiedler PyPI as a CDN slide with three columns
+Clean Abuse, Turducken Software, and Asserted Not Verified showing 12716 OSS-license projects with no source
+distribution" >}}
 
 The vector Mike called *Turducken Software*: a Rust binary installs a Python package that ships a Go binary that invokes
 a Zig compiler. PyPI now hosts Java JARs, Node `node_modules` directories, and complete language runtimes from people
@@ -329,7 +334,8 @@ everyone interested is in this room. Barry encouraged everyone present to consid
 
 ### Mobile packaging update — Malcolm Smith
 
-{{< figure src="malcolm-smith-mobile-wheels.webp" width="900" alt="Malcolm Smith beeware.org/mobile-wheels slide showing Android 11 of 360 packages and iOS 9 of 360 packages with mobile wheel support" >}}
+{{< figure src="malcolm-smith-mobile-wheels.webp" width="900" alt="Malcolm Smith beeware.org/mobile-wheels slide showing
+Android 11 of 360 packages and iOS 9 of 360 packages with mobile wheel support" >}}
 
 A year on from last summit, [Malcolm Smith](https://github.com/mhsmith) reported the build / host / install pipeline is
 in place. [cibuildwheel](https://cibuildwheel.pypa.io/) supports Android and iOS, PyPI accepts the new wheel tags, and
@@ -454,10 +460,10 @@ flowchart LR
   A --> Pl[manylinux1_x86_64.manylinux_2_5_x86_64<br/>platform tags]:::plat
 ```
 
-Extension suffixes are `.abi3t.so` on Linux and macOS (with `.so` as a workaround for the 3.13–3.14 window if you
-want both) and `.pyd` on Windows. pip already supports installing abi3t wheels. Other installers need to accept the
-`abi3t` tag for free-threaded CPython in the same places they accept `abi3` today, and build tools need to opt in when
-they want to expose the feature.
+Extension suffixes are `.abi3t.so` on Linux and macOS (with `.so` as a workaround for the 3.13–3.14 window if you want
+both) and `.pyd` on Windows. pip already supports installing abi3t wheels. Other installers need to accept the `abi3t`
+tag for free-threaded CPython in the same places they accept `abi3` today, and build tools need to opt in when they want
+to expose the feature.
 
 ### Yoda conditions in PEP 508 markers
 
