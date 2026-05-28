@@ -24,7 +24,7 @@ title = "Deterministic Multithreaded Testing in Python with blanket"
 > - [**How it works**](#how-it-works-under-the-hood): every method call on a blanket primitive becomes a _transaction_
 >   that parks at a _scheduler block_. Your test unblocks transactions in whatever order you want, making execution 100%
 >   deterministic.
-> - [**What makes it different**](#python-concurrency-testing-tools-compared): unlike stateless model checkers
+> - [**What makes it different**](#concurrency-testing-tools-compared): unlike stateless model checkers
 >   ([Loom](https://github.com/tokio-rs/loom), [Shuttle](https://github.com/awslabs/shuttle),
 >   [CHESS](https://www.microsoft.com/en-us/research/project/chess-find-and-reproduce-heisenbugs-in-concurrent-programs/))
 >   that _discover_ bugs by exploring interleavings automatically, blanket lets you _declare_ specific scenarios by
@@ -1260,168 +1260,6 @@ patched_update = inject_call(pause, loc)
 # patched_update pauses right before the write, letting you interleave another thread
 ```
 
-## Python concurrency testing tools, compared
-
-Testing concurrent code has been tackled differently across ecosystems. Understanding where blanket fits helps you know
-when to reach for it versus something else.
-
-| Approach                     | Tools                                                                                                                                                                                                                                                                                                                                                                                   | How it works                                                                                                                      |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| **Bug discovery**            | [Loom](https://github.com/tokio-rs/loom) (Rust), [Shuttle](https://github.com/awslabs/shuttle) (Rust/AWS), [Coyote](https://microsoft.github.io/coyote/) (.NET), [Lincheck](https://github.com/JetBrains/lincheck) (JVM)                                                                                                                                                                | Run the test many times with different scheduling choices to systematically find interleavings that trigger bugs                  |
-| **Runtime detection**        | [Go Race Detector](https://go.dev/blog/race-detector), [ThreadSanitizer](https://github.com/google/sanitizers) (C/C++)                                                                                                                                                                                                                                                                  | Instrument memory accesses and flag races as they happen in real runs                                                             |
-| **Deterministic control**    | **blanket** (Python), [kotlinx-coroutines-test](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/) (Kotlin), [Thread Weaver](https://github.com/google/thread-weaver) (Java)                                                                                                                                                                                       | Declare the exact interleaving you want; the tool guarantees it executes that way                                                 |
-| **Scenario generation**      | [Hypothesis](https://hypothesis.readthedocs.io/en/latest/stateful.html) (Python), [Jepsen](https://jepsen.io/) (distributed systems)                                                                                                                                                                                                                                                    | Generate test programs automatically from state machine rules or fault injection                                                  |
-| **Deterministic simulation** | [FoundationDB](https://www.thestrangeloop.com/2014/testing-distributed-systems-w-slash-deterministic-simulation.html), [TigerBeetle](https://tigerbeetle.com/blog/2023-07-06-simulation-testing-for-liveness/), [Antithesis](https://antithesis.com/blog/is_something_bugging_you/), [WarpStream](https://www.warpstream.com/blog/deterministic-simulation-testing-for-our-entire-saas) | Run the system inside a virtualized event loop driven by a single RNG seed; reuse the seed to replay a known failure step by step |
-
-### Stateless model checkers
-
-The largest family uses
-**[stateless model checking](https://en.wikipedia.org/wiki/Model_checking#Stateless_model_checking)** (SMC) -- running
-code many times with different scheduling decisions to explore interleavings.
-
-[Loom](https://github.com/tokio-rs/loom) (Rust) does exhaustive permutation testing under the
-[C11 memory model](https://en.cppreference.com/w/c/language/memory_model):
-
-```rust
-use loom::sync::Arc;
-use loom::sync::atomic::{AtomicUsize, Ordering};
-use loom::thread;
-
-#[test]
-fn test_concurrent_increment() {
-    loom::model(|| {
-        let num = Arc::new(AtomicUsize::new(0));
-        let num2 = num.clone();
-
-        let t1 = thread::spawn(move || {
-            num2.fetch_add(1, Ordering::SeqCst);
-        });
-
-        num.fetch_add(1, Ordering::SeqCst);
-        t1.join().unwrap();
-
-        assert_eq!(2, num.load(Ordering::SeqCst));
-    });
-}
-```
-
-Loom is _sound_ (if all explorations pass, the code is correct) but the number of interleavings grows exponentially.
-
-[Shuttle](https://github.com/awslabs/shuttle) (Rust, AWS) trades completeness for scalability using randomized testing:
-
-```rust
-use shuttle::sync::Mutex;
-use shuttle::thread;
-use std::sync::Arc;
-
-#[test]
-fn shuttle_test() {
-    shuttle::check_random(|| {
-        let data = Arc::new(Mutex::new(0));
-        let data2 = data.clone();
-
-        let t = thread::spawn(move || {
-            *data2.lock().unwrap() += 1;
-        });
-
-        *data.lock().unwrap() += 1;
-        t.join().unwrap();
-
-        assert_eq!(*data.lock().unwrap(), 2);
-    }, 1000);
-}
-```
-
-[Coyote](https://microsoft.github.io/coyote/) (Microsoft, .NET) uses binary rewriting and records schedules for replay.
-Azure teams report finding bugs "in minutes that would have taken days with stress testing."
-
-[Lincheck](https://github.com/JetBrains/lincheck) (JetBrains, JVM) tests concurrent data structures for
-[linearizability](https://en.wikipedia.org/wiki/Linearizability):
-
-```kotlin
-class ConcurrentCounterTest {
-    private val counter = ConcurrentCounter()
-
-    @Operation fun increment() = counter.increment()
-    @Operation fun get() = counter.get()
-
-    @Test fun modelCheckingTest() = ModelCheckingOptions().check(this::class)
-}
-```
-
-### Runtime detectors
-
-[Go's Race Detector](https://go.dev/blog/race-detector), built on
-[ThreadSanitizer](https://github.com/google/sanitizers), instruments every memory access:
-
-```go
-func main() {
-    counter := 0
-    var wg sync.WaitGroup
-    for i := 0; i < 1000; i++ {
-        wg.Add(1)
-        go func() {
-            defer wg.Done()
-            counter++ // DATA RACE
-        }()
-    }
-    wg.Wait()
-}
-```
-
-```bash
-$ go run -race main.go
-WARNING: DATA RACE
-Write at 0x00c0000b4010 by goroutine 7:
-```
-
-Catches races only when triggered. Adds ~10x overhead, so it's a CI tool, not production.
-
-### Deterministic virtual time
-
-[Kotlin's `kotlinx-coroutines-test`](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/) controls
-_time_ rather than thread scheduling -- similar philosophy, different domain:
-
-```kotlin
-@Test
-fun testTimeout() = runTest {
-    val deferred = async {
-        delay(1_000) // skipped, no real wait
-        "result"
-    }
-    advanceTimeBy(1_000)
-    assertEquals("result", deferred.await())
-}
-```
-
-### Distributed systems
-
-[Jepsen](https://jepsen.io/) injects network partitions, node crashes, and clock skew into distributed databases, then
-checks consistency guarantees. Different level (distributed nodes vs. threads in one process) but same philosophy:
-declare a failure scenario, force it, verify correctness.
-
-### Where blanket fits
-
-blanket doesn't explore interleavings automatically, detect races at runtime, or generate scenarios. It lets you declare
-a specific interleaving by hand and guarantees it executes that way every time.
-
-It shares the goal of deterministic replay with deterministic simulation testing
-([FoundationDB](https://www.thestrangeloop.com/2014/testing-distributed-systems-w-slash-deterministic-simulation.html),
-[TigerBeetle](https://tigerbeetle.com/blog/2023-07-06-simulation-testing-for-liveness/),
-[Antithesis](https://antithesis.com/blog/is_something_bugging_you/)) and inverts the user model. DST's determinism is
-seed-driven: you reuse an RNG seed to replay a failure that randomness once produced. blanket's is declarative: you
-write the scenario you want, by hand. DST scales by exploring a state space. blanket scales as engineers encode specific
-failures as regression tests.
-
-Best for:
-
-- **Regression tests for known bugs.** Pin the exact interleaving that triggers a bug. Fix it. Test stays green.
-- **Coverage of rare code paths.** Force the sequence that triggers that one `except` branch.
-- **Documentation of concurrency contracts.** A blanket test reads like a specification.
-
-The trade-off: you have to know what scenario to test. blanket won't discover bugs, it reproduces ones you understand.
-Ideal workflow: an SMC tool or DST harness finds bugs, blanket pins them as regression tests.
-
 ## A complete test suite example: thread-safe LRU cache
 
 Testing a thread-safe LRU cache:
@@ -1629,6 +1467,168 @@ Every blanket test follows three phases:
 - **Can blanket find concurrency bugs automatically?** No. blanket reproduces a scenario you describe. To discover
   unknown races, pair it with [Hypothesis](https://hypothesis.readthedocs.io/) for property-based testing, a
   `ThreadSanitizer`-style runtime detector, or a stateless model checker.
+
+## Concurrency testing tools, compared
+
+Testing concurrent code has been tackled differently across ecosystems. Understanding where blanket fits helps you know
+when to reach for it versus something else.
+
+| Approach                     | Tools                                                                                                                                                                                                                                                                                                                                                                                   | How it works                                                                                                                      |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| **Bug discovery**            | [Loom](https://github.com/tokio-rs/loom) (Rust), [Shuttle](https://github.com/awslabs/shuttle) (Rust/AWS), [Coyote](https://microsoft.github.io/coyote/) (.NET), [Lincheck](https://github.com/JetBrains/lincheck) (JVM)                                                                                                                                                                | Run the test many times with different scheduling choices to systematically find interleavings that trigger bugs                  |
+| **Runtime detection**        | [Go Race Detector](https://go.dev/blog/race-detector), [ThreadSanitizer](https://github.com/google/sanitizers) (C/C++)                                                                                                                                                                                                                                                                  | Instrument memory accesses and flag races as they happen in real runs                                                             |
+| **Deterministic control**    | **blanket** (Python), [kotlinx-coroutines-test](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/) (Kotlin), [Thread Weaver](https://github.com/google/thread-weaver) (Java)                                                                                                                                                                                       | Declare the exact interleaving you want; the tool guarantees it executes that way                                                 |
+| **Scenario generation**      | [Hypothesis](https://hypothesis.readthedocs.io/en/latest/stateful.html) (Python), [Jepsen](https://jepsen.io/) (distributed systems)                                                                                                                                                                                                                                                    | Generate test programs automatically from state machine rules or fault injection                                                  |
+| **Deterministic simulation** | [FoundationDB](https://www.thestrangeloop.com/2014/testing-distributed-systems-w-slash-deterministic-simulation.html), [TigerBeetle](https://tigerbeetle.com/blog/2023-07-06-simulation-testing-for-liveness/), [Antithesis](https://antithesis.com/blog/is_something_bugging_you/), [WarpStream](https://www.warpstream.com/blog/deterministic-simulation-testing-for-our-entire-saas) | Run the system inside a virtualized event loop driven by a single RNG seed; reuse the seed to replay a known failure step by step |
+
+### Stateless model checkers
+
+The largest family uses
+**[stateless model checking](https://en.wikipedia.org/wiki/Model_checking#Stateless_model_checking)** (SMC) -- running
+code many times with different scheduling decisions to explore interleavings.
+
+[Loom](https://github.com/tokio-rs/loom) (Rust) does exhaustive permutation testing under the
+[C11 memory model](https://en.cppreference.com/w/c/language/memory_model):
+
+```rust
+use loom::sync::Arc;
+use loom::sync::atomic::{AtomicUsize, Ordering};
+use loom::thread;
+
+#[test]
+fn test_concurrent_increment() {
+    loom::model(|| {
+        let num = Arc::new(AtomicUsize::new(0));
+        let num2 = num.clone();
+
+        let t1 = thread::spawn(move || {
+            num2.fetch_add(1, Ordering::SeqCst);
+        });
+
+        num.fetch_add(1, Ordering::SeqCst);
+        t1.join().unwrap();
+
+        assert_eq!(2, num.load(Ordering::SeqCst));
+    });
+}
+```
+
+Loom is _sound_ (if all explorations pass, the code is correct) but the number of interleavings grows exponentially.
+
+[Shuttle](https://github.com/awslabs/shuttle) (Rust, AWS) trades completeness for scalability using randomized testing:
+
+```rust
+use shuttle::sync::Mutex;
+use shuttle::thread;
+use std::sync::Arc;
+
+#[test]
+fn shuttle_test() {
+    shuttle::check_random(|| {
+        let data = Arc::new(Mutex::new(0));
+        let data2 = data.clone();
+
+        let t = thread::spawn(move || {
+            *data2.lock().unwrap() += 1;
+        });
+
+        *data.lock().unwrap() += 1;
+        t.join().unwrap();
+
+        assert_eq!(*data.lock().unwrap(), 2);
+    }, 1000);
+}
+```
+
+[Coyote](https://microsoft.github.io/coyote/) (Microsoft, .NET) uses binary rewriting and records schedules for replay.
+Azure teams report finding bugs "in minutes that would have taken days with stress testing."
+
+[Lincheck](https://github.com/JetBrains/lincheck) (JetBrains, JVM) tests concurrent data structures for
+[linearizability](https://en.wikipedia.org/wiki/Linearizability):
+
+```kotlin
+class ConcurrentCounterTest {
+    private val counter = ConcurrentCounter()
+
+    @Operation fun increment() = counter.increment()
+    @Operation fun get() = counter.get()
+
+    @Test fun modelCheckingTest() = ModelCheckingOptions().check(this::class)
+}
+```
+
+### Runtime detectors
+
+[Go's Race Detector](https://go.dev/blog/race-detector), built on
+[ThreadSanitizer](https://github.com/google/sanitizers), instruments every memory access:
+
+```go
+func main() {
+    counter := 0
+    var wg sync.WaitGroup
+    for i := 0; i < 1000; i++ {
+        wg.Add(1)
+        go func() {
+            defer wg.Done()
+            counter++ // DATA RACE
+        }()
+    }
+    wg.Wait()
+}
+```
+
+```bash
+$ go run -race main.go
+WARNING: DATA RACE
+Write at 0x00c0000b4010 by goroutine 7:
+```
+
+Catches races only when triggered. Adds ~10x overhead, so it's a CI tool, not production.
+
+### Deterministic virtual time
+
+[Kotlin's `kotlinx-coroutines-test`](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/) controls
+_time_ rather than thread scheduling -- similar philosophy, different domain:
+
+```kotlin
+@Test
+fun testTimeout() = runTest {
+    val deferred = async {
+        delay(1_000) // skipped, no real wait
+        "result"
+    }
+    advanceTimeBy(1_000)
+    assertEquals("result", deferred.await())
+}
+```
+
+### Distributed systems
+
+[Jepsen](https://jepsen.io/) injects network partitions, node crashes, and clock skew into distributed databases, then
+checks consistency guarantees. Different level (distributed nodes vs. threads in one process) but same philosophy:
+declare a failure scenario, force it, verify correctness.
+
+### Where blanket fits
+
+blanket doesn't explore interleavings automatically, detect races at runtime, or generate scenarios. It lets you declare
+a specific interleaving by hand and guarantees it executes that way every time.
+
+It shares the goal of deterministic replay with deterministic simulation testing
+([FoundationDB](https://www.thestrangeloop.com/2014/testing-distributed-systems-w-slash-deterministic-simulation.html),
+[TigerBeetle](https://tigerbeetle.com/blog/2023-07-06-simulation-testing-for-liveness/),
+[Antithesis](https://antithesis.com/blog/is_something_bugging_you/)) and inverts the user model. DST's determinism is
+seed-driven: you reuse an RNG seed to replay a failure that randomness once produced. blanket's is declarative: you
+write the scenario you want, by hand. DST scales by exploring a state space. blanket scales as engineers encode specific
+failures as regression tests.
+
+Best for:
+
+- **Regression tests for known bugs.** Pin the exact interleaving that triggers a bug. Fix it. Test stays green.
+- **Coverage of rare code paths.** Force the sequence that triggers that one `except` branch.
+- **Documentation of concurrency contracts.** A blanket test reads like a specification.
+
+The trade-off: you have to know what scenario to test. blanket won't discover bugs, it reproduces ones you understand.
+Ideal workflow: an SMC tool or DST harness finds bugs, blanket pins them as regression tests.
 
 ## Related reading
 
