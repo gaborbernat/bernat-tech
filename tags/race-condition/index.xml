@@ -20,7 +20,7 @@ didn&amp;amp;rsquo;t know you had; without it, they surface.&amp;lt;/li&amp;gt;
 : every method call on a blanket primitive becomes a &amp;lt;em&amp;gt;transaction&amp;lt;/em&amp;gt;
 that parks at a &amp;lt;em&amp;gt;scheduler block&amp;lt;/em&amp;gt;. Your test unblocks transactions in whatever order you want, making execution 100%
 deterministic.&amp;lt;/li&amp;gt;
-&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#python-concurrency-testing-tools-compared&amp;#34;&amp;gt;&amp;lt;strong&amp;gt;What makes it different&amp;lt;/strong&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#concurrency-testing-tools-compared&amp;#34;&amp;gt;&amp;lt;strong&amp;gt;What makes it different&amp;lt;/strong&amp;gt;&amp;lt;/a&amp;gt;
 : unlike stateless model checkers
 (&amp;lt;a href=&amp;#34;https://github.com/tokio-rs/loom&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;Loom&amp;lt;/a&amp;gt;
 , &amp;lt;a href=&amp;#34;https://github.com/awslabs/shuttle&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;Shuttle&amp;lt;/a&amp;gt;
