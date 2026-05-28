@@ -50,6 +50,16 @@
 {{- end }}
 
 {{- if and (eq .Kind "page") (eq .Section "posts") }}
+{{- /* Center the hero image and prevent overflow on small screens. */ -}}
+<style>
+  img.post-hero {
+    display: block;
+    margin: 0 auto 1.5rem;
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+  }
+</style>
 {{- /* Copy-to-clipboard buttons on code blocks. JS-only (no extra markup). */ -}}
 <style>
   .code-block-wrapper { position: relative; }

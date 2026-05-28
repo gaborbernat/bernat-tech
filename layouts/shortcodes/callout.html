@@ -1,0 +1,16 @@
+{{- /* Custom-titled callout. Mirrors the standard alert renderer in
+       layouts/_markup/render-blockquote.html but accepts an explicit
+       title that the GFM alert syntax loses when mdformat normalizes
+       the standard types. Use the percent variant for invocation so
+       the inner content renders as markdown. */ -}}
+{{- $kind := .Get "kind" | default "note" -}}
+{{- $title := .Get "title" -}}
+{{- $alertTypes := dict "note" "info" "tip" "success" "important" "important" "warning" "warning" "caution" "danger" -}}
+{{- $alertIcons := dict "note" "fa-circle-info" "tip" "fa-lightbulb" "important" "fa-circle-exclamation" "warning" "fa-triangle-exclamation" "caution" "fa-fire" -}}
+{{- $class := index $alertTypes $kind | default "info" -}}
+{{- $icon := index $alertIcons $kind | default "fa-circle-info" -}}
+{{- $titleText := $title | default (humanize $kind) -}}
+<div class="alert alert-{{ $class }}">
+  <p class="alert-title"><i class="fa-solid {{ $icon }}" aria-hidden="true"></i> {{ $titleText }}</p>
+  {{ .Inner | $.Page.RenderString (dict "display" "block") }}
+</div>
