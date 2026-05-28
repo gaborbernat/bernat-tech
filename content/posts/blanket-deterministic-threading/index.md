@@ -1,6 +1,6 @@
 +++
 author = "Bernat Gabor"
-date = 2026-05-17T00:00:00Z
+date = 2026-05-28T17:57:48Z
 description = "How blanket gives Python tests deterministic control over thread scheduling, and why that matters now that free-threaded Python is shipping."
 draft = false
 image = "splash.webp"
