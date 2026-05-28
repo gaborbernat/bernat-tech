@@ -1,45 +1,91 @@
 +++
 author = "Bernat Gabor"
 date = 2026-05-17T00:00:00Z
-description = "A tutorial-style deep dive into blanket, Larry Hastings' library for writing deterministic tests of multithreaded Python code, and why it matters for the free-threaded future"
-draft = true
-image = ""
+description = "How blanket gives Python tests deterministic control over thread scheduling, and why that matters now that free-threaded Python is shipping."
+draft = false
+image = "splash.webp"
+images = [ "splash.webp"]
 slug = "blanket-deterministic-threading"
-tags = [ "python", "testing", "concurrency", "threading", "free-threading", "blanket", "pycon"]
-title = "Taming Threads: Deterministic Multithreaded Testing in Python with blanket"
+tags = [ "python", "testing", "concurrency", "threading", "free-threading", "blanket", "pycon", "race-condition", "gil"]
+title = "Deterministic Multithreaded Testing in Python with blanket"
 +++
 
 > [!TLDR] **TLDR:**
 >
-> - **The problem:** testing multithreaded code is hard because the OS scheduler decides which thread runs when, making
->   race conditions nearly impossible to reproduce in a test suite.
-> - **The solution:** [blanket](https://pypi.org/project/blanket/) wraps real `threading` primitives (Lock, Condition,
->   Event, Barrier, Semaphore) and lets your test act as the scheduler, controlling exactly which thread proceeds at
->   each step.
-> - **Why now:** free-threaded Python (no [GIL](https://docs.python.org/3/glossary.html#term-GIL)) shipped
+> - [**The problem**](#why-multithreaded-python-tests-are-flaky): testing multithreaded code is hard because the OS
+>   scheduler decides which thread runs when, making race conditions nearly impossible to reproduce in a test suite.
+> - [**The solution**](#enter-blanket-deterministic-threading-control): [blanket](https://pypi.org/project/blanket/)
+>   wraps real `threading` primitives (Lock, Condition, Event, Barrier, Semaphore) and lets your test act as the
+>   scheduler, controlling which thread proceeds at each step.
+> - [**Why now**](#why-now): free-threaded Python (no [GIL](https://docs.python.org/3/glossary.html#term-GIL)) shipped
 >   experimentally in 3.13, is [officially supported in 3.14](https://docs.python.org/3.14/whatsnew/3.14.html), and
->   keeps maturing in [3.15](https://docs.python.org/3.15/whatsnew/3.15.html). Code that was "accidentally thread-safe"
->   under the GIL will start exhibiting real concurrency bugs.
-> - **How it works:** every method call on a blanket primitive becomes a _transaction_ that parks at a _scheduler
->   block_. Your test unblocks transactions in whatever order you want, making execution 100% deterministic.
-> - **What makes it different:** unlike stateless model checkers ([Loom](https://github.com/tokio-rs/loom),
->   [Shuttle](https://github.com/awslabs/shuttle),
+>   keeps maturing in [3.15](https://docs.python.org/3.15/whatsnew/3.15.html). The GIL was hiding thread-safety bugs you
+>   didn't know you had; without it, they surface.
+> - [**How it works**](#how-it-works-under-the-hood): every method call on a blanket primitive becomes a _transaction_
+>   that parks at a _scheduler block_. Your test unblocks transactions in whatever order you want, making execution 100%
+>   deterministic.
+> - [**What makes it different**](#python-concurrency-testing-tools-compared): unlike stateless model checkers
+>   ([Loom](https://github.com/tokio-rs/loom), [Shuttle](https://github.com/awslabs/shuttle),
 >   [CHESS](https://www.microsoft.com/en-us/research/project/chess-find-and-reproduce-heisenbugs-in-concurrent-programs/))
->   that _discover_ bugs by exploring interleavings automatically, blanket lets you _declare_ specific scenarios by hand
->   -- perfect for regression tests of known bugs and for achieving full coverage of rare code paths.
+>   that _discover_ bugs by exploring interleavings automatically, blanket lets you _declare_ specific scenarios by
+>   hand, useful for regression tests of known bugs and for full coverage of rare code paths.
 
-At [PyCon US 2026](https://us.pycon.org/2026/schedule/presentation/51),
-[Larry Hastings](https://github.com/larryhastings) (CPython core developer, creator of
-[Argument Clinic](https://peps.python.org/pep-0436/) (the C preprocessor that generates argument parsing code across
-CPython), release manager for Python 3.4 and 3.5, and the person behind the original
-[Gilectomy](https://github.com/larryhastings/gilectomy) experiment) presented
-[blanket](https://github.com/larryhastings/blanket). The talk,
-[_Conquer multithreaded Python with Blanket_](https://us.pycon.org/2026/schedule/presentation/51), addressed a problem
-every multithreaded developer has hit: how do you write a test that reliably reproduces a race condition?
+Most multithreaded Python codebases keep at least one test marked `@pytest.mark.flaky(reruns=5)`: the one that fails
+once in a thousand because of a race condition you can't reproduce on demand. The bug is a specific sequence of thread
+interactions. You don't get to pick the sequence; the OS scheduler does. You ship the retry and hope.
 
-This post walks through what blanket does, why it matters right now, how it works under the hood, and how to start using
-it. If you've ever stared at a flaky test that "only fails on CI" or tried to get coverage on an `except` branch that
-only triggers under a specific thread interleaving, read on.
+[blanket](https://github.com/larryhastings/blanket) takes the scheduler's job. Your test decides which thread acquires
+the lock next, which order barriers release, which waiter `notify()` wakes. The regression test that used to fail one
+run in a thousand now fails (or passes) the same way each run. [Larry Hastings](https://github.com/larryhastings)
+presented it at [PyCon US 2026](https://us.pycon.org/2026/schedule/presentation/51) (I wrote up the
+[Packaging Summit](/posts/pycon-us-2026-packaging-summit-recap) and
+[Typing Summit](/posts/pycon-us-2026-typing-summit-recap) from the same conference). He is a CPython core developer,
+author of [Argument Clinic](https://peps.python.org/pep-0436/), release manager for Python 3.4 and 3.5, and the engineer
+behind the original [Gilectomy](https://github.com/larryhastings/gilectomy) experiment to remove the GIL.
+
+> [!NOTE]
+> **When to use blanket:**
+>
+> - You have a flaky concurrency test you can't reproduce on demand.
+> - You want a regression test that pins one specific thread interleaving.
+> - You're porting a library to free-threaded Python and need confidence the locks behave under both schedulers.
+> - You want test coverage on an `except` branch that fires under one specific ordering.
+> - You want a concurrency test that reads as a specification of what should happen.
+
+## Quick start
+
+Install with [uv](https://docs.astral.sh/uv/) (or `pip` if you prefer):
+
+```bash
+uv pip install blanket
+```
+
+```python
+import blanket
+
+scenario = blanket.Scenario()
+lock = scenario.Lock()
+result: list[str] = []
+
+
+def worker(name: str) -> None:
+    with lock:
+        result.append(name)
+
+
+thread_a = scenario.thread(worker, "A")
+thread_b = scenario.thread(worker, "B")
+lock_api = scenario.api(lock)
+
+with scenario:
+    list(lock_api.relay(thread_b, thread_a))  # force B to take the lock before A
+    lock_api.unblock(lock.release, thread_a)
+
+assert result == ["B", "A"]  # the same order on every run
+```
+
+Without blanket, `result` lands as `["A", "B"]` or `["B", "A"]` depending on which thread the OS scheduler picks. With
+blanket, you pick.
 
 ## Why now
 
@@ -50,7 +96,7 @@ Python**. The change is not just about speed: it rewires CPython's internals -- 
 locking, [mimalloc](https://github.com/microsoft/mimalloc) replacing
 [pymalloc](https://docs.python.org/3/c-api/memory.html#the-pymalloc-allocator), stop-the-world GC pauses.
 
-Code that was "accidentally thread-safe" will start exhibiting real data races:
+Code the GIL has been serializing, one bytecode at a time, will start showing real data races:
 
 ```python
 import threading
@@ -59,7 +105,7 @@ import threading
 def increment() -> None:
     global counter
     for _ in range(1_000):
-        counter += 1  # read-modify-write: NOT atomic without GIL
+        counter += 1  # read-modify-write: not atomic without the GIL
 
 
 counter: int = 0
@@ -73,27 +119,46 @@ for thread in threads:
 With the GIL: `counter` probably equals 2,000. Without: it's some unpredictable number below 2,000 -- two threads read
 the same value, both increment it, and one write clobbers the other.
 
-As the GIL fades, Python developers face the same concurrency challenges that Rust, Go, Java, and C++ developers have
-dealt with for decades. Those ecosystems built tooling: [Loom](https://github.com/tokio-rs/loom) and
+The toy counter understates the case. The Quansight team's free-threading work has turned up concrete receipts: a
+[24-year-old data race in `scipy.signal`](https://labs.quansight.org/blog/free-threaded-one-year-recap) the GIL had
+masked since the function was written, a numpy crash on parallel `.sum()` calls reporting
+`"Identity cache already includes the item"`, a Pillow segfault from C API patterns the GIL had been serializing into
+safety. The test suites that passed under the GIL passed because the GIL was doing the locking for them.
+
+Performance is the other concern. [PEP 779](https://peps.python.org/pep-0779/), the criteria document for
+free-threading's supported status, pegs the budget at 10% CPU and 15% memory overhead versus the GIL build, with a hard
+ceiling of 20%. Python 3.13 shipped at roughly 40% overhead. Python 3.14 lands near 5 to 10% depending on platform. The
+"free-threading hurts performance" critique held in 2024; the CPython team's work since has closed most of the gap for
+CPU-bound code, though reference-counting-heavy workloads still pay a bigger tax.
+
+Three objections recur. _"Most Python code doesn't use threads. asyncio and multiprocessing cover it."_ asyncio and
+multiprocessing do cover I/O-bound application code. Libraries are a different story: numpy, PyTorch, scientific stacks,
+and anything wrapping native code with callbacks all run on threads, whether the application above them knows it or not.
+_"Subinterpreters would have been the right answer."_ Subinterpreters share less state and are easier to reason about,
+but they require copying data across the boundary. Workloads that need shared-memory parallelism need free-threading.
+_"The GIL is good."_ For library authors who don't want to think about thread safety, yes. That same comfort is why
+Python's concurrency-testing tooling has lagged behind other ecosystems.
+
+As the GIL fades, Python developers face the same concurrency challenges Rust, Go, Java, and C++ have dealt with for
+decades. Those ecosystems built tooling: [Loom](https://github.com/tokio-rs/loom) and
 [Shuttle](https://github.com/awslabs/shuttle) in Rust, the [race detector](https://go.dev/blog/race-detector) in Go,
 [Lincheck](https://github.com/JetBrains/lincheck) and [Thread Weaver](https://github.com/google/thread-weaver) in
 JVM-land, [Coyote](https://microsoft.github.io/coyote/) in .NET, [Jepsen](https://jepsen.io/) for distributed systems.
-
 Python's concurrency testing story has been thin because the GIL made it less urgent.
 [blanket](https://github.com/larryhastings/blanket) is the first serious entry in what will need to become a richer
 ecosystem.
 
 ## Synchronization primitives
 
-Before we can test multithreaded code, we need to understand the tools threads use to coordinate. Python's
-[`threading`](https://docs.python.org/3/library/threading.html) module provides several **synchronization primitives**
--- objects that let threads signal each other and take turns accessing shared state.
+blanket wraps the seven synchronization primitives Python's
+[`threading`](https://docs.python.org/3/library/threading.html) module ships. Each one solves a specific coordination
+problem, and each creates a specific class of testing nightmare.
 
 ### Lock
 
-A [`Lock`](https://docs.python.org/3/library/threading.html#threading.Lock) is the most basic primitive. At any moment
-it is either _unlocked_ or _locked_. Only one thread can hold it at a time. Any other thread calling `acquire()` while
-the lock is held blocks -- sits idle -- until the holder calls `release()`.
+A [`Lock`](https://docs.python.org/3/library/threading.html#threading.Lock) is single-occupancy: at any moment one
+thread holds it. Any other thread calling `acquire()` blocks until the holder calls `release()`. Reach for it when "two
+threads doing this at once" is the bug.
 
 A web server tracking active requests needs a lock to safely update the counter from multiple threads:
 
@@ -148,9 +213,9 @@ sequenceDiagram
 
 ### Barrier
 
-A [`Barrier(n)`](https://docs.python.org/3/library/threading.html#threading.Barrier) makes `n` threads wait until all of
-them have called `barrier.wait()`. The first `n - 1` arrivals block. When the last arrives, all `n` are released at
-once. It is a rendezvous point: no one proceeds until everyone is ready.
+A [`Barrier(n)`](https://docs.python.org/3/library/threading.html#threading.Barrier) is a starting gate for `n` threads.
+The first `n - 1` arrivals block; when the `n`-th calls `wait()`, the Barrier releases all of them at once. Reach for it
+when threads have to hit a checkpoint together before any can move on.
 
 A data pipeline that runs three parallel preprocessing steps before the merge phase:
 
@@ -190,11 +255,10 @@ sequenceDiagram
 
 ### RLock
 
-An [`RLock`](https://docs.python.org/3/library/threading.html#threading.RLock) (reentrant lock) is a Lock that the
-_same_ thread can acquire multiple times without deadlocking itself. It tracks an internal count: each `acquire()`
-increments it, each `release()` decrements it, and the lock is fully released only when the count reaches zero.
-
-Useful when a locked method calls another method that also needs the lock:
+An [`RLock`](https://docs.python.org/3/library/threading.html#threading.RLock) (reentrant lock) is a Lock that doesn't
+deadlock against itself. The same thread can `acquire()` it any number of times. The lock tracks a counter and releases
+for real once the counter hits zero. Reach for it when a locked method might call another locked method on the same
+object:
 
 ```python
 import threading
@@ -237,9 +301,9 @@ sequenceDiagram
 
 ### Event
 
-An [`Event`](https://docs.python.org/3/library/threading.html#threading.Event) is a boolean flag shared between threads.
-It starts unset. Any thread can call `event.wait()` to block until the flag is set; another thread calls `event.set()`
-to unblock all waiters at once. `event.clear()` resets it.
+An [`Event`](https://docs.python.org/3/library/threading.html#threading.Event) is a one-way switch. It starts unset.
+`wait()` blocks until someone calls `set()`; `set()` unblocks every waiter at once; `clear()` flips it back. Reach for
+it to signal "the system is ready, you may now proceed."
 
 A background configuration loader that signals workers when startup is complete:
 
@@ -285,9 +349,10 @@ sequenceDiagram
 
 ### Condition
 
-A [`Condition`](https://docs.python.org/3/library/threading.html#threading.Condition) combines a lock with a
-notification mechanism. Threads call `wait()` to release the lock and sleep until another thread calls `notify()` or
-`notify_all()`. Used in producer-consumer patterns where consumers sleep when the queue is empty.
+A [`Condition`](https://docs.python.org/3/library/threading.html#threading.Condition) is a lock plus a way to wait for
+state to change. `wait()` releases the lock and sleeps; another thread changes state and calls `notify()` or
+`notify_all()`; the sleeper wakes, reacquires the lock, and rechecks. Reach for it in producer-consumer patterns where
+consumers must sleep when the queue is empty.
 
 ```python
 import threading
@@ -337,9 +402,9 @@ sequenceDiagram
 
 ### Semaphore
 
-A [`Semaphore(n)`](https://docs.python.org/3/library/threading.html#threading.Semaphore) maintains an internal counter
-starting at `n`. `acquire()` decrements it (blocking when it reaches zero); `release()` increments it. Up to `n` threads
-can hold it simultaneously.
+A [`Semaphore(n)`](https://docs.python.org/3/library/threading.html#threading.Semaphore) is a counter. It starts at `n`.
+`acquire()` decrements it (blocking when it hits zero); `release()` increments. Up to `n` threads can hold it at once.
+Reach for it to cap a bounded resource: a connection pool, a parallelism limit.
 
 A connection pool that limits concurrent database connections to 5:
 
@@ -353,31 +418,6 @@ def query_database(sql: str) -> str:
     with connection_semaphore:  # blocks if 5 connections already active
         # ... execute query ...
         return "result"
-```
-
-### BoundedSemaphore
-
-A [`BoundedSemaphore(n)`](https://docs.python.org/3/library/threading.html#threading.BoundedSemaphore) is identical to
-`Semaphore` except it raises a `ValueError` if `release()` is called more times than `acquire()`. A plain `Semaphore`
-silently lets the counter drift above the initial value, which can mask bugs where a thread releases a resource it never
-acquired. `BoundedSemaphore` catches that immediately.
-
-A rate limiter that prevents more than 2 concurrent API calls:
-
-```python
-import threading
-
-rate_limiter = threading.BoundedSemaphore(2)
-
-
-def call_api(endpoint: str) -> str:
-    with rate_limiter:
-        # ... at most 2 threads here at once ...
-        return "response"
-
-
-# A bug: releasing without a matching acquire
-rate_limiter.release()  # raises ValueError: semaphore released too many times
 ```
 
 ```mermaid
@@ -402,6 +442,31 @@ sequenceDiagram
     Q2->>S: release() (count: 0→1)
     Q3->>S: release() (count: 1→2)
     deactivate S
+```
+
+### BoundedSemaphore
+
+A [`BoundedSemaphore(n)`](https://docs.python.org/3/library/threading.html#threading.BoundedSemaphore) is a `Semaphore`
+that refuses to drift above its initial value. Call `release()` one too many times and it raises `ValueError`. A plain
+`Semaphore` lets the counter climb past the cap, leaving the limit broken for the rest of the program. Reach for it when
+stray releases should raise an exception rather than corrupt state.
+
+A rate limiter that prevents more than 2 concurrent API calls:
+
+```python
+import threading
+
+rate_limiter = threading.BoundedSemaphore(2)
+
+
+def call_api(endpoint: str) -> str:
+    with rate_limiter:
+        # ... at most 2 threads here at once ...
+        return "response"
+
+
+# A bug: releasing without a matching acquire
+rate_limiter.release()  # raises ValueError: semaphore released too many times
 ```
 
 ```mermaid
@@ -431,10 +496,15 @@ sequenceDiagram
 
 ---
 
-blanket wraps all seven primitives with the same interface your production code already uses, so worker threads need no
-changes.
+Each of these primitives is non-deterministic by design. The OS scheduler picks which thread acquires a contended `Lock`
+first, which order a `Barrier` releases its waiters, which `Condition` waiter `notify()` wakes; it picks differently
+each run. Production code relies on that flexibility: a lock exists to resolve contention without callers specifying an
+order. As Edward Lee put it in
+[_The Problem with Threads_](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2006/EECS-2006-1.pdf): _"threads represent a
+huge step. They discard the most essential and appealing properties of sequential computation: understandability,
+predictability, and determinism."_
 
-## The problem with testing threads
+## Why multithreaded Python tests are flaky
 
 Three threads share a lock and a barrier:
 
@@ -490,9 +560,6 @@ Now imagine this isn't a toy example but a connection pool, a cache invalidation
 up only when thread B acquires the lock _before_ thread A has released its resource. You can't write a regression test
 for that because you can't tell the OS "run B next."
 
-**Synchronization primitives are non-deterministic by design.** They have to be -- the whole point of a lock is to
-manage contention without requiring a specific ordering. But that same property makes them untestable in isolation.
-
 ### The GIL used to hide this
 
 The [Global Interpreter Lock](https://docs.python.org/3/glossary.html#term-GIL) masked many threading bugs for decades.
@@ -542,11 +609,7 @@ timeline
     2026 : Python 3.15 — stable ABI (abi3t), new threading utils, Tachyon profiler
 ```
 
-Larry Hastings' [Gilectomy project](https://github.com/larryhastings/gilectomy), started years before PEP 703, was an
-early experimental attempt to remove the GIL from CPython -- which gives him a practical grounding in the concurrency
-problems free-threading introduces.
-
-## Enter blanket
+## Enter blanket: deterministic threading control
 
 [blanket](https://pypi.org/project/blanket/) (v1.0, MIT license, Python 3.11+) replaces your `threading` synchronization
 primitives with wrapped versions that **stop and wait for instructions** instead of making their own scheduling
@@ -630,6 +693,13 @@ The changes are minimal:
 
 The worker code is _unchanged_. It still does `with lock:` and `barrier.wait()` like it would in production. The workers
 have no idea they're being orchestrated.
+
+Larry borrows Java's vocabulary for the mechanism. When a worker calls a blanket method, the primitive **parks** the
+thread until the scheduler issues a **permit** to proceed. The linearized sequence of permits the scheduler hands out is
+the scenario's **tempo**. The move in a blanket test, as he puts it, is to "decide what the tempo should be, then make
+it so." The README's motto says it shorter:
+
+> _Your test should be effectively single-threaded. If it isn't, you haven't blanketed hard enough. Slow it down._
 
 ## Wrapping, not reimplementing
 
@@ -1184,17 +1254,18 @@ patched_update = inject_call(pause, loc)
 # patched_update pauses right before the write, letting you interleave another thread
 ```
 
-## The concurrency testing landscape
+## Python concurrency testing tools, compared
 
 Testing concurrent code has been tackled differently across ecosystems. Understanding where blanket fits helps you know
 when to reach for it versus something else.
 
-| Approach                  | Tools                                                                                                                                                                                                                    | How it works                                                                                                     |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| **Bug discovery**         | [Loom](https://github.com/tokio-rs/loom) (Rust), [Shuttle](https://github.com/awslabs/shuttle) (Rust/AWS), [Coyote](https://microsoft.github.io/coyote/) (.NET), [Lincheck](https://github.com/JetBrains/lincheck) (JVM) | Run the test many times with different scheduling choices to systematically find interleavings that trigger bugs |
-| **Runtime detection**     | [Go Race Detector](https://go.dev/blog/race-detector), [ThreadSanitizer](https://github.com/google/sanitizers) (C/C++)                                                                                                   | Instrument memory accesses and flag races as they happen in real runs                                            |
-| **Deterministic control** | **blanket** (Python), [kotlinx-coroutines-test](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/) (Kotlin), [Thread Weaver](https://github.com/google/thread-weaver) (Java)                        | Declare the exact interleaving you want; the tool guarantees it executes that way                                |
-| **Scenario generation**   | [Hypothesis](https://hypothesis.readthedocs.io/en/latest/stateful.html) (Python), [Jepsen](https://jepsen.io/) (distributed systems)                                                                                     | Generate test programs automatically from state machine rules or fault injection                                 |
+| Approach                     | Tools                                                                                                                                                                                                                                                                                                                                                                                   | How it works                                                                                                                      |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| **Bug discovery**            | [Loom](https://github.com/tokio-rs/loom) (Rust), [Shuttle](https://github.com/awslabs/shuttle) (Rust/AWS), [Coyote](https://microsoft.github.io/coyote/) (.NET), [Lincheck](https://github.com/JetBrains/lincheck) (JVM)                                                                                                                                                                | Run the test many times with different scheduling choices to systematically find interleavings that trigger bugs                  |
+| **Runtime detection**        | [Go Race Detector](https://go.dev/blog/race-detector), [ThreadSanitizer](https://github.com/google/sanitizers) (C/C++)                                                                                                                                                                                                                                                                  | Instrument memory accesses and flag races as they happen in real runs                                                             |
+| **Deterministic control**    | **blanket** (Python), [kotlinx-coroutines-test](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/) (Kotlin), [Thread Weaver](https://github.com/google/thread-weaver) (Java)                                                                                                                                                                                       | Declare the exact interleaving you want; the tool guarantees it executes that way                                                 |
+| **Scenario generation**      | [Hypothesis](https://hypothesis.readthedocs.io/en/latest/stateful.html) (Python), [Jepsen](https://jepsen.io/) (distributed systems)                                                                                                                                                                                                                                                    | Generate test programs automatically from state machine rules or fault injection                                                  |
+| **Deterministic simulation** | [FoundationDB](https://www.thestrangeloop.com/2014/testing-distributed-systems-w-slash-deterministic-simulation.html), [TigerBeetle](https://tigerbeetle.com/blog/2023-07-06-simulation-testing-for-liveness/), [Antithesis](https://antithesis.com/blog/is_something_bugging_you/), [WarpStream](https://www.warpstream.com/blog/deterministic-simulation-testing-for-our-entire-saas) | Run the system inside a virtualized event loop driven by a single RNG seed; reuse the seed to replay a known failure step by step |
 
 ### Stateless model checkers
 
@@ -1328,6 +1399,14 @@ declare a failure scenario, force it, verify correctness.
 blanket doesn't explore interleavings automatically, detect races at runtime, or generate scenarios. It lets you declare
 a specific interleaving by hand and guarantees it executes that way every time.
 
+It shares the goal of deterministic replay with deterministic simulation testing
+([FoundationDB](https://www.thestrangeloop.com/2014/testing-distributed-systems-w-slash-deterministic-simulation.html),
+[TigerBeetle](https://tigerbeetle.com/blog/2023-07-06-simulation-testing-for-liveness/),
+[Antithesis](https://antithesis.com/blog/is_something_bugging_you/)) and inverts the user model. DST's determinism is
+seed-driven: you reuse an RNG seed to replay a failure that randomness once produced. blanket's is declarative: you
+write the scenario you want, by hand. DST scales by exploring a state space. blanket scales as engineers encode specific
+failures as regression tests.
+
 Best for:
 
 - **Regression tests for known bugs.** Pin the exact interleaving that triggers a bug. Fix it. Test stays green.
@@ -1335,9 +1414,9 @@ Best for:
 - **Documentation of concurrency contracts.** A blanket test reads like a specification.
 
 The trade-off: you have to know what scenario to test. blanket won't discover bugs, it reproduces ones you understand.
-Ideal workflow: an SMC tool finds bugs, blanket pins them as regression tests.
+Ideal workflow: an SMC tool or DST harness finds bugs, blanket pins them as regression tests.
 
-## A complete test suite example
+## A complete test suite example: thread-safe LRU cache
 
 Testing a thread-safe LRU cache:
 
@@ -1472,14 +1551,14 @@ def test_read_prevents_eviction() -> None:
 
 Each test forces one interleaving and asserts the exact outcome. No flakiness. 100% reproducible.
 
-## Getting started
+## Getting started with blanket
 
 ```bash
-pip install blanket
+uv pip install blanket
 ```
 
-Requires Python 3.11+ and depends on [big](https://github.com/larryhastings/big). The bytecode injector optionally needs
-the [bytecode](https://pypi.org/project/bytecode/) package.
+Requires Python 3.11+ and depends on [big](https://github.com/larryhastings/big). The bytecode injector also needs the
+[bytecode](https://pypi.org/project/bytecode/) package when you reach for it.
 
 ### The shape of every blanket test
 
@@ -1509,5 +1588,47 @@ Every blanket test follows three phases:
 | Test code that creates its own locks                 | `scenario.inject(module)`               |
 | Add sync points to lockless code                     | `blanket.injector.inject_call(fn, loc)` |
 
-Whether you're maintaining a library that needs to work under free-threading, writing new concurrent code, or pinning
-down a flaky test -- `pip install blanket` and try it.
+## Common pitfalls
+
+- **Calling a blanket primitive outside `with scenario:`**. The primitives need an active scheduler. Outside the block
+  they hang or raise.
+- **Skipping `scenario.api(primitive)`**. The high-level helpers (`relay`, `cycle`, `allocate`) live on the API object,
+  not on the primitive handle the workers use.
+- **Calling a regulated primitive from your scheduler code**. The scheduler thread holds the scenario; a regulated call
+  from it parks against itself. Use `scenario.raw(primitive)` to bypass regulation when the scheduler needs to touch a
+  primitive directly.
+- **Forgetting `tx.unblock()` after `tx.expire()`**. `expire()` arms the timeout. The transaction stays parked until
+  `unblock()` releases it.
+- **Mixing `scenario.thread(...)` with bare `threading.Thread`**. The scenario joins managed threads on exit; bare
+  threads it doesn't know about can escape the block and race the scheduler.
+
+## FAQ
+
+- **Why is my multithreaded Python test flaky?** The test depends on which thread the OS scheduler picks next. The
+  scheduler picks differently on each run, so a race condition that fires one time in a thousand stays one time in a
+  thousand. blanket lets your test make the scheduling decisions instead.
+- **How do I write a deterministic concurrency test in Python?** Wrap each `threading` primitive in its blanket
+  counterpart inside a `Scenario`, then drive execution from the main thread with `relay`, `cycle`, or `assign`. Each
+  method call on a blanket primitive parks until the scheduler issues a permit. Runs reproduce the same order.
+- **How is blanket different from Loom, Shuttle, or Coyote?** Stateless model checkers explore many interleavings to
+  discover bugs. blanket runs one interleaving you write by hand. The two approaches pair well: an SMC tool finds a
+  race, you pin it with a blanket regression test.
+- **Does blanket work with pytest?** Yes. A blanket test is a regular Python function that runs to completion. Put it
+  inside a pytest test function and pytest reports pass or fail in the usual way.
+- **Does blanket work with asyncio?** blanket targets the `threading` module. Tasks coordinated with asyncio primitives
+  (`asyncio.Lock`, `asyncio.Event`) sit outside its scope. For deterministic asyncio tests, see
+  [pytest-asyncio](https://pytest-asyncio.readthedocs.io/) and the asyncio event loop's own debug hooks.
+- **Does blanket work with free-threaded Python?** Yes. blanket wraps the real `threading` primitives, so whatever
+  semantics those primitives carry in your build (GIL or free-threaded) come along.
+- **Can blanket find concurrency bugs automatically?** No. blanket reproduces a scenario you describe. To discover
+  unknown races, pair it with [Hypothesis](https://hypothesis.readthedocs.io/) for property-based testing, a
+  `ThreadSanitizer`-style runtime detector, or a stateless model checker.
+
+## Related reading
+
+- [PyCon US 2026 Packaging Summit Recap](/posts/pycon-us-2026-packaging-summit-recap) and
+  [Typing Summit Recap](/posts/pycon-us-2026-typing-summit-recap) for the rest of my PyCon US 2026 coverage.
+- [PyTexas 2026 Recap](/posts/pytexas-2026-recap) for more on free-threading and the Python 3.14 rollout.
+
+If you maintain a library that needs to work under free-threading, write new concurrent code, or want to pin down a
+flaky test, run `uv pip install blanket` and try it.
