@@ -1,4 +1,38 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pycon on Bernát Gábor — Python packaging, tox, virtualenv &amp; open source</title><link>https://bernat.tech/tags/pycon/</link><description>Engineering notes from Bernát Gábor — PyPA maintainer of tox, virtualenv, pipx, filelock, and platformdirs. Python packaging, type hints, and supply chain security.</description><generator>Hugo 0.161.1</generator><language>en-US</language><lastBuildDate>Fri, 15 May 2026 23:00:00 +0000</lastBuildDate><atom:link href="https://bernat.tech/tags/pycon/index.xml" rel="self" type="application/rss+xml"/><item><title>PyCon US 2026 Packaging Summit Recap</title><link>https://bernat.tech/posts/pycon-us-2026-packaging-summit-recap/</link><pubDate>Fri, 15 May 2026 23:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pycon-us-2026-packaging-summit-recap/</guid><description>&amp;lt;p&amp;gt;The &amp;lt;a href=&amp;#34;https://us.pycon.org/2026/events/packaging-summit/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;PyCon US 2026 Packaging Summit&amp;lt;/a&amp;gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pycon on Bernát Gábor — Python packaging, tox, virtualenv &amp; open source</title><link>https://bernat.tech/tags/pycon/</link><description>Engineering notes from Bernát Gábor — PyPA maintainer of tox, virtualenv, pipx, filelock, and platformdirs. Python packaging, type hints, and supply chain security.</description><generator>Hugo 0.161.1</generator><language>en-US</language><lastBuildDate>Sun, 17 May 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://bernat.tech/tags/pycon/index.xml" rel="self" type="application/rss+xml"/><item><title>Deterministic Multithreaded Testing in Python with blanket</title><link>https://bernat.tech/posts/blanket-deterministic-threading/</link><pubDate>Sun, 17 May 2026 00:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/blanket-deterministic-threading/</guid><description>&amp;lt;div class=&amp;#34;alert alert-info&amp;#34;&amp;gt;
+&amp;lt;p class=&amp;#34;alert-title&amp;#34;&amp;gt;&amp;lt;i class=&amp;#34;fa-solid fa-circle-info&amp;#34; aria-hidden=&amp;#34;true&amp;#34;&amp;gt;&amp;lt;/i&amp;gt; TLDR:&amp;lt;/p&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#why-multithreaded-python-tests-are-flaky&amp;#34;&amp;gt;&amp;lt;strong&amp;gt;The problem&amp;lt;/strong&amp;gt;&amp;lt;/a&amp;gt;
+: testing multithreaded code is hard because the OS
+scheduler decides which thread runs when, making race conditions nearly impossible to reproduce in a test suite.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#enter-blanket-deterministic-threading-control&amp;#34;&amp;gt;&amp;lt;strong&amp;gt;The solution&amp;lt;/strong&amp;gt;&amp;lt;/a&amp;gt;
+: &amp;lt;a href=&amp;#34;https://pypi.org/project/blanket/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;blanket&amp;lt;/a&amp;gt;
+wraps real &amp;lt;code&amp;gt;threading&amp;lt;/code&amp;gt; primitives (Lock, Condition, Event, Barrier, Semaphore) and lets your test act as the
+scheduler, controlling which thread proceeds at each step.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#why-now&amp;#34;&amp;gt;&amp;lt;strong&amp;gt;Why now&amp;lt;/strong&amp;gt;&amp;lt;/a&amp;gt;
+: free-threaded Python (no &amp;lt;a href=&amp;#34;https://docs.python.org/3/glossary.html#term-GIL&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;GIL&amp;lt;/a&amp;gt;
+) shipped
+experimentally in 3.13, is &amp;lt;a href=&amp;#34;https://docs.python.org/3.14/whatsnew/3.14.html&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;officially supported in 3.14&amp;lt;/a&amp;gt;
+, and
+keeps maturing in &amp;lt;a href=&amp;#34;https://docs.python.org/3.15/whatsnew/3.15.html&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;3.15&amp;lt;/a&amp;gt;
+. The GIL was hiding thread-safety bugs you
+didn&amp;amp;rsquo;t know you had; without it, they surface.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#how-it-works-under-the-hood&amp;#34;&amp;gt;&amp;lt;strong&amp;gt;How it works&amp;lt;/strong&amp;gt;&amp;lt;/a&amp;gt;
+: every method call on a blanket primitive becomes a &amp;lt;em&amp;gt;transaction&amp;lt;/em&amp;gt;
+that parks at a &amp;lt;em&amp;gt;scheduler block&amp;lt;/em&amp;gt;. Your test unblocks transactions in whatever order you want, making execution 100%
+deterministic.&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;#34;#python-concurrency-testing-tools-compared&amp;#34;&amp;gt;&amp;lt;strong&amp;gt;What makes it different&amp;lt;/strong&amp;gt;&amp;lt;/a&amp;gt;
+: unlike stateless model checkers
+(&amp;lt;a href=&amp;#34;https://github.com/tokio-rs/loom&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;Loom&amp;lt;/a&amp;gt;
+, &amp;lt;a href=&amp;#34;https://github.com/awslabs/shuttle&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;Shuttle&amp;lt;/a&amp;gt;
+,
+&amp;lt;a href=&amp;#34;https://www.microsoft.com/en-us/research/project/chess-find-and-reproduce-heisenbugs-in-concurrent-programs/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;CHESS&amp;lt;/a&amp;gt;
+)
+that &amp;lt;em&amp;gt;discover&amp;lt;/em&amp;gt; bugs by exploring interleavings automatically, blanket lets you &amp;lt;em&amp;gt;declare&amp;lt;/em&amp;gt; specific scenarios by
+hand, useful for regression tests of known bugs and for full coverage of rare code paths.&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;&amp;lt;p&amp;gt;Most multithreaded Python codebases keep at least one test marked &amp;lt;code&amp;gt;@pytest.mark.flaky(reruns=5)&amp;lt;/code&amp;gt;: the one that fails
+once in a thousand because of a race condition you can&amp;amp;rsquo;t reproduce on demand. The bug is a specific sequence of thread
+interactions. You don&amp;amp;rsquo;t get to pick the sequence; the OS scheduler does. You ship the retry and hope.&amp;lt;/p&amp;gt;</description><category>python</category><category>testing</category><category>concurrency</category><category>threading</category><category>free-threading</category><category>blanket</category><category>pycon</category><category>race-condition</category><category>gil</category></item><item><title>PyCon US 2026 Packaging Summit Recap</title><link>https://bernat.tech/posts/pycon-us-2026-packaging-summit-recap/</link><pubDate>Fri, 15 May 2026 23:00:00 +0000</pubDate><author>Bernát Gábor</author><guid>https://bernat.tech/posts/pycon-us-2026-packaging-summit-recap/</guid><description>&amp;lt;p&amp;gt;The &amp;lt;a href=&amp;#34;https://us.pycon.org/2026/events/packaging-summit/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;PyCon US 2026 Packaging Summit&amp;lt;/a&amp;gt;
 ran Friday May 15, 2026, from
 1:45 PM to 5:45 PM in Room 201A of the Long Beach Convention Center. Three talks, nine lightning talks, six roundtable
 discussions. Organized by &amp;lt;a href=&amp;#34;https://pradyunsg.me/&amp;#34; target=&amp;#34;_blank&amp;#34; rel=&amp;#34;noopener noreferrer&amp;#34;&amp;gt;Pradyun Gedam&amp;lt;/a&amp;gt;
