@@ -41,14 +41,15 @@ presented it at [PyCon US 2026](https://us.pycon.org/2026/schedule/presentation/
 author of [Argument Clinic](https://peps.python.org/pep-0436/), release manager for Python 3.4 and 3.5, and the engineer
 behind the original [Gilectomy](https://github.com/larryhastings/gilectomy) experiment to remove the GIL.
 
-> [!NOTE]
-> **When to use blanket:**
->
-> - You have a flaky concurrency test you can't reproduce on demand.
-> - You want a regression test that pins one specific thread interleaving.
-> - You're porting a library to free-threaded Python and need confidence the locks behave under both schedulers.
-> - You want test coverage on an `except` branch that fires under one specific ordering.
-> - You want a concurrency test that reads as a specification of what should happen.
+{{< callout kind="tip" title="When to use blanket:" >}}
+
+- You have a flaky concurrency test you can't reproduce on demand.
+- You want a regression test that pins one specific thread interleaving.
+- You're porting a library to free-threaded Python and need confidence the locks behave under both schedulers.
+- You want test coverage on an `except` branch that fires under one specific ordering.
+- You want a concurrency test that reads as a specification of what should happen.
+
+{{< /callout >}}
 
 ## Quick start
 
@@ -114,14 +115,15 @@ for thread in threads:
     thread.join()
 ```
 
-Run this with the GIL and `counter` ends at 2,000 in nearly every run, but the GIL doesn't make `+=` atomic.
-`counter += 1` compiles to multiple bytecodes (load, add, store), and the GIL only releases between bytecodes (default
-switch interval is 5 ms via
-[`sys.setswitchinterval`](https://docs.python.org/3/library/sys.html#sys.setswitchinterval)). For a race, the runtime
-has to switch threads inside the roughly 35-nanosecond window between the load and the store. With two threads and a
-thousand iterations, that almost never happens, so the bug stays latent. Free-threading removes the buffer: two threads
-can read the same value, both increment it, and one write clobbers the other, leaving `counter` at some unpredictable
-number below 2,000.
+Run this with the GIL and `counter` ends at 2,000 every time. The program is too short to expose the race, but the GIL
+doesn't make `+=` atomic. `counter += 1` compiles to multiple bytecodes (load, add, store), and the GIL releases between
+bytecodes (default switch interval 5 ms, set in
+[`Python/ceval_gil.c`](https://github.com/python/cpython/blob/main/Python/ceval_gil.c) and adjustable via
+[`sys.setswitchinterval`](https://docs.python.org/3/library/sys.html#sys.setswitchinterval)). Two threads doing a
+thousand iterations finish in roughly 100 µs, far below one switch interval, so they run serially in practice. Crank the
+loop to ten million iterations or sprinkle in any call that releases the GIL, and the race shows up even under the GIL.
+Free-threading removes the buffer entirely: two threads run in parallel on separate cores, both read the same value,
+both increment it, and one write clobbers the other, leaving `counter` at some unpredictable number below 2,000.
 
 The toy counter understates the case. The Quansight team's free-threading work has turned up concrete receipts: a
 [24-year-old data race in `scipy.signal`](https://labs.quansight.org/blog/free-threaded-one-year-recap) the GIL had
