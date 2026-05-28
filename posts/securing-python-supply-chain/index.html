@@ -19,7 +19,7 @@ Updated
 </span><span class=separator>•</span>
 <span class=tag><a href=/tags/pypi/>Pypi</a>
 </span><span class=separator>•</span>
-<span class=tag><a href=/tags/pip/>Pip</a></span></div></div></header><div class="post-wrapper has-toc"><div class=post-content><div class="alert alert-info"><p class=alert-title><i class="fa-solid fa-circle-info" aria-hidden=true></i> TLDR:</p><p>Layer your defenses and don&rsquo;t trust any single control. Use Ruff with security rules to catch bugs in your code before
+<span class=tag><a href=/tags/pip/>Pip</a></span></div></div></header><div class="post-wrapper has-toc"><div class=post-content><img class=post-hero src=/posts/securing-python-supply-chain/splash.webp alt="Defense in Depth: A Practical Guide to Python Supply Chain Security"><div class="alert alert-info"><p class=alert-title><i class="fa-solid fa-circle-info" aria-hidden=true></i> TLDR:</p><p>Layer your defenses and don&rsquo;t trust any single control. Use Ruff with security rules to catch bugs in your code before
 they ship. Pin all your dependencies with cryptographic hashes using <code>uv lock</code> or <code>uv pip compile --generate-hashes</code>
 so nobody can swap out packages on you. Run <a href=https://github.com/pypa/pip-audit target=_blank rel="noopener noreferrer"><code>pip-audit</code></a>
 in CI to catch known CVEs
