@@ -37,9 +37,7 @@ interactions. You don't get to pick the sequence; the OS scheduler does. You shi
 [blanket](https://github.com/larryhastings/blanket) takes the scheduler's job. Your test decides which thread acquires
 the lock next, which order barriers release, which waiter `notify()` wakes. The regression test that used to fail one
 run in a thousand now fails (or passes) the same way each run. [Larry Hastings](https://github.com/larryhastings)
-presented it at [PyCon US 2026](https://us.pycon.org/2026/schedule/presentation/51) (I wrote up the
-[Packaging Summit](/posts/pycon-us-2026-packaging-summit-recap) and
-[Typing Summit](/posts/pycon-us-2026-typing-summit-recap) from the same conference). He is a CPython core developer,
+presented it at [PyCon US 2026](https://us.pycon.org/2026/schedule/presentation/51). He is a CPython core developer,
 author of [Argument Clinic](https://peps.python.org/pep-0436/), release manager for Python 3.4 and 3.5, and the engineer
 behind the original [Gilectomy](https://github.com/larryhastings/gilectomy) experiment to remove the GIL.
 
@@ -116,8 +114,14 @@ for thread in threads:
     thread.join()
 ```
 
-With the GIL: `counter` probably equals 2,000. Without: it's some unpredictable number below 2,000 -- two threads read
-the same value, both increment it, and one write clobbers the other.
+Run this with the GIL and `counter` ends at 2,000 in nearly every run, but the GIL doesn't make `+=` atomic.
+`counter += 1` compiles to multiple bytecodes (load, add, store), and the GIL only releases between bytecodes (default
+switch interval is 5 ms via
+[`sys.setswitchinterval`](https://docs.python.org/3/library/sys.html#sys.setswitchinterval)). For a race, the runtime
+has to switch threads inside the roughly 35-nanosecond window between the load and the store. With two threads and a
+thousand iterations, that almost never happens, so the bug stays latent. Free-threading removes the buffer: two threads
+can read the same value, both increment it, and one write clobbers the other, leaving `counter` at some unpredictable
+number below 2,000.
 
 The toy counter understates the case. The Quansight team's free-threading work has turned up concrete receipts: a
 [24-year-old data race in `scipy.signal`](https://labs.quansight.org/blog/free-threaded-one-year-recap) the GIL had
