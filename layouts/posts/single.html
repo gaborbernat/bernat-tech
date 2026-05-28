@@ -43,9 +43,15 @@
       {{- $toc := default .Site.Params.Entry.toc .Params.toc -}}
       <div class="post-wrapper{{ if $toc }} has-toc{{ end }}">
         <div class="post-content">
-          {{ if .Params.featuredImage }}
-            <img src="{{ .Params.featuredImage | relURL }}" alt="Featured image"/>
-          {{ end }}
+          {{- with (.Params.featuredImage | default .Params.image) }}
+            {{- $alt := $.Params.imageAlt | default $.Title -}}
+            {{- $resource := $.Resources.GetMatch . -}}
+            {{- if $resource -}}
+              <img class="post-hero" src="{{ $resource.RelPermalink }}" alt="{{ $alt }}"/>
+            {{- else -}}
+              <img class="post-hero" src="{{ . | relURL }}" alt="{{ $alt }}"/>
+            {{- end -}}
+          {{- end }}
           {{ .Content }}
         </div>
         {{ if $toc }}
