@@ -50,6 +50,56 @@
 {{- end }}
 
 {{- if and (eq .Kind "page") (eq .Section "posts") }}
+{{- /* Copy-to-clipboard buttons on code blocks. JS-only (no extra markup). */ -}}
+<style>
+  .code-block-wrapper { position: relative; }
+  .code-copy-btn {
+    position: absolute; top: 0.5rem; right: 0.5rem;
+    background: rgba(127, 127, 127, 0.18);
+    border: 1px solid rgba(127, 127, 127, 0.35);
+    color: inherit; padding: 0.2rem 0.55rem;
+    font-size: 0.72rem; font-family: inherit;
+    border-radius: 4px; cursor: pointer;
+    opacity: 0; transition: opacity 120ms ease, background 120ms ease;
+    line-height: 1;
+  }
+  .code-block-wrapper:hover .code-copy-btn,
+  .code-copy-btn:focus-visible { opacity: 1; }
+  .code-copy-btn:hover { background: rgba(127, 127, 127, 0.3); }
+  .code-copy-btn.copied { background: rgba(80, 200, 120, 0.35); border-color: rgba(80, 200, 120, 0.6); }
+</style>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.code-block-wrapper').forEach(function (wrap) {
+      if (wrap.querySelector('.code-copy-btn')) return;
+      var code = wrap.querySelector('pre > code');
+      if (!code) return;
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'code-copy-btn';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', function () {
+        var text = code.innerText;
+        var done = function (ok) {
+          btn.textContent = ok ? 'Copied' : 'Failed';
+          if (ok) btn.classList.add('copied');
+          setTimeout(function () { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+        } else {
+          var ta = document.createElement('textarea');
+          ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+          document.body.appendChild(ta); ta.select();
+          try { document.execCommand('copy'); done(true); } catch (e) { done(false); }
+          document.body.removeChild(ta);
+        }
+      });
+      wrap.appendChild(btn);
+    });
+  });
+</script>
 {{- $desc := .Description | default .Summary | plainify -}}
 {{- $post := dict
   "@context" "https://schema.org"
