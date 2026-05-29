@@ -125,6 +125,17 @@ loop to ten million iterations or sprinkle in any call that releases the GIL, an
 Free-threading removes the buffer entirely: two threads run in parallel on separate cores, both read the same value,
 both increment it, and one write clobbers the other, leaving `counter` at some unpredictable number below 2,000.
 
+{{< callout kind="note" title="This counter is a free-threading visualization, not a blanket demo:" >}}
+
+blanket schedules at synchronization-primitive boundaries: it parks a thread when that thread calls `acquire()` or
+`wait()`. A bare `counter += 1` touches no primitive, so blanket has nothing to park on and cannot preempt between the
+load and store bytecodes. The example shows why free-threading surfaces the race; `relay` and `cycle` don't reproduce
+it. For a lockless race like this one, blanket's
+[bytecode injector](#cache-update-race-injecting-sync-points-into-lockless-code) plants a checkpoint between the read
+and the write. See [Counter race: forcing the lost update](#counter-race-forcing-the-lost-update) below.
+
+{{< /callout >}}
+
 The toy counter understates the case. The Quansight team's free-threading work has turned up concrete receipts: a
 [24-year-old data race in `scipy.signal`](https://labs.quansight.org/blog/free-threaded-one-year-recap) the GIL had
 masked since the function was written, a numpy crash on parallel `.sum()` calls reporting
@@ -1259,6 +1270,44 @@ loc = Location.text(update_cache, "cache[key] = new_value")
 patched_update = inject_call(pause, loc)
 # patched_update pauses right before the write, letting you interleave another thread
 ```
+
+### Counter race: forcing the lost update
+
+The `counter += 1` race from [Why now](#why-now) is the canonical lost update: two threads read the same value, both add
+one, and the second write clobbers the first. blanket's scheduler cannot force a switch inside `counter += 1` because
+the read-modify-write hides between bytecodes with no primitive to park on. Split it into explicit statements and the
+injector plants a checkpoint in the gap, so you can run the second thread's whole increment between the first thread's
+read and write:
+
+```python
+import threading
+
+from blanket.injector import Location, inject_call
+
+counter: int = 0
+
+
+def increment() -> None:
+    global counter
+    current = counter  # read
+    counter = current + 1  # write clobbers any update made since the read
+
+
+checkpoint = threading.Event()
+
+
+def pause() -> None:
+    checkpoint.wait()
+
+
+loc = Location.text(increment, "counter = current + 1")
+patched_increment = inject_call(pause, loc)
+# patched_increment pauses right before the write
+```
+
+Drive one thread to the checkpoint, let the other run its full increment, then release the checkpoint. The first
+thread's stale write drops `counter` to 1, never 2. The race that needed ten million iterations to surface by luck now
+reproduces on every run.
 
 ## A complete test suite example: thread-safe LRU cache
 
