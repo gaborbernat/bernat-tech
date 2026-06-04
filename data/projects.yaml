@@ -45,7 +45,7 @@ primary:
     ci: check
   - name: toml-fmt
     org: tox-dev
-    ci: common
+    ci: common,toml_fmt_common_build,toml_fmt_common_test
     pypi: "false"
     no-release: "true"
     monorepo: Monorepo for pyproject-fmt, toml-fmt-common, and tox-toml-fmt
@@ -61,12 +61,6 @@ primary:
     pypi: "false"
     type: pre-commit
     label: pyproject-fmt
-  - name: toml-fmt-common
-    org: tox-dev
-    repo: toml-fmt
-    ci: toml_fmt_common_build,toml_fmt_common_test
-    monorepo: Part of toml-fmt monorepo
-    type: python
   - name: tox-toml-fmt
     org: tox-dev
     repo: toml-fmt
