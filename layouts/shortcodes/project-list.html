@@ -41,8 +41,17 @@
     {{- end -}}
   </tbody>
   {{- if eq ($.Get "footer") "true" }}
+  {{- $footRow := slice `<td></td><td class="summary-label">Total</td>` -}}
+  {{- range $cols -}}
+    {{- $col := trim . " " -}}
+    {{- if eq $col "downloads" -}}{{ $footRow = $footRow | append `<td class="dl-cell col-data summary-downloads"></td>` }}
+    {{- else if eq $col "stars" -}}{{ $footRow = $footRow | append `<td class="col-data summary-stars"></td>` }}
+    {{- else if eq $col "ci" -}}{{ $footRow = $footRow | append `<td class="col-ci"></td>` }}
+    {{- else -}}{{ $footRow = $footRow | append `<td class="col-data"></td>` }}
+    {{- end -}}
+  {{- end -}}
   <tfoot>
-    <tr>{{ $cells | safeHTML }}</tr>
+    <tr class="summary-row">{{ delimit $footRow "" | safeHTML }}</tr>
   </tfoot>
   {{- end }}
 </table>

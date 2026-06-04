@@ -41,6 +41,13 @@ table.project-table thead th {
 table.project-table tfoot th {
   bottom: 0;
 }
+table.project-table tfoot tr.summary-row td {
+  font-weight: bold;
+  border-top: 2px solid #ddd !important;
+}
+table.project-table tfoot tr.summary-row td.summary-label {
+  text-align: right;
+}
 table.project-table .col-ci {
   display: none;
 }

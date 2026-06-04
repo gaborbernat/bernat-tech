@@ -48,6 +48,30 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  function formatCount(n) {
+    return n.toLocaleString("en-US").replace(/,/g, "_");
+  }
+
+  document.querySelectorAll(".project-table tfoot tr.summary-row").forEach(function (row) {
+    var table = row.closest("table");
+    var dlCell = row.querySelector(".summary-downloads");
+    if (dlCell) {
+      var dlSum = 0;
+      table.querySelectorAll("tbody td.dl-cell").forEach(function (cell) {
+        dlSum += parseInt(cell.dataset.monthly, 10) || 0;
+      });
+      dlCell.innerHTML = '<span class="badge badge-green">' + formatCount(dlSum) + "/mo</span>";
+    }
+    var starCell = row.querySelector(".summary-stars");
+    if (starCell) {
+      var starSum = 0;
+      table.querySelectorAll("tbody td.star-cell").forEach(function (cell) {
+        starSum += parseInt(cell.dataset.value, 10) || 0;
+      });
+      starCell.innerHTML = '<span class="badge badge-yellow">' + formatCount(starSum) + "</span>";
+    }
+  });
+
   document.querySelectorAll(".project-table").forEach(function (table) {
     var dlHeader = table.querySelector('th[data-sort="downloads"]');
     if (dlHeader) {
