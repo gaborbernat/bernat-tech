@@ -103,6 +103,9 @@ primary:
   - name: xml-fmt
     org: tox-dev
     ci: check
+  - name: turbohtml
+    org: tox-dev
+    ci: check
   - name: PyVenvManage
     org: tox-dev
     ci: check
