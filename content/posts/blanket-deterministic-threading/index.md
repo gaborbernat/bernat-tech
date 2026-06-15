@@ -1483,8 +1483,10 @@ Every blanket test follows three phases:
 
 ## Common pitfalls
 
-- **Calling a blanket primitive outside `with scenario:`**. The primitives need an active scheduler. Outside the block
-  they hang or raise.
+- **Expecting regulation outside `with scenario:`**. Outside the block, blanket primitives run unregulated: they behave
+  like the real `threading` primitive, slower because of the wrapper, so don't expect scheduler control there. Entering
+  the scenario sets the bit that auto-parks transactions in `BLOCKED`; exiting unsets it and unparks every in-flight
+  transaction parked at a blanket-controlled state.
 - **Skipping `scenario.api(primitive)`**. The high-level helpers (`relay`, `cycle`, `allocate`) live on the API object,
   not on the primitive handle the workers use.
 - **Calling a regulated primitive from your scheduler code**. The scheduler thread holds the scenario; a regulated call
