@@ -278,9 +278,12 @@ whole string building a new one; turbohtml scans it sixteen bytes at a step, see
 given.
 
 The sizing pass leans on a CPython detail worth knowing. A Python `str` is allocated for a known length and a known
-maximum character value, through `PyUnicode_New(length, maxchar)`. Because we computed both numbers in pass one, we get
-a correctly sized buffer in one allocation and write straight into it, no reallocation, no waste. I will come back to
-that `maxchar` in a moment, because it ties into how strings are stored.
+maximum character value, through
+[`PyUnicode_New(length, maxchar)`](https://docs.python.org/3/c-api/unicode.html#c.PyUnicode_New), part of CPython's
+public Unicode C API alongside the `PyUnicode_1BYTE_KIND`, `PyUnicode_DATA`, and `PyUnicode_FindChar` calls in the later
+snippets. Because we computed both numbers in pass one, we get a correctly sized buffer in one allocation and write
+straight into it, no reallocation, no waste. I will come back to that `maxchar` in a moment, because it ties into how
+strings are stored.
 
 ## Going backwards: unescape
 
