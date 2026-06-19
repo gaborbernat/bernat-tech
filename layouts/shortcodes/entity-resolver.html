@@ -1,0 +1,4 @@
+{{- .Page.Store.Set "hasTurboViz" true -}}
+<div class="turbo-viz tv-entity" data-text="{{ .Get "text" | default `&notit;` }}">
+  <noscript>Enable JavaScript to try the interactive entity resolver.</noscript>
+</div>

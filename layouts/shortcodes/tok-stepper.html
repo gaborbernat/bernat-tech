@@ -1,0 +1,4 @@
+{{- .Page.Store.Set "hasTurboViz" true -}}
+<div class="turbo-viz tv-tok" data-text="{{ .Get "text" | default `<p class=&#34;x&#34;>Hi & bye</p>` }}">
+  <noscript>Enable JavaScript to step through the tokenizer state machine.</noscript>
+</div>

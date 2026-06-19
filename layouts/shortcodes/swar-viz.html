@@ -1,0 +1,4 @@
+{{- .Page.Store.Set "hasTurboViz" true -}}
+<div class="turbo-viz tv-swar" data-text="{{ .Get "text" | default "Tom & Jerry" }}" data-target="{{ .Get "target" | default "&" }}">
+  <noscript>Enable JavaScript to try the interactive SWAR has-zero demo.</noscript>
+</div>

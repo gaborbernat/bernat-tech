@@ -18,6 +18,10 @@
     <script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
     {{ $codeCopyJs := resources.Get "js/code-copy.js" | minify | fingerprint }}
     <script defer src="{{ $codeCopyJs.RelPermalink }}" integrity="{{ $codeCopyJs.Data.Integrity }}"></script>
+    {{ if .Page.Store.Get "hasTurboViz" }}
+    {{ $turboViz := resources.Get "js/turbo-viz.js" | minify | fingerprint }}
+    <script defer src="{{ $turboViz.RelPermalink }}" integrity="{{ $turboViz.Data.Integrity }}"></script>
+    {{ end }}
   </section>
 </footer>
 {{ if and hugo.IsServer (.Page.Store.Get "hasCode") }}
