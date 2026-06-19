@@ -146,9 +146,9 @@ same arithmetic the C runs):
 
 {{< swar-viz text="Tom & cats" target="&" >}}
 
-This SWAR test is the portable fallback. It is also what `glibc` uses inside `strlen` and `memchr` when no vector
-instructions are available. On a real CPU we can do better, because the hardware has instructions built for exactly
-this.
+This SWAR test is the portable fallback. It is also what `glibc` uses inside
+[`strlen`](https://en.cppreference.com/w/c/string/byte/strlen) and `memchr` when no vector instructions are available.
+On a real CPU we can do better, because the hardware has instructions built for exactly this.
 
 ### Sixteen bytes with one shuffle
 
@@ -169,8 +169,8 @@ hits = _mm_or_si128(hits, _mm_cmpeq_epi8(bytes, _mm_set1_epi8('>')));
 // ... '"' and '\'' when quoting
 ```
 
-Each `_mm_cmpeq_epi8` sets a lane to `0xFF` on a match and `0x00` otherwise. After the ORs, `hits` has `0xFF` wherever
-any special sits.
+Each [`_mm_cmpeq_epi8`](https://www.felixcloutier.com/x86/pcmpeqb:pcmpeqw:pcmpeqd) sets a lane to `0xFF` on a match and
+`0x00` otherwise. After the ORs, `hits` has `0xFF` wherever any special sits.
 
 These `_mm_*` names are not magic incantations. Each is an SSE2 or SSSE3 _intrinsic_, a thin wrapper the compiler turns
 into a single CPU instruction, and you can look any of them up in the
@@ -182,8 +182,9 @@ On ARM, turbohtml uses a sharper trick borrowed from [pulldown-cmark](https://gi
 and the [simdjson](https://arxiv.org/abs/1902.08318) line of work. Look at the five specials in hex: `"` is `0x22`, `&`
 is `0x26`, `'` is `0x27`, `<` is `0x3C`, `>` is `0x3E`. Their low four bits (the low nibble) are all different. So you
 can build a sixteen-entry table indexed by low nibble, put each special's byte value in its slot, and zero everywhere
-else. One NEON shuffle instruction (`vqtbl1q_u8`) looks up all sixteen lanes against that table at once. Compare the
-lookup result against the original bytes, and a lane matches only when the byte is that special:
+else. One NEON shuffle instruction ([`vqtbl1q_u8`](https://arm-software.github.io/acle/neon_intrinsics/advsimd.html))
+looks up all sixteen lanes against that table at once. Compare the lookup result against the original bytes, and a lane
+matches only when the byte is that special:
 
 ```c
 static const uint8_t NIBBLE_SPECIALS[16] =
@@ -201,7 +202,8 @@ you want to go deeper; their UTF-8 validator classifies bytes
 
 Knowing a block is dirty is only half the job; the writing pass needs to know *which* lanes. The vector compare gives a
 sixteen-lane result, but we want it as a plain integer bitmask we can pick bits out of. On x86 that is one instruction,
-`_mm_movemask_epi8`, which takes the high bit of each of the sixteen lanes and packs them into a sixteen-bit number.
+[`_mm_movemask_epi8`](https://www.felixcloutier.com/x86/pmovmskb), which takes the high bit of each of the sixteen lanes
+and packs them into a sixteen-bit number.
 
 ARM has no such instruction, which tripped me up the first time. The workaround comes from
 [Danila Kutenin](https://developer.arm.com/community/arm-community-blogs/b/servers-and-cloud-computing-blog/posts/porting-x86-vector-bitmask-optimizations-to-arm-neon):
@@ -224,8 +226,9 @@ do {
 } while (mask != 0);
 ```
 
-The clean stretch between two specials moves with one `memcpy`. Only the specials themselves get rewritten. A block with
-no specials skips the loop and copies all sixteen bytes at once.
+The clean stretch between two specials moves with one [`memcpy`](https://en.cppreference.com/w/c/string/byte/memcpy).
+Only the specials themselves get rewritten. A block with no specials skips the loop and copies all sixteen bytes at
+once.
 
 Try it on your own text below. The bytes group into blocks; each block reports whether it is clean (one `memcpy`) or
 dirty (copy the gaps, rewrite the specials), and the running total is the exact output size the counting pass computes.
@@ -262,7 +265,8 @@ __m128i sums = _mm_sad_epu8(extras, _mm_setzero_si128());  // sum all 16 lanes a
 
 [`_mm_sad_epu8`](https://www.felixcloutier.com/x86/psadbw) exists to add up sixteen bytes in one shot. On ARM the nibble
 table from earlier does double duty: a second table maps each special's low nibble to its growth, and one horizontal add
-(`vaddvq_u8`) totals the lanes. Either way, sizing a clean block costs a few instructions and no branches.
+([`vaddvq_u8`](https://arm-software.github.io/acle/neon_intrinsics/advsimd.html)) totals the lanes. Either way, sizing a
+clean block costs a few instructions and no branches.
 
 The measure pass also hands us a shortcut. If the count comes back zero, nothing needs escaping, and the input is
 already its own answer:
@@ -280,10 +284,13 @@ given.
 The sizing pass leans on a CPython detail worth knowing. A Python `str` is allocated for a known length and a known
 maximum character value, through
 [`PyUnicode_New(length, maxchar)`](https://docs.python.org/3/c-api/unicode.html#c.PyUnicode_New), part of CPython's
-public Unicode C API alongside the `PyUnicode_1BYTE_KIND`, `PyUnicode_DATA`, and `PyUnicode_FindChar` calls in the later
-snippets. Because we computed both numbers in pass one, we get a correctly sized buffer in one allocation and write
-straight into it, no reallocation, no waste. I will come back to that `maxchar` in a moment, because it ties into how
-strings are stored.
+public Unicode C API alongside the
+[`PyUnicode_1BYTE_KIND`](https://docs.python.org/3/c-api/unicode.html#c.PyUnicode_1BYTE_KIND),
+[`PyUnicode_DATA`](https://docs.python.org/3/c-api/unicode.html#c.PyUnicode_DATA), and
+[`PyUnicode_FindChar`](https://docs.python.org/3/c-api/unicode.html#c.PyUnicode_FindChar) calls in the later snippets.
+Because we computed both numbers in pass one, we get a correctly sized buffer in one allocation and write straight into
+it, no reallocation, no waste. I will come back to that `maxchar` in a moment, because it ties into how strings are
+stored.
 
 ## Going backwards: unescape
 
@@ -622,9 +629,10 @@ A few more touches keep the inner loop lean, none of them dramatic on their own:
 - **The line and column counters update without a branch.** A newline test becomes a `0` or `1` that is added to the
   line count and used to reset the column, so the per-character bookkeeping carries no jump.
 - **Tag names are lowercased on the way in**, so every later comparison works on already-folded text. Deciding whether
-  `<script>` switches the tokenizer into raw-text mode is then a chain of `memcmp` calls against string literals, with
-  the literal lengths taken at compile time so there is no runtime `strlen`. Checking whether an end tag matches the
-  open raw-text element is a length comparison, a width comparison, and one `memcmp`, never a character loop.
+  `<script>` switches the tokenizer into raw-text mode is then a chain of
+  [`memcmp`](https://en.cppreference.com/w/c/string/byte/memcmp) calls against string literals, with the literal lengths
+  taken at compile time so there is no runtime `strlen`. Checking whether an end tag matches the open raw-text element
+  is a length comparison, a width comparison, and one `memcmp`, never a character loop.
 - **Error handling stays off the hot path.** A failed allocation sets one sticky `oom` flag that is checked once per
   token rather than after every append, so the per-character code carries no error branch.
 - **Duplicate attributes are dropped lazily.** The spec keeps the first occurrence of a repeated attribute name; rather
