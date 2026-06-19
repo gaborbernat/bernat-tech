@@ -172,6 +172,12 @@ hits = _mm_or_si128(hits, _mm_cmpeq_epi8(bytes, _mm_set1_epi8('>')));
 Each `_mm_cmpeq_epi8` sets a lane to `0xFF` on a match and `0x00` otherwise. After the ORs, `hits` has `0xFF` wherever
 any special sits.
 
+These `_mm_*` names are not magic incantations. Each is an SSE2 or SSSE3 _intrinsic_, a thin wrapper the compiler turns
+into a single CPU instruction, and you can look any of them up in the
+[Intel Intrinsics Guide](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html). The NEON `v*` names
+play the same role on ARM and live in
+[Arm's NEON intrinsics reference](https://arm-software.github.io/acle/neon_intrinsics/advsimd.html).
+
 On ARM, turbohtml uses a sharper trick borrowed from [pulldown-cmark](https://github.com/pulldown-cmark/pulldown-cmark)
 and the [simdjson](https://arxiv.org/abs/1902.08318) line of work. Look at the five specials in hex: `"` is `0x22`, `&`
 is `0x26`, `'` is `0x27`, `<` is `0x3C`, `>` is `0x3E`. Their low four bits (the low nibble) are all different. So you
@@ -254,9 +260,9 @@ extras = _mm_add_epi8(extras, _mm_and_si128(_mm_cmpeq_epi8(bytes, _mm_set1_epi8(
 __m128i sums = _mm_sad_epu8(extras, _mm_setzero_si128());  // sum all 16 lanes at once
 ```
 
-`_mm_sad_epu8` exists to add up sixteen bytes in one shot. On ARM the nibble table from earlier does double duty: a
-second table maps each special's low nibble to its growth, and one horizontal add (`vaddvq_u8`) totals the lanes. Either
-way, sizing a clean block costs a few instructions and no branches.
+[`_mm_sad_epu8`](https://www.felixcloutier.com/x86/psadbw) exists to add up sixteen bytes in one shot. On ARM the nibble
+table from earlier does double duty: a second table maps each special's low nibble to its growth, and one horizontal add
+(`vaddvq_u8`) totals the lanes. Either way, sizing a clean block costs a few instructions and no branches.
 
 The measure pass also hands us a shortcut. If the count comes back zero, nothing needs escaping, and the input is
 already its own answer:
