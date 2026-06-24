@@ -130,10 +130,6 @@ primary:
     org: bloomberg
     ci: build.yml,build_dist.yml
     role: co-maintained
-  - name: ipydatagrid
-    org: jupyter-widgets
-    ci: check.yml,jest.yml
-    role: co-maintained
   - name: attrs-strict
     org: bloomberg
     ci: check.yml
