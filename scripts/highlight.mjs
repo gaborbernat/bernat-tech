@@ -34,9 +34,9 @@ for (const file of files) {
     const decoded = code
       .replaceAll("&lt;", "<")
       .replaceAll("&gt;", ">")
-      .replaceAll("&amp;", "&")
       .replaceAll("&#34;", '"')
-      .replaceAll("&#39;", "'");
+      .replaceAll("&#39;", "'")
+      .replaceAll("&amp;", "&");
 
     const highlighted = highlighter.codeToHtml(decoded, {
       lang: LANGS.includes(lang) ? lang : "text",
@@ -52,9 +52,9 @@ for (const file of files) {
     const decoded = code
       .replaceAll("&lt;", "<")
       .replaceAll("&gt;", ">")
-      .replaceAll("&amp;", "&")
       .replaceAll("&#34;", '"')
-      .replaceAll("&#39;", "'");
+      .replaceAll("&#39;", "'")
+      .replaceAll("&amp;", "&");
 
     const highlighted = highlighter.codeToHtml(decoded, {
       lang: "python",
