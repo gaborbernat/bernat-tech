@@ -33,8 +33,8 @@ discussions. Organized by [Pradyun Gedam](https://pradyunsg.me/), [C.A.M. Gerlac
 > - Involved in Python packaging? Consider running for the Packaging Council this fall or becoming a voting
 >   [PSF member](https://www.python.org/psf/membership/) to nominate and vote.
 
-For background, here are the packaging-topic PEPs resolved in the year leading up to the summit (January 2025 through
-May 2026), newest first.
+For background, I list the packaging-topic PEPs resolved in the year leading up to the summit (January 2025 through May
+2026), newest first.
 
 Accepted or Final:
 
@@ -61,7 +61,7 @@ Rejected or Withdrawn:
   richer multi-index priority and trust controls (pointing toward [PEP 766](https://peps.python.org/pep-0766/)) over
   external hosting
 
-Several of these came up during the summit and are referenced inline below.
+Several of these came up during the summit; I reference them inline below.
 
 {{< figure src="pradyun-gedam-welcome.webp" width="900" alt="Pradyun Gedam at the podium opening the Packaging Summit with the shared HackMD notes URL on screen" >}}
 
@@ -88,9 +88,9 @@ adoption waits until [Python 3.13 reaches end-of-life in October 2029](https://d
 3.14+ becomes the oldest supported interpreter and installers can rely on `compression.zstd` being present everywhere.
 
 The earlier version of PEP 777 added a wheel-version field to the filename so existing installers would skip Wheel 2.0
-outputs. Three objections came back from the community: updates would silently stop on old installers, the existing
-wheel-compatibility schema was felt to be sufficient, and the `pip install ./wheel_file.whl` path was not covered. Emma
-Smith worked through this with [Donald Stufft](https://github.com/dstufft) and landed on a different plan.
+outputs. The community raised three objections: updates would silently stop on old installers, they found the existing
+wheel-compatibility schema sufficient, and the PEP missed the `pip install ./wheel_file.whl` path. Emma Smith worked
+through this with [Donald Stufft](https://github.com/dstufft) and landed on a different plan.
 
 The Python packaging ecosystem is too distributed to migrate coherently, so any all-at-once approach has too many
 downsides. The revised PEP 777 makes the minimum change: wheels stay zip files, and the only hard requirement is that
@@ -117,7 +117,7 @@ flowchart TB
 The first sub-PEP is **Zstandard compression**. Emma analyzed the top 1,000 most-downloaded projects on PyPI:
 
 - About 25% smaller wheels on average.
-- About 100 PB of bandwidth saved across just those 1,000 projects.
+- About 100 PB of bandwidth saved across those 1,000 projects.
 - About 36 years of cumulative decompression time saved per month.
 
 A constraint shaped the rollout: pure-Python installers, including pip, prefer to avoid C dependencies. Emma landed
@@ -202,21 +202,20 @@ The three vectors Mike wanted to discuss:
 
 Mike's framing: PyPI is a warehouse, and people leave things in the warehouse. Deletions today move files to cold
 storage but the content stays accessible by URL at `files.pythonhosted.org`. Attackers know this and use the trusted
-hostname to push "install from this URL" links after the index entry has been removed. People also upload non-package
-content (MP3 collections, ebooks, one project that used PyPI as Dropbox), which has to be removed for legal reasons.
+hostname to push "install from this URL" links after removing the index entry. People also upload non-package content
+(MP3 collections, ebooks, one project that used PyPI as Dropbox), which PyPI has to remove for legal reasons.
 
 Mike's questions: should the cold-storage layer eventually be garbage-collected; should users be allowed to delete or
 should that move to admin-only; should the quota system stay tied to user-driven deletion when those deletions do not
-actually free space.
+free space.
 
 In the discussion I suggested a two-phase delete: mark for deletion, then actually delete after one to six months. Mike
 noted the copyrighted-material case where the legal obligation rules out a long grace window.
 
-Related sub-thread: unused API tokens. PyPI has over a million user accounts and many of those accounts have provisioned
-API tokens that never got used. The room agreed PyPI should notify and then delete unused tokens, and that the
-trusted-publishing setup flow should offer to delete the corresponding API token at the same time. A few voices flagged
-the migration cost: applying this to existing tokens without an opt-in path could break CI that was set up and forgotten
-years ago.
+Related sub-thread: unused API tokens. PyPI has over a million user accounts and many of those accounts hold API tokens
+they never used. The room agreed PyPI should notify and then delete unused tokens, and that the trusted-publishing setup
+flow should offer to delete the corresponding API token at the same time. A few voices flagged the migration cost:
+applying this to existing tokens without an opt-in path could break CI that someone set up and forgot years ago.
 
 ### 2. Open-ended releases
 
@@ -225,9 +224,9 @@ to an existing release after the fact, and `==1.0.0` will pick them up. Mike ask
 window (he suggested seven days) and ask publishers to issue post-releases instead.
 
 The discussion landed on a tension. Post-releases are useful for back-filling new-Python or new-architecture wheels
-months after a release, and the room wanted to keep that capability available. Two ideas surfaced (any change here would
-need [PEP 440 (Version Identification and Dependency Specification)](https://peps.python.org/pep-0440/) amended too, not
-only installer behaviour):
+months after a release, and the room wanted to keep that capability available. Attendees floated two ideas (any change
+here would need [PEP 440 (Version Identification and Dependency Specification)](https://peps.python.org/pep-0440/)
+amended too, not only installer behaviour):
 
 - **Stale-release upload as an opt-in.** Today it works by default; flip it so the publisher has to re-open the release
   in the UI, with extra security checks.
@@ -238,7 +237,7 @@ The bigger change is [PEP 694, Upload 2.0 API for Python Package Indexes](https:
 would give publishers staged uploads and atomic publish, and would tie into a sealed-release state.
 
 Emma noted that `==1.0.0` already pulls any matching local versions and dot-zero variants, so any change to
-upload-after-release semantics needs the version-specifier spec amended, not just installer behavior.
+upload-after-release semantics needs the version-specifier spec amended, not only installer behavior.
 
 ### 3. PyPI as a CDN
 
@@ -262,8 +261,8 @@ based in Berlin and has maintained [conda](https://github.com/conda/conda) for a
 three questions she keeps getting asked: what is the difference between conda and pip, when should you use one or the
 other, and can you mix them.
 
-Her thesis: conda and pip are best understood as two parallel ecosystems with different origins, not as two competing
-tools. The history sketch:
+Her thesis: conda and pip are two parallel ecosystems with different origins, not two competing tools. The history
+sketch:
 
 - [`distutils`](https://docs.python.org/3.11/library/distutils.html) shipped in the standard library with no dependency
   management, no uninstall, and a release cadence tied to CPython.
@@ -301,31 +300,31 @@ on-ramp.
 The discussion ran longer than the talk. Threads worth keeping:
 
 - **Vendor-neutral on-ramp.** Deborah Nicholson (PSF) noted there is no "right way in" on python.org for newcomers to
-  packaging today and offered PSF funding for someone to build one. The current set of links was added piecemeal over
+  packaging today and offered PSF funding for someone to build one. People added the current set of links piecemeal over
   the years.
 - **More than two ecosystems.** A consultant pointed out that [Ecosyste.ms](https://ecosyste.ms/) treats every
   distribution channel (PyPI, conda, Debian, Nix, Spack, Homebrew) as a separate ecosystem with different metadata
   semantics. Security advisories published on a PyPI package do not propagate to a conda or Nix repackaging of the same
-  code, which leaves real CVE-coverage gaps that translation layers between ecosystems would close.
+  code, which leaves CVE-coverage gaps that translation layers between ecosystems would close.
 - **The scientific-community frame.** A long exchange on two framings: can wheels eventually solve the scientific use
-  case (multiple compiled languages, hardware variance), or does the conda model exist because PyPI cannot?
-  [Ralf Gommers](https://github.com/rgommers)' [pypackaging-native](https://pypackaging-native.github.io/) was cited as
-  the reference on this. The wheel-next working group's effort on
+  case (multiple compiled languages, hardware variance), or does the conda model exist because PyPI cannot? The room
+  cited [Ralf Gommers](https://github.com/rgommers)' [pypackaging-native](https://pypackaging-native.github.io/) as the
+  reference on this. The wheel-next working group's effort on
   [PEP 817 wheel variants](https://peps.python.org/pep-0817/) and [PEP 825](https://peps.python.org/pep-0825/) is the
-  visible bridge being built between the two ecosystems.
+  visible bridge between the two ecosystems.
 - **Publishing-side experience.** As an author of a pure-Python CLI tool, you ship to PyPI and you are done; the package
-  showing up in Homebrew three months later is somebody else's work. Getting more involved in the various places your
-  work is republished is a specialist skill the community does not document well.
+  showing up in Homebrew three months later is somebody else's work. Getting more involved in the various places others
+  republish your work is a specialist skill the community does not document well.
 
 ## Lightning talks
 
 ### PEP 772 Packaging Council update — Barry Warsaw
 
-[PEP 772 (Packaging Council)](https://peps.python.org/pep-0772/) is fully approved.
-[Barry Warsaw](https://barry.warsaw.us/) walked through the elections plan: aligned with the PSF board election in the
-fall, three two-week phases (nominations, voting), two cohorts on a rotating two-year cycle, PSF membership required to
-nominate or be nominated. [Deborah Nicholson](https://github.com/deborahgu) called out the spread-the-word problem: not
-everyone interested is in this room. Barry encouraged everyone present to consider running.
+[PEP 772 (Packaging Council)](https://peps.python.org/pep-0772/) is approved. [Barry Warsaw](https://barry.warsaw.us/)
+walked through the elections plan: aligned with the PSF board election in the fall, three two-week phases (nominations,
+voting), two cohorts on a rotating two-year cycle, PSF membership required to nominate or be nominated.
+[Deborah Nicholson](https://github.com/deborahgu) called out the spread-the-word problem: not everyone interested is in
+this room. Barry encouraged everyone present to consider running.
 
 ### Mobile packaging update — Malcolm Smith
 
@@ -372,8 +371,8 @@ extends the wheel-variants idea ([PEP 817](https://peps.python.org/pep-0817/)) i
 [`docker pull`](https://docs.docker.com/reference/cli/docker/image/pull/) auto-selects by architecture but not by
 hardware feature, and
 [Kubernetes' Dynamic Resource Allocation](https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/)
-makes users configure GPU and vendor-specific matching by hand. Joongi targets not just
-[NVIDIA CUDA](https://developer.nvidia.com/cuda-zone) SM architectures but also [Rebellions](https://rebellions.ai/) and
+makes users configure GPU and vendor-specific matching by hand. Joongi targets
+[NVIDIA CUDA](https://developer.nvidia.com/cuda-zone) SM architectures plus [Rebellions](https://rebellions.ai/) and
 [Furiosa](https://www.furiosa.ai/) NPUs, and pointed at Backend.AI's [Sokovan](https://github.com/lablup/backend.ai)
 scheduler as an existing implementation of per-node variant providers feeding into per-workload variant labels. The
 design lets compute nodes report their properties to the scheduler, which matches them against container-image labels
@@ -425,7 +424,7 @@ integration handles the bridge without manual intervention.
 plus CLI built on top of [Pixi](https://pixi.sh/) that adds version history and rollback, OCI-registry distribution
 ([Quay](https://quay.io/),
 [GHCR](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)),
-role-based access control, and named workspace activation. Lock files and spec files are versioned together. The
+role-based access control, and named workspace activation. Nebi versions lock files and spec files together. The
 long-term goal is reproducible environments for science.
 
 ## Roundtable discussions
@@ -474,14 +473,13 @@ tests. uv does not implement `'3.13.*' == python_full_version`. The `~=` operato
 Picking up from Emma's talk. Concrete suggestions for tightening what a valid Wheel 2.0 container looks like:
 
 - **Restrict the zip and tar feature set.** Parser-differential attacks have come from GNU tar versus POSIX tar
-  extensions, both of which most unpackers tolerate. A Wheel 2.0 sub-PEP should pick one and ban the other, and ideally
-  specify the outer zip's binary layout exactly (it only ever holds two regular files with specific compression
-  methods).
+  extensions, both of which most unpackers tolerate. A Wheel 2.0 sub-PEP should pick one and ban the other, and specify
+  the outer zip's binary layout exactly (it only ever holds two regular files with specific compression methods).
 - **No hard links, no device files, no resource forks or NTFS streams, no xattrs.**
 - **ZIP64 for large wheels.** The choice between requiring ZIP64 unconditionally or only above a size threshold needs to
   stay compatible with what major build tools can produce.
 - **`data.tar.zst` or `wheel-filename.data.tar.zst`.** Daniel Holth's preference: keep the existing `.data` convention
-  so two wheels can be unpacked side-by-side without collision, and list only the tar archive in `RECORD` (not its
+  so you can unpack two wheels side-by-side without collision, and list only the tar archive in `RECORD` (not its
   members), matching existing rules.
 - **Symlinks.** Tar supports them. The question of whether Wheel 2.0 should allow them inside the data archive stayed
   open; the simplest path is to keep them out.
@@ -490,9 +488,9 @@ Picking up from Emma's talk. Concrete suggestions for tightening what a valid Wh
 
 ### Cross-platform environments and wheel building
 
-Android, iOS, and Emscripten each landed their own cross-platform wheel-building solution, with significant overlap
-between the three. They all rely on a `.pth` file that monkey-patches `sysconfig` and other stdlib modules to simulate
-running on the target platform, because most Python build systems still have no concept of cross-compilation. Even for
+Android, iOS, and Emscripten each landed their own cross-platform wheel-building solution, with a lot of overlap between
+the three. They all rely on a `.pth` file that monkey-patches `sysconfig` and other stdlib modules to simulate running
+on the target platform, because most Python build systems still have no concept of cross-compilation. Even for
 established platforms, cross-compilation matters when CI for the target architecture is limited (Apple Silicon before CI
 vendors caught up; Windows on ARM today). The longer-term path is for build backends
 ([setuptools](https://setuptools.pypa.io/), [meson-python](https://meson-python.readthedocs.io/),
@@ -539,9 +537,9 @@ constraints. In the Python ecosystem, [uv](https://docs.astral.sh/uv/) uses PubG
 [`pubgrub-rs`](https://github.com/pubgrub-rs/pubgrub) Rust crate; pip and [PDM](https://pdm-project.org/) instead use
 [resolvelib](https://github.com/sarugaku/resolvelib), which is a backtracking resolver rather than a PubGrub-style one.
 
-Today nab is structured as four pluggable layers: `nab-resolver` (the PubGrub-based resolver core), `nab-python`
-(Python-specific resolution), `nab-index` (PyPI-style index access), and the top-level `nab` package that wires the
-three together into the CLI.
+Today nab has four pluggable layers: `nab-resolver` (the PubGrub-based resolver core), `nab-python` (Python-specific
+resolution), `nab-index` (PyPI-style index access), and the top-level `nab` package that wires the three together into
+the CLI.
 
 ```mermaid
 flowchart TB
@@ -576,8 +574,8 @@ afterwards. They are the ones that would need to close before I could adopt nab 
 - **CLI ergonomics.** Common flags from pip and uv (`--constraint`, `--pre`, `--upgrade-package`, `--verbose`/`--quiet`)
   are not yet present, and there is no progress feedback or diff summary across re-locks.
 - **PEP 751 portability.** Reproducibility gaps include missing
-  [`SOURCE_DATE_EPOCH`](https://reproducible-builds.org/specs/source-date-epoch/) support, `file://` URLs that are not
-  rewritten to relative paths in the lockfile, and an unpopulated `packages.dependencies` graph.
+  [`SOURCE_DATE_EPOCH`](https://reproducible-builds.org/specs/source-date-epoch/) support, `file://` URLs that nab does
+  not rewrite to relative paths in the lockfile, and an unpopulated `packages.dependencies` graph.
 - **Resolution stability.** No seed-pins from a prior lockfile means unrelated packages can churn on re-lock; some
   dependency-group conflict messages do not name which groups disagree.
 - **Networking in corporate environments.** Both transports skip proxy environment variables and the OS certificate
@@ -585,17 +583,16 @@ afterwards. They are the ones that would need to close before I could adopt nab 
 - **Docs.** The current flat guides directory would benefit from restructuring along the
   [Diataxis framework](https://diataxis.fr/).
 
-The project moves quickly. Within roughly 24 hours of filing the issues, Damian had already merged fixes covering
-lockfile portability, PEP 751 spec conformance, the security gaps around auth credentials in lockfile URLs, the
-networking issues, and several CLI ergonomics fixes:
-[PRs #41, #42, and #43](https://github.com/notatallshaw/nab/pulls?q=is%3Apr+is%3Amerged) closed sixteen tracking issues
-in one batch.
+Within roughly 24 hours of filing the issues, Damian merged fixes covering lockfile portability, PEP 751 spec
+conformance, the security gaps around auth credentials in lockfile URLs, the networking issues, and several CLI
+ergonomics fixes: [PRs #41, #42, and #43](https://github.com/notatallshaw/nab/pulls?q=is%3Apr+is%3Amerged) closed
+sixteen tracking issues in one batch.
 
 ## Wrapping Up
 
 The format ran tight to schedule. The roundtables let attendees pick a thread and follow it across several ecosystems in
 one afternoon. As someone who has attended every Packaging Summit since 2019, this year felt like the best one yet.
-There was a lot of laughter, eager collaboration across project boundaries, and the audience keeps growing year over
+There was a lot of laughter and eager collaboration across project boundaries, and the audience keeps growing year over
 year. With the [Packaging Council](https://peps.python.org/pep-0772/) coming online this fall, that pattern should
 accelerate.
 

@@ -12,36 +12,37 @@ title = "Defense in Depth: A Practical Guide to Python Supply Chain Security"
 
 > [!TLDR] **TLDR:**
 >
-> Layer your defenses and don't trust any single control. Use Ruff with security rules to catch bugs in your code before
-> they ship. Pin all your dependencies with cryptographic hashes using `uv lock` or `uv pip compile --generate-hashes`
-> so nobody can swap out packages on you. Run [`pip-audit`](https://github.com/pypa/pip-audit) in CI to catch known CVEs
-> before they hit production. Generate SBOMs with CycloneDX so when the next Ultralytics-style compromise drops, you can
-> answer "are we affected?" in minutes instead of days.
+> Layer your defenses and do not trust any single control. Use Ruff with security rules to catch bugs in your code
+> before they ship. Pin all your dependencies with cryptographic hashes using `uv lock` or
+> `uv pip compile --generate-hashes` so nobody can swap out packages on you. Run
+> [`pip-audit`](https://github.com/pypa/pip-audit) in CI to catch known CVEs before they hit production. Generate SBOMs
+> with CycloneDX so when the next Ultralytics-style compromise drops, you can answer "are we affected?" in minutes
+> instead of days.
 >
-> If you're publishing packages, ditch the long-lived API tokens and switch to Trusted Publishing with OIDC. This
+> If you are publishing packages, ditch the long-lived API tokens and switch to Trusted Publishing with OIDC. This
 > generates attestations automatically via Sigstore, linking your packages back to source repos. Organizations running
-> internal mirrors can add a 7-day delay to let the community be your canary - but only if you've got the infrastructure
+> internal mirrors can add a 7-day delay to let the community be your canary - but only if you have the infrastructure
 > to maintain it.
 >
-> Nothing here is perfect. Hash pinning stops tampering but won't save you from a malicious package you installed on day
-> one. Scanning finds known CVEs but misses zero-days. Attestations prove where code came from, not whether it's safe.
-> That's why you layer them - when one control fails, the others catch it. Start with linting and pinning for quick
-> wins, add scanning and SBOMs next, then level up to advanced stuff as you mature.
+> Nothing here is perfect. Hash pinning stops tampering but will not save you from a malicious package you installed on
+> day one. Scanning finds known CVEs but misses zero-days. Attestations prove where code came from, not whether it is
+> safe. That is why you layer them - when one control fails, the others catch it. Start with linting and pinning for
+> quick wins, add scanning and SBOMs next, then level up to advanced stuff as you mature.
 
 I maintain several PyPA projects (virtualenv, tox, pipx, platformdirs, filelock) and work on corporate package hosting
-infrastructure. I've watched supply chain attacks targeting Python packages get nastier over the years from both sides:
-publishing to PyPI as an open-source maintainer and managing thousands of dependencies as an enterprise consumer. This
-post covers practical approaches to securing your Python supply chain. For a broader threat model across all ecosystems,
-the
+infrastructure. I have watched supply chain attacks targeting Python packages get nastier over the years from both
+sides: publishing to PyPI as an open-source maintainer and managing thousands of dependencies as an enterprise consumer.
+This post covers practical approaches to securing your Python supply chain. For a broader threat model across all
+ecosystems, the
 [CNCF Software Supply Chain Security Whitepaper](https://tag-security.cncf.io/community/working-groups/supply-chain-security/supply-chain-security-paper-v2/Software_Supply_Chain_Practices_whitepaper_v2.pdf)
-is an excellent primer. Here we'll focus on Python-specific defenses: writing secure code, managing dependencies,
-scanning for vulnerabilities, and verifying package authenticity.
+is an excellent primer. The focus is Python-specific defenses: writing secure code, managing dependencies, scanning for
+vulnerabilities, and verifying package authenticity.
 
 ## Why This Matters
 
 PyPI hosts over 743,000 packages as of March 2026, and that number grows daily. Your average Python project pulls in
 dozens of transitive dependencies, packages you never explicitly chose but depend on anyway because your dependencies
-need them. Security patches consistently lag behind vulnerability discovery, sometimes by weeks or months.
+need them. Security patches lag behind vulnerability discovery, sometimes by weeks or months.
 
 The flow from developers to your application:
 
@@ -69,7 +70,7 @@ Each red arrow is a potential attack vector. Real incidents show the consequence
 ### Real Attacks, Real Impact
 
 **[ctx and PHPass Account Takeover](https://www.crowdstrike.com/en-us/blog/how-crowdstrike-detects-poisoned-python-packages-ctx-phpass/)
-(May 2022)**: Attackers compromised the `ctx` package (which hadn't been updated since 2014) by re-registering its
+(May 2022)**: Attackers compromised the `ctx` package (which had not been updated since 2014) by re-registering its
 maintainer's expired email domain. They pushed a malicious update that exfiltrated AWS credentials and other sensitive
 environment variables to an attacker-controlled server. The report notes roughly 2,000 downloads daily for about 10 days
 before detection, potentially exposing many AWS accounts. PyPI has since implemented
@@ -79,8 +80,7 @@ expired domains and un-verifying associated email addresses to mitigate this att
 **[Ultralytics Compromise](https://blog.pypi.org/posts/2024-12-11-ultralytics-attack-analysis/) (December 2024)**: The
 widely-used YOLO computer vision package (reported ~80 million downloads per month as of December 2024) got compromised
 through a GitHub Actions script injection attack. Attackers stole the PyPI upload token and injected a cryptocurrency
-miner into four versions. Thousands of developers unknowingly installed malware just by running
-`pip install ultralytics`.
+miner into four versions. Thousands of developers installed malware by running `pip install ultralytics`.
 
 **[PyPI Phishing Campaign](https://blog.pypi.org/posts/2025-07-28-pypi-phishing-attack/) (July 2025)**: Maintainers who
 published packages with email in metadata were targeted with phishing emails from `noreply@pypj.org` (note the lowercase
@@ -98,15 +98,15 @@ and pushed everyone to migrate to [Trusted Publishers](#the-new-way-trusted-publ
 **[Shai-Hulud Worm Campaign](https://blog.pypi.org/posts/2025-11-26-pypi-and-shai-hulud/) (November 2025)**: A
 cross-ecosystem worm primarily targeting npm that also hit PyPI because monorepo setups store credentials for both
 registries. Attackers compromised npm accounts and exfiltrated long-lived PyPI tokens from GitHub repository secrets.
-PyPI proactively revoked exposed tokens and recommended using [zizmor](https://docs.zizmor.sh/) for auditing GitHub
-Actions workflows.
+PyPI revoked exposed tokens and recommended using [zizmor](https://docs.zizmor.sh/) for auditing GitHub Actions
+workflows.
 
-These aren't theoretical attacks. They happened to real projects with millions of users. If you discover a malicious
+These are not theoretical attacks. They happened to real projects with millions of users. If you discover a malicious
 package on PyPI, you can report it through [PyPI's security reporting system](https://pypi.org/security/).
 
 ### The Hidden Dependency Problem
 
-When you install Flask, you're not just getting Flask. Here's the full dependency tree:
+When you install Flask, you get more than Flask. The full dependency tree:
 
 ```bash
 # Install Flask
@@ -132,21 +132,21 @@ Jinja2 and Werkzeug. You never explicitly installed it, and if it has a vulnerab
 With 50+ transitive dependencies per project on average, your attack surface is massive compared to what appears in your
 requirements file.
 
-Now let's build your defense strategy, starting with your own code.
+Start your defense strategy with your own code.
 
 ## Secure Your Own Code First
 
-Supply chain attacks don't come only from external dependencies. Your own code can create the entry points. A hardcoded
+Supply chain attacks do not come only from external dependencies. Your own code can create the entry points. A hardcoded
 PyPI token in your source code, once pushed to a repository, gives an attacker everything they need to compromise your
 account and publish malicious packages under your name. Beyond secrets, common security bugs hide in everyday code
-patterns that look fine during code review, and humans miss these under time pressure. Catching them automatically with
-a linter is the first layer of defense.
+patterns that look fine during code review, and humans miss these under time pressure. Catching them with a linter is
+the first layer of defense.
 
 ### The Forever Secret
 
 A leaked credential is the starting point for many supply chain compromises. An exposed PyPI token lets an attacker
 publish backdoored versions of your packages. An exposed database URL lets them exfiltrate data. Yet this pattern is
-depressingly common:
+common:
 
 ```python
 # Bad: secrets in code live forever in git history
@@ -161,9 +161,8 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 ```
 
 Git never forgets. When you commit a secret, it lives in your repository's history forever. Deleting it in a later
-commit doesn't help. Anyone with repository access (or an old clone) can extract those credentials. Attackers routinely
-trawl git histories for secrets, and a leaked PyPI token or cloud credential is often the first step in a supply chain
-compromise.
+commit does not help. Anyone with repository access (or an old clone) can extract those credentials. Attackers trawl git
+histories for secrets, and a leaked PyPI token or cloud credential is often the first step in a supply chain compromise.
 
 ### Broken Cryptography
 
@@ -182,7 +181,7 @@ digest = hashlib.sha256(payload).hexdigest()
 MD5 collisions were first demonstrated in 2004, though weaknesses were known earlier. SHA1 practical collisions were
 demonstrated in 2017. Both were deprecated by NIST for digital signatures in 2011. "Broken" means attackers can generate
 collisions - different inputs producing the same hash. This enables certificate forgery, download tampering, or
-integrity check bypasses. Don't use either for security purposes.
+integrity check bypasses. Do not use either for security purposes.
 
 ### The Hanging Connection
 
@@ -216,7 +215,7 @@ line-length = 120
 lint.select = ["E", "F", "S"]
 ```
 
-The security rules (`["S"]`) alone catch a lot: they're the Bandit checks that flag hardcoded secrets, weak crypto, and
+The security rules (`["S"]`) alone catch a lot: they are the Bandit checks that flag hardcoded secrets, weak crypto, and
 unsafe deserialization. Once your codebase is clean, expand to all rules:
 
 ```toml
@@ -233,7 +232,7 @@ lint.ignore = [
 ```
 
 Ruff runs in under a second, so you can run it as you type in your IDE and before every commit. All three
-vulnerabilities above get caught automatically:
+vulnerabilities above get caught:
 
 - [**S105**](https://docs.astral.sh/ruff/rules/hardcoded-password-string/) - hardcoded secrets,
 - [**S324**](https://docs.astral.sh/ruff/rules/hashlib-insecure-hash-function/) - weak cryptography,
@@ -243,7 +242,7 @@ vulnerabilities above get caught automatically:
 - [**S307**](https://docs.astral.sh/ruff/rules/suspicious-eval-usage/) - using eval() with untrusted input.
 
 Each linked rule page includes a detailed explanation of why the pattern is dangerous, examples of vulnerable code, and
-how to fix it - worth reading if you want to understand the risks beyond just silencing the warning. For example, this
+how to fix it - worth reading if you want to understand the risks beyond silencing the warning. For example, this
 dangerous pattern gets flagged immediately:
 
 ```python
@@ -256,12 +255,12 @@ data = pickle.loads(untrusted_input)  # Use json.loads() instead
 cursor.execute(f"SELECT * FROM users WHERE name = '{user_input}'")
 ```
 
-Add Ruff to your editor and CI pipeline - it'll save your forgetful self.
+Add Ruff to your editor and CI pipeline - it will save your forgetful self.
 
 ## Manage Your Dependencies
 
-Now let's talk about managing the code you didn't write: your dependencies. This is where supply chain attacks happen.
-The [OpenSSF Secure Supply Chain Consumption Framework (S2C2F)](https://github.com/ossf/s2c2f) provides a structured
+Now for the code you did not write: your dependencies. This is where supply chain attacks happen. The
+[OpenSSF Secure Supply Chain Consumption Framework (S2C2F)](https://github.com/ossf/s2c2f) provides a structured
 maturity model for how organizations should consume open source software.
 
 ### Choose Dependencies Carefully
@@ -269,15 +268,15 @@ maturity model for how organizations should consume open source software.
 Before adding a dependency, consider whether you need it at all. Every dependency expands your attack surface. Fewer
 dependencies means fewer opportunities for compromise. When you do add one, evaluate the publisher's security posture
 using the [OpenSSF Scorecard](https://securityscorecards.dev/), which grades projects on practices like branch
-protection, signed releases, dependency update tooling, and vulnerability disclosure. A low score doesn't mean "don't
-use it," but it tells you how much trust you're placing in a project with limited security hygiene.
+protection, signed releases, dependency update tooling, and vulnerability disclosure. A low score does not mean "do not
+use it," but it tells you how much trust you are placing in a project with limited security hygiene.
 
 ### The Unpinned Dependency Problem
 
-A scenario that happens more often than you'd think: You write `flask>=2.0` in your requirements file. Today, when you
-run `pip install`, you get Flask 3.1.0 and everything works great. Tomorrow, an attacker publishes a compromised Flask
-3.1.1. Your next `pip install` silently downloads the malicious version because it satisfies your `>=2.0` constraint.
-You just installed malware without changing a single line of code.
+A scenario that happens more often than you would think: You write `flask>=2.0` in your requirements file. Today, when
+you run `pip install`, you get Flask 3.1.0 and everything works great. Tomorrow, an attacker publishes a compromised
+Flask 3.1.1. Your next `pip install` silently downloads the malicious version because it satisfies your `>=2.0`
+constraint. You installed malware without changing a single line of code.
 
 The progression from unsafe to secure:
 
@@ -293,11 +292,11 @@ graph LR
 ```
 
 **Unpinned** (`flask>=2.0`) is the most dangerous - you get whatever version is latest, which could be compromised. Your
-builds aren't reproducible and you have no way to detect tampering.
+builds are not reproducible and you have no way to detect tampering.
 
-**Version pinned** (`flask==3.1.1`) is better - you get the exact version you tested with. But there's no integrity
+**Version pinned** (`flask==3.1.1`) is better - you get the exact version you tested with. But there is no integrity
 check. If an attacker compromises the maintainer's account and publishes a new backdoored artifact for the same version
-(e.g., a wheel targeting a platform that wasn't previously uploaded), you'd install it without knowing.
+(e.g., a wheel targeting a platform that was not previously uploaded), you would install it without knowing.
 
 ```mermaid
 sequenceDiagram
@@ -319,26 +318,25 @@ sequenceDiagram
 
 With hash pinning, the second install would fail because the file's hash no longer matches what was recorded. **Hash
 pinned** (`flask==3.1.1 --hash=sha256:d667207822...`) is secure - it creates a cryptographic fingerprint of the package
-file. During installation, pip recalculates the hash and compares it to what you specified. If they don't match,
+file. During installation, pip recalculates the hash and compares it to what you specified. If they do not match,
 installation fails. Note that PyPI does not allow re-uploading an existing filename: once `flask-3.1.1.tar.gz` is
 uploaded, that specific file is immutable. However, an attacker could still upload additional distribution files for the
 same version.
 
-What does hash pinning protect against? It ensures you only install the exact artifact you locked, and it detects
-tampering in transit, in caches, or in mirrors.
+Hash pinning ensures you only install the exact artifact you locked, and it detects tampering in transit, in caches, or
+in mirrors.
 
-What doesn't it protect against? If you install a package for the first time that's already malicious (like in the
-Ultralytics incident), hash pinning won't help - you'll just pin the malicious hash. This is why you combine hash
-pinning with vulnerability scanning and delayed ingestion. There are also deeper attacks at the archive format level -
-PyPI has had to introduce
+It does not protect against installing a package for the first time that is already malicious (like in the Ultralytics
+incident); you would pin the malicious hash. Combine hash pinning with vulnerability scanning and delayed ingestion.
+There are also deeper attacks at the archive format level - PyPI has had to introduce
 [restrictions against ZIP parser confusion attacks](https://blog.pypi.org/posts/2025-08-07-wheel-archive-confusion-attacks/)
 where different installers could extract different content from the same wheel file.
 
 ### Modern Tooling: uv
 
 [uv](https://docs.astral.sh/uv/) makes hash pinning effortless by generating lockfiles with cryptographic hashes by
-default. It also creates isolated virtual environments automatically, limiting the blast radius if a dependency turns
-out to be malicious, since a compromised package can't affect other projects or system-level resources. See the
+default. It also creates isolated virtual environments, limiting the blast radius if a dependency turns out to be
+malicious, since a compromised package cannot affect other projects or system-level resources. See the
 [uv lockfile documentation](https://docs.astral.sh/uv/concepts/projects/#lockfile) for details:
 
 ```bash
@@ -355,7 +353,7 @@ uv pip compile --generate-hashes requirements.in -o requirements.txt
 uv export --format requirements-txt -o requirements.txt
 ```
 
-If you're not ready to switch to uv yet, [pip-tools](https://github.com/jazzband/pip-tools) provides similar
+If you are not ready to switch to uv yet, [pip-tools](https://github.com/jazzband/pip-tools) provides similar
 functionality:
 
 ```bash
@@ -363,7 +361,7 @@ pip-compile --generate-hashes requirements.in > requirements.txt
 ```
 
 These commands create SHA256 checksums that get verified at install time. If someone modifies a package even with the
-same version number, the hash won't match and installation fails. Read more about
+same version number, the hash will not match and installation fails. Read more about
 [secure installs with pip](https://pip.pypa.io/en/stable/topics/secure-installs/).
 
 > [!IMPORTANT]
@@ -376,20 +374,19 @@ artifacts. Full reproducibility also depends on deterministic build scripts and 
 layer removes one of the biggest sources of variation. `uv lock` captures exact versions, hashes, and platform markers,
 getting you most of the way there.
 
-Looking ahead, [PEP 751](https://peps.python.org/pep-0751/) defines `pylock.toml`, a standardized, tool-agnostic lock
-file format. Unlike tool-specific formats (`uv.lock`, `poetry.lock`), any tool can produce or consume it. Notably,
-`pylock.toml` supports recording
-[attestation identities](https://packaging.python.org/en/latest/specifications/index-hosted-attestations/) directly in
-the lock file, so consumers can verify package provenance at install time. uv already supports both
+[PEP 751](https://peps.python.org/pep-0751/) defines `pylock.toml`, a standardized, tool-agnostic lock file format.
+Unlike tool-specific formats (`uv.lock`, `poetry.lock`), any tool can produce or consume it. `pylock.toml` supports
+recording [attestation identities](https://packaging.python.org/en/latest/specifications/index-hosted-attestations/)
+directly in the lock file, so consumers can verify package provenance at install time. uv already supports both
 [installing from](https://docs.astral.sh/uv/reference/cli/#uv-pip-install) and
 [exporting to](https://docs.astral.sh/uv/reference/cli/#uv-export) `pylock.toml`.
 
 ### Separate Development From Deployment
 
 > [!WARNING]
-> If you're publishing a **library** to PyPI, don't pin dependencies in your `pyproject.toml`. Use broad version ranges
-> to avoid conflicts when users install your library alongside others. The advice in this section is for application
-> deployment only.
+> If you are publishing a **library** to PyPI, do not pin dependencies in your `pyproject.toml`. Use broad version
+> ranges to avoid conflicts when users install your library alongside others. The advice in this section is for
+> application deployment only.
 
 Modern best practice for applications separates what you want (development) from what you got (deployment):
 
@@ -412,8 +409,8 @@ werkzeug==3.1.3 \
     --hash=sha256:54b78bf3716...
 ```
 
-This approach gives you flexibility during development (you can easily upgrade to test new versions) while guaranteeing
-exact reproducibility for deployment (production always gets exactly what you tested).
+This approach gives you flexibility during development (you can upgrade to test new versions) while guaranteeing exact
+reproducibility for deployment (production gets what you tested).
 [Dependabot](https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain) can automate updates by filing
 pull requests when new versions are available. Add a `.github/dependabot.yml` to your repository:
 
@@ -437,13 +434,13 @@ dependencies. Each PR includes the changelog and compatibility score, so you can
 
 ## Scan For Vulnerabilities
 
-Dependency pinning prevents unauthorized changes, but what if you've pinned a version that already has a known
-vulnerability? New CVEs get discovered regularly in popular packages. A package that worked fine yesterday might have a
-critical flaw discovered today.
+Dependency pinning prevents unauthorized changes, but what if you have pinned a version that already has a known
+vulnerability? Researchers find new CVEs in popular packages. A package that worked fine yesterday might have a critical
+flaw discovered today.
 
 ### The Invisible Bug
 
-Why scanning matters - a real example:
+A real example of why scanning matters:
 
 ```python
 # CVE-2024-22195: jinja2 < 3.1.3 allows attribute injection via xmlattr
@@ -463,9 +460,9 @@ result = template.render(
 
 This is [CVE-2024-22195](https://nvd.nist.gov/vuln/detail/CVE-2024-22195), a real vulnerability from 2024. The bug sits
 in the template engine itself, so even code that looks reasonable can be vulnerable when it feeds untrusted input into
-the affected paths. An attacker can inject malicious JavaScript that executes in users' browsers, potentially stealing
-sessions, credentials, or personal data. The critical insight: **you can't see these vulnerabilities by reading your own
-code**. The bug is in a dependency you imported. This is why automated vulnerability scanning is essential.
+the affected paths. An attacker can inject malicious JavaScript that executes in users' browsers, stealing sessions,
+credentials, or personal data. **You cannot see these vulnerabilities by reading your own code**; the bug is in a
+dependency you imported. Automated vulnerability scanning is essential here.
 
 ### Automated Scanning With pip-audit
 
@@ -522,13 +519,12 @@ policies, see the
 **Not every CVE affects you.** A vulnerability in a dependency's code path you never call is a false positive.
 [VEX](https://www.cisa.gov/resources-tools/resources/minimum-requirements-vulnerability-exploitability-exchange-vex)
 (Vulnerability Exploitability eXchange) is an emerging standard where software producers can declare whether a specific
-CVE actually affects their shipped product. VEX adoption in the Python ecosystem is still early, but it's worth knowing
-about, especially if you're triaging a long list of pip-audit findings and need to prioritize what matters.
+CVE affects their shipped product. VEX adoption in the Python ecosystem is still early. It helps when you are triaging a
+long list of pip-audit findings and need to prioritize what matters.
 
 ### Integrate Into CI/CD
 
-Security checks should run automatically on every commit. Adding [pip-audit](https://github.com/pypa/pip-audit) to
-common CI systems:
+Security checks should run on every commit. Adding [pip-audit](https://github.com/pypa/pip-audit) to common CI systems:
 
 **GitHub Actions:**
 
@@ -565,14 +561,13 @@ stage('Security Scan') {
 
 Add Ruff linting to these pipelines as well to catch security issues in your own code before they get merged.
 
-## Know What You're Running
+## Know What You Are Running
 
-Let's say a critical vulnerability gets announced in a popular library. Your first question: "Are we using this
-anywhere?" Without a Software Bill of Materials (SBOM), answering this requires manually checking every project, every
-environment, every deployment. With hundreds of applications and thousands of dependencies, this is practically
-impossible.
+Suppose a critical vulnerability is announced in a popular library. Your first question: "Are we using this anywhere?"
+Without a Software Bill of Materials (SBOM), answering this requires checking every project, environment, and
+deployment. With hundreds of applications and thousands of dependencies, this is impractical.
 
-### What's an SBOM?
+### What Is an SBOM?
 
 An SBOM is like an ingredients label for software. Just as food packaging lists every ingredient, an SBOM lists every
 software component in your application - both direct dependencies (packages you explicitly installed) and transitive
@@ -599,7 +594,7 @@ graph TD
 ```
 
 SBOMs enable rapid vulnerability response, license compliance tracking, regulatory compliance, and build-time dependency
-visibility. You know exactly what dependencies were included when your application was built.
+visibility. You know what dependencies went into the build.
 
 ### Generate SBOMs
 
@@ -659,7 +654,7 @@ for Python, `pkg:npm/@babel/core@7.24.0` for npm, etc.
 
 Dependency confusion attacks exploit how package managers resolve names when you use both public and private package
 indexes. An attacker publishes a malicious package to PyPI with the same name as your internal package, and your build
-system accidentally installs the public one instead. Here's how the attack works with pip:
+system installs the public one instead. With pip, the attack works like this:
 
 ```bash
 # Your pip.conf uses --extra-index-url for internal packages
@@ -671,8 +666,8 @@ pip install --extra-index-url https://internal.corp.com/pypi mypackage
 ```
 
 **uv is secure by default.** Unlike pip, uv uses a [first-match strategy](https://docs.astral.sh/uv/concepts/indexes/) -
-it stops at the first index where a package is found and won't search further. This prevents dependency confusion out of
-the box. You can also pin packages to specific indexes explicitly:
+it stops at the first index where a package is found and will not search further. This prevents dependency confusion out
+of the box. You can also pin packages to specific indexes explicitly:
 
 ```toml
 # pyproject.toml - pin internal packages to your private index
@@ -685,7 +680,7 @@ explicit = true                        # only use this index for explicitly pinn
 mypackage = { index = "internal" }
 ```
 
-If you're still using pip, mitigate with these strategies:
+If you are still using pip, mitigate with these strategies:
 
 ```bash
 # Use --index-url (single index) instead of --extra-index-url (multiple)
@@ -699,12 +694,12 @@ index-url = https://internal.corp.com/pypi
 trusted-host = internal.corp.com
 ```
 
-SBOMs can help detect potential naming conflicts by providing an inventory to audit, but they're detective controls -
+SBOMs can help detect potential naming conflicts by providing an inventory to audit, but they are detective controls -
 they show you what you installed after the fact.
 
-**Reserve specific project names**: While PyPI doesn't support wildcard namespaces like `yourcompany.*`, you can
-manually register specific package names you use internally. This prevents attackers from registering them, though it
-requires registering each name individually.
+**Reserve specific project names**: While PyPI does not support wildcard namespaces like `yourcompany.*`, you can
+register specific package names you use internally. This prevents attackers from registering them, though it requires
+registering each name individually.
 
 **PyPI organization accounts** let teams manage packages under a shared identity, providing centralized access control
 and making it harder for typosquatting attacks to impersonate your project. If you publish packages,
@@ -718,14 +713,14 @@ namespace.
 
 Account takeover is one of the most effective supply chain attacks - compromise a maintainer's credentials and you can
 publish malicious code under a trusted name. The ctx incident (expired domain takeover) and the 2025 phishing campaigns
-showed that passwords alone aren't enough, even with TOTP-based 2FA (which can be phished through proxy attacks).
+showed that passwords alone are not enough, even with TOTP-based 2FA (which can be phished through proxy attacks).
 
-That's why PyPI
+That is why PyPI
 [mandated 2FA for all project maintainers](https://blog.pypi.org/posts/2023-05-25-securing-pypi-with-2fa/) by end of
 2023\. By 2025, [52% of active users had non-phishable 2FA](https://blog.pypi.org/posts/2025-12-31-pypi-2025-in-review/)
-(hardware keys or passkeys). But 2FA only protects the PyPI login flow - it doesn't protect the publishing pipeline.
-Long-lived API tokens stored in CI/CD systems remain a major risk. The GhostAction and Shai-Hulud attacks didn't need to
-phish any maintainer's password - they stole thousands of API tokens directly from GitHub repository secrets.
+(hardware keys or passkeys). But 2FA only protects the PyPI login flow - it does not protect the publishing pipeline.
+Long-lived API tokens stored in CI/CD systems remain a major risk. The GhostAction and Shai-Hulud attacks did not need
+to phish any maintainer's password - they stole thousands of API tokens from GitHub repository secrets.
 
 ### The Old Way (Risky)
 
@@ -784,7 +779,7 @@ The security improvements are substantial. There are no long-lived secrets to st
 workflow run. The short-lived, scoped tokens reduce the exposure window to minutes instead of forever. You also get
 provenance tracking through Sigstore transparency logs.
 
-OIDC alone isn't a silver bullet though. If an attacker can modify your workflow file (via a compromised dependency, a
+OIDC alone is not a silver bullet though. If an attacker can modify your workflow file (via a compromised dependency, a
 malicious PR merged without review, or a GitHub Actions supply chain attack like GhostAction), they can trigger a
 legitimate OIDC token exchange and publish malicious packages through your trusted pipeline. Protect your workflows by
 pinning Actions to commit SHAs instead of tags (as shown above; the `# v4.3.1` comment preserves readability),
@@ -795,10 +790,10 @@ modify workflow files, and auditing your workflows with tools like [zizmor](http
 
 ### Audit Your Workflows With zizmor
 
-[zizmor](https://docs.zizmor.sh/) is a static analysis tool that finds security issues in GitHub Actions workflows —
+[zizmor](https://docs.zizmor.sh/) is a static analysis tool that finds security issues in GitHub Actions workflows -
 template injection, unpinned actions, excessive permissions, credential leaks, and
-[30+ other audit rules](https://docs.zizmor.sh/audits/). It's particularly relevant here because the GhostAction attack
-exploited exactly the kind of workflow vulnerabilities zizmor detects.
+[30+ other audit rules](https://docs.zizmor.sh/audits/). It is relevant here because the GhostAction attack exploited
+the kind of workflow vulnerabilities zizmor detects.
 
 Run it against your repository:
 
@@ -831,7 +826,7 @@ error[template-injection]: code injection via template expansion
    |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ attacker-controlled input in run step
 ```
 
-Add it to your pre-commit hooks to catch issues before they're pushed:
+Add it to your pre-commit hooks to catch issues before they are pushed:
 
 ```yaml
 # .pre-commit-config.yaml
@@ -870,12 +865,12 @@ jobs:
 
 Key audits relevant to supply chain security:
 
-- **template-injection** — `${{ }}` expansion with attacker-controlled input enables shell injection,
-- **unpinned-uses** — actions referenced by tag instead of SHA can be hijacked,
-- **excessive-permissions** — over-scoped `GITHUB_TOKEN` increases blast radius,
-- **use-trusted-publishing** — flags workflows still using long-lived PyPI tokens instead of OIDC,
-- **impostor-commit** — detects fork commits masquerading as main repo commits (requires `--gh-token`),
-- **known-vulnerable-actions** — flags actions with publicly disclosed CVEs.
+- **template-injection** - `${{ }}` expansion with attacker-controlled input enables shell injection,
+- **unpinned-uses** - actions referenced by tag instead of SHA can be hijacked,
+- **excessive-permissions** - over-scoped `GITHUB_TOKEN` increases blast radius,
+- **use-trusted-publishing** - flags workflows still using long-lived PyPI tokens instead of OIDC,
+- **impostor-commit** - detects fork commits masquerading as main repo commits (requires `--gh-token`),
+- **known-vulnerable-actions** - flags actions with publicly disclosed CVEs.
 
 zizmor also has [VS Code integration](https://marketplace.visualstudio.com/items?itemName=zizmor.zizmor-vscode) and can
 run as an LSP server (`zizmor --lsp`) for real-time feedback in any editor.
@@ -912,14 +907,14 @@ Abridged attestation metadata links packages to source repositories:
 }
 ```
 
-Adoption is growing rapidly. By end of 2025,
+Adoption is growing. By end of 2025,
 [50,000+ projects used Trusted Publishing and 17% of uploads included attestations](https://blog.pypi.org/posts/2025-12-31-pypi-2025-in-review/).
 Trusted Publishing also
 [expanded to organizations and GitLab Self-Managed instances (beta)](https://blog.pypi.org/posts/2025-11-10-trusted-publishers-coming-to-orgs/).
 As of March 2026, 132,360+ packages have attestations (see
 [Are we PEP 740 yet?](https://trailofbits.github.io/are-we-pep740-yet/)).
 
-The attestation shown above is a PyPI "publish" attestation — it proves the publishing identity and links back to the
+The attestation shown above is a PyPI "publish" attestation - it proves the publishing identity and links back to the
 source repository. Under the hood, PyPI attestations use the
 [in-toto attestation framework](https://github.com/in-toto/attestation), which defines the attestation format that both
 Sigstore and [SLSA](https://slsa.dev/) (Supply-chain Levels for Software Artifacts) build on. SLSA standardizes what
@@ -932,22 +927,22 @@ effort to improve open source software security.
 
 ### Attestations in Practice
 
-During the Ultralytics compromise, attestations would have let investigators quickly identify which versions came from a
-compromised workflow versus legitimate ones — no manual forensic analysis needed. The Sigstore transparency logs provide
+During the Ultralytics compromise, attestations would have let investigators identify which versions came from a
+compromised workflow versus legitimate ones - no manual forensic analysis needed. The Sigstore transparency logs provide
 an independent audit trail with exact timestamps and workflow provenance for each published artifact.
 
 ## Add Time-Based Defenses
 
-When an attacker publishes a malicious package to PyPI, it becomes instantly available worldwide. Detection times vary
-widely - some attacks are caught within days, while others go unnoticed for weeks or months. However, targeted,
-high-profile packages or obvious malware often get reported relatively quickly as the community tests and analyzes new
-releases. PyPI has also introduced a [quarantine system](https://blog.pypi.org/posts/2024-12-30-quarantine/) that can
-freeze suspected malware while preserving it for investigation, rather than immediately deleting it - in 2025,
+When an attacker publishes a malicious package to PyPI, it becomes instantly available worldwide. Detection times vary -
+some attacks are caught within days, while others go unnoticed for weeks or months. However, targeted, high-profile
+packages or obvious malware often get reported as the community tests and analyzes new releases. PyPI has also
+introduced a [quarantine system](https://blog.pypi.org/posts/2024-12-30-quarantine/) that can freeze suspected malware
+while preserving it for investigation, rather than immediately deleting it - in 2025,
 [over 2,000 malware reports were processed with 66% handled within 4 hours](https://blog.pypi.org/posts/2025-12-31-pypi-2025-in-review/).
 
-This is where delayed ingestion comes in - intentionally waiting before using newly published packages. It's not a
-guarantee (some attacks evade detection for months), but it's a risk-reduction tactic that gives the community time to
-discover obvious threats:
+This is where delayed ingestion comes in - waiting before using newly published packages. It is not a guarantee (some
+attacks evade detection for months), but it is a risk-reduction tactic that gives the community time to discover obvious
+threats:
 
 ```mermaid
 timeline
@@ -977,11 +972,11 @@ pip install --uploaded-prior-to 2026-03-02T00:00:00Z -r requirements.txt
 
 This provides a buffer period that can help catch obvious malicious packages before they reach your systems. Think of it
 as letting others be the "canaries in the coal mine." Note that both flags rely on the package index reporting accurate
-upload timestamps — they're one layer, not a guarantee.
+upload timestamps - they are one layer, not a guarantee.
 
-**Limitations**: Delayed ingestion won't catch sophisticated attacks that evade detection, doesn't protect against
-vulnerabilities in packages you're already using, and delays access to security patches (you might need to expedite
-critical fixes). It's one layer of defense, not a complete solution.
+**Limitations**: Delayed ingestion will not catch sophisticated attacks that evade detection, does not protect against
+vulnerabilities in packages you are already using, and delays access to security patches (you might need to expedite
+critical fixes). It is one layer of defense, not a complete solution.
 
 ### For Organizations
 
@@ -1008,14 +1003,14 @@ graph LR
     style D2 fill:#50b432,stroke:#3d8a26,color:#fff
 ```
 
-A simple mirror acts as a proxy to PyPI, making packages available immediately after publication. While this provides
-faster downloads, offline availability, and enables centralized logging, it offers limited protection against
-supply-chain attacks - malicious packages get through instantly unless you layer on additional controls like scanning or
-allowlists. Examples include devpi in simple mode and basic Artifactory setups.
+A simple mirror is a proxy to PyPI, making packages available immediately after publication. While this provides faster
+downloads, offline availability, and enables centralized logging, it offers limited protection against supply-chain
+attacks - malicious packages get through instantly unless you layer on additional controls like scanning or allowlists.
+Examples include devpi in simple mode and basic Artifactory setups.
 
-Ingestion control actively controls what packages enter the organization by enforcing a mandatory delay window
-(typically 6-7 days) and scanning packages before making them available. This provides security benefit by giving the
-community time to discover threats, but requires dedicated infrastructure and policy management.
+Ingestion control governs what packages enter the organization by enforcing a mandatory delay window (typically 6-7
+days) and scanning packages before making them available. This provides security benefit by giving the community time to
+discover threats, but requires dedicated infrastructure and policy management.
 
 #### How Ingestion Control Works
 
@@ -1051,13 +1046,13 @@ Key components:
 - **Expedited ingestion**: Fast-track process for critical security patches (with approval),
 - **Internal package bypass**: Company-developed packages skip the delay entirely.
 
-Who should use ingestion control? Large enterprises with dedicated security teams, organizations in regulated industries
-(finance, healthcare, government), companies with resources to maintain additional infrastructure, and environments
-where security outweighs developer convenience.
+Ingestion control fits large enterprises with dedicated security teams, organizations in regulated industries (finance,
+healthcare, government), companies with resources to maintain additional infrastructure, and environments where security
+outweighs developer convenience.
 
-Who should stick with simple mirrors? Small to medium companies without dedicated security infrastructure, organizations
-where `uv lock --exclude-newer` on individual projects is sufficient, and teams that rely primarily on vulnerability
-scanning and pinning for security.
+Simple mirrors fit small to medium companies without dedicated security infrastructure, organizations where
+`uv lock --exclude-newer` on individual projects is sufficient, and teams that rely on vulnerability scanning and
+pinning for security.
 
 **For small teams (under 50 developers):** Delayed ingestion requires dedicated infrastructure, security expertise, and
 ongoing maintenance. The ROI calculation often favors simpler approaches: use `uv pip compile --exclude-newer` with a
@@ -1067,9 +1062,9 @@ ingestion control only when you have dedicated security infrastructure.
 
 ## Putting It All Together
 
-Each security practice we've discussed provides a layer of defense. Together, they create a comprehensive security
-posture where if one layer fails, others still protect you. This is called "defense in depth." Here's how these layers
-work together in your development pipeline:
+Each security practice we have discussed provides a layer of defense. Together, they create a security posture where if
+one layer fails, others still protect you. This is defense in depth. These layers work together in your development
+pipeline:
 
 Most Python developers consume packages rather than publish them. The two paths share early stages but diverge at build
 time:
@@ -1143,25 +1138,25 @@ flowchart LR
 
 The remediation workflow:
 
-1. **Detection**: Vulnerability scanner flags affected packages automatically.
+1. **Detection**: Vulnerability scanner flags affected packages.
 2. **Impact Analysis**: SBOM search shows every deployment using the affected version.
 3. **Remediation**: Automated dependency update tools (like Dependabot) file a PR with the fix.
-4. **Validation**: CI runs tests to ensure the upgrade doesn't break functionality.
+4. **Validation**: CI runs tests to ensure the upgrade does not break functionality.
 5. **Deployment**: Once tests pass, the fixed version is deployed.
 
-Most of this is automated. You just review and merge the update.
+Most of this is automated. You review and merge the update.
 
 ### When You Discover a Malicious Package
 
-If you've installed a compromised package, time is critical - malicious packages often exfiltrate credentials within
+If you have installed a compromised package, time is critical - malicious packages often exfiltrate credentials within
 seconds of installation.
 
 1. **Isolate immediately.** Stop all deployments using the affected dependency and block the package version in your
    internal mirror if you have one. The goal is to prevent further installations while you investigate.
 
-2. **Assess the damage.** Check if the malicious code actually executed by reviewing logs and process lists. Identify
-   what secrets the package could have accessed - environment variables, filesystem credentials, cloud tokens. Use your
-   SBOM to find all affected projects across your organization.
+2. **Assess the damage.** Check if the malicious code executed by reviewing logs and process lists. Identify what
+   secrets the package could have accessed - environment variables, filesystem credentials, cloud tokens. Use your SBOM
+   to find all affected projects across your organization.
 
 3. **Contain the breach.** Rotate all credentials the package could have accessed: API keys, database passwords, cloud
    credentials. Scan systems for indicators of compromise and check outbound network connections for signs of data
@@ -1176,7 +1171,7 @@ seconds of installation.
 
 ## Your Roadmap
 
-You don't need to implement everything at once. A practical roadmap prioritized by impact and ease of implementation:
+You do not need to implement everything at once. A practical roadmap prioritized by impact and ease of implementation:
 
 ```mermaid
 graph TD
@@ -1210,7 +1205,7 @@ Start here for immediate security improvements with minimal effort:
    uvx ruff check --select S .  # Just security rules to start
    ```
 
-   Once you're comfortable, expand to `lint.select = ["ALL"]` for broader coverage.
+   Once you are comfortable, expand to `lint.select = ["ALL"]` for broader coverage.
 
 2. **Pin your dependencies** with hash verification:
 
@@ -1223,7 +1218,7 @@ Start here for immediate security improvements with minimal effort:
 Build the foundation for ongoing security:
 
 1. **Add pip-audit to CI** to catch vulnerabilities before they reach production.
-2. **Generate SBOMs** at build time to know what's deployed.
+2. **Generate SBOMs** at build time to know what is deployed.
 3. **Enable Dependabot** or similar tools for automated dependency updates.
 4. **Switch to Trusted Publishing** to eliminate credential theft risk.
 
@@ -1232,13 +1227,13 @@ Build the foundation for ongoing security:
 Implement advanced protections as your security maturity grows:
 
 1. **Set up delayed ingestion** if you manage an internal package mirror.
-2. **Build an SBOM tracking system** to quickly respond to vulnerabilities.
+2. **Build an SBOM tracking system** to respond to vulnerabilities.
 
 ### Key Takeaways
 
-Supply chain security isn't a single solution but a layered approach:
+Supply chain security is a layered approach:
 
-- **Prevention**: Linting catches bugs before they're committed.
+- **Prevention**: Linting catches bugs before they are committed.
 - **Control**: Pinning and hashing prevent unauthorized package changes.
 - **Detection**: Scanning identifies known vulnerabilities.
 - **Response**: SBOMs enable rapid incident response.
@@ -1298,7 +1293,7 @@ catch it. The tooling is mature and available today. Start small, get the basics
   SLSA
 - [SPDX](https://spdx.dev/) - Alternative SBOM standard (Linux Foundation)
 - [CNCF Software Supply Chain Security Whitepaper](https://tag-security.cncf.io/community/working-groups/supply-chain-security/supply-chain-security-paper-v2/Software_Supply_Chain_Practices_whitepaper_v2.pdf)
-  — Comprehensive supply chain threat model primer
+  - Comprehensive supply chain threat model primer
 - [OpenSSF Scorecard](https://securityscorecards.dev/) - Automated security health assessment for open source projects
 - [S2C2F](https://github.com/ossf/s2c2f) - Secure Supply Chain Consumption Framework
 - [VEX](https://www.cisa.gov/resources-tools/resources/minimum-requirements-vulnerability-exploitability-exchange-vex) -

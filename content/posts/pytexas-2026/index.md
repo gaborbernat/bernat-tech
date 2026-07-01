@@ -19,14 +19,14 @@ title = "PyTexas 2026 Recap"
 > PyTexas 2026 ran April 17–19 in Austin. Friday was tutorials, Saturday and Sunday were talks with two keynotes and two
 > lightning-talk blocks. A few themes kept coming back across unrelated talks:
 >
-> - **Design deliberately.** A thread across both keynotes. Hynek Schlawack: the domain model is *"the precious"* —
+> - **Design deliberately.** A thread across both keynotes. Hynek Schlawack: the domain model is *"the precious"* -
 >   design it first, translate at the edges. Dawn Wages: ownership over your stack as one of her three pillars for model
 >   and career specialization.
 > - **Agents should write code, not decide what to write.** Peter Sobot's Seven Stages of AI Grief ended on that line.
 >   Al Sweigart argued "agentic engineering" is vibe coding with better marketing, and that almost-right is worse than
 >   wrong. Maria Silvia Mielniczuk's MCP talk built the same idea into an architecture: models suggest, only the server
 >   executes. Adam Gordon Bell's running coach split deterministic work (plain Python) from interpretation (LLM). The
->   Sunday opener framed it bluntly: when AI ships a bad PR, fix the process, not the model.
+>   Sunday opener framed it: when AI ships a bad PR, fix the process, not the model.
 > - **Code quality is an input to AI productivity.** Miguel Vargas's framing: AI agents produce cleaner, safer code in
 >   codebases that are already clean, safe, and typed, so Ruff, ty, and uv matter more now.
 > - **The supply chain is still the attack surface.** Christopher Ariza on why `pip install` still runs arbitrary code,
@@ -61,9 +61,9 @@ with a caveat on the AI productivity narrative: early UC Berkeley research sugge
 reducing it. Lower start/stop costs mean tasks fragment and bleed into the breaks your brain needs. She asked the
 audience to drink water.
 
-The keynote framed an **experimentation loop** as the foundational mental model for engineers, researchers, and
-scientists: plan → design → build → test → release, as a dialogue, not a linear path. Specialization is the reward you
-unlock by running that loop deliberately enough.
+Dawn framed an **experimentation loop** as the mental model for engineers, researchers, and scientists: plan → design →
+build → test → release, as a dialogue, not a linear path. Specialization is the reward you unlock by running that loop
+deliberately enough.
 
 Her analogy carried the rest of the talk: LLM specialization and career specialization are the same shape.
 
@@ -82,8 +82,8 @@ She argued for **ontology** as the lever that lets both models and careers compo
 further than semantics: where semantics asks what a word means in context (a "sidecar" might be a drink, a motorcycle
 attachment, or an Azure component), ontology formally defines what entities exist, how they relate, and what rules
 govern them. Tools from the knowledge-graph world ([OWL](https://www.w3.org/OWL/), [RDF](https://www.w3.org/RDF/),
-[SPARQL](https://www.w3.org/TR/sparql11-overview/), triple stores) underpin this, and in multi-agent systems ontologies
-become essential for semantic consistency between agents.
+[SPARQL](https://www.w3.org/TR/sparql11-overview/), triple stores) support this, and multi-agent systems need ontologies
+to keep agents semantically consistent.
 
 She walked through specialization techniques on the model side: [**LoRA**](https://arxiv.org/abs/2106.09685) (small
 adapters inside transformer layers), full fine-tuning, parameter-efficient methods, ontology-driven data cleaning, world
@@ -112,12 +112,12 @@ Slides: [dawnwages.info/pytexas-keynote-26](https://dawnwages.info/pytexas-keyno
 
 ### Moshe Zadka: Python as Your DSL
 
-Moshe's thesis: *any* Python code can serve as a domain-specific language if you design it thoughtfully. The failure
-mode is building "fake Python": systems that look like Python but break its rules through runtime magic. Early Django
-did that: it injected names like `book_set` when you declared a `ForeignKey`, hid a global `db` object, and created
-reverse relationships invisible in the source. Editors and linters couldn't resolve them, tests broke outside the
-framework, pickling failed because the classes weren't attached to modules, and users couldn't trust introspection.
-Django eventually ran a *magic removal* pass for these reasons.
+Moshe's thesis: *any* Python code can be a domain-specific language if you design for it. The failure mode is building
+"fake Python": systems that look like Python but break its rules through runtime magic. Early Django did that: it
+injected names like `book_set` when you declared a `ForeignKey`, hid a global `db` object, and created reverse
+relationships invisible in the source. Editors and linters couldn't resolve them, tests broke outside the framework,
+pickling failed because the classes weren't attached to modules, and users couldn't trust introspection. Django later
+ran a *magic removal* pass for these reasons.
 
 **Why magic is harmful:**
 
@@ -149,8 +149,8 @@ metaclasses for intervention at class creation (used sparingly). For plugin disc
 [`pluggy`](https://pluggy.readthedocs.io/) over global registration side effects.
 
 **Moshe's principles for a Pythonic DSL:** require explicit imports, stay discoverable (jump-to-definition must work),
-support standard testing and debugging, leverage familiar syntax instead of custom parsers, start small and let users
-fall back to plain Python when the DSL runs out, and don't surprise people who know Python well. Build a DSL when users
+support standard testing and debugging, use familiar syntax instead of custom parsers, start small and let users fall
+back to plain Python when the DSL runs out, and don't surprise people who know Python well. Build a DSL when users
 interact with your system through the same three or four patterns repeatedly. Skip it for one-off or highly variable
 tasks.
 
@@ -193,8 +193,8 @@ handles what he'd otherwise be doing by reading the data with his eyes: interpre
 feedback. This keeps costs down and the system predictable.
 
 **Training philosophy.** Polarized training: 80% low-intensity (Zone 2) for endurance and injury resilience, 20%
-high-intensity (Zone 4+) for speed. Three mid-week runs, one long weekend run, one strength session. The plan shifts
-seasonally (fall volume build, winter treadmill, spring trails).
+high-intensity (Zone 4+) for speed. Three mid-week runs, one long weekend run, one strength session. He shifts the plan
+by season (fall volume build, winter treadmill, spring trails).
 
 **Adaptive feedback.** If Adam misses one or two days the coach keeps nudging the plan. After three days it detects a
 "fragile motivational state" and scales back: *"Maybe just do a 20-minute run today. We won't even talk about the
@@ -207,10 +207,10 @@ bot stores in S3 via registered function calls, so it doesn't rely on LLM memory
 roughly **$1/month**. Inference uses an open-weight OpenAI OSS model served by an external provider. Coding assistance
 throughout the build came from [Claude](https://www.anthropic.com/claude).
 
-**Results.** Weekly volume and consistency are both up sharply; visualization graphs (generated via
+**Results.** Weekly volume and consistency are both up; visualization graphs (generated via
 [Claude Code](https://www.anthropic.com/claude-code)) show clear upward trends. He admits he gave up on measuring speed
-improvement: sleep, diet, and alcohol produce so much noise that a meaningful trend signal is not reachable with his
-dataset. His invitation to the audience: *what could you build with your own data?*
+improvement: sleep, diet, and alcohol produce so much noise that he cannot pull a meaningful trend from his dataset. His
+invitation to the audience: *what could you build with your own data?*
 
 Code: [github.com/adamgordonbell/ai-running-coach](https://github.com/adamgordonbell/ai-running-coach). More from Adam
 on the [Pulumi community page](https://www.pulumi.com/community/community-engineering/adam-gordon-bell/).
@@ -219,10 +219,10 @@ on the [Pulumi community page](https://www.pulumi.com/community/community-engine
 
 {{< figure src="maria-mielniczuk-mcp-security.webp" width="900" alt="MCP hub-and-spoke architecture vs N×M custom integrations" \\ >}}
 
-Maria's framing: when you connect a model to tools, its output stops being text and becomes actions with real-world
-consequences. Building model × tool integrations by hand gets you an N×M explosion of custom glue with high maintenance
-cost, inconsistent interfaces, poor observability, and a larger security surface. She called it the "wild west" of
-ad-hoc integrations.
+Maria's framing: when you connect a model to tools, the model's output becomes actions with real-world consequences.
+Building model × tool integrations by hand gets you an N×M explosion of custom glue with high maintenance cost,
+inconsistent interfaces, poor observability, and a larger security surface. She called it the "wild west" of ad-hoc
+integrations.
 
 [**MCP (Model Context Protocol)**](https://modelcontextprotocol.io/) is the open standard for that glue, built on a
 host/client/server architecture:
@@ -230,7 +230,7 @@ host/client/server architecture:
 - **Host**: where the model runs and reasoning happens. Contains agent logic but doesn't execute tools itself.
 - **Client**: manages sessions and transport, converts high-level agent requests into structured JSON events, sanitizes
   inputs.
-- **Server**: a stateful message processor that routes requests to Python tool functions. Acts as the control plane for
+- **Server**: a stateful message processor that routes requests to Python tool functions. It is the control plane for
   capability discovery, request validation, policy enforcement, and audit logging.
 
 ```mermaid
@@ -300,8 +300,8 @@ She compared **FastMCP** (convenient framework, hides JSON plumbing, minimal obs
 the cost of visibility and control.
 
 **Open problems** as MCP systems compose: server-to-server calls (multi-hop workflows that lose end-to-end visibility),
-agent-to-agent delegation (chains of trust, policy propagation), and infinite loops between agents (budget controls and
-loop detection become survival features). *"As systems grow in composability, governability becomes more critical than
+agent-to-agent delegation (chains of trust, policy propagation), and infinite loops between agents (where you need
+budget controls and loop detection). *"As systems grow in composability, governability becomes more critical than
 connectivity."*
 
 Demo code: [github.com/MS-Mielnic/pytexas-mcp-demo](https://github.com/MS-Mielnic/pytexas-mcp-demo).
@@ -313,7 +313,7 @@ Demo code: [github.com/MS-Mielnic/pytexas-mcp-demo](https://github.com/MS-Mielni
 James has been using Python since 2003 and works on [PyViz](https://pyviz.org/) (a neutral catalog) and
 [HoloViz](https://holoviz.org/) (his team's opinionated project) at [Anaconda](https://www.anaconda.com/). His core
 point: Python has over **175 visualization tools** cataloged on [pyviz.org](https://pyviz.org), and no individual has
-used more than 25% of them. About 90% remain largely untested by the wider community. R has
+used more than 25% of them. About 90% remain untested by the wider community. R has
 [ggplot2](https://ggplot2.tidyverse.org/) as the obvious default; Python has a paradox-of-choice problem instead.
 
 **Seven decision dimensions** for narrowing the space:
@@ -370,7 +370,7 @@ space, see my earlier post on \[Python supply chain security\]({{< ref "posts/se
 - **Execution at interpreter startup**: `site.main` processes `.pth` files and `sitecustomize.py` on every Python
   launch. A 2003 change allowed `.pth` files to contain `import`-prefixed lines that run through `exec()` at startup, so
   a one-line `.pth` file with semicolons is enough for arbitrary code execution at every interpreter invocation.
-  Exceptions in these executions are caught and printed, not raised, so failures stay invisible.
+  `site.main` catches and prints exceptions from these executions instead of raising them, so failures stay invisible.
 
 **Attack techniques**:
 
@@ -462,8 +462,8 @@ with updated models:
   making it unfalsifiable.)
 - "Well, I don't have that problem."
 
-Al looked for functioning apps built by non-developers using AI alone, the thing all the breathless blog posts promise.
-He found maybe half a dozen that were installable and usable. The best was a poker-themed match-3 game, made by someone
+Al looked for functioning apps built by non-developers using AI alone, the thing the breathless blog posts promise. He
+found maybe half a dozen that were installable and usable. The best was a poker-themed match-3 game, made by someone
 with web development experience who spent two weeks refining it. The rest were minimal or uninstallable.
 
 He also flagged the legal reality: the terms of service of major AI products disclaim liability even for foreseeable
@@ -472,8 +472,8 @@ psychics use.
 
 **His key line**: ***almost right is worse than wrong.*** Wrong is detectable and fixable. Almost right gets shipped,
 rationalized, and carried forward as technical debt, security bugs, or failure modes nobody noticed. To trade off
-reliability against speed sensibly, you need accurate information, not plausible output. The closing question he
-answered: *is there a point to understanding things?* "Yes. Absolutely."
+reliability against speed, you need accurate information, not plausible output. The closing question he answered: *is
+there a point to understanding things?* "Yes. Absolutely."
 
 FYI: Carol Willing followed up in the Discord with a research project Al might enjoy,
 [*The LLM Writing Distortion*](https://sites.google.com/view/llmwritingdistortion/home), which studies how LLM
@@ -483,9 +483,9 @@ correct.
 ### Saturday Lightning Talks
 
 - **Ana Eilering** (senior developer relations engineer at [Google](https://www.google.com/), speaking independently):
-  "models are not magic, they are code." LLMs are lists of layers and neurons implemented in Python, and every neuron
-  operates as a non-deterministic black-box function. She showed a visual of [Gemma 2](https://ai.google.dev/gemma)'s
-  neuron activity during a factorial calculation.
+  "models are not magic, they are code." LLMs are lists of layers and neurons implemented in Python, and every neuron is
+  a non-deterministic black-box function. She showed a visual of [Gemma 2](https://ai.google.dev/gemma)'s neuron
+  activity during a factorial calculation.
 
 - A [Django Rest Framework](https://www.django-rest-framework.org/) cautionary tale: a serializer field `book_returned`
   (boolean column) shared a name root with a model method `book_return` that updated the database. DRF treats any
@@ -795,8 +795,8 @@ task, enforce with [pre-commit](https://pre-commit.com/) hooks locally and
 - **[Tristan Lee](https://trislee.github.io/pytexas-network/)** (data journalist): a network visualization of PyTexas
   itself, built the night before. Pipeline: [yt-dlp](https://github.com/yt-dlp/yt-dlp) to download the conference video
   playlist, an ASR model (he used "Vidya Therapy" for speed) to transcribe, [spaCy](https://spacy.io/) to extract
-  entities, general cleanup (PyTexas is apparently a hard token for ASR), [NetworkX](https://networkx.org/) for the
-  graph, [Gephi](https://gephi.org/) to lay out the nodes, and [Sigma.js](https://www.sigmajs.org/) to render. Nodes are
+  entities, general cleanup (PyTexas is a hard token for ASR), [NetworkX](https://networkx.org/) for the graph,
+  [Gephi](https://gephi.org/) to lay out the nodes, and [Sigma.js](https://www.sigmajs.org/) to render. Nodes are
   entities; edges connect two entities mentioned within ten words of each other. Clusters emerged for tooling/packaging,
   APIs, systems and containers, and a "Zen of Python" cluster. *"Don't yell at me, I know Gephi and Sigma.js aren't
   Python, but hey, what can we do?"* Live project:
@@ -825,8 +825,7 @@ task, enforce with [pre-commit](https://pre-commit.com/) hooks locally and
   uses **persona prompts** via a Cursor system-prompt Markdown file to pick the voice the model writes in. On screen: a
   slide comparing book covers of Harry Percival's *Test-Driven Development with Python* (2017), *Architecture Patterns
   with Python* (2020), and *Test-Driven Development with Python, 3rd Edition* (2025) to show how the same author's
-  thinking evolved across editions. Different personas (e.g., Django-era vs. Laravel-era) produce noticeably different
-  code.
+  thinking evolved across editions. Different personas (e.g., Django-era vs. Laravel-era) produce different code.
 - A pitch to come to [**EuroPython 2026**](https://ep2026.europython.eu/) this summer, featuring a live Core Dev podcast
   episode with Guido van Rossum, Łukasz Langa, and Pablo Galindo Salgado. A quick audience poll: are your summer plans
   still the same, does Europe sound tempting, have you met someone here you want to talk to again. Most hands went up.
@@ -863,8 +862,8 @@ making the trip.
 
 One piece of feedback on the format. This year had Open Spaces on both days, which I love in principle. In practice,
 running them alongside the main-stage talks meant Open Spaces attendance looked thinner than the interest warranted.
-Running them in a dedicated block (or without competing with the talks) would let them flourish. Small change, big
-payoff.
+Running them in a dedicated block (or without competing with the talks) would let them flourish. It is a small change
+with a big payoff.
 
 A final thanks to the many attendees, too many to enumerate, who came up to ask questions, share feedback on the Friday
 tutorial, trade notes on AI agents and packaging and everything in between, or just chat in the hallway.

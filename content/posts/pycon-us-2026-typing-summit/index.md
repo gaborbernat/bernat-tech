@@ -52,16 +52,16 @@ The answer to question 1 depends on coverage.
   Matplotlib): no meaningful improvement. The agent spent steps on type errors in code adjacent to the task, fixing
   import mismatches and missing attributes unrelated to the assigned bug.
 
-The answer to question 2 was yes: with the type checker in the loop, the agent stopped re-introducing previously fixed
-bugs when working on new ones.
+The answer to question 2 was yes: with the type checker in the loop, the agent stopped re-introducing old bugs while
+fixing new ones.
 
 Two findings on delivery mechanics:
 
-1. **Models do not use tools just because you mention them.** Telling the agent "you can run the type checker" was not
-   enough. The team wrapped Pyrefly invocations in a lightweight think-act-observe loop that ran the type checker after
-   every edit and injected the result. With that wrapper, both models engaged with the errors. Without it, they did not.
-2. **Surface errors as a fresh conversation turn, not as edit-tool output.** Errors returned inside the previous tool
-   response got treated as noise. The same errors posted as a new turn got addressed.
+1. **Mentioning a tool does not make a model use it.** Telling the agent "you can run the type checker" was not enough.
+   The team wrapped Pyrefly invocations in a lightweight think-act-observe loop that ran the type checker after every
+   edit and injected the result. With that wrapper, both models engaged with the errors. Without it, they did not.
+2. **Surface errors as a fresh conversation turn, not as edit-tool output.** The model treated errors returned inside
+   the previous tool response as noise, but addressed the same errors when they arrived as a new turn.
 
 Model sensitivity diverged. [Claude Sonnet 4.5](https://www.anthropic.com/news/claude-sonnet-4-5) chased every error the
 type checker emitted, which helped on clean code and hurt on noisy code: the model would fix unrelated nags before
@@ -116,7 +116,7 @@ direct-call answer.
 | 2        | Map `Y` and `Z` to `A`, drop `A` from the substitution     | `Callable[[A], A]`                                  | Accepts, but solutions for `A` lose `None`: only `Literal[2]`/`int` |
 | 3        | Carry the whole constraint set forward as a latent generic | `Callable[[Y], Z]` with `Y ≤ Z ∧ None ≤ Z` attached | Same answer as the direct call: `Y = Z = None \| Literal[2]`        |
 
-Astral is migrating `ty` to the third strategy; the work is not shipped publicly yet.
+Astral is migrating `ty` to the third strategy; the work is not public yet.
 
 Doug walked through how `ty` represents constraint sets internally: **ternary binary decision diagrams**, BDDs extended
 with a third "uncertain" edge, composed with a Horn-clause-style derived-fact engine for transitivity. He credited the
@@ -131,7 +131,7 @@ background on subtyping inference and reifying constraints into types, he cited
 Two open questions Doug flagged:
 
 1. Should the typing spec gain "constrained callable" types, or should this stay an implementation detail of `ty`?
-2. If constraints get reified into types, how do you report a contradiction to a user? Every constraint needs a
+2. If you reify constraints into types, how do you report a contradiction to a user? Every constraint needs a
    back-pointer to the source span that introduced it, or the error message degenerates to "something somewhere is
    wrong."
 
@@ -146,7 +146,7 @@ informal and unreleased. Jia uses it to answer design questions where the typing
 are inconclusive, before deciding what to ship in Pyrefly.
 
 The artifact bundles five Lean modules: source language, interpreter, type checker, theorem statements, proofs. The Lean
-compiler either accepts the bundle (definitions well-formed, all proofs valid) or rejects it. The project totals roughly
+compiler either accepts the bundle (definitions well-formed, all proofs valid) or rejects it. The project totals about
 39,000 lines of Lean, with the gradual-typing layer about twice the size of the static layer. Static took a week of his
 time; gradual took about a month.
 
@@ -161,20 +161,20 @@ acyclic; the world is open, so the type checker cannot enumerate every class tha
 
 The open-world choice constrains the type system. A negation type as set complement (everything that is not `T`) needs a
 fixed universe to subtract from, and an open world does not give you one. Jia restricted negation to single classes
-whose absence can be witnessed at runtime via `isinstance`. Jelle's intersection talk hit the same constraint later in
-the afternoon.
+whose absence `isinstance` can witness at runtime. Jelle's intersection talk hit the same constraint later in the
+afternoon.
 
-For the gradual layer, Jia rephrased the theorem. With `Any` in the picture, soundness fails outright; you cannot prove
-"no failure." The salvageable property: every failure traces back to an `Any` boundary. The proof device is to rewrite
-the program by inserting runtime checks at each `Any`-to-static transition, then show that any check failure points to
-an annotation that introduced the `Any`. Code without `Any` stays protected; the parts that opt out of the static side
-are the only ones that can fail.
+For the gradual layer, Jia rephrased the theorem. With `Any` in the picture, soundness fails; you cannot prove "no
+failure." The salvageable property: every failure traces back to an `Any` boundary. The proof device is to rewrite the
+program by inserting runtime checks at each `Any`-to-static transition, then show that any check failure points to an
+annotation that introduced the `Any`. Code without `Any` stays protected; the parts that opt out of the static side are
+the only ones that can fail.
 
-The closing meta-point landed on tooling. Jia tried to start a project like this five years ago and abandoned it because
-writing formal proofs by hand is too slow. With recent AI assistants, the calculus changes. The architectural work stays
-human: choose the language, decide which theorems to prove, recognize when a failed proof attempt is hiding a real
-design issue. The mechanical proof writing goes to the AI. Jia's estimate is that the gradual layer took weeks of his
-time instead of years.
+Jia closed on tooling. He tried to start a project like this five years ago and abandoned it because writing formal
+proofs by hand is too slow. With recent AI assistants, the calculus changes. The architectural work stays human: choose
+the language, decide which theorems to prove, recognize when a failed proof attempt is hiding a real design issue. The
+mechanical proof writing goes to the AI. Jia's estimate is that the gradual layer took weeks of his time instead of
+years.
 
 ## Exploration of tensor shape types in Pyrefly — Avik Chaudhuri
 
@@ -183,7 +183,8 @@ time instead of years.
 Avik (Meta) opened with a screenshot of
 [Andrej Karpathy's nanoGPT](https://github.com/karpathy/nanoGPT/blob/master/model.py), the kind of PyTorch code where
 every tensor operation carries a hand-written shape comment (`(B, T, C)`, `(B, nh, T, hs)`, etc.) because tensors are
-otherwise opaque to readers. His pitch: those comments should be inferred by the type checker, not maintained by hand.
+otherwise opaque to readers. His pitch: the type checker should infer those comments rather than developers maintaining
+them by hand.
 
 Avik described three building blocks:
 
@@ -197,7 +198,7 @@ Avik described three building blocks:
 3. **Op typing via a tiny shape DSL.** PyTorch has thousands of operators. Writing each one as a type stub is
    intractable because the shape transformations are too rich. Pyrefly defines a "fake op" for each PyTorch op: a
    comprehension-style function over ints that returns the output shape. The DSL is small enough to keep costs bounded,
-   and it is borrowed in spirit from
+   and it borrows in spirit from
    [PyTorch's own symbolic-shape work in `torch.compile`](https://docs.pytorch.org/docs/stable/torch.compiler_dynamic_shapes.html).
 
 He walked through code samples from real modules: an MLP class, an attention block with a `chunk(3, dim=-1)` split (the
@@ -252,7 +253,7 @@ reasoning from the previous talk.
 
 The rules he proposed:
 
-- `T` assignable to `A & B` iff `T` assignable to `A` and `T` assignable to `B`. Standard.
+- `T` assignable to `A & B` iff `T` assignable to `A` and `T` assignable to `B`; this is the standard rule.
 - `A & B` assignable to `T` iff `A & B` is assignable to `T` **and** the intersection is inhabited. The inhabitation
   check is the new part. Without it, `int & Any` ends up assignable to `str`, which is sound but useless.
 - **Attribute access** on an intersection: look up the attribute on each member, classify each result as `Type`,
@@ -270,14 +271,14 @@ ground the point. Starting from `x: int | Awaitable[int]` and applying
 `Awaitable[int]` in the positive branch and `int` in the negative branch. Strict reasoning gives a different answer,
 because a subclass of `int` could also implement `Awaitable`: the positive branch becomes
 `int & Awaitable[object] | Awaitable[int]`. Jelle noted that the sound answer surprises most users, while the
-type-system community treats it as correct. The design space lives between "what is sound" and "what we report."
+type-system community treats it as correct. The design space sits between "what is sound" and "what we report."
 
 ## PEP 827: Type Manipulation — Michael Sullivan
 
 {{< figure src="michael-sullivan-pep-827-type-manipulation.webp" width="900" alt="Michael Sullivan PEP 827 core constructs slide: conditional types, unpacked comprehensions, and type operators" >}}
 
 Michael ([Vercel](https://vercel.com/)) presented [PEP 827, Type Manipulation](https://peps.python.org/pep-0827/),
-targeting Python 3.15 and currently Draft. The PEP is co-authored with Daniel W. Park and
+targeting Python 3.15 and in Draft. The PEP is co-authored with Daniel W. Park and
 [Yury Selivanov](https://github.com/1st1), who were not on stage. Michael walked through the motivating use cases the
 PEP lists: Prisma-style typed query results, FastAPI's `Create`/`Read`/`Update` model duplication, dataclass-style class
 generation, and decorators that transform a class.
@@ -328,16 +329,16 @@ During Q&A, an audience member who had co-authored an earlier typing PEP asked a
 bracket-and-special-form syntax. Why not allow function calls in type positions and spell these as
 `typing.is_assignable(T, list)` instead of `typing.IsAssignable[T, list]`? Michael's response: they are not functions in
 the runtime sense; they operate on terms, not values; and mixing them with user-defined type aliases (which use
-bracketed form today) would conflate two different syntactic categories. The discussion came down to whether to lean
-further into existing type-form syntax or pull in the direction of familiar Python.
+bracketed form today) would conflate two different syntactic categories. The discussion came down to whether to build
+further on existing type-form syntax or pull toward familiar Python.
 
 ## Direction of Python's Type System — Guido van Rossum
 
 {{< figure src="guido-van-rossum-typing-direction.webp" width="900" alt="Guido van Rossum Three things I keep wondering about slide asking whether new typing features are too esoteric for Python users, whether discussions are dominated by typing nerds, and whether discussions go in circles" >}}
 
 Guido framed the talk as a discussion, not a conclusion. He opened with three things he keeps wondering about: are new
-typing features becoming too esoteric for everyday Python users, are typing discussions dominated by "typing nerds" out
-of touch with everyday pain, and are the discussions going in circles. Slides:
+typing features becoming too esoteric for everyday Python users, do "typing nerds" out of touch with everyday pain
+dominate the discussions, and are the discussions going in circles. Slides:
 [gvanrossum.github.io/typingtalk.html](https://gvanrossum.github.io/typingtalk.html).
 
 His starting point was Jukka Lehtosalo's original principle for [`mypy`](https://mypy-lang.org/): *useful, not perfect*.
@@ -356,8 +357,8 @@ Guido's reading, already gone in practice: variable annotations, generics syntax
 based) would unlock a nicer-looking version of type manipulation, shorten common annotations, or make `cast` a soft
 keyword.
 
-The third area is tooling divergence. Making code conform to multiple checkers is hard, users get pushed to pick one and
-live with its quirks, and tighter consistency across `mypy`, `pyright`, `ty`, and Pyrefly would make everyone's life
+The third area is tooling divergence. Making code conform to multiple checkers is hard, users end up picking one and
+living with its quirks, and tighter consistency across `mypy`, `pyright`, `ty`, and Pyrefly would make everyone's life
 easier.
 
 Guido grounded the user-pain framing in the
@@ -397,11 +398,10 @@ The panel opened with a state-of-the-world on type checkers. Actively maintained
 (Meta), [`ty`](https://docs.astral.sh/ty/) (Astral), [Zuban](https://github.com/zubanls/zuban) (David Halter),
 [Pycroscope](https://github.com/JelleZijlstra/pycroscope) (Jelle Zijlstra),
 [Pyright](https://github.com/microsoft/pyright) (Microsoft), and [`mypy`](https://mypy-lang.org/). Meta's Pyre is no
-longer in active development; it has been superseded by Pyrefly. [pytype](https://github.com/google/pytype) (Google) is
-being wound down too; Google has announced Python 3.12 as the last supported version, and pytype has been dropped from
-the
+longer in active development; Pyrefly has superseded it. [pytype](https://github.com/google/pytype) (Google) is being
+wound down too; Google has announced Python 3.12 as the last supported version, and the
 [typing conformance leaderboard](https://htmlpreview.github.io/?https://github.com/python/typing/blob/main/conformance/results/results.html)
-(now covering `mypy`, Pycroscope, Pyrefly, Pyright, `ty`, and Zuban).
+(now covering `mypy`, Pycroscope, Pyrefly, Pyright, `ty`, and Zuban) has dropped it.
 
 Carl Meyer walked through what the council has handled over the past year: PEP recommendations on typing-adjacent
 proposals, plus a longer queue of spec clarifications that did not warrant a full PEP.
@@ -447,7 +447,7 @@ In flight on the spec side (open issues on the council tracker):
   invariant today)
 - [#61 — PEP 718 (subscriptable functions)](https://github.com/python/typing-council/issues/61)
 
-The Q&A leaned into structural questions more than spec mechanics.
+The Q&A focused on structural questions more than spec mechanics.
 
 **On theoretical purity vs. legacy.** Asked about cases where the typing spec keeps a special case because removing it
 would break code (variance checking on protocols differing from variance checking on regular classes was the example),
@@ -473,8 +473,8 @@ end users, but full standardization runs into real differences in how each check
 piece by piece; not worth aiming for 100%.
 
 **On `ty` specifically.** Carl mentioned that `ty` is migrating its generics solver to use constraint sets for all
-expressions, not just callables and explicit generics. The next step, reifying constraint sets into user-facing types,
-has not been taken; that is the same question Doug Creager left open earlier in the day.
+expressions, beyond callables and explicit generics. Astral has not taken the next step, reifying constraint sets into
+user-facing types; that is the same question Doug Creager left open earlier in the day.
 
 ## Wrapping Up
 
