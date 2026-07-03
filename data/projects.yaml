@@ -135,10 +135,6 @@ primary:
     org: bloomberg
     ci: build.yml,build_dist.yml
     role: co-maintained
-  - name: attrs-strict
-    org: bloomberg
-    ci: check.yml
-    role: co-maintained
 
 maintenance:
   - name: all-repos-self
