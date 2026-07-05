@@ -7,6 +7,7 @@ enableEmoji = true
 enableGitInfo = true
 disableHugoGeneratorInject = true
 ignoreLogs = ["warning-goldmark-raw-html"]
+timeout = "180s"                                 # ~59 projects × several GetRemote calls each can exceed the 30s default
 
 pagination.pagerSize = 20
 

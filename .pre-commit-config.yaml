@@ -14,7 +14,7 @@ repos:
         args: ["--fix=lf"]
       - id: check-case-conflict
   - repo: https://github.com/rbubley/mirrors-prettier
-    rev: "v3.8.3"
+    rev: "v3.9.4"
     hooks:
       - id: prettier
         exclude: layouts/.*|.*\.md$|.*\.ya?ml$|package-lock\.json$
@@ -38,6 +38,6 @@ repos:
       - id: yamlfmt
         args: ["--formatter", "max_line_length=120,retain_line_breaks=true"]
   - repo: https://github.com/zizmorcore/zizmor-pre-commit
-    rev: v1.25.0
+    rev: v1.26.1
     hooks:
       - id: zizmor

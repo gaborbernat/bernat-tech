@@ -39,6 +39,8 @@
 
   // Build the shared header + body chrome and return the body to fill.
   function mount(root, title) {
+    root.setAttribute("role", "group");
+    root.setAttribute("aria-label", "Interactive demo: " + title);
     var head = el("div", "tv-head");
     head.appendChild(el("span", "tv-badge", "interactive"));
     head.appendChild(el("span", "tv-title", title));
@@ -1436,6 +1438,11 @@
         node.dataset.tvInit = "1";
         try {
           pair[1](node);
+          // announce result text to assistive tech as it updates
+          var live = node.querySelectorAll(".tv-summary, .tv-verdict, .tv-output");
+          for (var k = 0; k < live.length; k++) {
+            live[k].setAttribute("aria-live", "polite");
+          }
         } catch (err) {
           node.appendChild(el("div", "tv-empty", "widget failed to load"));
         }
