@@ -11,30 +11,29 @@ slug = "blazing-fast-html-parser"
 date = 2026-06-18T09:00:00Z
 +++
 
-> [!TLDR] **TLDR:**
->
-> turbohtml does HTML escape, unescape, tokenize, query, serialize, and URL work in C, 3-22x faster than Python's
-> standard library. The recurring trick is skipping work:
->
-> - **Scan in blocks, not characters.** [SWAR](#the-swar-trick-checking-eight-bytes-with-one-subtraction) clears eight
->   bytes with a subtraction, [SIMD](#sixteen-bytes-with-one-shuffle) sixteen with one shuffle; a clean block costs
->   almost nothing.
-> - **Measure, then write.** [One pass sizes the output exactly](#two-passes-measure-then-write), so the second
->   allocates once and bulk-copies the clean stretches.
-> - **Keep text at its native width and copy it rarely.** The tokenizer stamps its state machine
->   [once per width](#stamping-the-machine-once-per-width) and hands back
->   [zero-copy slices](#never-copy-text-you-dont-have-to) into the input.
-> - **The same instincts across the toolkit.** Tag names [interned to integers](#interning-names-to-integers), an
->   [id index built once](#building-the-index-once-instead-of-every-time) that turns an O(N²) path walk linear, and
->   [wrapper objects recycled](#recycling-the-wrapper-objects) on a free list.
-> - **When the work is a standard, not a scan.** Host encoding needs
->   [Punycode, normalization, and Hangul by arithmetic](#when-the-work-is-a-standard-not-a-scan), with the Unicode
->   tables generated at build time.
-> - **Down to the build and the benchmark.** [LTO and PGO](#teaching-the-compiler-what-is-hot) squeeze the machine code;
->   the CI gate [counts instructions under Callgrind](#measuring-without-lying-to-yourself) so a regression cannot hide
->   in the noise.
-> - **Free-threaded.** No shared mutable state, so it declares `Py_MOD_GIL_NOT_USED` and runs on the
->   [no-GIL build](https://peps.python.org/pep-0703/) without forcing the lock back on.
+{{< callout kind="note" title="TLDR: turbohtml does HTML escape, unescape, tokenize, query, serialize, and URL work in C, 3-22x faster than Python's standard library. The recurring trick is skipping work:" >}}
+
+- **Scan in blocks, not characters.** [SWAR](#the-swar-trick-checking-eight-bytes-with-one-subtraction) clears eight
+  bytes with a subtraction, [SIMD](#sixteen-bytes-with-one-shuffle) sixteen with one shuffle; a clean block costs almost
+  nothing.
+- **Measure, then write.** [One pass sizes the output exactly](#two-passes-measure-then-write), so the second allocates
+  once and bulk-copies the clean stretches.
+- **Keep text at its native width and copy it rarely.** The tokenizer stamps its state machine
+  [once per width](#stamping-the-machine-once-per-width) and hands back
+  [zero-copy slices](#never-copy-text-you-dont-have-to) into the input.
+- **The same instincts across the toolkit.** Tag names [interned to integers](#interning-names-to-integers), an
+  [id index built once](#building-the-index-once-instead-of-every-time) that turns an O(N²) path walk linear, and
+  [wrapper objects recycled](#recycling-the-wrapper-objects) on a free list.
+- **When the work is a standard, not a scan.** Host encoding needs
+  [Punycode, normalization, and Hangul by arithmetic](#when-the-work-is-a-standard-not-a-scan), with the Unicode tables
+  generated at build time.
+- **Down to the build and the benchmark.** [LTO and PGO](#teaching-the-compiler-what-is-hot) squeeze the machine code;
+  the CI gate [counts instructions under Callgrind](#measuring-without-lying-to-yourself) so a regression cannot hide in
+  the noise.
+- **Free-threaded.** No shared mutable state, so it declares `Py_MOD_GIL_NOT_USED` and runs on the
+  [no-GIL build](https://peps.python.org/pep-0703/) without forcing the lock back on.
+
+{{< /callout >}}
 
 _turbohtml was built with Claude (Opus 4.8), not by hand, over a month and close to 300 iterations. I review the code
 and own its correctness; [more on how, and my thanks, at the end](#how-this-was-built)._
