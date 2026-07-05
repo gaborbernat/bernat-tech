@@ -329,6 +329,10 @@ pre.mermaid svg {
   max-width: 100%;
   height: auto;
 }
+.post img[width] {
+  max-width: 100%;
+  height: auto;
+}
 
 /* Table of Contents */
 .post-wrapper.has-toc {
