@@ -7,5 +7,8 @@
   "devDependencies": {
     "glob": "^13.0.6",
     "shiki": "^4.3.1"
+  },
+  "dependencies": {
+    "mermaid": "11.16.0"
   }
 }

@@ -169,6 +169,29 @@ quality = 95
 hint = "photo"
 
 [module]
+# declaring any mount replaces Hugo's defaults, so the project dirs are re-listed alongside the
+# vendored mermaid bundle (pulled by npm ci, kept out of git) served as a fingerprinted asset.
+[[module.mounts]]
+source = "assets"
+target = "assets"
+[[module.mounts]]
+source = "content"
+target = "content"
+[[module.mounts]]
+source = "data"
+target = "data"
+[[module.mounts]]
+source = "layouts"
+target = "layouts"
+[[module.mounts]]
+source = "static"
+target = "static"
+[[module.mounts]]
+source = "archetypes"
+target = "archetypes"
+[[module.mounts]]
+source = "node_modules/mermaid/dist/mermaid.min.js"
+target = "assets/js/vendor/mermaid.min.js"
 [[module.imports]]
 path = "github.com/luizdepra/hugo-coder"
 
