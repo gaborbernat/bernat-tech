@@ -396,6 +396,8 @@ pre.mermaid svg {
 }
 .toc-content a {
   text-decoration: none;
+  display: block;
+  padding: 5px 0;
 }
 .toc-content a:hover {
   opacity: 1;

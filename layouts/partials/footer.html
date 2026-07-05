@@ -97,18 +97,24 @@
     diagram.setAttribute('data-mermaid-code', diagram.textContent);
   });
 
+  // dark mermaid renders edge labels as #ccc on a #585858 backing (4.43:1); darken the backing to the
+  // page background so the labels clear WCAG AA.
+  const mermaidConfig = () => {
+    const cfg = { theme: getTheme() };
+    if (cfg.theme === 'dark') cfg.themeVariables = { edgeLabelBackground: '#212121' };
+    return cfg;
+  };
+
   // Initialize mermaid with current theme
   mermaid.initialize({
     startOnLoad: true,
-    theme: getTheme()
+    ...mermaidConfig()
   });
 
   // Re-render diagrams when theme changes
   document.addEventListener('themeChanged', async () => {
-    const newTheme = getTheme();
-
     // Re-initialize mermaid with new theme
-    mermaid.initialize({ theme: newTheme });
+    mermaid.initialize(mermaidConfig());
 
     // Find all mermaid diagram containers
     const diagrams = document.querySelectorAll('pre.mermaid');
