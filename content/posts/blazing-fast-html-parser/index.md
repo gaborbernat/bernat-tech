@@ -712,25 +712,28 @@ extraction, and a URL parser, all with the same C core underneath. The interesti
 paying off, and the places they did not reach needed a different idea. Here are the ones worth knowing.
 
 Before the techniques, here is the shape of the whole toolkit against the libraries people reach for, one representative
-input each. turbohtml is the green column; the number in parentheses is how many times slower the competitor ran. The
-full picture, every operation against every competitor, lives in the
+input each. turbohtml is the green column; the parenthetical is the competitor's time against turbohtml's, so above one
+is slower and below one is faster. The full picture, every operation against every competitor, lives in the
 [migration guides](https://turbohtml.readthedocs.io/migration/index.html).
 
 {{< bench-table you=2 nums="3,4" >}} operation | input | turbohtml | a fast peer | a popular peer ; parse | 92 kB page |
-272 µs | lxml 631 µs (2.3x) | BeautifulSoup 15.3 ms (56x) ; query (CSS select) | 95 kB page | 1.3 µs | lxml 20.8 µs
-(16x) | BeautifulSoup 99.9 µs (77x) ; tokenize | typical markup | 34.9 µs | html.parser 435 µs (12x) | html5lib 836 µs
-(24x) ; escape | dense 4 MiB | 4.98 ms | html.escape 12.7 ms (2.6x) | n/a ; unescape | dense refs (4 KiB) | 8.1 µs |
+272 µs | resiliparse 282 µs (1.0x) | BeautifulSoup 15.3 ms (56x) ; query (CSS select) | 95 kB page | 1.3 µs | lxml 20.8
+µs (16x) | BeautifulSoup 99.9 µs (77x) ; tokenize | typical markup | 34.9 µs | html.parser 435 µs (12x) | html5lib 836
+µs (24x) ; escape | dense 4 MiB | 4.98 ms | html.escape 12.7 ms (2.6x) | n/a ; unescape | dense refs (4 KiB) | 8.1 µs |
 html.unescape 69.3 µs (8.6x) | w3lib 116 µs (14x) ; minify HTML | 95 kB page | 331 µs | minify-html 859 µs (2.6x) |
-htmlmin 6.77 ms (20x) ; minify CSS | bootstrap (274 kB) | 1.65 ms | lightningcss 4.82 ms (2.9x) | csscompressor 80.9 ms
-(49x) ; minify JS | jquery (279 kB) | 9.73 ms | terser 122 ms (12x) | calmjs.parse 411 ms (42x) ; sanitize | 4 KiB post
-| 42.1 µs | nh3 120 µs (2.9x) | bleach 1.92 ms (46x) {{< /bench-table >}}
+htmlmin 6.77 ms (20x) ; minify CSS | bootstrap 274 kB | 229 kB in 1.65 ms | rcssmin 233 kB in 625 µs (0.4x) |
+lightningcss 229 kB in 4.82 ms (2.9x) ; minify JS | jquery 279 kB | 88 kB in 9.73 ms | rjsmin 141 kB in 335 µs (0.0x) |
+terser 87 kB in 122 ms (12x) ; sanitize | 4 KiB post | 42.1 µs | nh3 120 µs (2.9x) | bleach 1.92 ms (46x)
+{{< /bench-table >}}
 
-Two honest caveats. The CSS and JS minifiers [`rcssmin`](https://pypi.org/project/rcssmin/) and
-[`rjsmin`](https://pypi.org/project/rjsmin/) are single-pass regular-expression tools that skip the parse turbohtml
-does, so they run faster than anything above while doing a shallower job; and
-[resiliparse](https://github.com/chatnoir-eu/chatnoir-resiliparse) matches turbohtml on raw parse speed, because it too
-is a hand-written C parser. The point is not that turbohtml wins every row. It is that a fully typed, spec-conformant
-toolkit sits in the same class as the fastest native code, an order of magnitude ahead of the pure-Python libraries most
+Two things the table makes concrete. Minification trades speed against size, which is why the minify rows carry both.
+The regex minifiers [`rcssmin`](https://pypi.org/project/rcssmin/) and [`rjsmin`](https://pypi.org/project/rjsmin/) are
+the fastest tools by a wide margin, but the size columns show they leave the file bigger; the full parsers
+[lightningcss](https://lightningcss.dev/) and [terser](https://github.com/terser/terser) match turbohtml's compression
+and pay several times the time for it; turbohtml sits at both corners at once. And
+[resiliparse](https://github.com/chatnoir-eu/chatnoir-resiliparse) ties turbohtml on parse because it too is a
+hand-written C parser. The point is not that turbohtml wins every row. It is that a fully typed, spec-conformant toolkit
+sits in the same class as the fastest native code, an order of magnitude ahead of the pure-Python libraries most
 projects run.
 
 ### Interning names to integers
