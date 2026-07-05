@@ -57,7 +57,7 @@ jobs:
           root: public/
           css: false
       - name: Validate RSS feed
-        run: xmllint --noout public/index.xml
+        run: python3 -c "import xml.etree.ElementTree as ET; ET.parse('public/index.xml')"
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
