@@ -1,6 +1,8 @@
 {{ if and .Site.Params.avatarURL (not .Site.Params.gravatar) }}
   {{ with .Site.Params.avatarURL }}
-    <div class="avatar"><img src="{{ . | relURL }}" alt="{{ $.Site.Params.author }}"></div>
+    <div class="avatar">
+      <img src="{{ . | relURL }}" alt="{{ $.Site.Params.author }}" width="512" height="512" decoding="async">
+    </div>
   {{ end }}
 {{ end }}
 {{ with .Site.Params.gravatar }}
