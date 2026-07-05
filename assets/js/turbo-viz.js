@@ -85,7 +85,7 @@
   function initSwar(root) {
     var initial = (root.dataset.text || "Tom & Jerry").slice(0, 8);
     var target = root.dataset.target || "&";
-    var body = mount(root, "SWAR has-zero — one byte hunted in eight");
+    var body = mount(root, "SWAR has-zero: one byte hunted in eight");
 
     var controls = el("div", "tv-controls");
     var inWrap = el("label", "tv-field");
@@ -161,13 +161,13 @@
         verdict.textContent =
           "mask = 0x" +
           res.mask.toString(16).toUpperCase().padStart(16, "0") +
-          " — '" +
+          ": '" +
           select.value +
           "' is in this word (" +
           found +
           (found === 1 ? " lane)" : " lanes)");
       } else {
-        verdict.textContent = "mask = 0 — no '" + select.value + "' here, the whole 8-byte block is clean";
+        verdict.textContent = "mask = 0, no '" + select.value + "' here, the whole 8-byte block is clean";
       }
       display.appendChild(verdict);
     }
@@ -187,7 +187,7 @@
     var initial = root.dataset.text || 'Tom & Jerry <3 "hi" don\'t';
     var block = parseInt(root.dataset.block || "16", 10);
     if (block !== 8 && block !== 16) block = 16;
-    var body = mount(root, "Block scan — escaping the way the CPU sees it");
+    var body = mount(root, "Block scan: escaping the way the CPU sees it");
 
     var controls = el("div", "tv-controls");
     var inWrap = el("label", "tv-field tv-grow");
@@ -291,7 +291,7 @@
 
   function initWidth(root) {
     var initial = root.dataset.text || "café 🎉";
-    var body = mount(root, "PEP 393 — how wide is your string?");
+    var body = mount(root, "PEP 393: how wide is your string?");
 
     var controls = el("div", "tv-controls");
     var inWrap = el("label", "tv-field tv-grow");
@@ -360,7 +360,7 @@
 
   // A faithful subset of the WHATWG tokenizer: the tag and attribute states
   // plus DATA. Character references are simplified (a '&' that does not start a
-  // known short entity is treated as text) — the entity resolver widget covers
+  // known short entity is treated as text); the entity resolver widget covers
   // that path. Returns a precomputed trace so stepping forward and back is just
   // an index.
   function tokTrace(input) {
@@ -645,7 +645,7 @@
 
   function initTok(root) {
     var initial = root.dataset.text || '<p class="x">Hi & bye</p>';
-    var body = mount(root, "WHATWG tokenizer — step the state machine");
+    var body = mount(root, "WHATWG tokenizer: step the state machine");
 
     var controls = el("div", "tv-controls");
     var inWrap = el("label", "tv-field tv-grow");
@@ -781,8 +781,8 @@
 
   // ------------------------------------------------------- entity resolver
 
-  // A curated, sorted slice of the HTML5 named-character-reference table — both
-  // the canonical "name;" forms and a few legacy semicolon-less ones — enough
+  // A curated, sorted slice of the HTML5 named-character-reference table, both
+  // the canonical "name;" forms and a few legacy semicolon-less ones, enough
   // to show binary search and longest-prefix matching honestly.
   var ENTITIES = [
     { name: "amp", cp: "&" },
@@ -841,7 +841,7 @@
 
   function initEntity(root) {
     var initial = root.dataset.text || "&notit;";
-    var body = mount(root, "unescape — resolving a character reference");
+    var body = mount(root, "unescape: resolving a character reference");
 
     var controls = el("div", "tv-controls");
     var inWrap = el("label", "tv-field tv-grow");
@@ -972,6 +972,449 @@
 
   // ---------------------------------------------------------------- boot
 
+  // ------------------------------------------------- interned atoms + bucket
+
+  function initAtom(root) {
+    var body = mount(root, "Interned atoms: one integer compare, one bucket");
+    var ATOMS = {
+      html: 1,
+      head: 2,
+      body: 3,
+      div: 4,
+      p: 5,
+      a: 6,
+      span: 7,
+      ul: 8,
+      li: 9,
+      img: 10,
+      table: 11,
+      tr: 12,
+      td: 13,
+    };
+    var DOC = ["html", "head", "body", "div", "p", "a", "span", "a", "div", "p", "a", "li", "div", "img"];
+
+    var controls = el("div", "tv-controls");
+    var field = el("label", "tv-field");
+    field.appendChild(el("span", "tv-fieldlabel", "find_all(tag)"));
+    var sel = el("select", "tv-input tv-mono");
+    Object.keys(ATOMS).forEach(function (t) {
+      var o = el("option", null, t);
+      o.value = t;
+      sel.appendChild(o);
+    });
+    sel.value = "a";
+    field.appendChild(sel);
+    controls.appendChild(field);
+    var atomField = el("div", "tv-field");
+    atomField.appendChild(el("span", "tv-fieldlabel", "atom"));
+    var atomVal = el("span", "tv-probe");
+    atomField.appendChild(atomVal);
+    controls.appendChild(atomField);
+
+    var docRow = el("div", "tv-doc");
+    var cells = DOC.map(function (t) {
+      var c = el("div", "tv-node");
+      c.appendChild(el("span", "tv-nodetag", t));
+      docRow.appendChild(c);
+      return c;
+    });
+    var summary = el("div", "tv-summary");
+    body.appendChild(controls);
+    body.appendChild(docRow);
+    body.appendChild(summary);
+
+    function render() {
+      var target = sel.value;
+      var atom = ATOMS[target];
+      atomVal.textContent = "TH_TAG_" + target.toUpperCase() + " = " + atom;
+      var n = 0;
+      cells.forEach(function (c, i) {
+        var hit = DOC[i] === target;
+        c.classList.toggle("tv-on", hit);
+        if (hit) n++;
+      });
+      summary.textContent =
+        "find_all('" +
+        target +
+        "') visits the " +
+        n +
+        " node" +
+        (n === 1 ? "" : "s") +
+        " in the " +
+        target +
+        "-bucket, not all " +
+        DOC.length +
+        ". Each match is one integer compare: node.atom == " +
+        atom +
+        ".";
+    }
+    sel.addEventListener("change", render);
+    render();
+  }
+
+  // ------------------------------------------- O(N^2) -> O(N) id locator index
+
+  function initIdIndex(root) {
+    var body = mount(root, "css_path uniqueness: O(N²) scan vs a build-once index");
+    var controls = el("div", "tv-controls");
+    var field = el("label", "tv-field tv-grow");
+    field.appendChild(el("span", "tv-fieldlabel", "elements carrying an id"));
+    var slider = el("input", "tv-input");
+    slider.type = "range";
+    slider.min = "5";
+    slider.max = "400";
+    slider.step = "5";
+    slider.value = "60";
+    field.appendChild(slider);
+    controls.appendChild(field);
+
+    var compare = el("div", "tv-compare");
+    var naiveCard = el("div", "tv-card tv-card-bad");
+    naiveCard.appendChild(el("div", "tv-cardhead", "naive: scan the whole document per id"));
+    var naiveVal = el("div", "tv-rbig");
+    naiveCard.appendChild(naiveVal);
+    naiveCard.appendChild(el("div", "tv-note", "O(N²)"));
+    var idxCard = el("div", "tv-card tv-card-good");
+    idxCard.appendChild(el("div", "tv-cardhead", "indexed: build the map once, then probe"));
+    var idxVal = el("div", "tv-rbig");
+    idxCard.appendChild(idxVal);
+    idxCard.appendChild(el("div", "tv-note", "O(N)"));
+    compare.appendChild(naiveCard);
+    compare.appendChild(idxCard);
+
+    var summary = el("div", "tv-summary");
+    body.appendChild(controls);
+    body.appendChild(compare);
+    body.appendChild(summary);
+
+    function fmt(n) {
+      return n >= 1000000 ? (n / 1000000).toFixed(1) + "M" : n >= 1000 ? (n / 1000).toFixed(1) + "k" : "" + n;
+    }
+    function render() {
+      var N = +slider.value;
+      var naive = N * N;
+      var indexed = N + N;
+      naiveVal.textContent = fmt(naive) + " ops";
+      idxVal.textContent = fmt(indexed) + " ops";
+      var ratio = Math.round(naive / indexed);
+      summary.textContent =
+        "Pathing every element costs N×N = " +
+        fmt(naive) +
+        " id comparisons the naive way, but N+N = " +
+        fmt(indexed) +
+        " with a build-once id→count map: about " +
+        ratio +
+        "× fewer at N=" +
+        N +
+        ". That gap is O(N²) against O(N).";
+    }
+    slider.addEventListener("input", render);
+    render();
+  }
+
+  // --------------------------------------------------- node wrapper free list
+
+  function initFreelist(root) {
+    var body = mount(root, "Node wrappers: a bounded free list");
+    var CAP = 8;
+    var parked = 0;
+    var live = 0;
+    var stats = { alloc: 0, revive: 0, free: 0 };
+
+    var controls = el("div", "tv-btnrow");
+    function mkbtn(label) {
+      var b = el("button", "tv-btn", label);
+      controls.appendChild(b);
+      return b;
+    }
+    var bWrap = mkbtn("wrap a node");
+    var bFree = mkbtn("release one");
+    var bBurst = mkbtn("find_all: wrap 6, release 6");
+    var toggle = el("label", "tv-toggle");
+    var cb = el("input");
+    cb.type = "checkbox";
+    cb.checked = true;
+    toggle.appendChild(cb);
+    toggle.appendChild(el("span", null, " pool on"));
+    controls.appendChild(toggle);
+
+    var poolRow = el("div", "tv-pool");
+    var slots = [];
+    for (var i = 0; i < CAP; i++) {
+      var s = el("div", "tv-slot");
+      poolRow.appendChild(s);
+      slots.push(s);
+    }
+    var counters = el("div", "tv-counters");
+    var cAlloc = el("span", "tv-stat");
+    var cRevive = el("span", "tv-stat");
+    var cFree = el("span", "tv-stat");
+    var cLive = el("span", "tv-stat");
+    counters.appendChild(cAlloc);
+    counters.appendChild(cRevive);
+    counters.appendChild(cFree);
+    counters.appendChild(cLive);
+    var summary = el("div", "tv-summary");
+    body.appendChild(controls);
+    body.appendChild(poolRow);
+    body.appendChild(counters);
+    body.appendChild(summary);
+
+    function wrap() {
+      if (cb.checked && parked > 0) {
+        parked--;
+        stats.revive++;
+      } else {
+        stats.alloc++;
+      }
+      live++;
+    }
+    function release() {
+      if (live <= 0) return;
+      live--;
+      if (cb.checked && parked < CAP) {
+        parked++;
+      } else {
+        stats.free++;
+      }
+    }
+    function render() {
+      slots.forEach(function (slot, idx) {
+        slot.classList.toggle("tv-on", idx < parked);
+      });
+      cAlloc.textContent = "malloc: " + stats.alloc;
+      cRevive.textContent = "revive: " + stats.revive;
+      cFree.textContent = "free: " + stats.free;
+      cLive.textContent = "live: " + live;
+      summary.textContent = cb.checked
+        ? "Released wrappers park on the list (max " +
+          CAP +
+          "); the next wrap revives one, so a burst of queries costs a few mallocs, not one per node."
+        : "Pool off: every wrap is a malloc and every release a free, the free-threaded build's path, where the GIL cannot guard a shared list.";
+    }
+    bWrap.addEventListener("click", function () {
+      wrap();
+      render();
+    });
+    bFree.addEventListener("click", function () {
+      release();
+      render();
+    });
+    bBurst.addEventListener("click", function () {
+      var k;
+      for (k = 0; k < 6; k++) wrap();
+      for (k = 0; k < 6; k++) release();
+      render();
+    });
+    cb.addEventListener("change", render);
+    render();
+  }
+
+  // -------------------------------------------------- IDNA / Punycode encoder
+
+  // RFC 3492 Punycode encode of one label (array of code points) to ASCII,
+  // without the xn-- prefix. This is the real bootstring algorithm.
+  function punyEncode(input) {
+    var base = 36,
+      tmin = 1,
+      tmax = 26,
+      skew = 38,
+      damp = 700,
+      initialBias = 72,
+      initialN = 128,
+      delimiter = 0x2d;
+    function adapt(delta, numpoints, first) {
+      delta = first ? Math.floor(delta / damp) : delta >> 1;
+      delta += Math.floor(delta / numpoints);
+      var k = 0;
+      for (; delta > ((base - tmin) * tmax) >> 1; k += base) {
+        delta = Math.floor(delta / (base - tmin));
+      }
+      return Math.floor(k + ((base - tmin + 1) * delta) / (delta + skew));
+    }
+    function digit(d) {
+      return d + (d < 26 ? 97 : 22);
+    }
+    var output = [];
+    var n = initialN,
+      delta = 0,
+      bias = initialBias;
+    var basic = input.filter(function (c) {
+      return c < 0x80;
+    });
+    var b = basic.length;
+    var h = b;
+    basic.forEach(function (c) {
+      output.push(c);
+    });
+    if (b > 0) output.push(delimiter);
+    while (h < input.length) {
+      var m = Infinity;
+      input.forEach(function (c) {
+        if (c >= n && c < m) m = c;
+      });
+      delta += (m - n) * (h + 1);
+      n = m;
+      input.forEach(function (c) {
+        if (c < n) delta++;
+        if (c === n) {
+          var q = delta;
+          for (var k = base; ; k += base) {
+            var t = k <= bias ? tmin : k >= bias + tmax ? tmax : k - bias;
+            if (q < t) break;
+            output.push(digit(t + ((q - t) % (base - t))));
+            q = Math.floor((q - t) / (base - t));
+          }
+          output.push(digit(q));
+          bias = adapt(delta, h + 1, h === b);
+          delta = 0;
+          h++;
+        }
+      });
+      delta++;
+      n++;
+    }
+    return output
+      .map(function (c) {
+        return String.fromCharCode(c);
+      })
+      .join("");
+  }
+
+  function initIdna(root) {
+    var body = mount(root, "IDNA host encoding: map, normalize (NFC), Punycode");
+    var controls = el("div", "tv-controls");
+    var field = el("label", "tv-field tv-grow");
+    field.appendChild(el("span", "tv-fieldlabel", "a Unicode host"));
+    var input = el("input", "tv-input tv-mono");
+    input.type = "text";
+    input.value = root.dataset.text || "café.example";
+    input.spellcheck = false;
+    field.appendChild(input);
+    controls.appendChild(field);
+
+    var steps = el("div", "tv-steps");
+    var out = el("div", "tv-output tv-mono");
+    var note = el(
+      "div",
+      "tv-note",
+      "The live demo lowercases as its UTS-46 step; the library uses the full Unicode mapping table.",
+    );
+    var summary = el("div", "tv-summary");
+    body.appendChild(controls);
+    body.appendChild(steps);
+    body.appendChild(out);
+    body.appendChild(note);
+    body.appendChild(summary);
+
+    function cps(s) {
+      var a = [];
+      for (var ch of s) a.push(ch.codePointAt(0));
+      return a;
+    }
+    function render() {
+      steps.textContent = "";
+      var labels = input.value.split(".");
+      var asciiLabels = labels.map(function (label) {
+        if (label === "") return "";
+        var mapped = label.toLowerCase();
+        var nfc = mapped.normalize("NFC");
+        var isAscii = /^[\x00-\x7f]*$/.test(nfc);
+        var ascii = isAscii ? nfc : "xn--" + punyEncode(cps(nfc));
+        var step = el("div", "tv-step");
+        step.appendChild(el("span", "tv-steplabel", label));
+        step.appendChild(el("span", "tv-steparrow", "→"));
+        step.appendChild(el("span", "tv-mono", isAscii ? nfc + "  (ASCII, kept)" : nfc + "  →  " + ascii));
+        steps.appendChild(step);
+        return ascii;
+      });
+      out.textContent = asciiLabels.join(".");
+      summary.textContent =
+        "Each label is mapped and normalized to NFC, then any label with non-ASCII becomes xn-- plus its Punycode. That is the ASCII form DNS carries.";
+    }
+    input.addEventListener("input", render);
+    render();
+  }
+
+  // ----------------------------------------------- benchmark CPU determinism
+
+  function initBench(root) {
+    var body = mount(root, "Why the gate counts instructions, and pins the CPU");
+    var controls = el("div", "tv-controls");
+    var field = el("label", "tv-field tv-grow");
+    field.appendChild(el("span", "tv-fieldlabel", "bytes to copy (one memcpy)"));
+    var slider = el("input", "tv-input");
+    slider.type = "range";
+    slider.min = "64";
+    slider.max = "8192";
+    slider.step = "64";
+    slider.value = "4096";
+    field.appendChild(slider);
+    controls.appendChild(field);
+    var toggle = el("label", "tv-toggle");
+    var cb = el("input");
+    cb.type = "checkbox";
+    toggle.appendChild(cb);
+    toggle.appendChild(el("span", null, " pin GLIBC_TUNABLES (force SSE2 everywhere)"));
+    controls.appendChild(toggle);
+
+    var compare = el("div", "tv-compare");
+    var intel = el("div", "tv-card");
+    intel.appendChild(el("div", "tv-cardhead", "Intel Xeon runner"));
+    var iVal = el("div", "tv-rbig");
+    var iSub = el("div", "tv-note");
+    intel.appendChild(iVal);
+    intel.appendChild(iSub);
+    var amd = el("div", "tv-card");
+    amd.appendChild(el("div", "tv-cardhead", "AMD EPYC runner"));
+    var aVal = el("div", "tv-rbig");
+    var aSub = el("div", "tv-note");
+    amd.appendChild(aVal);
+    amd.appendChild(aSub);
+    compare.appendChild(intel);
+    compare.appendChild(amd);
+
+    var verdict = el("div", "tv-verdict");
+    var summary = el("div", "tv-summary");
+    body.appendChild(controls);
+    body.appendChild(compare);
+    body.appendChild(verdict);
+    body.appendChild(summary);
+
+    function render() {
+      var bytes = +slider.value;
+      var pinned = cb.checked;
+      var intelLane = pinned ? 16 : 64;
+      var amdLane = 16;
+      var iInstr = Math.ceil(bytes / intelLane);
+      var aInstr = Math.ceil(bytes / amdLane);
+      iVal.textContent = iInstr + " instrs";
+      aVal.textContent = aInstr + " instrs";
+      iSub.textContent = pinned ? "SSE2, 16 B/instr" : "AVX-512, 64 B/instr";
+      aSub.textContent = "SSE2, 16 B/instr";
+      var same = iInstr === aInstr;
+      intel.classList.toggle("tv-card-good", same);
+      intel.classList.toggle("tv-card-bad", !same);
+      amd.classList.toggle("tv-card-good", same);
+      amd.classList.toggle("tv-card-bad", !same);
+      if (same) {
+        verdict.textContent = "identical counts → a real regression would stand out";
+        verdict.className = "tv-verdict tv-v-clean";
+      } else {
+        var d = (Math.abs(iInstr - aInstr) / Math.min(iInstr, aInstr)) * 100;
+        verdict.textContent =
+          "counts differ by " + d.toFixed(0) + "% for the SAME code → a false regression, pure CPU luck";
+        verdict.className = "tv-verdict tv-v-dirty";
+      }
+      summary.textContent = pinned
+        ? "Pinning forces the SSE2 memcpy on every runner, so the count reproduces and the gate compares like with like."
+        : "GitHub picks the CPU; glibc picks the memcpy. The same source counts differently on Intel and AMD, which reads as a regression that never happened.";
+    }
+    slider.addEventListener("input", render);
+    cb.addEventListener("change", render);
+    render();
+  }
+
   function boot() {
     var widgets = [
       ["tv-swar", initSwar],
@@ -979,6 +1422,11 @@
       ["tv-width", initWidth],
       ["tv-tok", initTok],
       ["tv-entity", initEntity],
+      ["tv-atom", initAtom],
+      ["tv-idindex", initIdIndex],
+      ["tv-freelist", initFreelist],
+      ["tv-idna", initIdna],
+      ["tv-bench", initBench],
     ];
     widgets.forEach(function (pair) {
       var nodes = document.querySelectorAll("." + pair[0]);

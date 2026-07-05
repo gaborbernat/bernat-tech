@@ -1,0 +1,66 @@
+{{- /* Colored benchmark table. Inner content is ";"-separated rows (the first
+       row is the header), each row "|"-separated cells. A ";" row delimiter
+       survives mdformat's prose reflow where newlines would not. you=<col of
+       turbohtml> tints green; nums="i,j" are competitor columns, each tinted
+       from the (Nx) ratio in its own cell (bigger = redder). A competitor
+       cell whose leading token names a known library is linked to it. */ -}}
+{{- $you := int (.Get "you") -}}
+{{- $nums := slice -}}
+{{- range (split (.Get "nums") ",") -}}
+  {{- $nums = $nums | append (int (trim . " ")) -}}
+{{- end -}}
+{{- $urls := dict
+  "lxml" "https://lxml.de/"
+  "BeautifulSoup" "https://www.crummy.com/software/BeautifulSoup/"
+  "html5lib" "https://github.com/html5lib/html5lib-python"
+  "html.parser" "https://docs.python.org/3/library/html.parser.html"
+  "html.escape" "https://docs.python.org/3/library/html.html#html.escape"
+  "html.unescape" "https://docs.python.org/3/library/html.html#html.unescape"
+  "minify-html" "https://github.com/wilsonzlin/minify-html"
+  "htmlmin" "https://pypi.org/project/htmlmin/"
+  "lightningcss" "https://lightningcss.dev/"
+  "csscompressor" "https://pypi.org/project/csscompressor/"
+  "terser" "https://github.com/terser/terser"
+  "calmjs.parse" "https://pypi.org/project/calmjs.parse/"
+  "nh3" "https://pypi.org/project/nh3/"
+  "bleach" "https://github.com/mozilla/bleach"
+  "w3lib" "https://github.com/scrapy/w3lib"
+-}}
+{{- $rows := split (trim .Inner " \n;") ";" -}}
+<div class="bench-wrap">
+<table class="bench-table">
+<thead><tr>
+{{- range (split (index $rows 0) "|") }}<th>{{ trim (replaceRE `\s+` " " .) " " }}</th>{{ end -}}
+</tr></thead>
+<tbody>
+{{- range $ri, $row := $rows }}{{ if gt $ri 0 -}}
+<tr>
+{{- range $ci, $c := split $row "|" -}}
+  {{- $txt := trim (replaceRE `\s+` " " $c) " " -}}
+  {{- $cls := "" -}}
+  {{- if eq $ci $you -}}
+    {{- $cls = "bench-faster" -}}
+  {{- else if and (in $nums $ci) (ne $txt "n/a") -}}
+    {{- $m := findRE `\([0-9.]+x\)` $txt 1 -}}
+    {{- if $m -}}
+      {{- $r := float (replaceRE `[^0-9.]` "" (index $m 0)) -}}
+      {{- $cls = cond (ge $r 15.0) "bench-worst" (cond (ge $r 6.0) "bench-veryslow" (cond (ge $r 2.5) "bench-slow" (cond (ge $r 1.1) "bench-mild" "bench-par"))) -}}
+    {{- else -}}
+      {{- $cls = "bench-par" -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $name := index (split $txt " ") 0 -}}
+  {{- $url := index $urls $name -}}
+  {{- if and $cls (in $nums $ci) $url -}}
+    <td class="{{ $cls }}"><a href="{{ $url }}">{{ $name }}</a>{{ strings.TrimPrefix $name $txt }}</td>
+  {{- else if $cls -}}
+    <td class="{{ $cls }}">{{ $txt }}</td>
+  {{- else -}}
+    <td>{{ $txt }}</td>
+  {{- end -}}
+{{- end -}}
+</tr>
+{{- end }}{{ end }}
+</tbody>
+</table>
+</div>

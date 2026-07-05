@@ -1150,3 +1150,239 @@ body.colorscheme-dark .turbo-viz {
   border-radius: 6px;
   background: var(--tv-block);
 }
+
+/* new widgets: atom bucket, id index, freelist, idna, bench determinism */
+.tv-input[type="range"] {
+  padding: 0.35em 0;
+  background: transparent;
+  border: none;
+  accent-color: var(--tv-accent);
+  width: 100%;
+}
+select.tv-input {
+  cursor: pointer;
+}
+.tv-doc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  margin-bottom: 1em;
+}
+.tv-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.4em;
+  padding: 0.4em 0.5em;
+  border: 1px solid var(--tv-cell-border);
+  border-radius: 8px;
+  background: var(--tv-cell);
+  font-family: var(--tv-mono);
+  font-size: 0.82em;
+  color: var(--tv-muted);
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.tv-node.tv-on {
+  background: var(--tv-lit);
+  color: var(--tv-lit-fg);
+  border-color: transparent;
+  box-shadow: 0 0 0 3px var(--tv-lit-glow);
+  font-weight: 700;
+}
+.tv-nodetag::before {
+  content: "<";
+  opacity: 0.55;
+}
+.tv-nodetag::after {
+  content: ">";
+  opacity: 0.55;
+}
+.tv-compare {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  margin-bottom: 1em;
+}
+.tv-card {
+  flex: 1 1 14em;
+  padding: 0.9em 1em;
+  border: 1px solid var(--tv-line);
+  border-radius: 10px;
+  background: var(--tv-block);
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+.tv-cardhead {
+  font-size: 0.78em;
+  font-weight: 600;
+  color: var(--tv-sub);
+  margin-bottom: 0.4em;
+}
+.tv-card-good {
+  border-color: var(--tv-good);
+  background: var(--tv-good-soft);
+}
+.tv-card-bad {
+  border-color: #d03b3b;
+  background: rgba(208, 59, 59, 0.12);
+}
+.tv-rbig {
+  font-family: var(--tv-mono);
+  font-size: 1.5em;
+  font-weight: 700;
+  color: var(--tv-text);
+}
+.tv-pool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin-bottom: 0.9em;
+}
+.tv-slot {
+  width: 2.4em;
+  height: 2.4em;
+  border: 1px dashed var(--tv-line-2);
+  border-radius: 8px;
+  background: var(--tv-block);
+  transition:
+    background 0.15s ease,
+    border 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.tv-slot.tv-on {
+  border-style: solid;
+  border-color: transparent;
+  background: var(--tv-lit);
+  box-shadow: 0 0 0 2px var(--tv-lit-glow);
+}
+.tv-counters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin-bottom: 0.9em;
+}
+.tv-stat {
+  font-family: var(--tv-mono);
+  font-size: 0.82em;
+  padding: 0.25em 0.6em;
+  border-radius: 6px;
+  background: var(--tv-block);
+  color: var(--tv-sub);
+}
+.tv-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  margin-bottom: 0.9em;
+}
+.tv-step {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5em;
+  font-size: 0.9em;
+}
+.tv-steplabel {
+  font-family: var(--tv-mono);
+  font-weight: 600;
+  color: var(--tv-accent);
+}
+.tv-steparrow {
+  color: var(--tv-muted);
+}
+
+/* colored benchmark tables (bench-table shortcode), after the docs' heat ladder */
+.bench-wrap {
+  overflow-x: auto;
+  margin: 1.6em 0;
+}
+table.bench-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.94em;
+}
+table.bench-table th,
+table.bench-table td {
+  padding: 0.4em 0.7em;
+  border: 1px solid var(--tv-line, #d3dae3);
+  text-align: left;
+  white-space: nowrap;
+}
+table.bench-table thead th {
+  background: rgba(15, 23, 42, 0.05);
+  font-weight: 600;
+}
+table.bench-table td[class*="bench-"] {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+}
+table.bench-table td.bench-faster,
+table.bench-table td.bench-win {
+  background: rgba(12, 163, 12, 0.28);
+}
+table.bench-table td.bench-par {
+  background: rgba(12, 163, 12, 0.14);
+}
+table.bench-table td.bench-mild {
+  background: rgba(250, 178, 25, 0.16);
+}
+table.bench-table td.bench-slow {
+  background: rgba(236, 131, 90, 0.2);
+}
+table.bench-table td.bench-veryslow {
+  background: rgba(208, 59, 59, 0.22);
+}
+table.bench-table td.bench-worst {
+  background: rgba(208, 59, 59, 0.38);
+}
+body.colorscheme-dark table.bench-table thead th {
+  background: rgba(255, 255, 255, 0.06);
+}
+body.colorscheme-dark table.bench-table td.bench-faster,
+body.colorscheme-dark table.bench-table td.bench-win {
+  background: rgba(12, 163, 12, 0.34);
+}
+body.colorscheme-dark table.bench-table td.bench-par {
+  background: rgba(12, 163, 12, 0.18);
+}
+body.colorscheme-dark table.bench-table td.bench-mild {
+  background: rgba(250, 178, 25, 0.2);
+}
+body.colorscheme-dark table.bench-table td.bench-slow {
+  background: rgba(236, 131, 90, 0.24);
+}
+body.colorscheme-dark table.bench-table td.bench-veryslow {
+  background: rgba(208, 59, 59, 0.28);
+}
+body.colorscheme-dark table.bench-table td.bench-worst {
+  background: rgba(208, 59, 59, 0.44);
+}
+@media (prefers-color-scheme: dark) {
+  body.colorscheme-auto table.bench-table thead th {
+    background: rgba(255, 255, 255, 0.06);
+  }
+  body.colorscheme-auto table.bench-table td.bench-faster,
+  body.colorscheme-auto table.bench-table td.bench-win {
+    background: rgba(12, 163, 12, 0.34);
+  }
+  body.colorscheme-auto table.bench-table td.bench-par {
+    background: rgba(12, 163, 12, 0.18);
+  }
+  body.colorscheme-auto table.bench-table td.bench-mild {
+    background: rgba(250, 178, 25, 0.2);
+  }
+  body.colorscheme-auto table.bench-table td.bench-slow {
+    background: rgba(236, 131, 90, 0.24);
+  }
+  body.colorscheme-auto table.bench-table td.bench-veryslow {
+    background: rgba(208, 59, 59, 0.28);
+  }
+  body.colorscheme-auto table.bench-table td.bench-worst {
+    background: rgba(208, 59, 59, 0.44);
+  }
+}

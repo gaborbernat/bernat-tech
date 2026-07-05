@@ -1,33 +1,41 @@
 +++
 author = "Bernat Gabor"
-title = "Building a fast HTML parser in C: SWAR, SIMD, and zero-copy"
-description = "A walk through the techniques that make turbohtml's escape, unescape, and HTML tokenizer several times faster than the Python standard library: SWAR, SIMD, per-width specialization, and zero-copy text runs."
+title = "Building a fast HTML toolkit in C for Python"
+description = "How turbohtml builds a fast HTML toolkit in C for Python: SWAR, SIMD, zero-copy, interned atoms, IDNA, LTO/PGO, and honest benchmarking, 3-22x faster."
+keywords = [ "html parser", "html toolkit", "python c extension", "simd", "swar", "zero-copy", "tokenizer", "idna", "punycode", "pgo", "lto", "free-threading", "benchmarking", "turbohtml", "lxml alternative", "beautifulsoup alternative"]
 image = "splash.webp"
 images = [ "splash.webp"]
-tags = [ "python", "c", "performance", "simd", "html", "parser", "tokenizer", "unicode", "turbohtml"]
+tags = [ "python", "c", "performance", "simd", "html", "parser", "tokenizer", "unicode", "turbohtml", "idna", "pgo", "lto", "benchmarking"]
 draft = true
 slug = "blazing-fast-html-parser"
 date = 2026-06-18T09:00:00Z
 +++
 
-> [!TLDR] **TLDR:**
+> [!TLDR] **TLDR:** turbohtml does HTML escape, unescape, tokenize, query, serialize, and URL work in C, 3-22x faster
+> than Python's standard library. The recurring trick is skipping work:
 >
-> - [**The setting**](#why-bother): escaping, unescaping, and tokenizing HTML sit on hot paths. The Python standard
->   library does them in pure Python, one character at a time. [turbohtml](https://pypi.org/project/turbohtml/) does
->   them in C and comes out 3-15x ahead.
-> - [**Scan many bytes at once**](#scanning-sixteen-bytes-at-a-time): most text contains nothing special, so the trick
->   is to confirm that quickly. [SWAR](#the-swar-trick-checking-eight-bytes-with-one-subtraction) checks eight bytes
->   with a subtraction; [SIMD](#sixteen-bytes-with-one-shuffle) checks sixteen with one shuffle.
-> - [**Measure, then write**](#two-passes-measure-then-write): one pass sizes the result exactly, so the second pass
->   allocates once and copies clean stretches wholesale.
-> - [**Keep the native width**](#the-tokenizer-a-spec-exact-state-machine): a Python `str` stores text at one, two, or
->   four bytes per character ([PEP 393](https://peps.python.org/pep-0393/)). The tokenizer compiles its state machine
->   [once per width](#stamping-the-machine-once-per-width) and never copies a clean run of text out of the input
->   ([zero-copy slices](#never-copy-text-you-dont-have-to)).
-> - [**The result**](#what-it-all-adds-up-to): an all-ASCII document, the common case, travels from input to tokens as
->   one-byte copies, scanned sixteen bytes at a step.
-> - [**Free-threaded**](#making-it-free-threaded): no shared mutable state, so it declares `Py_MOD_GIL_NOT_USED` and
->   runs on the [no-GIL build](https://peps.python.org/pep-0703/) without forcing the lock back on.
+> - **Scan in blocks, not characters.** [SWAR](#the-swar-trick-checking-eight-bytes-with-one-subtraction) clears eight
+>   bytes with a subtraction, [SIMD](#sixteen-bytes-with-one-shuffle) sixteen with one shuffle; a clean block costs
+>   almost nothing.
+> - **Measure, then write.** [One pass sizes the output exactly](#two-passes-measure-then-write), so the second
+>   allocates once and bulk-copies the clean stretches.
+> - **Keep text at its native width and copy it rarely.** The tokenizer stamps its state machine
+>   [once per width](#stamping-the-machine-once-per-width) and hands back
+>   [zero-copy slices](#never-copy-text-you-dont-have-to) into the input.
+> - **The same instincts across the toolkit.** Tag names [interned to integers](#interning-names-to-integers), an
+>   [id index built once](#building-the-index-once-instead-of-every-time) that turns an O(N²) path walk linear, and
+>   [wrapper objects recycled](#recycling-the-wrapper-objects) on a free list.
+> - **When the work is a standard, not a scan.** Host encoding needs
+>   [Punycode, normalization, and Hangul by arithmetic](#when-the-work-is-a-standard-not-a-scan), with the Unicode
+>   tables generated at build time.
+> - **Down to the build and the benchmark.** [LTO and PGO](#teaching-the-compiler-what-is-hot) squeeze the machine code;
+>   the CI gate [counts instructions under Callgrind](#measuring-without-lying-to-yourself) so a regression cannot hide
+>   in the noise.
+> - **Free-threaded.** No shared mutable state, so it declares `Py_MOD_GIL_NOT_USED` and runs on the
+>   [no-GIL build](https://peps.python.org/pep-0703/) without forcing the lock back on.
+
+_turbohtml was built with Claude (Opus 4.8), not by hand, over a month and close to 300 iterations. I review the code
+and own its correctness; [more on how, and my thanks, at the end](#how-this-was-built)._
 
 This started as a proposal to CPython. The standard library's
 [`html.escape`](https://docs.python.org/3/library/html.html#html.escape) and
@@ -38,15 +46,50 @@ entity table. Both sit on hot paths, since `html.parser.HTMLParser` calls `unesc
 [pull request](https://github.com/python/cpython/pull/151025) to add a small C accelerator behind them, keeping the
 Python versions as the [PEP 399](https://peps.python.org/pep-0399/) fallback.
 
-The core developers turned it down, and their reasons were fair. A C extension is a maintenance burden, `HTMLParser` is
-still being rewritten, and there is talk of a unified `xml.escape` that might one day want to share an accelerator. One
-of the maintainers
+The core developers turned it down, and their reasons were fair. A C extension is a maintenance burden, hand-written
+SIMD more so, and they were clear they did not want to carry vector code in the standard library; on top of that
+`HTMLParser` is still being rewritten, and there is talk of a unified `xml.escape` that might one day want to share an
+accelerator. One of the maintainers
 [suggested PyPI as the better home](https://github.com/python/cpython/issues/151024#issuecomment-4640666387) for this
-rather than the standard library. So that is where it went, as [turbohtml](https://github.com/tox-dev/turbohtml).
+rather than the standard library. So that is where it went, as [turbohtml](https://turbohtml.readthedocs.io/).
 
-Outside the standard library's constraints I kept going, and added a tokenizer too. turbohtml now does three things: it
-escapes text for HTML, it unescapes HTML back to text, and it tokenizes HTML into a stream of tags and text. It matches
-`html.escape`, `html.unescape`, and `html.parser` byte for byte, in C, several times faster.
+The standard library is right to be wary of SIMD in code that has to build everywhere and last decades. But once the
+code lived on PyPI instead, that caution stopped applying, and it left a question I wanted to answer: if nothing is
+off-limits, how fast can HTML-domain work get? So I set the scope to the whole HTML domain and kept pushing. turbohtml
+grew from three functions into a toolkit. It still escapes, unescapes, and tokenizes, matching `html.escape`,
+`html.unescape`, and `html.parser` byte for byte; on top of that it builds a tree, queries it with CSS and XPath,
+serializes, sanitizes, minifies HTML and CSS and JavaScript, extracts metadata, and parses URLs, all over one C core and
+behind a thin typed Python facade. What it does, and what it refuses to do, follows from a short list of design
+principles worth stating before the techniques.
+
+## Design principles
+
+A handful of rules decide what turbohtml is, and they explain most of the choices in the rest of this piece.
+
+- **Speed over ease of maintenance.** The hot path is C: the tokenizer, the WHATWG tree builder, the CSS and XPath
+  engines, escaping, and serialization all run over one
+  [bump-allocated arena](https://en.wikipedia.org/wiki/Region-based_memory_management) that holds no Python objects.
+  Python appears only at the typed edge, a thin facade over the nodes you actually touch.
+- **A modern, fully typed API.** Every concept carries one name and the whole surface is annotated. turbohtml is not a
+  drop-in for what it replaces; the `turbohtml.migration` modules and guides translate
+  [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/), [lxml](https://lxml.de/),
+  [html5lib](https://github.com/html5lib/html5lib-python), [markupsafe](https://pypi.org/project/MarkupSafe/), and
+  standard-library code rather than aliasing their APIs.
+- **Still maintainable.** The C is split by subsystem and written to read as its own documentation, and both the Python
+  and C coverage gates require 100% line and branch coverage, on gcc and llvm-cov alike, before a change lands.
+- **WHATWG conformance first.** The tokenizer and tree builder follow the
+  [WHATWG HTML standard](https://html.spec.whatwg.org/multipage/parsing.html) state by state, validated against the
+  html5lib-tests suite browsers use. It matches a competitor's behavior only where the spec leaves the answer open.
+- **Free-threading ready.** The extension holds no shared mutable state and declares free-threading support, and every
+  tree edit and string read runs under a per-tree [critical section](https://en.wikipedia.org/wiki/Critical_section)
+  that snapshots the arena before any Python callback, so a concurrent mutation can never tear a walk.
+- **Native and dependency-free.** The core is pure C, no libxml2 or lxml underneath, accelerated with SIMD, SWAR, and an
+  incremental codec. It reuses the standard library for solved problems like
+  [regex matching](https://docs.python.org/3/library/re.html) instead of reimplementing them.
+- **Benchmark-driven and competitor-informed.** Designs are measured with pyperf against the fastest implementations
+  across C, Rust, and Go, and adopt their proven techniques: the [lexbor](https://github.com/lexbor/lexbor) and
+  [html5ever](https://github.com/servo/html5ever) arena layout, html5ever's bulk text scan, the Rust
+  [linkify](https://github.com/robinst/linkify) scanner. A change that regresses the benchmarks does not ship.
 
 I want to walk you through how. None of the techniques are mine; they come from CPython itself, from
 [simdjson](https://github.com/simdjson/simdjson), from [html5ever](https://github.com/servo/html5ever), and from a
@@ -64,17 +107,15 @@ so a constant-factor speedup on each call adds up to real time saved.
 Here is the shape of the gap, measured with [pyperf](https://pyperf.readthedocs.io) on CPython 3.14 against the standard
 library:
 
-| operation  | input                     | turbohtml | stdlib  | speedup |
-| ---------- | ------------------------- | --------- | ------- | ------- |
-| `escape`   | prose, nothing to escape  | 0.12 ms   | 2.66 ms | 22x     |
-| `escape`   | real HTML (4 MiB)         | 1.35 ms   | 4.88 ms | 3.6x    |
-| `unescape` | entity-heavy text         | 10.4 ms   | 78.5 ms | 7.6x    |
-| `tokenize` | typical markup            | 30.3 µs   | 449 µs  | 14.8x   |
-| `tokenize` | a 7.9 MB HTML spec source | 37.0 ms   | 399 ms  | 10.8x   |
+{{< bench-table you=2 nums="3" >}} operation | input | turbohtml | Python stdlib ; escape | prose, nothing to escape |
+0.12 ms | 2.66 ms (22x) ; escape | real HTML (4 MiB) | 1.35 ms | 4.88 ms (3.6x) ; unescape | entity-heavy text | 10.4 ms
+| 78.5 ms (7.6x) ; tokenize | typical markup | 30.3 µs | 449 µs (14.8x) ; tokenize | a 7.9 MB HTML spec source | 37.0 ms
+| 399 ms (10.8x) {{< /bench-table >}}
 
 Numbers vary with input and hardware; reproduce them with `tox -e bench` against the
-[benchmark corpus](https://github.com/tox-dev/turbohtml/tree/main/tools) (Project Gutenberg's _War and Peace_, the
-WHATWG and ECMAScript specs) in the repo.
+[benchmark corpus](https://github.com/tox-dev/turbohtml/tree/main/tools) (Project Gutenberg's
+[_War and Peace_](https://www.gutenberg.org/ebooks/2600), the [WHATWG](https://html.spec.whatwg.org/) and
+[ECMAScript](https://tc39.es/ecma262/) specs) in the repo.
 
 The standard library is not slow because its authors were careless. It is slow because it is written in Python, and
 Python pays an interpreter cost on every character it touches. `html.unescape` calls a Python function for every entity
@@ -315,9 +356,9 @@ long clean span it races ahead at memory speed. The text between two entities co
 that is not part of an entity is touched once, by a bulk copy, never inspected on its own.
 
 When it lands on an `&`, it resolves the entity. Numeric ones like `&#127881;` parse the digits. Named ones like `&amp;`
-need a lookup, and HTML has about 2,000 of them. A binary search over a sorted table finds any of them in around eleven
-comparisons, but most real text uses only a handful, so turbohtml checks those first with one comparison each before
-falling back to the search:
+need a lookup, and HTML has about 2,000 of them. A [binary search](https://en.wikipedia.org/wiki/Binary_search) over a
+sorted table finds any of them in around eleven comparisons, but most real text uses only a handful, so turbohtml checks
+those first with one comparison each before falling back to the search:
 
 ```c
 switch (name[0]) {
@@ -663,6 +704,462 @@ text tokens that are just offsets into the original, and build a `str` only when
 where the speed comes from, and as far as I can tell none of it is magic, just a handful of old ideas stacked on top of
 each other.
 
+## The rest of the library learned the same lessons
+
+Everything above is the original three functions: escape, unescape, tokenize. turbohtml did not stay there. It grew a
+tree builder, a CSS and XPath query engine, a serializer, a sanitizer, an HTML and CSS and JavaScript minifier, metadata
+extraction, and a URL parser, all with the same C core underneath. The interesting part is that the four principles kept
+paying off, and the places they did not reach needed a different idea. Here are the ones worth knowing.
+
+Before the techniques, here is the shape of the whole toolkit against the libraries people reach for, one representative
+input each. turbohtml is the green column; the number in parentheses is how many times slower the competitor ran. The
+full picture, every operation against every competitor, lives in the
+[migration guides](https://turbohtml.readthedocs.io/migration/index.html).
+
+{{< bench-table you=2 nums="3,4" >}} operation | input | turbohtml | a fast peer | a popular peer ; parse | 92 kB page |
+272 µs | lxml 631 µs (2.3x) | BeautifulSoup 15.3 ms (56x) ; query (CSS select) | 95 kB page | 1.3 µs | lxml 20.8 µs
+(16x) | BeautifulSoup 99.9 µs (77x) ; tokenize | typical markup | 34.9 µs | html.parser 435 µs (12x) | html5lib 836 µs
+(24x) ; escape | dense 4 MiB | 4.98 ms | html.escape 12.7 ms (2.6x) | n/a ; unescape | dense refs (4 KiB) | 8.1 µs |
+html.unescape 69.3 µs (8.6x) | w3lib 116 µs (14x) ; minify HTML | 95 kB page | 331 µs | minify-html 859 µs (2.6x) |
+htmlmin 6.77 ms (20x) ; minify CSS | bootstrap (274 kB) | 1.65 ms | lightningcss 4.82 ms (2.9x) | csscompressor 80.9 ms
+(49x) ; minify JS | jquery (279 kB) | 9.73 ms | terser 122 ms (12x) | calmjs.parse 411 ms (42x) ; sanitize | 4 KiB post
+| 42.1 µs | nh3 120 µs (2.9x) | bleach 1.92 ms (46x) {{< /bench-table >}}
+
+Two honest caveats. The CSS and JS minifiers [`rcssmin`](https://pypi.org/project/rcssmin/) and
+[`rjsmin`](https://pypi.org/project/rjsmin/) are single-pass regular-expression tools that skip the parse turbohtml
+does, so they run faster than anything above while doing a shallower job; and
+[resiliparse](https://github.com/chatnoir-eu/chatnoir-resiliparse) matches turbohtml on raw parse speed, because it too
+is a hand-written C parser. The point is not that turbohtml wins every row. It is that a fully typed, spec-conformant
+toolkit sits in the same class as the fastest native code, an order of magnitude ahead of the pure-Python libraries most
+projects run.
+
+### Interning names to integers
+
+A parser compares tag names constantly. Is this a `<script>`? Does this end tag close the open `<p>`? Does the selector
+`div.note` match this element? Done as written, each of those is a string comparison, and a string comparison walks
+bytes.
+
+turbohtml almost never compares tag-name bytes after the tokenizer. Every tag and attribute name in the HTML namespace
+has a fixed small integer, its _atom_, assigned when the name is first seen. The tokenizer already lowercases names on
+the way in, the step I described earlier, so folding a name to its atom is a lookup, and after that a tag is an integer.
+Deciding whether an element is a `<div>` is `node->atom == TH_TAG_DIV`, one comparison, no memory touched past the node
+itself. The exception is a name outside the known table: those share a single `TH_TAG_UNKNOWN` atom and fall back to a
+byte compare, rare enough not to matter.
+
+That one integer compare shows up everywhere the query engine walks the tree. When `find_all("a")` looks for anchors, it
+does not test every descendant; the tree carries a per-tag index, and the search visits only the
+[pre-order](https://en.wikipedia.org/wiki/Tree_traversal) bucket of `a` elements. When the same call adds an attribute
+filter, `find_all("a", attrs={"href": True})`, the tag still selects the bucket and the filter runs only over those
+candidates:
+
+```c
+static int tag_plain_matches(const query_t *query, th_node *node) {
+    if (query->tag_atom != TH_TAG_UNKNOWN) {
+        return node->atom == query->tag_atom;   // a known tag: one integer compare
+    }
+    // an unknown-name query can only match the rare unknown-atom elements
+    return node->atom == TH_TAG_UNKNOWN ? tag_matches_by_name(query, node) : 0;
+}
+```
+
+```mermaid
+flowchart LR
+    Q["find_all('a', href=True)"] --> A["fold 'a' to its atom<br/>TH_TAG_A"]
+    A --> B["per-tag index:<br/>the bucket of &lt;a&gt; nodes"]
+    B --> F["test href on the<br/>bucket only"]
+    F --> R["matches"]
+    T["every descendant<br/>of the tree"] -. skipped .-> R
+    classDef data fill:#dbeafe,stroke:#2563eb,color:#0b1220;
+    classDef proc fill:#fde68a,stroke:#d97706,color:#0b1220;
+    classDef good fill:#bbf7d0,stroke:#16a34a,color:#0b1220;
+    classDef bad fill:#fecaca,stroke:#dc2626,color:#0b1220;
+    class Q,A data
+    class B,F proc
+    class R good
+    class T bad
+```
+
+The bucket, not the cheaper compare, is what produces the large numbers: it lets the search visit only the tag's
+elements and skip the rest of the tree, while the one-compare match keeps each candidate it does reach cheap on top.
+`find_all("a", attrs={"href": True})` over the WHATWG spec drops from 33.5 to 4.4 microseconds, and a rare-tag lookup
+like `find_all("meta", attrs={"name": "viewport"})` from 29.2 down to 0.17. The same integer compare rides into the CSS
+engine, which matches selectors right to left. A selector like `section > p` anchors on each `p` and checks its parent;
+when the left side of a combinator is a bare type selector, that step is `parent->atom == TH_TAG_SECTION` before the
+full compound matcher runs. Selector matching picks up 11 to 19 percent across the corpus pages. This is the same trick
+browsers use: an [interned name](https://en.wikipedia.org/wiki/String_interning), sometimes called an atom or a quark,
+so that the hot comparison is an integer identity test. It is the string-side equivalent of everything the tokenizer
+does to avoid touching bytes it does not need.
+
+{{< atom-index >}}
+
+### Building the index once instead of every time
+
+`element.css_path()` hands back a CSS selector that locates one element from the document root, the thing your browser's
+devtools shows when you right-click and copy a selector. The short selector is an id, `#main > p:nth-of-type(3)`, but a
+selector may anchor on an id only if that id is unique in the document, because a repeated id would match more than one
+element and the path would be wrong.
+
+The first version checked uniqueness the obvious way: to see whether an id was unique, scan the whole document and count
+how many elements carried it. That is O(N) per candidate, and pathing every element in a document is then O(N squared).
+On a document with six thousand ids it took 112 milliseconds, which is slow enough to notice.
+
+The fix is an auxiliary index built once. The first `css_path()` call on a tree builds an id-occurrence map, an
+[open-addressed hash table](https://en.wikipedia.org/wiki/Open_addressing) from id value to the count of elements
+carrying it, and caches it on the tree. Uniqueness is then a probe of a few characters instead of a document scan:
+
+```c
+static uint64_t path_id_hash(const Py_UCS4 *value, Py_ssize_t len, int ci) {
+    uint64_t hash = 14695981039346656037u;          // FNV-1a
+    for (Py_ssize_t i = 0; i < len; i++) {
+        hash ^= (uint64_t)sel_fold(value[i], ci);   // fold case in quirks mode, as the id selector does
+        hash *= 1099511628211u;
+    }
+    return hash;
+}
+
+// unique means the map counted exactly one element with this id
+static int path_id_unique(const path_id_map *map, const Py_UCS4 *value, Py_ssize_t len) {
+    size_t slot = (size_t)path_id_hash(value, len, map->ci) & map->mask;
+    while (!sel_eq(map->slots[slot].value, map->slots[slot].len, value, len, map->ci)) {
+        slot = (slot + 1) & map->mask;              // linear probe past collisions
+    }
+    return map->slots[slot].count == 1;
+}
+```
+
+```mermaid
+flowchart TB
+    C["css_path anchors on an id"] --> W{"is the id unique?"}
+    W --> NAIVE["naive: scan the whole document<br/>and count it, O(N) per id,<br/>O(N²) to path every element"]
+    W --> INDEX["indexed: build an id→count map<br/>once, then probe it,<br/>O(id length) per id"]
+    NAIVE --> R1["112 ms on 6002 ids"]
+    INDEX --> R2["0.9 ms, about 125x"]
+    classDef data fill:#dbeafe,stroke:#2563eb,color:#0b1220;
+    classDef dec fill:#ede9fe,stroke:#7c3aed,color:#0b1220;
+    classDef good fill:#bbf7d0,stroke:#16a34a,color:#0b1220;
+    classDef bad fill:#fecaca,stroke:#dc2626,color:#0b1220;
+    class C data
+    class W dec
+    class NAIVE,R1 bad
+    class INDEX,R2 good
+```
+
+The probe terminates without a bounds check because the candidate's own id is always in the map, so the walk always
+lands on a filled slot: a `count` of one means the element owns its id alone. The map is cached on the tree and thrown
+away the moment the tree mutates, together with the element index it sits beside, so a stale count can never anchor a
+path on an id that a later edit duplicated. Building an index once and dropping it on write is the standard shape of
+this kind of cache, and it is worth reaching for whenever a per-item check secretly rescans the whole collection. The
+six-thousand-id document went from 112 milliseconds to 0.9, and `css_path` now runs about five times faster than
+libxml2's `getpath` where it used to trail.
+
+{{< id-locator >}}
+
+### Recycling the wrapper objects
+
+Every node a query returns is a Python object wrapping a C tree node. A `find_all` over a large page builds thousands of
+them, and they die as soon as the caller is done iterating. Allocating and freeing a Python object is not free: it walks
+the allocator's [free list](https://en.wikipedia.org/wiki/Free_list), and on a free-threaded build it takes a lock.
+
+I noted earlier that the tokenizer reuses its buffers rather than freeing them. The query layer does the same for whole
+objects, with a small free list. When a node wrapper is deallocated it is parked on the list instead of released, and
+the next wrap revives it:
+
+```c
+static void node_dealloc(PyObject *self) {
+    Py_DECREF(((NodeObject *)self)->handle);
+    if (state->node_freelist_len < NODE_FREELIST_MAX) {         // park it, do not free it
+        ((NodeObject *)self)->node = (th_node *)state->node_freelist;  // next link rides in the node field
+        state->node_freelist = self;
+        state->node_freelist_len++;
+        Py_DECREF(Py_TYPE(self));    // PyObject_Init re-takes the type ref on revive
+        return;
+    }
+    Py_TYPE(self)->tp_free(self);
+}
+```
+
+```mermaid
+flowchart LR
+    WR["node_wrap()"] --> Q{"free list<br/>has one?"}
+    Q -->|yes| RV["revive:<br/>PyObject_Init"]
+    Q -->|no| AL["tp_alloc"]
+    RV --> U["live wrapper"]
+    AL --> U
+    U --> DE["dealloc"]
+    DE --> QC{"pool full?"}
+    QC -->|no| PK["park it: next link<br/>rides in the node field"]
+    QC -->|yes| FR["free"]
+    PK --> Q
+    classDef data fill:#dbeafe,stroke:#2563eb,color:#0b1220;
+    classDef proc fill:#fde68a,stroke:#d97706,color:#0b1220;
+    classDef dec fill:#ede9fe,stroke:#7c3aed,color:#0b1220;
+    classDef good fill:#bbf7d0,stroke:#16a34a,color:#0b1220;
+    class WR,U data
+    class RV,AL,PK proc
+    class Q,QC dec
+    class FR good
+```
+
+Two details make it cheap. The list is [_intrusive_](https://www.boost.org/doc/libs/release/doc/html/intrusive.html):
+the next-pointer rides inside the `node` field the parked object no longer needs, so the pool costs no extra storage.
+And one list serves every node type, because a `NodeObject` is a fixed 32 bytes whatever it wraps (the real payload
+lives in the C tree) and the concrete types the wrapper stamps, Element, Text, Comment and the rest, none accept a
+[subclass](https://docs.python.org/3/c-api/typeobj.html#c.Py_TPFLAGS_BASETYPE) or add a field (only the abstract base
+`Node` is subclassable, and it is never instantiated), so reviving one with
+[`PyObject_Init`](https://docs.python.org/3/c-api/allocation.html#c.PyObject_Init) and re-stamping its type is always
+sound. The list is capped at 1024 entries, about 32 KiB, so a burst of queries recycles freely without pinning memory
+afterward. On a 92 kB page, `find_all()` drops from 1.9 to 1.4 microseconds and a full descendant walk from 101 to 65,
+moving the lead over lxml from 2.9x to 4.3x. Where it does not help is holding every wrapper alive at once,
+`list(doc.descendants)`, where nothing is ever returned to recycle; that path is about 8 percent slower, a fair trade
+for the common one being faster.
+
+The pool exists only on the default build. The free-threaded build keeps the plain allocate-and-free path, because a
+shared list is safe only because the GIL serializes access to it, and that is the guarantee the free-threaded build
+removes. The section on free-threading below is the longer version of that argument.
+
+{{< node-pool >}}
+
+## When the work is a standard, not a scan
+
+The URL parser is where the block-scanning story runs out. Splitting a URL into its parts, percent-encoding a path,
+resolving a relative reference against a base: all of these moved into C and got several times faster, but the speedup
+is the plain one, no interpreter in the loop, the same reason the first C accelerator was faster than pure Python. The
+scanning tricks do not apply, and one of them runs backward: the URL code deliberately widens the whole input to
+four-byte characters up front, so the rest of the code reads one fixed width instead of branching on width per read.
+That is the opposite of the tokenizer, which refuses to widen and compiles three machines so an ASCII document stays one
+byte per character. The difference is size. A URL is short, so widening it once costs nothing and buys a simpler loop; a
+document is large, so widening it would be the 4x copy the tokenizer bends over backward to avoid. Different input,
+different answer.
+
+Host encoding is the exception, and it is worth a section because it is a kind of work the rest of the library does not
+do. Turning `café.example` into the ASCII `xn--caf-dma.example` that DNS can carry is
+[Internationalized Domain Names](https://www.rfc-editor.org/rfc/rfc5890) (IDNA), and doing it the way the
+[WHATWG URL Standard](https://url.spec.whatwg.org/#idna) asks means [UTS #46](https://www.unicode.org/reports/tr46/)
+`ToASCII`, which pulls in three separate pieces of Unicode machinery. Python's `str.encode("idna")` implements an older
+version of the standard and gets several cases wrong (`faß.de` should become `xn--fa-hia.de`, not `fass.de`), so
+turbohtml implements the current one from scratch in C. That meant writing three things nothing else in this piece
+needed:
+
+- [**Punycode**](https://www.rfc-editor.org/rfc/rfc3492), the encoding that packs `café` into `caf-dma`. It is a
+  bootstring algorithm: a run of generalized variable-length integers with an adaptive bias, unlike anything else in the
+  library, and a fun one to implement against the RFC's reference pseudocode.
+- [**Normalization Form C**](https://www.unicode.org/reports/tr15/), because `é` can arrive as one code point or as `e`
+  plus a combining accent, and they have to encode identically. Composing them means canonical decomposition, a stable
+  sort of [combining marks by class](https://www.unicode.org/reports/tr44/#Canonical_Combining_Class), then
+  recomposition, reimplemented rather than borrowed from `unicodedata`.
+- **Hangul by arithmetic.** Korean syllables compose and decompose by a
+  [formula](https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-3/) rather than a table, so all 11,172
+  precomposed syllables cost zero table rows. It is the cleanest example I know of picking an algorithm over a lookup.
+
+```mermaid
+flowchart LR
+    H["café.example<br/>Unicode host"] --> M["UTS #46 map<br/>keep / map / drop"]
+    M --> N["normalize to NFC"]
+    N --> P["Punycode each label<br/>RFC 3492"]
+    P --> A["xn--caf-dma.example<br/>ASCII for DNS"]
+    classDef data fill:#dbeafe,stroke:#2563eb,color:#0b1220;
+    classDef proc fill:#fde68a,stroke:#d97706,color:#0b1220;
+    classDef good fill:#bbf7d0,stroke:#16a34a,color:#0b1220;
+    class H data
+    class M,N,P proc
+    class A good
+```
+
+The mapping data that is left, which code points UTS #46 keeps, maps, or drops, is 6,960 ranges stored as
+`{first, last, status, offset, length}` rows and probed by binary search: the range says what happens to a code point,
+and a mapped range points at the replacement in a shared pool with the `offset` and `length`. It is a different
+structure from the direct-index tables the escaping code uses, because the key space is all of Unicode and mostly empty.
+
+The part I would not have guessed in advance is that most of this code is generated. A
+[331-line build script](https://github.com/tox-dev/turbohtml/blob/main/tools/generate_idna.py) downloads the pinned
+[Unicode 16.0.0 database](https://www.unicode.org/Public/16.0.0/ucd/) and writes an 8,513-line C header: the mapping
+ranges, the combining classes, and the decompositions already expanded recursively so the C runtime never recurses. It
+is pinned to the exact Unicode version CPython 3.14's `unicodedata` ships, so the hand-written C normalizer and the
+interpreter always agree on the answer. Generating a spec's data tables at build time, pinned for reproducibility, is
+its own technique, and a better one than transcribing five thousand table rows by hand and hoping. The lesson that
+carried over from the scanning work was the smaller one: do the expensive preparation once, at build time here rather
+than in the first pass, so the runtime stays simple.
+
+{{< idna-encode >}}
+
+## Teaching the compiler what is hot
+
+Everything so far is source-level. Two build-level techniques squeeze the same code further, and both come with a catch
+worth explaining.
+
+The first is [link-time optimization](https://gcc.gnu.org/onlinedocs/gccint/LTO-Overview.html) (LTO). As the query
+engine grew, one source file had swollen past 4,200 lines, accreting the select, regex, and xpath entry points, because
+splitting anything out of it would have cost speed: the compiler can only inline across a function-call boundary when
+both sides sit in the same [translation unit](<https://en.wikipedia.org/wiki/Translation_unit_(programming)>), and the
+query code leaned on calls into the tree code being inlined. Pulling the hot CSS selector engine into its own file costs
+about 9 percent on `select` under gcc for exactly that reason. LTO buys it back. With LTO the compiler defers
+optimization to link time, when it can see the whole program at once and
+[re-inline across the file boundary](http://hubicka.blogspot.com/2014/04/linktime-optimization-in-gcc-1-brief.html) it
+just split, landing within 0.1 percent of the monolith. So LTO landed first and the split followed, in that order,
+because the split is only free once LTO is there to undo its cost. The related move is telling the compiler which code
+is cold: the long bulk-text scan in the tokenizer is marked
+[`noinline`](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html) and pulled out of line, so the compact
+markup-heavy path that runs far more often stays small and stays in cache.
+
+The second is [profile-guided optimization](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html) (PGO), and it buys
+more than LTO does. The build runs in two phases. First it compiles an instrumented binary, runs it over a training
+workload while it records which branches are taken and which functions are hot, then recompiles using that profile to
+lay out the code the way the run used it. CPython builds itself this way, and the standard advice holds: the gain is
+only as good as the training workload is representative. Measured against a plain `-O3` build with
+[cachegrind](https://valgrind.org/docs/manual/cg-manual.html), PGO cut instructions by 15.7 percent on parse, 27.5 on
+select, and 13.2 on serialize.
+
+```mermaid
+flowchart LR
+    S["source"] --> I["build instrumented<br/>-Db_pgo=generate"]
+    I --> TR["train on a<br/>representative corpus"]
+    TR --> U["rebuild with the profile<br/>-Db_pgo=use"]
+    U --> V{"held-out check:<br/>net gain, no op<br/>regresses past 2%?"}
+    V -->|yes| SHIP["ship the wheel"]
+    V -->|no| REJ["reject: overfit"]
+    classDef data fill:#dbeafe,stroke:#2563eb,color:#0b1220;
+    classDef proc fill:#fde68a,stroke:#d97706,color:#0b1220;
+    classDef dec fill:#ede9fe,stroke:#7c3aed,color:#0b1220;
+    classDef good fill:#bbf7d0,stroke:#16a34a,color:#0b1220;
+    classDef bad fill:#fecaca,stroke:#dc2626,color:#0b1220;
+    class S data
+    class I,TR,U proc
+    class V dec
+    class SHIP good
+    class REJ bad
+```
+
+Getting there took two rounds of learning what "representative" means. The first training corpus was one clean UTF-8
+document, so the profile never saw the messy branches: the
+[adoption-agency algorithm](https://html.spec.whatwg.org/multipage/parsing.html#adoptionAgency), foreign-content
+breakout, legacy encodings, tag soup. The corpus now spans those branch classes on purpose, mixing clean markup with
+deliberately broken fixtures from the [html5lib test suite](https://github.com/html5lib/html5lib-tests) and real saved
+pages. Representativeness is code-path coverage, not input volume.
+
+The subtler bug was in how the training run spent its time. It first ran every operation a flat eight times, which
+sounds fair and is not. A whole-document parse runs orders of magnitude more instructions per call than a read-path
+query like `text-content`, so under a flat count the cheap operation's hot blocks landed below the profile's global hot
+cutoff, the compiler read them as cold, and their layout flipped a few percent between rebuilds. That was a phantom
+regression that kept tripping the benchmark gate. The fix is to budget by time, not by iterations: give every operation
+an equal slice of wall-clock, so a cheap operation repeats into the thousands and clears the hot cutoff decisively. This
+is a real pitfall of PGO that the textbook description skips, and it took a flaky CI signal to find.
+
+One guard makes the whole thing trustworthy. PGO's failure mode is overfitting, laying out the code for the training
+inputs at the expense of everything else, and the way to catch it is a held-out set. A validation step measures a third
+group of pages that appear in neither the training corpus nor the benchmark suite, and the build passes only on a net
+gain with no single operation regressing past 2 percent, which is the signature of an overfit profile. On the held-out
+pages the real gain is 13.9 percent [geometric mean](https://en.wikipedia.org/wiki/Geometric_mean), below the 15-to-27
+percent that parse and select showed on the training inputs, because those were measured on the very data the profile
+trained on, which is measuring your own homework.
+
+## Measuring comes before improving
+
+You cannot improve what you cannot measure, and none of the numbers in this article would mean much without a suite
+built to produce them honestly. The measurement setup is as much a part of the project as the C, so it is worth a look.
+
+Every published speedup comes from `tox -e bench`, which times each operation with
+[pyperf](https://pyperf.readthedocs.io) on a quiet, tuned machine (`pyperf system tune` first, with `--rigorous` and CPU
+pinning available). pyperf runs each case in isolated worker processes, calibrates the loop count, warms up, and reports
+a mean with a relative standard deviation, so every figure carries its own noise estimate. An operation that mutates the
+tree gets special handling: the tree is rebuilt untimed before each iteration, because timing the second mutation of an
+already-mutated tree measures neither the real work nor anything stable.
+
+The corpus is chosen for code-path coverage, not size. Clean layout markup comes from the WHATWG and ECMAScript specs
+and the [web-platform-test](https://github.com/web-platform-tests/wpt) fixtures; the nested divs and links that
+selectors and `:has()` actually chase come from real saved pages in Mozilla's
+[readability](https://github.com/mozilla/readability) corpus; recovery paths come from deliberately broken
+[html5lib fixtures](https://github.com/html5lib/html5lib-tests) that fire the adoption-agency and foster-parenting
+algorithms; escaping and unescaping run over Tolstoy's [_War and Peace_](https://www.gutenberg.org/ebooks/2600);
+encoding detection runs over prose re-encoded into [Shift-JIS](https://en.wikipedia.org/wiki/Shift_JIS),
+[GBK](<https://en.wikipedia.org/wiki/GBK_(character_encoding)>), and the Windows codepages; and CSS and JavaScript
+minification climb a size ladder from a 6 kB reset to a 745 kB framework. Every branch that matters gets exercised by
+something real.
+
+The comparison is against 59 other libraries, from lxml and BeautifulSoup to selectolax, minify-html, nh3, trafilatura,
+and courlan, and each one runs in its own [uv](https://docs.astral.sh/uv/) virtual environment holding only that
+library. The harness never imports a competitor; it reads each one's requirements out of the source with the
+[`ast`](https://docs.python.org/3/library/ast.html) module, so one library's dependency pins can never perturb
+another's, and every library sees the identical input for a like-for-like ratio. A library that fails to install drops
+its column with a note; one that installs and then crashes fails the run, because that is a real result, not an
+environment quirk.
+
+That suite feeds two consumers, and the split is the whole point. The wall-clock timings are the human-facing answer to
+how fast, so they run on a tuned machine and never in CI, where wall-clock is the noise the next section is about. The
+same operation registry also drives a Callgrind instruction-count gate on every pull request, a reproducible regression
+alarm a wall-clock bench could never be. Instruction counts catch the small regression wall-clock is too jittery to see;
+wall-clock measures the real speed an instruction count cannot express. Neither on its own is enough.
+
+## Measuring without lying to yourself
+
+The benchmark numbers in this article are only worth printing if they are stable, and a benchmark that runs in CI is
+fighting a losing battle for stability. Shared runners have neighbors, frequencies scale, and the same benchmark can
+read
+[as much as 50 percent apart from one run to the next on cloud CI](https://pythonspeed.com/articles/consistent-benchmarking-in-ci/)
+with nothing changed. A wall-clock regression alarm in that environment cries wolf until you stop believing it, which is
+worse than having no alarm.
+
+The way out is to stop measuring time. [CodSpeed](https://codspeed.io/) runs each benchmark under
+[Callgrind](https://valgrind.org/docs/manual/cl-manual.html), which executes the code on a simulated CPU and counts the
+instructions it runs. An instruction count does not care how busy the runner is; the same code produces the same count
+to well under one percent, so a real change stands out from the noise instead of drowning in it. The cost is that the
+simulator's cache and branch predictor are idealized models rather than the runner's real silicon, so the count is a
+proxy for time rather than time itself, but for catching a regression on a pull request a stable proxy beats a true
+measurement you cannot trust.
+
+Making the count reproducible took chasing down two sources of drift, and both are instructive because neither is
+obviously a benchmarking problem. The first is PGO itself. A fresh profile is collected on every CI run, and it is not
+byte-identical from one run to the next, so the hot-path layout shifts and a marginal operation swings a few percent for
+no source reason. The fix is to measure a different binary than you ship: the benchmark gate builds with LTO only, which
+is reproducible, while the wheels you download keep the full PGO profile. The measured binary and the shipped binary are
+not the same, and that is the point.
+
+The second is the C library, and it is the article's own SIMD tricks turned against it. GitHub hands the job whatever
+CPU is free, an Intel Xeon with [AVX-512](https://en.wikipedia.org/wiki/AVX-512) one run and an AMD EPYC without it the
+next, and
+[glibc dispatches a different vectorized `memcpy` and `memmove` per CPU](https://sourceware.org/glibc/wiki/Tunables).
+The same source then runs a different number of instructions depending on which `memcpy` the hardware selected, so
+untouched benchmarks drift a few percent between the base run and the pull-request run, wide enough to bury a small real
+regression. Pinning `GLIBC_TUNABLES` to switch off the newer AVX and fast-string paths that differ across those CPUs
+forces every runner down to the SSE2 baseline glibc always has, and the count reproduces. That baseline is slower and,
+since it moves fewer bytes per instruction than the AVX copy it replaces, it even raises the absolute count, but it
+costs the gate nothing: the tunable is set only for the CI measurement, never for the wheels you install, and the gate
+compares a base run against a pull-request run with both pinned to the same path, so a higher-but-reproducible count
+shifts them together and hides no regression.
+
+```mermaid
+flowchart TB
+    C["the same source"] --> X["Intel Xeon runner:<br/>AVX-512 memcpy"]
+    C --> Y["AMD EPYC runner:<br/>SSE2 memcpy"]
+    X --> D1["instruction count N1"]
+    Y --> D2["instruction count N2 ≠ N1"]
+    D1 --> WB["a few percent drift<br/>hides small regressions"]
+    D2 --> WB
+    PIN["pin GLIBC_TUNABLES:<br/>SSE2 on every runner"] --> D3["one count, reproducible"]
+    classDef data fill:#dbeafe,stroke:#2563eb,color:#0b1220;
+    classDef proc fill:#fde68a,stroke:#d97706,color:#0b1220;
+    classDef bad fill:#fecaca,stroke:#dc2626,color:#0b1220;
+    classDef good fill:#bbf7d0,stroke:#16a34a,color:#0b1220;
+    class C data
+    class X,Y,PIN proc
+    class D1,D2,WB bad
+    class D3 good
+```
+
+{{< bench-determinism >}}
+
+Both fixes buy the same thing, an instruction count a real regression can move on its own instead of one that already
+wobbles for reasons unrelated to the code. There is a limit worth naming: this gate measures a reproducible LTO-only
+build, so it catches source-level regressions, which show up in the shipped PGO build too, but a regression that lived
+only in the PGO code layout would slip past it. That is the price of measuring a stable binary instead of the exact one
+you ship, and a trade I would make again over an alarm nobody believes.
+
+Reporting what the numbers really say means owning the experiments that went nowhere, too. Fusing the
+metadata-extraction walks into one tree pass moved it a few percent at most, because parsing and property extraction
+dominate that path and the walks were already cheap. And a bottom-up rewrite of the `:has()` selector, which is still
+quadratic on deeply nested trees, wants a scratch field on every node that the 80-byte node struct has no room for, so
+it stays on the list. The honest state of the code is that `:has()` on a pathological tree can still blow up, and I have
+not fixed it yet.
+
 ## Making it free-threaded
 
 Speed is one half of why I wrote this now. The other half is that Python is in the middle of removing the
@@ -700,7 +1197,8 @@ that keeps the GIL off. The other slot,
 [`Py_mod_multiple_interpreters`](https://docs.python.org/3/c-api/module.html#c.Py_mod_multiple_interpreters) set to
 `Py_MOD_PER_INTERPRETER_GIL_SUPPORTED`, is the neighbouring promise from [PEP 684](https://peps.python.org/pep-0684/):
 the module is happy inside sub-interpreters that each carry their own GIL. Both rest on the same property, and both are
-guarded with `PY_VERSION_HEX` checks so the one source still builds on CPython 3.10 through 3.15.
+guarded with [`PY_VERSION_HEX`](https://docs.python.org/3/c-api/apiabiversion.html#c.PY_VERSION_HEX) checks so the one
+source still builds on CPython 3.10 through 3.15.
 
 That property is the absence of shared mutable state, and it is real rather than a label I stuck on. The state machine
 keeps all of its scratch space, the input buffer, the reusable token buffers, the attribute array, inside the
@@ -729,6 +1227,27 @@ If you want to read the real thing, it is on [GitHub](https://github.com/tox-dev
 [PyPI](https://pypi.org/project/turbohtml/) (`pip install turbohtml`), and the C is meant to be read side by side with
 the spec. I learned these tricks by reading other people's code, so it seems only fair to make mine easy to read back.
 
+## How this was built
+
+One more thing, since leaving it out would be dishonest. I did not write turbohtml by hand. It came together over about
+a month of continuous background work with Anthropic's Opus 4.8, with a little Fable in the mix, across close to 300
+pull requests and many more iterations than that. I reviewed most of the code that landed, but I did not type most of
+it.
+
+The hours I did put in went to the half that matters more than speed: making sure the answers are correct, because a
+fast parser that is subtly wrong is worse than a slow one. Most of that work is harness rather than features. turbohtml
+is checked byte for byte against the Python standard library, against the html5lib conformance suite browsers use, and
+against the output of the libraries it replaces; the URL, encoding, and Unicode-normalization code is validated against
+the standards' own reference test vectors. Where a spec already has a trusted implementation in another language, I ran
+differential tests against it, so a result has to satisfy Python, Rust, C, C++, and Go implementations and the specs at
+once before I believe it. That cross-checking is why I am comfortable publishing something a model and I wrote together.
+
+None of it would exist on its own. The techniques are borrowed and credited throughout, and the correctness is borrowed
+too: every competing library I measured against, across the Python, Rust, C, C++, and Go ecosystems, doubled as an
+oracle for the right answer, and the people who wrote the HTML, CSS, URL, and ECMAScript specs and the conformance
+suites that go with them are the reason any of it can be checked at all. Standing on the shoulders of giants is just the
+accurate description here. My thanks to all of them.
+
 ## Further reading
 
 - [Bit Twiddling Hacks](https://graphics.stanford.edu/~seander/bithacks.html) by Sean Anderson, the source of the
@@ -747,3 +1266,15 @@ the spec. I learned these tricks by reading other people's code, so it seems onl
   [C API free-threading HOWTO](https://docs.python.org/3/howto/free-threading-extensions.html) for porting extensions.
 - The [Python Free-Threading Guide](https://py-free-threading.github.io/), a community collection of porting notes and
   an ecosystem compatibility tracker.
+- [RFC 3492](https://www.rfc-editor.org/rfc/rfc3492), the Punycode bootstring algorithm, and
+  [UTS #46](https://www.unicode.org/reports/tr46/) and [UAX #15](https://www.unicode.org/reports/tr15/), the IDNA
+  mapping and Unicode normalization the host encoder implements.
+- [Honza Hubička's link-time optimization series](http://hubicka.blogspot.com/2014/04/linktime-optimization-in-gcc-1-brief.html)
+  and the GCC [LTO overview](https://gcc.gnu.org/onlinedocs/gccint/LTO-Overview.html), on re-inlining across translation
+  units.
+- [Go's profile-guided optimization docs](https://go.dev/doc/pgo), the clearest writeup of the
+  training-representativeness and profile-flapping pitfalls that bite every PGO build.
+- [Cachegrind and Callgrind](https://valgrind.org/docs/manual/cl-manual.html), the instruction-counting profilers behind
+  reproducible benchmarks, and
+  [Reliable benchmarking in noisy environments](https://pythonspeed.com/articles/consistent-benchmarking-in-ci/) by
+  Itamar Turner-Trauring, on why CI benchmarks need them.
