@@ -1,9 +1,12 @@
 {{- /*
-  Demote in-content h1 to h2 so every page has exactly one <h1> (the page title).
-  Some posts authored section headings as `# ...`; rendering them verbatim would
-  emit multiple h1 elements per page, hurting accessibility and SERP outline.
+  Keep a single <h1> per page (the title) without breaking the outline. Demote
+  only in-content <h1> to <h2>; leave deeper levels as authored. Posts that write
+  sections as `##` then render a proper h1 -> h2 -> h3 hierarchy, and posts that
+  write them as `#` no longer skip a level (the old blanket `add .Level 1` pushed
+  every `##` down to an <h3>, so pages had h1 then h3 and no h2).
 */ -}}
-{{- $level := math.Min 6 (add .Level 1) -}}
+{{- $level := .Level -}}
+{{- if le .Level 1 }}{{ $level = 2 }}{{ end -}}
 <h{{ $level }} id="{{ .Anchor | safeURL }}">
   {{ .Text | safeHTML }}
   <a class="heading-link" href="#{{ .Anchor | safeURL }}">

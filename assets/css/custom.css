@@ -1405,3 +1405,15 @@ body.colorscheme-dark table.bench-table td.bench-worst {
   outline: 2px solid var(--tv-accent);
   outline-offset: 2px;
 }
+
+/* accessibility: give the small heading-anchor icons the 24px minimum tap target on touch screens */
+@media (max-width: 640px) {
+  .heading-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    min-height: 24px;
+    vertical-align: middle;
+  }
+}
