@@ -11,8 +11,10 @@ slug = "blazing-fast-html-parser"
 date = 2026-06-18T09:00:00Z
 +++
 
-> [!TLDR] **TLDR:** turbohtml does HTML escape, unescape, tokenize, query, serialize, and URL work in C, 3-22x faster
-> than Python's standard library. The recurring trick is skipping work:
+> [!TLDR] **TLDR:**
+>
+> turbohtml does HTML escape, unescape, tokenize, query, serialize, and URL work in C, 3-22x faster than Python's
+> standard library. The recurring trick is skipping work:
 >
 > - **Scan in blocks, not characters.** [SWAR](#the-swar-trick-checking-eight-bytes-with-one-subtraction) clears eight
 >   bytes with a subtraction, [SIMD](#sixteen-bytes-with-one-shuffle) sixteen with one shuffle; a clean block costs
