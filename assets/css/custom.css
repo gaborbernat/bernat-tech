@@ -87,13 +87,13 @@ table.project-table td.row-num::before {
   white-space: nowrap;
 }
 .badge-blue {
-  background: #007ec6;
+  background: #0069ad;
 }
 .badge-green {
   background: #3b1;
 }
 .badge-red {
-  background: #e05d44;
+  background: #c74631;
 }
 .badge-yellow {
   background: #dfb317;
@@ -105,6 +105,12 @@ a .badge,
 .project-table .badge a {
   color: #212529;
   text-decoration: none;
+}
+.project-table .badge-blue,
+.project-table .badge-blue a,
+.project-table .badge-red,
+.project-table .badge-red a {
+  color: #fff;
 }
 a:hover .badge,
 .project-table .badge a:hover {
