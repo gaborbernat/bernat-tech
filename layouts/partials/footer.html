@@ -10,8 +10,12 @@
       {{ $date := now }}
       <a href="https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml">Updated</a>&nbsp;<time id="footer-ts" datetime="{{- $date.UTC.Format "2006-01-02T15:04:05.000Z" -}}">{{- $date.UTC.Format "2006-01-02T15:04:05.000Z" -}}&nbsp;UTC</time>
     {{ end }}
-    {{ if .GitInfo }}
-      via <a href="https://github.com/gaborbernat/bernat-tech/commit/{{ .GitInfo.Hash }}">{{ .GitInfo.AbbreviatedHash }}</a>.
+    {{/* per-page commit where the content has git history (posts); otherwise the site build commit passed from CI, so every page's footer links its source commit */}}
+    {{ $hash := "" }}{{ $short := "" }}
+    {{ with .GitInfo }}{{ $hash = .Hash }}{{ $short = .AbbreviatedHash }}{{ end }}
+    {{ if not $hash }}{{ with .Site.Params.buildCommit }}{{ $hash = . }}{{ $short = substr . 0 10 }}{{ end }}{{ end }}
+    {{ with $short }}
+      via <a href="https://github.com/gaborbernat/bernat-tech/commit/{{ $hash }}">{{ . }}</a>.
     {{ end }}
     © 2018-{{now.Year }}
     {{ $js := resources.Get "js/footer.js" | minify | fingerprint }}

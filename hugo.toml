@@ -17,7 +17,7 @@ description = "Engineering notes from Bernát Gábor — PyPA maintainer of tox,
 keywords = "python packaging,tox,virtualenv,pipx,pep 517,pep 518,type hints,mypy,python supply chain,sbom,bernat gabor"
 images = ["img/avatar.webp"]
 info = [
-    "Bloomberg · Open Source · Software Engineering",
+    "Open Source · Software Engineering · Bloomberg",
 ]
 avatarurl = "img/avatar.webp"
 dateFormat = "2006-01-02"
