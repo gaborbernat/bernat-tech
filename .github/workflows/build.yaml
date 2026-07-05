@@ -51,6 +51,21 @@ jobs:
           HUGO_GITHUB_TOKEN: ${{ secrets.HUGO_GITHUB_TOKEN }}
       - name: Highlight code
         run: node scripts/highlight.mjs
+      - name: Subset FontAwesome fonts to used glyphs
+        run: |
+          python3 -m pip install --quiet fonttools brotli
+          python3 scripts/subset-fa.py
+      - name: Optimize raster images (lossless)
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq optipng libjpeg-turbo-progs
+          find public -name '*.png' -print0 | xargs -0 -r optipng -quiet -o2 -strip all
+          find public \( -name '*.jpg' -o -name '*.jpeg' \) -print0 | while IFS= read -r -d '' f; do
+            if jpegtran -optimize -progressive -copy none "$f" > "$f.opt" 2>/dev/null; then
+              mv "$f.opt" "$f"
+            else
+              rm -f "$f.opt"
+            fi
+          done
       - name: Validate HTML
         uses: Cyb3r-Jak3/html5validator-action@4ea5e57383ed7e14432ebbaae1b64893b7c5210b # v8.0.0
         with:

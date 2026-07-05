@@ -47,7 +47,7 @@
             {{- $alt := $.Params.imageAlt | default $.Title -}}
             {{- $resource := $.Resources.GetMatch . -}}
             {{- if $resource -}}
-              <img class="post-hero" src="{{ $resource.RelPermalink }}" alt="{{ $alt }}"/>
+              <img class="post-hero" src="{{ $resource.RelPermalink }}" alt="{{ $alt }}" width="{{ $resource.Width }}" height="{{ $resource.Height }}" fetchpriority="high" decoding="async"/>
             {{- else -}}
               <img class="post-hero" src="{{ . | relURL }}" alt="{{ $alt }}"/>
             {{- end -}}
