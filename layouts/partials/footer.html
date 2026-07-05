@@ -39,7 +39,7 @@
     return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   };
 
-  const themes = { light: 'catppuccin-latte', dark: 'catppuccin-mocha' };
+  const themes = { light: 'github-light', dark: 'github-dark' };
 
   async function highlightAll() {
     const blocks = document.querySelectorAll('pre code[class*="language-"]');
