@@ -8,8 +8,10 @@ on:
     - cron: "0 * * * *"
 
 concurrency:
-  group: check-${{ github.ref }}
-  cancel-in-progress: true
+  # keep the event kinds in separate groups so the hourly cron never cancels a push (or vice versa);
+  # supersede only within a kind, and never cancel a scheduled run mid-flight
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: ${{ github.event_name != 'schedule' }}
 
 permissions:
   contents: read
