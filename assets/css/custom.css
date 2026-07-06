@@ -1426,3 +1426,22 @@ body.colorscheme-dark table.bench-table td.bench-worst {
     vertical-align: middle;
   }
 }
+
+/* /tags/ word cloud — each tag sized by how often the word appears in site content */
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.3rem 0.85rem;
+  max-width: 58rem;
+  margin: 2rem auto;
+  line-height: 1.5;
+}
+.tag-cloud a {
+  text-decoration: none;
+  white-space: nowrap;
+}
+.tag-cloud a:hover {
+  text-decoration: underline;
+}

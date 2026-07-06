@@ -1,0 +1,67 @@
+{{ define "title" }}
+  {{- if eq .Kind "term" -}}
+    {{- i18n .Data.Plural 1 | title -}}
+    {{- print ": " -}}
+  {{- end -}}
+  {{- i18n (lower .Title) | default .Title | title }} · {{ .Site.Title -}}
+{{ end }}
+{{ define "content" }}
+  {{ if eq .Kind "taxonomy" }}
+    <section class="container taxonomy">
+      <header>
+        <h1 class="title">
+          <a class="title-link" href="{{ .Permalink | safeURL }}">{{ .Title | title }}</a>
+        </h1>
+      </header>
+      {{ .Content }}
+
+      {{/* Size each tag by how often its word appears across the site's content, not by post count. */}}
+      {{ $plains := slice }}
+      {{ range .Site.RegularPages }}
+        {{ $plains = $plains | append (lower .Plain) }}
+      {{ end }}
+
+      {{ $type := .Type }}
+      {{ $items := slice }}
+      {{ range .Data.Terms.Alphabetical }}
+        {{ $count := .Count }}
+        {{ with $.Site.GetPage (printf "/%s/%s" $type .Name) }}
+          {{/* whole-word match (so "ai" does not count inside "chain"); hyphen or space between parts */}}
+          {{ $pattern := printf `\b%s\b` (replaceRE `[\s-]+` `[\s-]+` (lower .Title)) }}
+          {{ $freq := 0 }}
+          {{ range $plains }}
+            {{ $freq = add $freq (len (findRE $pattern .)) }}
+          {{ end }}
+          {{ $items = $items | append (dict
+            "title" .Title
+            "url" .RelPermalink
+            "count" $count
+            "freq" $freq
+            "weight" (math.Sqrt (add $freq 1)))
+          }}
+        {{ end }}
+      {{ end }}
+
+      {{ if $items }}
+        {{ $min := (index (sort $items "weight" "asc") 0).weight }}
+        {{ $max := (index (sort $items "weight" "desc") 0).weight }}
+        {{ $span := sub $max $min }}
+        <div class="tag-cloud">
+          {{ range sort $items "title" }}
+            {{ $t := 0.5 }}
+            {{ if gt $span 0.0 }}{{ $t = div (sub .weight $min) $span }}{{ end }}
+            {{ $size := add 0.9 (mul $t 1.85) }}
+            <a
+              href="{{ .url }}"
+              style="font-size:{{ printf "%.2f" $size }}rem"
+              title="{{ .freq }} mention{{ if ne .freq 1 }}s{{ end }} across the site · {{ .count }} post{{ if ne .count 1 }}s{{ end }}"
+              >{{ .title }}</a
+            >
+          {{ end }}
+        </div>
+      {{ end }}
+    </section>
+  {{ else }}
+    {{ partial "list.html" . }}
+  {{ end }}
+{{ end }}
