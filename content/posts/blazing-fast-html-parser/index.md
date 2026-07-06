@@ -32,6 +32,9 @@ date = 2026-06-18T09:00:00Z
   the noise.
 - **Free-threaded.** No shared mutable state, so it declares `Py_MOD_GIL_NOT_USED` and runs on the
   [no-GIL build](https://peps.python.org/pep-0703/) without forcing the lock back on.
+- **Safe under hostile input.** It
+  [caps nesting, dedups attributes in linear time, and overflow-checks every buffer](#when-the-input-is-trying-to-hurt-you),
+  and the sanitizer is validated against DOMPurify's own XSS corpus.
 
 {{< /callout >}}
 
@@ -1159,10 +1162,17 @@ you ship, and a trade I would make again over an alarm nobody believes.
 
 Reporting what the numbers really say means owning the experiments that went nowhere, too. Fusing the
 metadata-extraction walks into one tree pass moved it a few percent at most, because parsing and property extraction
-dominate that path and the walks were already cheap. And a bottom-up rewrite of the `:has()` selector, which is still
-quadratic on deeply nested trees, wants a scratch field on every node that the 80-byte node struct has no room for, so
-it stays on the list. The honest state of the code is that `:has()` on a pathological tree can still blow up, and I have
-not fixed it yet.
+dominate that path and the walks were already cheap, so it stayed on the list.
+
+The [`:has()`](https://developer.mozilla.org/en-US/docs/Web/CSS/:has) selector was the harder admission, and it is the
+one I get to take back. Its evaluation re-walked each candidate anchor's subtree, so a deeply nested tree drove it
+quadratic, and the clean fix, a bottom-up pass, wanted a scratch field on every node that the 80-byte struct had no room
+for. The 1.0 answer routes around the struct instead of growing it. A per-query memo, an open-addressing table keyed on
+the pair of the relative selector and a subtree root, computes "does this subtree contain a match" once and reuses the
+answer across every anchor that asks, so the re-walk collapses to one amortized-linear pass. It costs ordinary markup
+nothing: the memo is consulted only past 24 levels of nesting and allocated only when the selector actually uses
+`:has()` and the tree is actually that deep, so a page that nests eight levels runs the same direct walk it always did,
+and only the pathological tree that used to blow up now stays linear. The one thing I said I had not fixed is fixed.
 
 ## Making it free-threaded
 
@@ -1212,6 +1222,16 @@ a fresh one. Two threads escaping two strings, or tokenizing two documents, neve
 nothing to lock. The one thing that is not safe, and the docs flag this for any stateful object, is feeding a single
 `Tokenizer` from several threads at once: that object has mutable state, so sharing it is your lock to take.
 
+Absence of shared mutable state is an argument, and an argument about thread safety is worth exactly what its tests are.
+Two of them back the claim. [`pytest-run-parallel`](https://github.com/Quansight-Labs/pytest-run-parallel) reruns each
+test on every core at once, twenty iterations deep, so a race that the single-threaded run steps over gets thousands of
+chances to tear; and the same suite runs again under [ThreadSanitizer](https://clang.llvm.org/docs/ThreadSanitizer.html)
+on a no-GIL 3.14 build, whose suppression list is empty on purpose on the principle that any race it reports against the
+extension is a real bug in the C, not interpreter noise. The one place a tree edit does share memory, the lazy per-tree
+indexes, is walked under a per-object
+[critical section](https://docs.python.org/3/c-api/init.html#c.Py_BEGIN_CRITICAL_SECTION) so a concurrent mutation
+cannot rewire the tree mid-walk.
+
 Shipping it is the last piece. A free-threaded interpreter has its own ABI, tagged with a trailing `t` (`cp313t`,
 `cp314t`), so it needs
 [its own wheels](https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/). turbohtml builds
@@ -1226,6 +1246,153 @@ If you maintain a C extension and want to walk this path, the ecosystem has coll
 [official extension HOWTO](https://docs.python.org/3/howto/free-threading-extensions.html) for the slots above. The same
 design that keeps turbohtml fast, no shared scratch space and no hidden globals, is what lets it keep its hands off the
 lock.
+
+## When the input is trying to hurt you
+
+Everything above chases speed. A toolkit that reads the open web has a second problem, and speed makes it worse. Its
+inputs are scraped pages, submitted comments, and URLs from wherever, so every byte it touches might be written by
+someone who wants it to misbehave. Several of the tricks that make it fast are exactly where a crafted input turns
+dangerous: a doubling buffer can be made to wrap, a pairwise scan can be driven quadratic, a recursive walk can be
+driven off the end of the stack. The faster the parser, the more hot paths invite it in, and the more hostile input it
+sees. The 1.0 work hardened those paths on four fronts: a small input that costs a lot, memory the C could corrupt, the
+sanitizer's own job, and the tables the build trusts.
+
+### A small input that costs a lot
+
+The first class is the [algorithmic-complexity attack](https://en.wikipedia.org/wiki/Algorithmic_complexity_attack): a
+short input that makes a linear job run quadratically, or blows a fixed budget, so a few kilobytes hang the process. Two
+of turbohtml's paths had one.
+
+Deduplicating attributes is the first. The
+[WHATWG tokenizer](https://html.spec.whatwg.org/multipage/parsing.html#attribute-name-state) treats a repeated attribute
+name on one tag as a `duplicate-attribute` parse error and drops the later copy, first occurrence winning. The obvious
+way to enforce that compares each new name against the ones already kept, which is O(n) per attribute and O(n²) for the
+tag, so a tag carrying thousands of distinct names becomes a cheap way to burn CPU. turbohtml keeps a per-tag
+[open-addressed](https://en.wikipedia.org/wiki/Open_addressing) hash set of the names it has seen, keyed on an
+[FNV-1a](https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vaughan_hash_function) hash carried on the attribute,
+so a duplicate is a probe rather than a scan and the tag costs O(n). The detail that keeps it honest is the reset:
+clearing the table between tags with a `memset` would be O(table) per tag and hand the quadratic straight back, so each
+slot carries an epoch instead, a slot counts as filled only when its epoch matches the tokenizer's current one, and a
+new tag bumps a single 64-bit counter to invalidate the whole table at once. A counter bumped once per tag cannot wrap
+in a run that finishes.
+
+Deep nesting is the second. `<div>` repeated twenty thousand times is a linear run of start tags, but the recursive
+walks that later serialize, sanitize, or convert the tree recurse once per level, so a deeply nested document walks the
+C stack right off its end, a stack-overflow crash rather than a slow answer. The tree builder itself is iterative,
+keeping an explicit
+[stack of open elements](https://html.spec.whatwg.org/multipage/parsing.html#the-stack-of-open-elements) rather than
+recursing, and it caps that stack at `TH_MAX_TREE_DEPTH`, 512 levels, the runaway-nesting bound browsers like Blink and
+WebKit also apply. Past the cap the over-deep element still lands in the tree, as a sibling instead of a child, so
+nothing is dropped and no error fires: twenty thousand nested divs parse to a tree that stops nesting at the cap and
+still holds all twenty thousand elements and serializes back unchanged. A second, looser cap of 1024 backstops the
+recursive walks themselves, because the mutation API can build a tree deeper than any parse would, and the 2x headroom
+means a parsed tree always walks identically while only a hand-built pathological one is ever truncated.
+
+The third algorithmic-complexity case is the [`:has()`](https://developer.mozilla.org/en-US/docs/Web/CSS/:has) selector,
+which re-walks each candidate's subtree and goes quadratic on a deep tree, the same shape a `:has()` denial-of-service
+would feed it. It is as much a speed bug as a safety one, so its fix, the memo that
+[the measurement section](#measuring-without-lying-to-yourself) once admitted it lacked, sits with that story rather
+than here.
+
+### Memory the C could corrupt
+
+C has no bounds checks, so a parser written in it is only as safe as its arithmetic. Two changes close that gap.
+
+Every growable buffer in the core, the open-element stack, the token buffers, the serializer output, the two minifiers,
+doubles when it fills, and a doubling loop is a classic
+[integer-overflow](https://cwe.mitre.org/data/definitions/190.html) site: feed it a length crafted to wrap `size_t` and
+the size computation comes out small, the buffer under-allocates, and the next write runs off the end. That is the shape
+of [libxml2's CVE-2022-29824](https://gitlab.gnome.org/GNOME/libxml2/-/commit/2554a2408e09f13652049e5ffb0d26196b02ebab).
+turbohtml routes every one of those buffers through a single `th_grow_cap` helper that checks the arithmetic before it
+runs it: it tests `cap > SIZE_MAX / 2` before doubling and `cap > SIZE_MAX / elem_size` before sizing the bytes, so the
+multiply can never wrap, and a caller that would have overflowed gets a clean failure instead. Dividing by a constant
+rather than reaching for `__builtin_mul_overflow` keeps the check working on the toolchains that lack the builtin.
+Closed once, for the whole core.
+
+Finding the bugs that arithmetic review misses is a separate discipline, so every entry point that takes untrusted bytes
+runs under a [fuzzer](https://en.wikipedia.org/wiki/Fuzzing) built with
+[AddressSanitizer and UndefinedBehaviorSanitizer](https://clang.llvm.org/docs/AddressSanitizer.html), which turn an
+out-of-bounds read or a signed overflow from silent corruption into an immediate, located crash. The surfaces that
+decouple from the interpreter, the [IDNA](https://www.unicode.org/reports/tr46/) `ToASCII` engine and the JavaScript
+minifier, get standalone C harnesses; parse, serialize, sanitize, the URL pipeline, and the HTML and CSS minifiers are
+driven in-process through the public API against a sanitizer-instrumented build. A per-pull-request job replays a seed
+corpus so a regression fails deterministically, and a weekly job runs a mutation loop for a wall-clock budget to hunt
+for new ones. The IDNA harness names the CVE classes it is looking for: the
+[RFC 3492](https://www.rfc-editor.org/rfc/rfc3492) Punycode accumulator is
+[Libidn2's CVE-2017-14062](https://gitlab.com/libidn/libidn2/-/issues/54) integer-overflow class, and its output bound
+is [OpenSSL's CVE-2022-3602](https://www.openssl.org/news/secadv/20221101.txt) off-by-one class. Writing the algorithm
+the RFC describes means inheriting the footguns the RFC hides, so the harness aims straight at them.
+
+### The sanitizer, where correctness is the security
+
+One surface is different in kind. [`turbohtml.clean`](https://turbohtml.readthedocs.io/) sanitizes untrusted HTML
+against an allowlist, the job [bleach](https://github.com/mozilla/bleach) did, and there the correct answer is a
+security boundary: the output goes straight into a live page, so a wrong answer is a cross-site-scripting hole, not a
+rendering glitch. The hard part is that HTML parsing is not a
+[fixpoint](<https://en.wikipedia.org/wiki/Fixed_point_(mathematics)>). Serialize a parsed tree and parse it again and
+you can get a different tree, and the gap between the two is where
+[mutation-XSS](https://research.securitum.com/dompurify-bypass-mxss/) lives: an attacker writes markup that is inert
+when you parse it and reshuffles into something executable when the browser parses your output.
+
+turbohtml answers it the way [DOMPurify](https://github.com/cure53/DOMPurify) does, in a single pass. It mutates the
+parsed tree in place, dropping and rewriting nodes through the tree builder's own edit primitives, then serializes once,
+and the documentation is blunt that the output is safe to insert as it stands and must never be parsed again. The safety
+baseline, scripting and framing elements, `on*` handlers, and `javascript:` and `data:` URLs, lives in C beneath the
+policy so no allowlist can route around it. On top of that sits the check that catches the mutation case: a
+[namespace-reachability](https://github.com/cure53/DOMPurify) test, DOMPurify's `_checkValidNamespace`, that asks
+whether each element's namespace is reachable from its parent's under the WHATWG
+[foreign-content](https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign) rules. You enter SVG only
+through `<svg>`, MathML only through `<math>`, and return to HTML only through an
+[integration point](https://html.spec.whatwg.org/multipage/parsing.html#html-integration-point) like SVG
+`foreignObject`. A tree the parser built always passes; a node spliced in by mutation, an HTML element reparented under
+SVG or a foreign element escaped into HTML, fails and is dropped even when the allowlist admits its name.
+
+```mermaid
+flowchart TB
+    P["crafted payload<br/>inert as written"] --> ONE["turbohtml: one pass<br/>drop scripts, on* handlers,<br/>bad URLs, unreachable namespaces"]
+    P --> TWO["naive: sanitize,<br/>then let the browser reparse"]
+    ONE --> SAFE["inert in the live DOM"]
+    TWO --> RE["reparse reshuffles<br/>inert markup into script"]
+    RE --> XSS["mutation-XSS fires"]
+    classDef data fill:#dbeafe,stroke:#2563eb,color:#0b1220;
+    classDef proc fill:#fde68a,stroke:#d97706,color:#0b1220;
+    classDef good fill:#bbf7d0,stroke:#16a34a,color:#0b1220;
+    classDef bad fill:#fecaca,stroke:#dc2626,color:#0b1220;
+    class P data
+    class ONE,TWO proc
+    class SAFE good
+    class RE,XSS bad
+```
+
+The proof it works is borrowed. The test suite vendors
+[DOMPurify's own XSS corpus](https://github.com/cure53/DOMPurify/blob/main/test/fixtures/expect.mjs), 219 payloads
+pinned at a source commit, and because turbohtml's default allowlist is not DOMPurify's it checks security equivalence
+rather than string equality: it reparses each sanitized output the way a browser would and asserts that nothing
+executable survives, a scriptable element, an event handler, a dangerous URL, under the default policy and under a
+deliberately maximal one that keeps the whole SVG, MathML, and CSS surface so only the C baseline stands between payload
+and page. The guarantee is inertness rather than a stable string: parsing is not a fixpoint even for safe markup, so a
+benign document can serialize to something that reparses a little differently, and the test allows that. A separate
+curated corpus of known mutation-XSS shapes gets the stronger check, `sanitize(sanitize(x)) == sanitize(x)`, because for
+markup whose whole trick is to reshuffle on a second parse, a sanitized form that changes again is the tell that the
+reshuffle is still live.
+
+### The tables the build trusts
+
+The last surface is not the input, it is the data. turbohtml generates its Unicode,
+[Public Suffix List](https://publicsuffix.org/), and [IANA TLD](https://data.iana.org/TLD/tlds-alpha-by-domain.txt)
+tables from their network sources at build time, the technique the IDNA section described, and a generated table is a
+supply-chain question. Pinning the version says which release you built against, but a poisoned or silently rewritten
+mirror can still serve altered content under that version's stable URL, and no review of the C would catch a bad row in
+an eight-thousand-line generated header. So each generator pins a [SHA-256](https://en.wikipedia.org/wiki/SHA-2) of the
+exact bytes it expects, the Public Suffix List additionally by [source commit](https://github.com/publicsuffix/list)
+rather than `main`, and the build recomputes the digest on every fetch and aborts on any mismatch instead of
+regenerating from whatever it was served. Updating a table is then a deliberate act: a maintainer reviews the diff and
+bumps the pin on purpose, so a rebuild is reproducible or it fails loudly. It is the same instinct as pinning the
+Unicode version so the normalizer and the interpreter agree, carried one step down to the bytes.
+
+None of these four is a speed technique, which is the point. Speed is why I started; being safe to point at the open web
+is what earns the toolkit the right to be there. The section that follows is the other half of the same commitment, the
+harness that checks every answer is correct, because fast and safe still have to be right.
 
 If you want to read the real thing, it is on [GitHub](https://github.com/tox-dev/turbohtml) and
 [PyPI](https://pypi.org/project/turbohtml/) (`pip install turbohtml`), and the C is meant to be read side by side with
