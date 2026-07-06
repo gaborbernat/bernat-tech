@@ -6,7 +6,7 @@ keywords = [ "html parser", "html toolkit", "python c extension", "simd", "swar"
 image = "splash.webp"
 images = [ "splash.webp"]
 tags = [ "python", "c", "performance", "simd", "html", "parser", "tokenizer", "unicode", "turbohtml", "idna", "pgo", "lto", "benchmarking"]
-draft = true
+draft = false
 slug = "blazing-fast-html-parser"
 date = 2026-06-18T09:00:00Z
 +++
@@ -41,8 +41,8 @@ date = 2026-06-18T09:00:00Z
 _turbohtml was built with Claude (Opus 4.8), not by hand, over a month and close to 300 iterations. I review the code
 and own its correctness; [more on how, and my thanks, at the end](#how-this-was-built)._
 
-This started as a proposal to CPython. The standard library's
-[`html.escape`](https://docs.python.org/3/library/html.html#html.escape) and
+I set out this year to contribute to CPython itself, and this is where that went. It started as a proposal to the
+standard library. The standard library's [`html.escape`](https://docs.python.org/3/library/html.html#html.escape) and
 [`html.unescape`](https://docs.python.org/3/library/html.html#html.unescape) are written in pure Python: `escape` runs
 up to five `str.replace` passes, and `unescape` runs a regex with a per-match Python callback over the 2,231-entry HTML5
 entity table. Both sit on hot paths, since `html.parser.HTMLParser` calls `unescape` on every run of text it sees, so I
@@ -57,14 +57,47 @@ accelerator. One of the maintainers
 [suggested PyPI as the better home](https://github.com/python/cpython/issues/151024#issuecomment-4640666387) for this
 rather than the standard library. So that is where it went, as [turbohtml](https://turbohtml.readthedocs.io/).
 
-The standard library is right to be wary of SIMD in code that has to build everywhere and last decades. But once the
-code lived on PyPI instead, that caution stopped applying, and it left a question I wanted to answer: if nothing is
+I had meant to land something in CPython this year, so that stung a little, but the reasoning was sound and the outcome
+was better than the one I set out for: the biggest dent I could make on the same problem was just outside CPython, not
+in it. The standard library is right to be wary of SIMD in code that has to build everywhere and last decades. Once the
+code lived on PyPI instead, that caution stopped applying, and it left a question worth answering: if nothing is
 off-limits, how fast can HTML-domain work get? So I set the scope to the whole HTML domain and kept pushing. turbohtml
 grew from three functions into a toolkit. It still escapes, unescapes, and tokenizes, matching `html.escape`,
 `html.unescape`, and `html.parser` byte for byte; on top of that it builds a tree, queries it with CSS and XPath,
 serializes, sanitizes, minifies HTML and CSS and JavaScript, extracts metadata, and parses URLs, all over one C core and
-behind a thin typed Python facade. What it does, and what it refuses to do, follows from a short list of design
-principles worth stating before the techniques.
+behind a thin typed Python facade. Before the techniques, two things are worth setting down: the size of the gap that
+makes any of this worth closing, and the short list of principles that decide what turbohtml is and what it refuses to
+be.
+
+## Why bother
+
+Escaping runs on every fragment of text a web app renders. Unescaping runs on every chunk of text an HTML parser hands
+back. Tokenizing runs on every document you scrape. These are the kind of functions that get called millions of times,
+so a constant-factor speedup on each call adds up to real time saved.
+
+Here is the shape of the gap, measured with [pyperf](https://pyperf.readthedocs.io) on CPython 3.14 against the standard
+library:
+
+{{< bench-table you=2 nums="3" >}} operation | input | turbohtml | Python stdlib ; escape | prose, nothing to escape |
+0.12 ms | 2.66 ms (22x) ; escape | real HTML (4 MiB) | 1.35 ms | 4.88 ms (3.6x) ; unescape | entity-heavy text | 10.4 ms
+| 78.5 ms (7.6x) ; tokenize | typical markup | 30.3 µs | 449 µs (14.8x) ; tokenize | a 7.9 MB HTML spec source | 37.0 ms
+| 399 ms (10.8x) {{< /bench-table >}}
+
+Numbers vary with input and hardware; reproduce them with `tox -e bench` against the
+[benchmark corpus](https://github.com/tox-dev/turbohtml/tree/main/tools) (Project Gutenberg's
+[_War and Peace_](https://www.gutenberg.org/ebooks/2600), the [WHATWG](https://html.spec.whatwg.org/) and
+[ECMAScript](https://tc39.es/ecma262/) specs) in the repo.
+
+The standard library is not slow because its authors were careless. It is slow because it is written in Python, and
+Python pays an interpreter cost on every character it touches. `html.unescape` calls a Python function for every entity
+it finds. `html.parser` runs a regular expression and then steps through matches in Python. Rewriting in C removes the
+interpreter from the inner loop, and that alone buys a few times speedup. The rest of the gap comes from being clever
+about what work to do at all, which is the interesting part.
+
+A recurring theme runs through everything below: **the fastest work is the work you skip.** Most text needs no escaping.
+Most characters in a document are ordinary letters. If you can confirm "nothing interesting here" for a big block of
+text in one cheap step, you have already won. Every rule turbohtml follows is a version of that one idea, which is why
+the principles come next, before the techniques that put them to work.
 
 ## Design principles
 
@@ -99,37 +132,8 @@ I want to walk you through how. None of the techniques are mine; they come from 
 [simdjson](https://github.com/simdjson/simdjson), from [html5ever](https://github.com/servo/html5ever), and from a
 decades-old page of [bit tricks](https://graphics.stanford.edu/~seander/bithacks.html). Putting them together in one
 place taught me a lot, and I think the ideas are worth knowing even if you never touch HTML. If you have written C
-before and know roughly what a CPU does, you have enough background to follow along. Let me start with why any of this
-matters.
-
-## Why bother
-
-Escaping runs on every fragment of text a web app renders. Unescaping runs on every chunk of text an HTML parser hands
-back. Tokenizing runs on every document you scrape. These are the kind of functions that get called millions of times,
-so a constant-factor speedup on each call adds up to real time saved.
-
-Here is the shape of the gap, measured with [pyperf](https://pyperf.readthedocs.io) on CPython 3.14 against the standard
-library:
-
-{{< bench-table you=2 nums="3" >}} operation | input | turbohtml | Python stdlib ; escape | prose, nothing to escape |
-0.12 ms | 2.66 ms (22x) ; escape | real HTML (4 MiB) | 1.35 ms | 4.88 ms (3.6x) ; unescape | entity-heavy text | 10.4 ms
-| 78.5 ms (7.6x) ; tokenize | typical markup | 30.3 µs | 449 µs (14.8x) ; tokenize | a 7.9 MB HTML spec source | 37.0 ms
-| 399 ms (10.8x) {{< /bench-table >}}
-
-Numbers vary with input and hardware; reproduce them with `tox -e bench` against the
-[benchmark corpus](https://github.com/tox-dev/turbohtml/tree/main/tools) (Project Gutenberg's
-[_War and Peace_](https://www.gutenberg.org/ebooks/2600), the [WHATWG](https://html.spec.whatwg.org/) and
-[ECMAScript](https://tc39.es/ecma262/) specs) in the repo.
-
-The standard library is not slow because its authors were careless. It is slow because it is written in Python, and
-Python pays an interpreter cost on every character it touches. `html.unescape` calls a Python function for every entity
-it finds. `html.parser` runs a regular expression and then steps through matches in Python. Rewriting in C removes the
-interpreter from the inner loop, and that alone buys a few times speedup. The rest of the gap comes from being clever
-about what work to do at all, which is the interesting part.
-
-A recurring theme runs through everything below: **the fastest work is the work you skip.** Most text needs no escaping.
-Most characters in a document are ordinary letters. If you can confirm "nothing interesting here" for a big block of
-text in one cheap step, you have already won. Let me show you the cheapest way I know to do that.
+before and know roughly what a CPU does, you have enough background to follow along. The smallest of the functions shows
+the whole trick, so let me start there, with escape and the cheapest way I know to clear a block of text.
 
 ## Scanning sixteen bytes at a time
 
@@ -928,15 +932,15 @@ removes. The section on free-threading below is the longer version of that argum
 
 ## When the work is a standard, not a scan
 
-The URL parser is where the block-scanning story runs out. Splitting a URL into its parts, percent-encoding a path,
-resolving a relative reference against a base: all of these moved into C and got several times faster, but the speedup
-is the plain one, no interpreter in the loop, the same reason the first C accelerator was faster than pure Python. The
-scanning tricks do not apply, and one of them runs backward: the URL code deliberately widens the whole input to
-four-byte characters up front, so the rest of the code reads one fixed width instead of branching on width per read.
-That is the opposite of the tokenizer, which refuses to widen and compiles three machines so an ASCII document stays one
-byte per character. The difference is size. A URL is short, so widening it once costs nothing and buys a simpler loop; a
-document is large, so widening it would be the 4x copy the tokenizer bends over backward to avoid. Different input,
-different answer.
+The URL parser is one of those places the principles did not reach, where the block-scanning story runs out. Splitting a
+URL into its parts, percent-encoding a path, resolving a relative reference against a base: all of these moved into C
+and got several times faster, but the speedup is the plain one, no interpreter in the loop, the same reason the first C
+accelerator was faster than pure Python. The scanning tricks do not apply, and one of them runs backward: the URL code
+deliberately widens the whole input to four-byte characters up front, so the rest of the code reads one fixed width
+instead of branching on width per read. That is the opposite of the tokenizer, which refuses to widen and compiles three
+machines so an ASCII document stays one byte per character. The difference is size. A URL is short, so widening it once
+costs nothing and buys a simpler loop; a document is large, so widening it would be the 4x copy the tokenizer bends over
+backward to avoid. Different input, different answer.
 
 Host encoding is the exception, and it is worth a section because it is a kind of work the rest of the library does not
 do. Turning `café.example` into the ASCII `xn--caf-dma.example` that DNS can carry is
@@ -1059,10 +1063,11 @@ pages the real gain is 13.9 percent [geometric mean](https://en.wikipedia.org/wi
 percent that parse and select showed on the training inputs, because those were measured on the very data the profile
 trained on, which is measuring your own homework.
 
-## Measuring comes before improving
+## Where the numbers come from
 
-You cannot improve what you cannot measure, and none of the numbers in this article would mean much without a suite
-built to produce them honestly. The measurement setup is as much a part of the project as the C, so it is worth a look.
+Every figure in this article, the held-out PGO gain just quoted included, comes from one benchmark suite built to
+produce numbers you can trust, and that suite is as much a part of the project as the C underneath it. It is worth a
+look.
 
 Every published speedup comes from `tox -e bench`, which times each operation with
 [pyperf](https://pyperf.readthedocs.io) on a quiet, tuned machine (`pyperf system tune` first, with `--rigorous` and CPU
@@ -1249,13 +1254,14 @@ lock.
 
 ## When the input is trying to hurt you
 
-Everything above chases speed. A toolkit that reads the open web has a second problem, and speed makes it worse. Its
-inputs are scraped pages, submitted comments, and URLs from wherever, so every byte it touches might be written by
-someone who wants it to misbehave. Several of the tricks that make it fast are exactly where a crafted input turns
-dangerous: a doubling buffer can be made to wrap, a pairwise scan can be driven quadratic, a recursive walk can be
-driven off the end of the stack. The faster the parser, the more hot paths invite it in, and the more hostile input it
-sees. The 1.0 work hardened those paths on four fronts: a small input that costs a lot, memory the C could corrupt, the
-sanitizer's own job, and the tables the build trusts.
+Free-threading makes turbohtml safe to run in parallel. This section is about a harder kind of safe: running it on input
+it cannot trust. A toolkit that reads the open web takes its bytes from scraped pages, submitted comments, and URLs from
+wherever, so much of what it parses was written by someone who might want it to misbehave, and speed makes that worse
+rather than better. Several of the tricks that make it fast are exactly where a crafted input turns dangerous: a
+doubling buffer can be made to wrap, a pairwise scan can be driven quadratic, a recursive walk can be driven off the end
+of the stack. The faster the parser, the more hot paths invite it in, and the more hostile input it sees. The 1.0 work
+hardened those paths on four fronts: a small input that costs a lot, memory the C could corrupt, the sanitizer's own
+job, and the tables the build trusts.
 
 ### A small input that costs a lot
 
