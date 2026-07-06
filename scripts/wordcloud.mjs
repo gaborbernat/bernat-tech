@@ -55,7 +55,7 @@ const layout = (width, height, seed) => {
       .padding(PAD)
       .font(FONT)
       .fontSize((d) => d.size)
-      .rotate(() => (rng() < 0.18 ? 90 : 0))
+      .rotate(() => 0) // horizontal only; rotated words are hard to read
       .random(rng)
       .on("end", resolve)
       .start();
@@ -91,11 +91,10 @@ for (const d of placed) {
   mctx.font = `600 ${d.size}px ${FONT}`;
   const halfW = mctx.measureText(d.text).width / 2;
   const halfH = d.size * 0.62;
-  const [ex, ey] = d.rotate ? [halfH, halfW] : [halfW, halfH];
-  x0 = Math.min(x0, d.x - ex);
-  y0 = Math.min(y0, d.y - ey);
-  x1 = Math.max(x1, d.x + ex);
-  y1 = Math.max(y1, d.y + ey);
+  x0 = Math.min(x0, d.x - halfW);
+  y0 = Math.min(y0, d.y - halfH);
+  x1 = Math.max(x1, d.x + halfW);
+  y1 = Math.max(y1, d.y + halfH);
 }
 const M = 6;
 const vbX = (x0 - M).toFixed(1);
@@ -111,10 +110,9 @@ const anchors = placed
   .map((d) => {
     const cx = d.x.toFixed(1);
     const cy = d.y.toFixed(1);
-    const rot = d.rotate ? ` transform="rotate(${d.rotate} ${cx} ${cy})"` : "";
     return (
       `<a href="${d.href}" aria-label="${esc(d.text)}">` +
-      `<text x="${cx}" y="${cy}"${rot} font-size="${d.size}" style="--t:${d.t.toFixed(3)}">${esc(d.text)}</text>` +
+      `<text x="${cx}" y="${cy}" font-size="${d.size}" style="--t:${d.t.toFixed(3)}">${esc(d.text)}</text>` +
       `</a>`
     );
   })
