@@ -50,6 +50,13 @@ jobs:
           key: ${{ runner.os }}-hugo-${{ github.run_id }}
           restore-keys: |
             ${{ runner.os }}-hugo-
+      - name: Refresh project stats
+        # only on main (PRs lack the secret); non-fatal, so a flaky API falls back to the committed file
+        if: github.ref == 'refs/heads/main'
+        continue-on-error: true
+        run: uv run scripts/prefetch_projects.py
+        env:
+          HUGO_GITHUB_TOKEN: ${{ secrets.HUGO_GITHUB_TOKEN }}
       - name: Build
         run: hugo --minify --gc
         env:

@@ -2,9 +2,10 @@
 # requires-python = ">=3.13"
 # dependencies = ["pyyaml>=6"]
 # ///
-"""Fetch the GitHub/PyPI/JetBrains stats the project tables show into data/project_stats.json, so the
-content build reads a static file instead of making ~150 API calls per build. A scheduled workflow
-refreshes this file; project-row.html consumes it by the key keyed() builds here."""
+"""Fetch the GitHub/PyPI/JetBrains stats the project tables show into data/project_stats.json, so Hugo
+reads a static file instead of making ~150 fragile API calls inside its render timeout. CI runs this
+once before the build; project-row.html consumes it by the key keyed() builds here. The committed file
+is the fallback used for local `hugo serve` and when the refresh step is skipped or fails."""
 
 # print is this CLI build script's progress output; stdout is intended
 # ruff: noqa: T201
