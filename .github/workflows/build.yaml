@@ -39,6 +39,8 @@ jobs:
           node-version: 26
           cache: npm
       - run: npm ci
+      - name: Install Chromium for build-time mermaid rendering
+        run: npx playwright install --with-deps chromium
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
@@ -56,6 +58,8 @@ jobs:
         run: node scripts/highlight.mjs
       - name: Pack tag word cloud
         run: node scripts/wordcloud.mjs
+      - name: Render mermaid diagrams to static SVG
+        run: node scripts/mermaid.mjs
       - name: Subset FontAwesome fonts to used glyphs
         run: |
           python3 -m pip install --quiet fonttools brotli

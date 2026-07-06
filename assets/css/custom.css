@@ -317,23 +317,34 @@ body.colorscheme-dark table.project-table img {
   background: rgba(248, 81, 73, 0.1);
 }
 
-/* Mermaid diagrams: collapse raw text to prevent CLS, expand once SVG renders */
-pre.mermaid {
-  justify-content: center;
-  background: transparent;
-  border: none;
-  padding: 0;
-  overflow: hidden;
-  height: 0;
+/* Mermaid diagrams: pre-rendered static SVG at build time, light/dark variants toggled by theme */
+figure.mermaid {
+  margin: 2rem 0;
+  text-align: center;
 }
-pre.mermaid:has(svg) {
-  display: flex;
-  height: auto;
-  padding: 2rem 0;
-}
-pre.mermaid svg {
+figure.mermaid svg {
   max-width: 100%;
   height: auto;
+}
+figure.mermaid .mermaid-light {
+  display: block;
+}
+figure.mermaid .mermaid-dark {
+  display: none;
+}
+body.colorscheme-dark figure.mermaid .mermaid-light {
+  display: none;
+}
+body.colorscheme-dark figure.mermaid .mermaid-dark {
+  display: block;
+}
+@media (prefers-color-scheme: dark) {
+  body.colorscheme-auto figure.mermaid .mermaid-light {
+    display: none;
+  }
+  body.colorscheme-auto figure.mermaid .mermaid-dark {
+    display: block;
+  }
 }
 .post img[width] {
   max-width: 100%;
@@ -552,7 +563,6 @@ body.colorscheme-dark code.shiki-inline span {
 }
 
 /* Cap mermaid diagrams so they fit on screen */
-pre.mermaid svg,
 .mermaid svg {
   max-height: 600px;
   height: auto;

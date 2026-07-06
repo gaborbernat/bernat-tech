@@ -64,52 +64,33 @@
   document.addEventListener('themeChanged', highlightAll);
 </script>
 {{ end }}
-{{ if .Page.Store.Get "hasMermaid" }}
-{{ $mermaid := resources.Get "js/vendor/mermaid.min.js" | fingerprint }}
-<script src="{{ $mermaid.RelPermalink }}" integrity="{{ $mermaid.Data.Integrity }}" crossorigin="anonymous" defer></script>
-<script>
-  // The mermaid UMD is deferred, so it executes after parsing but before DOMContentLoaded; defer is
-  // ignored on inline scripts, so wait for the event rather than reading window.mermaid immediately.
-  document.addEventListener('DOMContentLoaded', async () => {
-    const mermaid = window.mermaid;
-
-    const getTheme = () => {
-      const body = document.body;
-      if (body.classList.contains('colorscheme-dark')) return 'dark';
-      if (body.classList.contains('colorscheme-light')) return 'default';
-      if (body.classList.contains('colorscheme-auto')) {
-        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
-      }
-      return 'default';
-    };
-
-    // keep the source so theme switches can re-render from scratch
-    document.querySelectorAll('pre.mermaid').forEach((d) => d.setAttribute('data-mermaid-code', d.textContent));
-
-    // dark mermaid renders edge labels as #ccc on a #585858 backing (4.43:1); darken the backing to
-    // the page background so the labels clear WCAG AA.
-    const mermaidConfig = () => {
-      const cfg = { theme: getTheme() };
-      if (cfg.theme === 'dark') cfg.themeVariables = { edgeLabelBackground: '#212121' };
-      return cfg;
-    };
-
-    mermaid.initialize({ startOnLoad: false, ...mermaidConfig() });
-    await mermaid.run({ querySelector: 'pre.mermaid' });
-
-    document.addEventListener('themeChanged', async () => {
-      mermaid.initialize(mermaidConfig());
-      for (const d of document.querySelectorAll('pre.mermaid')) {
-        const code = d.getAttribute('data-mermaid-code');
-        const id = 'mermaid-' + Math.random().toString(36).substr(2, 9);
-        try {
-          const { svg } = await mermaid.render(id, code);
-          d.innerHTML = svg;
-        } catch (err) {
-          console.error('Failed to re-render mermaid diagram:', err);
-        }
-      }
-    });
+{{/* Production pre-renders mermaid to static light/dark SVG at build time (scripts/mermaid.mjs), so no
+     shipped page carries the runtime. The dev server skips that step, so render client-side there only,
+     the same dev-only pattern as the shiki block above. */}}
+{{ if and hugo.IsServer (.Page.Store.Get "hasMermaid") }}
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+  const getTheme = () => {
+    const b = document.body;
+    if (b.classList.contains('colorscheme-dark')) return 'dark';
+    if (b.classList.contains('colorscheme-light')) return 'default';
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+  };
+  const cfg = () => {
+    const c = { startOnLoad: false, theme: getTheme() };
+    if (c.theme === 'dark') c.themeVariables = { edgeLabelBackground: '#212121' };
+    return c;
+  };
+  document.querySelectorAll('pre.mermaid').forEach((d) => d.setAttribute('data-mermaid-code', d.textContent));
+  mermaid.initialize(cfg());
+  await mermaid.run({ querySelector: 'pre.mermaid' });
+  document.addEventListener('themeChanged', async () => {
+    mermaid.initialize(cfg());
+    for (const d of document.querySelectorAll('pre.mermaid')) {
+      const code = d.getAttribute('data-mermaid-code');
+      const { svg } = await mermaid.render('m-' + Math.random().toString(36).slice(2), code);
+      d.innerHTML = svg;
+    }
   });
 </script>
 {{ end }}
