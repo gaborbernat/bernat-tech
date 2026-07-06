@@ -1318,6 +1318,42 @@ select.tv-input {
 .bench-wrap {
   overflow-x: auto;
   margin: 1.6em 0;
+  /* force a visible scrollbar so it is obvious a wide table has columns off-screen (macOS hides
+     overlay scrollbars until you scroll, so the table looks like it just ends) */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(120, 120, 120, 0.6) rgba(120, 120, 120, 0.16);
+  transition: box-shadow 0.15s ease;
+}
+/* the scrollbar alone is easy to miss, so a JS-toggled inset edge shadow marks which side still has
+   off-screen columns; inset box-shadow paints on the border box and stays pinned as content scrolls */
+.bench-wrap.more-right {
+  box-shadow: inset -18px 0 14px -14px rgba(0, 0, 0, 0.45);
+}
+.bench-wrap.more-left {
+  box-shadow: inset 18px 0 14px -14px rgba(0, 0, 0, 0.45);
+}
+.bench-wrap.more-left.more-right {
+  box-shadow:
+    inset 18px 0 14px -14px rgba(0, 0, 0, 0.45),
+    inset -18px 0 14px -14px rgba(0, 0, 0, 0.45);
+}
+.bench-wrap:focus-visible {
+  outline: 2px solid var(--link-color, #42a5f5);
+  outline-offset: 2px;
+}
+.bench-wrap::-webkit-scrollbar {
+  height: 0.7rem;
+}
+.bench-wrap::-webkit-scrollbar-thumb {
+  background: rgba(120, 120, 120, 0.55);
+  border-radius: 0.35rem;
+}
+.bench-wrap::-webkit-scrollbar-thumb:hover {
+  background: rgba(120, 120, 120, 0.8);
+}
+.bench-wrap::-webkit-scrollbar-track {
+  background: rgba(120, 120, 120, 0.16);
+  border-radius: 0.35rem;
 }
 table.bench-table {
   border-collapse: collapse;
@@ -1334,6 +1370,35 @@ table.bench-table td {
 table.bench-table thead th {
   background: rgba(15, 23, 42, 0.05);
   font-weight: 600;
+}
+/* pin the operation column so its label stays in view while the peer columns scroll horizontally */
+table.bench-table th:first-child,
+table.bench-table td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: #f0f1f3;
+  box-shadow: 1px 0 0 var(--tv-line, #d3dae3);
+}
+body.colorscheme-dark table.bench-table th:first-child,
+body.colorscheme-dark table.bench-table td:first-child {
+  background: #2a2a2a;
+}
+@media (prefers-color-scheme: dark) {
+  body.colorscheme-auto table.bench-table th:first-child,
+  body.colorscheme-auto table.bench-table td:first-child {
+    background: #2a2a2a;
+  }
+}
+/* tighter on small screens so more columns fit before the horizontal scroll kicks in */
+@media (max-width: 640px) {
+  table.bench-table {
+    font-size: 0.82em;
+  }
+  table.bench-table th,
+  table.bench-table td {
+    padding: 0.3em 0.45em;
+  }
 }
 /* competitor links sit on the heat-colored cells, where the theme link blue fails contrast; use the
    cell's own text color (which is tuned to read on every heat level) and underline for affordance */
@@ -1478,7 +1543,11 @@ body.colorscheme-dark .tag-cloud {
 .tag-cloud a {
   display: inline-block;
   text-decoration: none;
-  color: color-mix(in oklab, var(--cloud-lo), var(--cloud-hi) calc(var(--t) * 100%));
+  color: color-mix(
+    in oklab,
+    var(--cloud-lo),
+    var(--cloud-hi) calc(var(--t) * 100%)
+  );
   transition:
     color 0.15s ease,
     transform 0.15s ease;
@@ -1515,7 +1584,11 @@ body.colorscheme-dark .tag-cloud {
 }
 .wordcloud text {
   font-weight: 600;
-  fill: color-mix(in oklab, var(--cloud-lo), var(--cloud-hi) calc(var(--t) * 100%));
+  fill: color-mix(
+    in oklab,
+    var(--cloud-lo),
+    var(--cloud-hi) calc(var(--t) * 100%)
+  );
   transition: fill 0.15s ease;
 }
 .wordcloud a:hover text {

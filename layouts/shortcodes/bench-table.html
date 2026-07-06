@@ -4,6 +4,7 @@
        turbohtml> tints green; nums="i,j" are competitor columns, each tinted
        from the (Nx) ratio in its own cell (bigger = redder). A competitor
        cell whose leading token names a known library is linked to it. */ -}}
+{{- .Page.Store.Set "hasBench" true -}}
 {{- $you := int (.Get "you") -}}
 {{- $nums := slice -}}
 {{- range (split (.Get "nums") ",") -}}
@@ -30,7 +31,7 @@
   "w3lib" "https://github.com/scrapy/w3lib"
 -}}
 {{- $rows := split (trim .Inner " \n;") ";" -}}
-<div class="bench-wrap">
+<div class="bench-wrap" tabindex="0" role="region" aria-label="Benchmark table, scroll horizontally for more columns">
 <table class="bench-table">
 <thead><tr>
 {{- range (split (index $rows 0) "|") }}<th>{{ trim (replaceRE `\s+` " " .) " " }}</th>{{ end -}}
