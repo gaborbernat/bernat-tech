@@ -1,0 +1,7 @@
+<h1>{{ .Site.Params.author }}</h1>
+<p class="name-pronounce">BEHR-naht GAH-bor</p>
+{{ if reflect.IsSlice .Site.Params.info }}
+<h2>{{ range .Site.Params.info }}{{ . | markdownify }}<br>{{ end }}</h2>
+{{ else }}
+<h2>{{ .Site.Params.info | markdownify }}</h2>
+{{ end }}

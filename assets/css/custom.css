@@ -219,6 +219,13 @@ body.colorscheme-dark table.project-table img {
   margin-right: 0;
   font-size: 1.2em;
 }
+.about .name-pronounce {
+  margin: 0.15rem 0 0;
+  font-size: 0.95rem;
+  font-style: italic;
+  opacity: 0.6;
+  letter-spacing: 0.03em;
+}
 /* brand-colour the home page social icons instead of leaving them monochrome */
 .about ul a .fa-twitter {
   color: #1da1f2;
