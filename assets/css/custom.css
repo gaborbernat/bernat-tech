@@ -219,6 +219,42 @@ body.colorscheme-dark table.project-table img {
   margin-right: 0;
   font-size: 1.2em;
 }
+/* brand-colour the home page social icons instead of leaving them monochrome */
+.about ul a .fa-twitter {
+  color: #1da1f2;
+}
+.about ul a .fa-bluesky {
+  color: #1185fe;
+}
+.about ul a .fa-mastodon {
+  color: #6364ff;
+}
+.about ul a .fa-python {
+  color: #4b8bbe;
+}
+.about ul a .fa-linkedin {
+  color: #0a66c2;
+}
+.about ul a .fa-twitch {
+  color: #9146ff;
+}
+.about ul a .fa-instagram {
+  color: #e4405f;
+}
+.about ul a .fa-heart {
+  color: #e25555;
+}
+.about ul a .fa-github {
+  color: #1b1f24;
+}
+body.colorscheme-dark .about ul a .fa-github {
+  color: #e6edf3;
+}
+@media (prefers-color-scheme: dark) {
+  body.colorscheme-auto .about ul a .fa-github {
+    color: #e6edf3;
+  }
+}
 .related-posts {
   margin-top: 2rem;
   padding-top: 1rem;
