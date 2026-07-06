@@ -39,6 +39,7 @@ jobs:
           node-version: 26
           cache: npm
       - run: npm ci
+      - uses: astral-sh/setup-uv@d31148d669074a8d0a63714ba94f3201e7020bc3 # v8.3.0
       - name: Install Chromium for build-time mermaid rendering
         run: npx playwright install --with-deps chromium
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
@@ -56,13 +57,11 @@ jobs:
       - name: Highlight code
         run: node scripts/highlight.mjs
       - name: Pack tag word cloud
-        run: node scripts/wordcloud.mjs
+        run: uv run scripts/wordcloud.py
       - name: Render mermaid diagrams to static SVG
         run: node scripts/mermaid.mjs
       - name: Subset FontAwesome fonts to used glyphs
-        run: |
-          python3 -m pip install --quiet fonttools brotli
-          python3 scripts/subset-fa.py
+        run: uv run scripts/subset-fa.py
       - name: Optimize raster images (lossless)
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq optipng libjpeg-turbo-progs
