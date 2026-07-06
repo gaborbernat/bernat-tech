@@ -1335,6 +1335,13 @@ table.bench-table thead th {
   background: rgba(15, 23, 42, 0.05);
   font-weight: 600;
 }
+/* competitor links sit on the heat-colored cells, where the theme link blue fails contrast; use the
+   cell's own text color (which is tuned to read on every heat level) and underline for affordance */
+table.bench-table a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
 table.bench-table td[class*="bench-"] {
   text-align: right;
   font-variant-numeric: tabular-nums;
