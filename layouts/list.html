@@ -12,10 +12,7 @@
 {{ define "content" }}
   {{ if eq .Kind "taxonomy" }}
     <section class="container taxonomy">
-      <header>
-        <h1 class="title">Topics</h1>
-      </header>
-      <p class="cloud-intro">A word cloud of the blog — bigger words show up more often across the posts.</p>
+      <h1 class="sr-only">Topics</h1>
       {{ .Content }}
 
       {{/* Size each tag by how often its word appears across the site's content, not by post count. */}}
@@ -49,7 +46,7 @@
         {{ $min := (index (sort $items "weight" "asc") 0).weight }}
         {{ $max := (index (sort $items "weight" "desc") 0).weight }}
         {{ $span := sub $max $min }}
-        {{/* Flex layout below is the accessible baseline; the wordcloud build step (scripts/wordcloud.mjs)
+        {{/* Flex layout below is the accessible baseline; the wordcloud build step (scripts/wordcloud.py)
              packs these same anchors into an SVG cloud in production, keyed off data-w. */}}
         <div class="tag-cloud" data-wordcloud>
           {{ range sort $items "title" }}
@@ -67,6 +64,7 @@
           {{ end }}
         </div>
       {{ end }}
+      <p class="cloud-intro">A word cloud of the blog — bigger words show up more often across the posts.</p>
     </section>
   {{ else }}
     {{ partial "list.html" . }}

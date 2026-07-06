@@ -1510,11 +1510,28 @@ body.colorscheme-dark table.bench-table td.bench-worst {
 }
 
 /* /tags/ word cloud — size, weight and color all scale with how often the word appears */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 .cloud-intro {
   text-align: center;
-  font-size: 0.95rem;
-  max-width: 34rem;
-  margin: 0.4rem auto 0;
+  font-size: 0.9rem;
+  opacity: 0.7;
+  white-space: nowrap;
+  margin: 1.25rem auto 0;
+}
+@media (max-width: 600px) {
+  .cloud-intro {
+    white-space: normal;
+  }
 }
 .tag-cloud {
   --cloud-lo: #5f7385;
@@ -1543,11 +1560,7 @@ body.colorscheme-dark .tag-cloud {
 .tag-cloud a {
   display: inline-block;
   text-decoration: none;
-  color: color-mix(
-    in oklab,
-    var(--cloud-lo),
-    var(--cloud-hi) calc(var(--t) * 100%)
-  );
+  color: color-mix(in oklab, var(--cloud-lo), var(--cloud-hi) calc(var(--t) * 100%));
   transition:
     color 0.15s ease,
     transform 0.15s ease;
@@ -1555,6 +1568,15 @@ body.colorscheme-dark .tag-cloud {
 .tag-cloud a:hover {
   color: var(--cloud-hi);
   transform: translateY(-2px) scale(1.05);
+}
+/* Inter subset (static/fonts/tag-cloud.woff2); wordcloud.mjs packs against this exact font so the
+   browser paints the same glyph widths it measured — a generic family would overlap. */
+@font-face {
+  font-family: "TagCloud";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/tag-cloud.woff2") format("woff2");
 }
 /* packed SVG variant (built by scripts/wordcloud.mjs) shown where it has room; flex list on phones */
 .tag-cloud--flex {
@@ -1583,12 +1605,9 @@ body.colorscheme-dark .tag-cloud {
   }
 }
 .wordcloud text {
+  font-family: "TagCloud", sans-serif;
   font-weight: 600;
-  fill: color-mix(
-    in oklab,
-    var(--cloud-lo),
-    var(--cloud-hi) calc(var(--t) * 100%)
-  );
+  fill: color-mix(in oklab, var(--cloud-lo), var(--cloud-hi) calc(var(--t) * 100%));
   transition: fill 0.15s ease;
 }
 .wordcloud a:hover text {
