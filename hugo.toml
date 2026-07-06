@@ -7,7 +7,7 @@ enableEmoji = true
 enableGitInfo = true
 disableHugoGeneratorInject = true
 ignoreLogs = ["warning-goldmark-raw-html"]
-timeout = "420s"                                 # ~59 projects × several GetRemote calls each; headroom for slow-API days
+timeout = "120s" # network-free build (project stats come from data/project_stats.json); headroom for image processing
 
 pagination.pagerSize = 20
 
@@ -159,9 +159,6 @@ endLevel = 6
 ordered = true
 startLevel = 2
 
-[caches.getresource]
-maxAge = "30m"
-
 [imaging]
 quality = 95
 
@@ -174,4 +171,4 @@ path = "github.com/luizdepra/hugo-coder"
 
 [security]
 [security.funcs]
-getenv = ['^HUGO_', '^CI$', '^GITHUB_TOKEN$', '^SEED_PROJECTS$']
+getenv = ['^HUGO_', '^CI$', '^GITHUB_TOKEN$']

@@ -52,8 +52,6 @@ jobs:
       - name: Build
         run: hugo --minify --gc
         env:
-          SEED_PROJECTS: "1"
-          HUGO_GITHUB_TOKEN: ${{ secrets.HUGO_GITHUB_TOKEN }}
           HUGO_PARAMS_BUILDCOMMIT: ${{ github.sha }}
       - name: Highlight code
         run: node scripts/highlight.mjs

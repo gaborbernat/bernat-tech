@@ -8,149 +8,27 @@
 {{ $jetbrainsId := $p.jetbrains_id }}
 {{ $jetbrainsSlug := $p.jetbrains_slug }}
 {{ $noRelease := eq (or $p.no_release "") "true" }}
-{{ $ghToken := or (getenv "HUGO_GITHUB_TOKEN") (getenv "GITHUB_TOKEN") }}
-{{ $ghOpts := dict }}{{ with $ghToken }}{{ $ghOpts = dict "headers" (dict "Authorization" (printf "Bearer %s" .)) }}{{ end }}
+{{/* Stats come from data/project_stats.json, refreshed out of band by scripts/prefetch-projects.mjs
+     so the content build makes no API calls. The key mirrors that script's keyOf(). */}}
+{{ $key := printf "%s|%s|%s|%s|%s" $org $repo $name (or $p.type "") (or $p.pypi "") }}
+{{ $d := index (or hugo.Data.project_stats dict) $key | default dict }}
 
-{{/* Live project stats need ~150 GitHub/PyPI calls; opt in with SEED_PROJECTS (set in CI) so a plain
-     `hugo serve -D` starts fast. */}}
-{{ $skipData := not (getenv "SEED_PROJECTS") }}
-
-{{ $errors := slice }}
-{{ $repoData := dict }}
-{{ $result := dict }}
-{{ $defaultBranch := "main" }}
-{{ if not $skipData }}
-{{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s" $org $repo) $ghOpts) }}
-{{ with $result.Value }}{{ $repoData = . | transform.Unmarshal }}{{ end }}
-{{ with $result.Err }}{{ $errors = $errors | append (printf "repo-info: %s" .) }}{{ end }}
-{{ $defaultBranch = or $repoData.default_branch "main" }}
-{{ end }}
-
-{{ $lastCommitDate := "" }}
-{{ $releaseData := dict }}
-{{ $pypiVersion := "" }}
-{{ $pypiReleaseDate := "" }}
-{{ $pypiDownloads := 0 }}
-{{ $ghDownloads := 0 }}
-{{ $ghDownloadLabel := "total" }}
-{{ $ghaUsageCount := 0 }}
-{{ $jbDownloads := 0 }}
-{{ $jbVersion := "" }}
-{{ $jbReleaseUnix := 0 }}
-{{ $stars := 0 }}
-{{ $openTotal := 0 }}
-{{ $openPRs := 0 }}
-{{ $openIssues := 0 }}
-
-{{ if not $skipData }}
-{{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/commits?sha=%s&per_page=1" $org $repo $defaultBranch) $ghOpts) }}
-{{ with $result.Value }}
-  {{ $commits := . | transform.Unmarshal }}
-  {{ with index $commits 0 }}{{ $lastCommitDate = .commit.committer.date }}{{ end }}
-{{ end }}
-{{ with $result.Err }}{{ $errors = $errors | append (printf "commits: %s" .) }}{{ end }}
-
-{{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/releases/latest" $org $repo) $ghOpts) }}
-{{ with $result.Value }}{{ $releaseData = . | transform.Unmarshal }}{{ end }}
-{{ with $result.Err }}{{ $errors = $errors | append (printf "release: %s" .) }}{{ end }}
-
-{{ if $showPypi }}
-  {{ $result = try (resources.GetRemote (printf "https://pypi.org/pypi/%s/json" $name)) }}
-  {{ with $result.Value }}
-    {{ $pypiData := . | transform.Unmarshal }}
-    {{ $pypiVersion = $pypiData.info.version }}
-    {{ with index $pypiData.urls 0 }}{{ $pypiReleaseDate = .upload_time_iso_8601 }}{{ end }}
-  {{ end }}
-  {{ with $result.Err }}{{ $errors = $errors | append (printf "pypi-version: %s" .) }}{{ end }}
-{{ end }}
-
-{{ if $showPypi }}
-  {{ $result = try (resources.GetRemote (printf "https://pypistats.org/api/packages/%s/recent" $name)) }}
-  {{ with $result.Value }}
-    {{ $parsed := (. | transform.Unmarshal).data.last_month }}
-    {{ $pypiDownloads = int $parsed }}
-  {{ end }}
-  {{ with $result.Err }}{{ $errors = $errors | append (printf "pypi-downloads: %s" .) }}{{ end }}
-{{ end }}
-
-{{ if and (not $showPypi) (not $jetbrainsId) }}
-  {{ $rawType := split (or $p.type "") "," }}
-  {{ if in $rawType "github-action" }}
-    {{ $result = try (resources.GetRemote (printf "https://api.github.com/search/code?q=%%22uses:+%s/%s%%22" $org $repo) $ghOpts) }}
-    {{ with $result.Value }}
-      {{ $ghaUsageCount = int (. | transform.Unmarshal).total_count }}
-    {{ end }}
-    {{ with $result.Err }}{{ $errors = $errors | append (printf "gha-usage: %s" .) }}{{ end }}
-  {{ else if in $rawType "pre-commit" }}
-    {{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/traffic/clones" $org $repo) $ghOpts) }}
-    {{ with $result.Value }}
-      {{ $ghDownloads = int (. | transform.Unmarshal).count }}
-      {{ $ghDownloadLabel = "clones/14d" }}
-    {{ end }}
-    {{ with $result.Err }}{{ $errors = $errors | append (printf "gh-clones: %s" .) }}{{ end }}
-  {{ else }}
-    {{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/releases?per_page=100" $org $repo) $ghOpts) }}
-    {{ with $result.Value }}
-      {{ range (. | transform.Unmarshal) }}
-        {{ range .assets }}
-          {{ $ghDownloads = add $ghDownloads (int .download_count) }}
-        {{ end }}
-      {{ end }}
-    {{ end }}
-    {{ with $result.Err }}{{ $errors = $errors | append (printf "gh-releases: %s" .) }}{{ end }}
-    {{ if eq $ghDownloads 0 }}
-      {{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/traffic/clones" $org $repo) $ghOpts) }}
-      {{ with $result.Value }}
-        {{ $ghDownloads = int (. | transform.Unmarshal).count }}
-        {{ $ghDownloadLabel = "clones/14d" }}
-      {{ end }}
-      {{ with $result.Err }}{{ $errors = $errors | append (printf "gh-clones: %s" .) }}{{ end }}
-    {{ end }}
-  {{ end }}
-{{ end }}
-
-{{ if $jetbrainsId }}
-  {{ $result = try (resources.GetRemote (printf "https://plugins.jetbrains.com/api/plugins/%s" $jetbrainsId)) }}
-  {{ with $result.Value }}
-    {{ $jbDownloads = int (. | transform.Unmarshal).downloads }}
-  {{ end }}
-  {{ with $result.Err }}{{ $errors = $errors | append (printf "jb-downloads: %s" .) }}{{ end }}
-  {{ $result = try (resources.GetRemote (printf "https://plugins.jetbrains.com/api/plugins/%s/updates?channel=&size=1" $jetbrainsId)) }}
-  {{ with $result.Value }}
-    {{ $updates := . | transform.Unmarshal }}
-    {{ with index $updates 0 }}
-      {{ $jbVersion = .version }}
-      {{ $jbReleaseUnix = div (int .cdate) 1000 }}
-    {{ end }}
-  {{ end }}
-  {{ with $result.Err }}{{ $errors = $errors | append (printf "jb-version: %s" .) }}{{ end }}
-{{ end }}
-
-{{ with $repoData.stargazers_count }}{{ $stars = int . }}{{ end }}
-{{ with $repoData.open_issues_count }}{{ $openTotal = int . }}{{ end }}
-{{ $result = try (resources.GetRemote (printf "https://api.github.com/repos/%s/%s/pulls?state=open&per_page=100" $org $repo) $ghOpts) }}
-{{ with $result.Value }}{{ $openPRs = len (. | transform.Unmarshal) }}{{ end }}
-{{ with $result.Err }}{{ $errors = $errors | append (printf "gh-pulls: %s" .) }}{{ end }}
-{{ $openIssues = sub $openTotal $openPRs }}
-{{ end }}
-{{ if not $skipData }}
-{{ $logParts := slice (printf "stars=%d" $stars) (printf "issues=%d prs=%d" $openIssues $openPRs) (printf "last-commit=%s" (or $lastCommitDate "?")) }}
-{{ if $showPypi }}
-  {{ $logParts = $logParts | append (printf "pypi-version=%s" (or $pypiVersion "?")) (printf "pypi-downloads=%d" $pypiDownloads) }}
-{{ else if $jetbrainsId }}
-  {{ $logParts = $logParts | append (printf "jb-version=%s" (or $jbVersion "?")) (printf "jb-downloads=%d" $jbDownloads) }}
-{{ else if gt $ghaUsageCount 0 }}
-  {{ $logParts = $logParts | append (printf "gha-usage=%d(repos)" $ghaUsageCount) }}
-{{ else }}
-  {{ $logParts = $logParts | append (printf "gh-downloads=%d(%s)" $ghDownloads $ghDownloadLabel) }}
-{{ end }}
-{{ with $releaseData.tag_name }}{{ $logParts = $logParts | append (printf "release=%s" .) }}{{ end }}
-{{ if $errors }}
-  {{ warnf "project %s/%s: %s | errors: %s" $org $repo (delimit $logParts " ") (delimit $errors "; ") }}
-{{ else }}
-  {{ warnf "project %s/%s: %s" $org $repo (delimit $logParts " ") }}
-{{ end }}
-{{ end }}
+{{ $defaultBranch := or $d.default_branch "main" }}
+{{ $lastCommitDate := or $d.last_commit_date "" }}
+{{ $releaseData := dict "tag_name" (or $d.release_tag "") "published_at" (or $d.release_published_at "") }}
+{{ $pypiVersion := or $d.pypi_version "" }}
+{{ $pypiReleaseDate := or $d.pypi_release_date "" }}
+{{ $pypiDownloads := int (or $d.pypi_downloads 0) }}
+{{ $ghDownloads := int (or $d.gh_downloads 0) }}
+{{ $ghDownloadLabel := or $d.gh_download_label "total" }}
+{{ $ghaUsageCount := int (or $d.gha_usage_count 0) }}
+{{ $jbDownloads := int (or $d.jb_downloads 0) }}
+{{ $jbVersion := or $d.jb_version "" }}
+{{ $jbReleaseUnix := int (or $d.jb_release_unix 0) }}
+{{ $stars := int (or $d.stars 0) }}
+{{ $openTotal := int (or $d.open_total 0) }}
+{{ $openPRs := int (or $d.open_prs 0) }}
+{{ $openIssues := sub $openTotal $openPRs }}
 
 {{ $nowUnix := now.Unix }}
 
