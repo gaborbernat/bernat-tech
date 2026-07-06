@@ -54,6 +54,8 @@ jobs:
           HUGO_PARAMS_BUILDCOMMIT: ${{ github.sha }}
       - name: Highlight code
         run: node scripts/highlight.mjs
+      - name: Pack tag word cloud
+        run: node scripts/wordcloud.mjs
       - name: Subset FontAwesome fonts to used glyphs
         run: |
           python3 -m pip install --quiet fonttools brotli
