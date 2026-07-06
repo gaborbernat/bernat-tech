@@ -11,7 +11,9 @@
 {{ $ghToken := or (getenv "HUGO_GITHUB_TOKEN") (getenv "GITHUB_TOKEN") }}
 {{ $ghOpts := dict }}{{ with $ghToken }}{{ $ghOpts = dict "headers" (dict "Authorization" (printf "Bearer %s" .)) }}{{ end }}
 
-{{ $skipData := getenv "HUGO_SKIP_PROJECT_DATA" }}
+{{/* Live project stats need ~150 GitHub/PyPI calls; opt in with SEED_PROJECTS (set in CI) so a plain
+     `hugo serve -D` starts fast. */}}
+{{ $skipData := not (getenv "SEED_PROJECTS") }}
 
 {{ $errors := slice }}
 {{ $repoData := dict }}

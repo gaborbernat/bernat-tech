@@ -174,4 +174,4 @@ path = "github.com/luizdepra/hugo-coder"
 
 [security]
 [security.funcs]
-getenv = ['^HUGO_', '^CI$', '^GITHUB_TOKEN$']
+getenv = ['^HUGO_', '^CI$', '^GITHUB_TOKEN$', '^SEED_PROJECTS$']
