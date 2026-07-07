@@ -262,44 +262,94 @@ body.colorscheme-dark :is(.about ul, .social-badges) a .fa-github {
     color: #e6edf3;
   }
 }
-/* posts index as a table with column headers (read time, published, updated) */
+/* posts index: a fit-to-content table, no column rules, faint row numbers, muted meta columns */
 table.post-list {
-  width: 100%;
+  width: auto;
   border-collapse: collapse;
-  margin: 1rem 0 0;
+  margin: 1rem auto 0;
+  counter-reset: post-row;
 }
 table.post-list th,
 table.post-list td {
-  padding: 0.45em 0 0.45em 1em;
-  border-bottom: 1px solid var(--tv-line, #d3dae3);
+  border: 0 !important;
+  padding: 0.55em 1.15em;
   vertical-align: baseline;
   text-align: left;
+  white-space: nowrap;
 }
 table.post-list th:first-child,
 table.post-list td:first-child {
-  padding-left: 0;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+table.post-list th:last-child,
+table.post-list td:last-child {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+/* no rules between columns or rows; faint zebra + hover keep the wide rows scannable */
+table.post-list tbody tr:nth-child(even) {
+  background: rgba(128, 128, 128, 0.06);
+}
+table.post-list tbody tr:hover {
+  background: rgba(128, 128, 128, 0.12);
 }
 table.post-list thead th {
-  font-size: 0.72em;
+  font-size: 0.7em;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   font-weight: 600;
-  opacity: 0.55;
+  opacity: 0.5;
+}
+table.post-list th[data-sort] {
+  cursor: pointer;
+  user-select: none;
+}
+table.post-list th[data-sort]:hover,
+table.post-list th.sort-asc,
+table.post-list th.sort-desc {
+  opacity: 0.85;
+}
+table.post-list th.sort-asc::after {
+  content: " \25B2";
+}
+table.post-list th.sort-desc::after {
+  content: " \25BC";
+}
+table.post-list th[data-sort]:focus-visible {
+  outline: 2px solid var(--link-color, #42a5f5);
+  outline-offset: 2px;
 }
 table.post-list td.post-title {
-  width: 100%;
+  white-space: normal;
+  padding-right: 1.8em;
 }
-table.post-list .post-meta {
-  white-space: nowrap;
+table.post-list tbody tr {
+  counter-increment: post-row;
+}
+table.post-list td.post-num {
+  padding-right: 0.9em;
   text-align: right;
-  font-size: 0.85em;
-  opacity: 0.75;
+  font-size: 0.82em;
   font-variant-numeric: tabular-nums;
 }
-table.post-list .post-dash {
-  opacity: 0.4;
+table.post-list td.post-num::before {
+  content: counter(post-row);
+  opacity: 0.28;
 }
-@media (max-width: 620px) {
+table.post-list .post-meta {
+  font-size: 0.82em;
+  opacity: 0.72;
+  font-variant-numeric: tabular-nums;
+}
+table.post-list .post-read i {
+  margin-right: 0.4em;
+  opacity: 0.65;
+}
+table.post-list .post-dash {
+  opacity: 0.35;
+}
+@media (max-width: 640px) {
   table.post-list th.post-meta:last-child,
   table.post-list td.post-meta:last-child {
     display: none;

@@ -14,10 +14,11 @@
     <table class="post-list">
       <thead>
         <tr>
-          <th>Post</th>
-          <th class="post-meta">Read</th>
-          <th class="post-meta">Published</th>
-          <th class="post-meta">Updated</th>
+          <th class="post-num"></th>
+          <th class="post-meta" data-sort="number" aria-sort="none">Published</th>
+          <th data-sort="text">Post</th>
+          <th class="post-meta" data-sort="number">Read time</th>
+          <th class="post-meta" data-sort="number">Updated</th>
         </tr>
       </thead>
       <tbody>
@@ -28,5 +29,7 @@
     </table>
 
     {{ partial "pagination.html" . }}
+    {{ $sort := resources.Get "js/post-list.js" | minify | fingerprint }}
+    <script defer src="{{ $sort.RelPermalink }}" integrity="{{ $sort.Data.Integrity }}"></script>
   </section>
 {{ end }}

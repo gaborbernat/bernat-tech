@@ -60,6 +60,8 @@ jobs:
         run: uv run scripts/prefetch_projects.py
         env:
           HUGO_GITHUB_TOKEN: ${{ secrets.HUGO_GITHUB_TOKEN }}
+      - name: Record post publish dates
+        run: uv run scripts/publish_dates.py
       - name: Build
         run: hugo --minify --gc
         env:

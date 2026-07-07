@@ -1,15 +1,19 @@
 {{ $fmt := .Site.Params.dateFormat | default "Jan 2, 2006" }}
-{{/* only surface Updated when the last edit is more than a day after publishing, so routine same-day
-     commits do not read as a real update */}}
+{{/* Published = when the post went from draft to live (scripts/publish_dates.py), not the frontmatter
+     start date; fall back to .Date for posts that were never drafts. */}}
+{{ $published := .Date }}
+{{ with index (or hugo.Data.publish_dates dict) .File.Path }}{{ $published = time . }}{{ end }}
+{{/* only surface Updated when the last edit lands on a different day than the go-live date */}}
 {{ $updated := "" }}
-{{ if .Lastmod.After (.Date.AddDate 0 0 1) }}{{ $updated = .Lastmod }}{{ end }}
+{{ if ne (.Lastmod.Format "2006-01-02") ($published.Format "2006-01-02") }}{{ $updated = .Lastmod }}{{ end }}
 <tr>
-  <td class="post-title"><a href="{{ .Params.externalLink | default .RelPermalink }}">{{ .Title }}</a></td>
-  <td class="post-meta">{{ .ReadingTime }} min</td>
-  <td class="post-meta">
-    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format $fmt }}</time>
+  <td class="post-num"></td>
+  <td class="post-meta post-date" data-value="{{ $published.Unix }}">
+    <time datetime="{{ $published.Format "2006-01-02" }}">{{ $published.Format $fmt }}</time>
   </td>
-  <td class="post-meta">
+  <td class="post-title"><a href="{{ .Params.externalLink | default .RelPermalink }}">{{ .Title }}</a></td>
+  <td class="post-meta post-read" data-value="{{ .ReadingTime }}"><i class="fa-regular fa-clock"></i>{{ .ReadingTime }} min</td>
+  <td class="post-meta post-date" data-value="{{ with $updated }}{{ .Unix }}{{ end }}">
     {{- with $updated -}}
       <time datetime="{{ .Format "2006-01-02" }}">{{ .Format $fmt }}</time>
     {{- else -}}
