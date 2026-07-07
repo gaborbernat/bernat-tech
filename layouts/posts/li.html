@@ -1,0 +1,19 @@
+{{ $fmt := .Site.Params.dateFormat | default "Jan 2, 2006" }}
+{{/* only surface Updated when the last edit is more than a day after publishing, so routine same-day
+     commits do not read as a real update */}}
+{{ $updated := "" }}
+{{ if .Lastmod.After (.Date.AddDate 0 0 1) }}{{ $updated = .Lastmod }}{{ end }}
+<tr>
+  <td class="post-title"><a href="{{ .Params.externalLink | default .RelPermalink }}">{{ .Title }}</a></td>
+  <td class="post-meta">{{ .ReadingTime }} min</td>
+  <td class="post-meta">
+    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format $fmt }}</time>
+  </td>
+  <td class="post-meta">
+    {{- with $updated -}}
+      <time datetime="{{ .Format "2006-01-02" }}">{{ .Format $fmt }}</time>
+    {{- else -}}
+      <span class="post-dash">&mdash;</span>
+    {{- end -}}
+  </td>
+</tr>

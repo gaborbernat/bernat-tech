@@ -1,0 +1,32 @@
+{{ define "title" }}
+  {{ title (i18n (lower .Title)) | default .Title }} · {{ .Site.Title }}
+{{ end }}
+{{ define "content" }}
+  <section class="container list">
+    <header>
+      <h1 class="title">
+        <a class="title-link" href="{{ .Permalink | safeURL }}">
+          {{ title (i18n (lower .Title)) | default .Title }}
+        </a>
+      </h1>
+    </header>
+    {{ .Content }}
+    <table class="post-list">
+      <thead>
+        <tr>
+          <th>Post</th>
+          <th class="post-meta">Read</th>
+          <th class="post-meta">Published</th>
+          <th class="post-meta">Updated</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{- range .Paginator.Pages -}}
+          {{- .Render "li" -}}
+        {{- end -}}
+      </tbody>
+    </table>
+
+    {{ partial "pagination.html" . }}
+  </section>
+{{ end }}

@@ -262,6 +262,49 @@ body.colorscheme-dark :is(.about ul, .social-badges) a .fa-github {
     color: #e6edf3;
   }
 }
+/* posts index as a table with column headers (read time, published, updated) */
+table.post-list {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0 0;
+}
+table.post-list th,
+table.post-list td {
+  padding: 0.45em 0 0.45em 1em;
+  border-bottom: 1px solid var(--tv-line, #d3dae3);
+  vertical-align: baseline;
+  text-align: left;
+}
+table.post-list th:first-child,
+table.post-list td:first-child {
+  padding-left: 0;
+}
+table.post-list thead th {
+  font-size: 0.72em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  opacity: 0.55;
+}
+table.post-list td.post-title {
+  width: 100%;
+}
+table.post-list .post-meta {
+  white-space: nowrap;
+  text-align: right;
+  font-size: 0.85em;
+  opacity: 0.75;
+  font-variant-numeric: tabular-nums;
+}
+table.post-list .post-dash {
+  opacity: 0.4;
+}
+@media (max-width: 620px) {
+  table.post-list th.post-meta:last-child,
+  table.post-list td.post-meta:last-child {
+    display: none;
+  }
+}
 .related-posts {
   margin-top: 2rem;
   padding-top: 1rem;
