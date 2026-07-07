@@ -1361,31 +1361,31 @@ select.tv-input {
 .bench-wrap {
   overflow-x: auto;
   margin: 1.6em 0;
-  /* force a visible scrollbar so it is obvious a wide table has columns off-screen (macOS hides
-     overlay scrollbars until you scroll, so the table looks like it just ends) */
-  scrollbar-width: thin;
-  scrollbar-color: rgba(120, 120, 120, 0.6) rgba(120, 120, 120, 0.16);
   transition: box-shadow 0.15s ease;
+}
+/* Force a persistent (non-overlay) scrollbar so a wide table visibly shows it has off-screen columns;
+   macOS hides overlay scrollbars until you scroll. The standard scrollbar-width/-color properties are
+   deliberately omitted: when they are set, Chromium ignores ::-webkit-scrollbar and reverts to the
+   hidden overlay, so the bar below only appears if the webkit pseudo-elements are the only styling. */
+.bench-wrap::-webkit-scrollbar {
+  height: 0.85rem;
 }
 /* the scrollbar alone is easy to miss, so a JS-toggled inset edge shadow marks which side still has
    off-screen columns; inset box-shadow paints on the border box and stays pinned as content scrolls */
 .bench-wrap.more-right {
-  box-shadow: inset -18px 0 14px -14px rgba(0, 0, 0, 0.45);
+  box-shadow: inset -26px 0 18px -16px rgba(0, 0, 0, 0.5);
 }
 .bench-wrap.more-left {
-  box-shadow: inset 18px 0 14px -14px rgba(0, 0, 0, 0.45);
+  box-shadow: inset 26px 0 18px -16px rgba(0, 0, 0, 0.5);
 }
 .bench-wrap.more-left.more-right {
   box-shadow:
-    inset 18px 0 14px -14px rgba(0, 0, 0, 0.45),
-    inset -18px 0 14px -14px rgba(0, 0, 0, 0.45);
+    inset 26px 0 18px -16px rgba(0, 0, 0, 0.5),
+    inset -26px 0 18px -16px rgba(0, 0, 0, 0.5);
 }
 .bench-wrap:focus-visible {
   outline: 2px solid var(--link-color, #42a5f5);
   outline-offset: 2px;
-}
-.bench-wrap::-webkit-scrollbar {
-  height: 0.7rem;
 }
 .bench-wrap::-webkit-scrollbar-thumb {
   background: rgba(120, 120, 120, 0.55);
