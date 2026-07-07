@@ -226,39 +226,39 @@ body.colorscheme-dark table.project-table img {
   opacity: 0.6;
   letter-spacing: 0.03em;
 }
-/* brand-colour the home page social icons instead of leaving them monochrome */
-.about ul a .fa-twitter {
+/* brand-colour the social icons: the home page .about list and the /about/ .social-badges row */
+:is(.about ul, .social-badges) a .fa-twitter {
   color: #1da1f2;
 }
-.about ul a .fa-bluesky {
+:is(.about ul, .social-badges) a .fa-bluesky {
   color: #1185fe;
 }
-.about ul a .fa-mastodon {
+:is(.about ul, .social-badges) a .fa-mastodon {
   color: #6364ff;
 }
-.about ul a .fa-python {
+:is(.about ul, .social-badges) a .fa-python {
   color: #4b8bbe;
 }
-.about ul a .fa-linkedin {
+:is(.about ul, .social-badges) a .fa-linkedin {
   color: #0a66c2;
 }
-.about ul a .fa-twitch {
+:is(.about ul, .social-badges) a .fa-twitch {
   color: #9146ff;
 }
-.about ul a .fa-instagram {
+:is(.about ul, .social-badges) a .fa-instagram {
   color: #e4405f;
 }
-.about ul a .fa-heart {
+:is(.about ul, .social-badges) a .fa-heart {
   color: #e25555;
 }
-.about ul a .fa-github {
+:is(.about ul, .social-badges) a .fa-github {
   color: #1b1f24;
 }
-body.colorscheme-dark .about ul a .fa-github {
+body.colorscheme-dark :is(.about ul, .social-badges) a .fa-github {
   color: #e6edf3;
 }
 @media (prefers-color-scheme: dark) {
-  body.colorscheme-auto .about ul a .fa-github {
+  body.colorscheme-auto :is(.about ul, .social-badges) a .fa-github {
     color: #e6edf3;
   }
 }
