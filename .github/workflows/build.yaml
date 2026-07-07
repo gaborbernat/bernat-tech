@@ -36,7 +36,7 @@ jobs:
           extended: true
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
-          node-version: 26
+          node-version: 22
           cache: npm
       - name: Cache node_modules
         id: node-modules
@@ -70,7 +70,7 @@ jobs:
           HUGO_GITHUB_TOKEN: ${{ secrets.HUGO_GITHUB_TOKEN }}
           REF: ${{ github.ref }}
         run: |
-          npx playwright install --with-deps chromium & browser=$!
+          npx playwright install chromium & browser=$!
           uv run scripts/publish_dates.py & dates=$!
           stats=""
           if [ "$REF" = "refs/heads/main" ]; then
