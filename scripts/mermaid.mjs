@@ -57,7 +57,7 @@ for (const file of files) {
   codesByFile.set(file, codes);
 }
 if (!targets.length) {
-  console.log("mermaid: no diagrams to render");
+  console.log(process.argv.includes("--check") ? "0" : "mermaid: no diagrams to render");
   process.exit(0);
 }
 
@@ -79,6 +79,12 @@ for (const codes of codesByFile.values()) {
       if (!existsSync(path)) misses.push({ code, theme, path });
     }
   }
+}
+
+// --check reports how many diagrams need rendering so CI can skip the browser install when it is zero
+if (process.argv.includes("--check")) {
+  console.log(misses.length);
+  process.exit(0);
 }
 
 if (misses.length) {

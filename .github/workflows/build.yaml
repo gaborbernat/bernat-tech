@@ -51,12 +51,6 @@ jobs:
         with:
           # scripts carry PEP 723 inline deps and there is no lockfile, so key the cache off the scripts
           cache-dependency-glob: scripts/*.py
-      - name: Cache the Playwright browser
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
-          restore-keys: ${{ runner.os }}-playwright-
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
@@ -72,25 +66,37 @@ jobs:
           path: .cache/mermaid
           key: ${{ runner.os }}-mermaid-${{ github.run_id }}
           restore-keys: ${{ runner.os }}-mermaid-
-      - name: Install browser and gather build inputs in parallel
+      - name: Gather build inputs in parallel
         env:
           HUGO_GITHUB_TOKEN: ${{ secrets.HUGO_GITHUB_TOKEN }}
           REF: ${{ github.ref }}
         run: |
-          npx playwright install chromium & browser=$!
           uv run scripts/publish_dates.py & dates=$!
           stats=""
           if [ "$REF" = "refs/heads/main" ]; then
             # non-fatal: a flaky API falls back to the committed data/project_stats.json
             (uv run scripts/prefetch_projects.py || echo "::warning::stats refresh failed, using committed file") & stats=$!
           fi
-          wait "$browser"
           wait "$dates"
           if [ -n "$stats" ]; then wait "$stats"; fi
       - name: Build
         run: hugo --minify --gc
         env:
           HUGO_PARAMS_BUILDCOMMIT: ${{ github.sha }}
+      - name: Check whether any mermaid diagram needs rendering
+        id: mermaid
+        run: echo "misses=$(node scripts/mermaid.mjs --check)" >> "$GITHUB_OUTPUT"
+      # only restore the 270 MB browser and install it when a diagram actually changed
+      - name: Cache the Playwright browser
+        if: steps.mermaid.outputs.misses != '0'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+          restore-keys: ${{ runner.os }}-playwright-
+      - name: Install Chromium for mermaid rendering
+        if: steps.mermaid.outputs.misses != '0'
+        run: npx playwright install chromium
       - name: Post-process, optimize, and validate in parallel
         run: |
           # images are independent of the HTML/font work, so optimize them in the background
