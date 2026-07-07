@@ -38,7 +38,15 @@ jobs:
         with:
           node-version: 26
           cache: npm
-      - run: npm ci
+      - name: Cache node_modules
+        id: node-modules
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          # the whole tree (incl. the vnu.jar the html validator downloads on install) keyed on the lockfile
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+      - if: steps.node-modules.outputs.cache-hit != 'true'
+        run: npm ci
       - uses: astral-sh/setup-uv@d31148d669074a8d0a63714ba94f3201e7020bc3 # v8.3.0
         with:
           # scripts carry PEP 723 inline deps and there is no lockfile, so key the cache off the scripts
@@ -49,8 +57,6 @@ jobs:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
           restore-keys: ${{ runner.os }}-playwright-
-      - name: Install Chromium for build-time mermaid rendering
-        run: npx playwright install --with-deps chromium
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
@@ -59,43 +65,42 @@ jobs:
           key: ${{ runner.os }}-hugo-${{ github.run_id }}
           restore-keys: |
             ${{ runner.os }}-hugo-
-      - name: Refresh project stats
-        # only on main (PRs lack the secret); non-fatal, so a flaky API falls back to the committed file
-        if: github.ref == 'refs/heads/main'
-        continue-on-error: true
-        run: uv run scripts/prefetch_projects.py
+      - name: Install browser and gather build inputs in parallel
         env:
           HUGO_GITHUB_TOKEN: ${{ secrets.HUGO_GITHUB_TOKEN }}
-      - name: Record post publish dates
-        run: uv run scripts/publish_dates.py
+          REF: ${{ github.ref }}
+        run: |
+          npx playwright install --with-deps chromium & browser=$!
+          uv run scripts/publish_dates.py & dates=$!
+          stats=""
+          if [ "$REF" = "refs/heads/main" ]; then
+            # non-fatal: a flaky API falls back to the committed data/project_stats.json
+            (uv run scripts/prefetch_projects.py || echo "::warning::stats refresh failed, using committed file") & stats=$!
+          fi
+          wait "$browser"
+          wait "$dates"
+          if [ -n "$stats" ]; then wait "$stats"; fi
       - name: Build
         run: hugo --minify --gc
         env:
           HUGO_PARAMS_BUILDCOMMIT: ${{ github.sha }}
-      - name: Highlight code
-        run: node scripts/highlight.mjs
-      - name: Pack tag word cloud
-        run: uv run scripts/wordcloud.py
-      - name: Render mermaid diagrams to static SVG
-        run: node scripts/mermaid.mjs
-      - name: Subset FontAwesome fonts to used glyphs
-        run: uv run scripts/subset-fa.py
-      - name: Optimize raster images (lossless)
+      - name: Post-process, optimize, and validate in parallel
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq optipng libjpeg-turbo-progs
-          find public -name '*.png' -print0 | xargs -0 -r optipng -quiet -o2 -strip all
-          find public \( -name '*.jpg' -o -name '*.jpeg' \) -print0 | while IFS= read -r -d '' f; do
-            if jpegtran -optimize -progressive -copy none "$f" > "$f.opt" 2>/dev/null; then
-              mv "$f.opt" "$f"
-            else
-              rm -f "$f.opt"
-            fi
-          done
-      - name: Validate HTML
-        uses: Cyb3r-Jak3/html5validator-action@4ea5e57383ed7e14432ebbaae1b64893b7c5210b # v8.0.0
-        with:
-          root: public/
-          css: false
+          # images are independent of the HTML/font work, so optimize them in the background
+          ( sudo apt-get update -qq && sudo apt-get install -y -qq optipng libjpeg-turbo-progs &&
+            find public -name '*.png' -print0 | xargs -0 -r optipng -quiet -o2 -strip all &&
+            find public \( -name '*.jpg' -o -name '*.jpeg' \) -print0 | while IFS= read -r -d '' f; do
+              if jpegtran -optimize -progressive -copy none "$f" >"$f.opt" 2>/dev/null; then mv "$f.opt" "$f"; else rm -f "$f.opt"; fi
+            done ) & images=$!
+          # highlight and mermaid both rewrite the same HTML files, so keep them serial
+          node scripts/highlight.mjs
+          node scripts/mermaid.mjs
+          uv run scripts/wordcloud.py
+          # HTML is final: validate it (a gate) while the fonts subset, since both only read the HTML
+          java -jar "$(node -p 'String(require("vnu-jar"))')" --errors-only --skip-non-html public & validate=$!
+          uv run scripts/subset-fa.py
+          wait "$validate"
+          wait "$images" || echo "::warning::image optimization failed"
       - name: Validate RSS feed
         run: python3 -c "import xml.etree.ElementTree as ET; ET.parse('public/index.xml')"
       - name: Upload Pages artifact
