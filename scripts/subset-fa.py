@@ -36,8 +36,10 @@ def main() -> None:
     }
     used_names = {
         name
-        for html in Path("public").rglob("*.html")
-        for name in _FA_USE.findall(html.read_text(encoding="utf-8", errors="ignore"))
+        # scan JS too: the copy button and other scripts inject fa- icons that never appear in the HTML
+        for pattern in ("*.html", "*.js")
+        for path in Path("public").rglob(pattern)
+        for name in _FA_USE.findall(path.read_text(encoding="utf-8", errors="ignore"))
     }
     used = sorted({name_to_cp[name] for name in used_names if name in name_to_cp})
     if not used:
