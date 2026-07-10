@@ -2,10 +2,15 @@
 # requires-python = ">=3.13"
 # dependencies = ["pyyaml>=6", "tenacity>=9"]
 # ///
-"""Fetch the GitHub/PyPI/JetBrains stats the project tables show into data/project_stats.json, so Hugo
-reads a static file instead of making ~150 fragile API calls inside its render timeout. CI runs this
-once before the build; project-row.html consumes it by the key keyed() builds here. The committed file
-is the fallback used for local `hugo serve` and when the refresh step is skipped or fails."""
+"""Refresh the GitHub/PyPI/JetBrains stats the project tables show into data/project_stats.json, so Hugo
+reads a static file instead of making ~150 fragile API calls inside its render timeout. An hourly workflow
+runs this off the build's hot path and stores the result in the Actions cache; the build restores it and
+falls back to the committed file. project-row.html consumes it by the key keyed() builds here.
+
+The refresh is best effort: it starts from the previous values and overwrites a number only when its fetch
+succeeds, so a rate-limited call keeps the last known value instead of zeroing it. Each record carries the
+day it was last fetched cleanly (no transient failure); the stalest go first, and the run exits non-zero
+when any record has gone unrefreshed for more than three days so the workflow surfaces it."""
 
 # print is this CLI build script's progress output; stdout is intended
 # ruff: noqa: T201
@@ -21,6 +26,7 @@ import urllib.parse
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass
+from datetime import UTC, date, datetime, timedelta
 from http import HTTPStatus
 from pathlib import Path
 from typing import TYPE_CHECKING, Final
@@ -46,8 +52,13 @@ _RETRYABLE: Final = frozenset({
     HTTPStatus.SERVICE_UNAVAILABLE,
     HTTPStatus.GATEWAY_TIMEOUT,
 })
-# pypistats.org throttles bursts hard (429), zeroing download counts; cap concurrent hits to it
-_PYPISTATS_GATE: Final = threading.Semaphore(2)
+# pypistats.org throttles bursts hard (429); run off the hot path lets us serialize every hit to dodge it
+_PYPISTATS_GATE: Final = threading.Semaphore(1)
+_NOW: Final = datetime.now(tz=UTC)
+_TODAY: Final = _NOW.date().isoformat()
+_STALE_AFTER: Final = timedelta(days=3)  # a record unrefreshed this long fails the job so it gets noticed
+# the previous run's records, keyed as below; the baseline every best-effort fetch merges onto
+_BASELINE: Final[dict[str, Json]] = json.loads(_OUT.read_text()) if _OUT.exists() else {}
 
 
 @dataclass
@@ -68,11 +79,13 @@ class Stats:
     jb_downloads: int = 0
     jb_version: str = ""
     jb_release_unix: int = 0
+    fetched_at: str = ""  # day this record last fetched with no transient failure; drives staleness
 
 
 def main() -> None:
     projects: dict[str, list[dict[str, str]]] = yaml.safe_load(_SRC.read_text())
     listing = [project for group in _GROUPS for project in (projects.get(group) or [])]
+    listing.sort(key=baseline_fetched_at)  # stalest (and never-fetched) first, so they win the rate-limit budget
     with ThreadPoolExecutor(max_workers=8) as pool:
         results = list(pool.map(stats_for, listing))
     stats = {keyed(project): asdict(record) for project, (record, _) in zip(listing, results, strict=True)}
@@ -85,6 +98,19 @@ def main() -> None:
     _OUT.write_text(json.dumps(stats, indent=2, sort_keys=True) + "\n")
     hint = "" if _TOKEN else " (no token: GitHub calls rate-limited)"
     print(f"prefetch: wrote {len(stats)} project records to {_OUT}{hint}")
+    if stale := sorted(key for key, record in stats.items() if is_stale(record["fetched_at"])):
+        print(f"::error::{len(stale)} record(s) unrefreshed for over {_STALE_AFTER.days} days: {', '.join(stale)}")
+        raise SystemExit(1)
+
+
+def baseline_fetched_at(project: dict[str, str]) -> str:
+    return as_text(dig(_BASELINE.get(keyed(project)), "fetched_at"))
+
+
+def is_stale(fetched_at: object) -> bool:
+    if not isinstance(fetched_at, str) or not fetched_at:
+        return True
+    return date.fromisoformat(fetched_at) < _NOW.date() - _STALE_AFTER
 
 
 def keyed(project: dict[str, str]) -> str:
@@ -100,61 +126,100 @@ def stats_for(project: dict[str, str]) -> tuple[Stats, list[str]]:
     jetbrains_id = project.get("jetbrains-id")
     types = [entry.strip() for entry in (project.get("type") or "").split(",")]
     errors: list[str] = []
-    record = Stats()
+    transient: list[str] = []
+    record = from_baseline(_BASELINE.get(keyed(project)))  # keep prior values for any fetch that fails
 
     def attempt(label: str, fetch: Callable[[], Json]) -> Json:
         try:
             return fetch()
+        except urllib.error.HTTPError as exc:
+            if exc.code in _RETRYABLE:
+                transient.append(label)  # rate-limited/5xx: a real refresh failure, not a missing resource
+            errors.append(f"{label}: {exc}")
+            return None
         except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
+            transient.append(label)
             errors.append(f"{label}: {exc}")
             return None
 
-    repo_data = attempt("repo-info", lambda: gh(f"repos/{org}/{repo}"))
-    record.default_branch = as_text(dig(repo_data, "default_branch")) or "main"
-    record.stars = as_int(dig(repo_data, "stargazers_count"))
-    record.open_total = as_int(dig(repo_data, "open_issues_count"))
+    collect_github(record, org, repo, attempt)
+    if show_pypi:
+        collect_pypi(record, name, attempt)
+    elif not jetbrains_id:
+        collect_downloads(record, org, repo, types, attempt)
+    if jetbrains_id:
+        collect_jetbrains(record, jetbrains_id, attempt)
+
+    if not transient:
+        record.fetched_at = _TODAY
+    return record, errors
+
+
+def from_baseline(data: Json) -> Stats:
+    return Stats(
+        default_branch=as_text(dig(data, "default_branch")) or "main",
+        stars=as_int(dig(data, "stars")),
+        open_total=as_int(dig(data, "open_total")),
+        open_prs=as_int(dig(data, "open_prs")),
+        last_commit_date=as_text(dig(data, "last_commit_date")),
+        release_tag=as_text(dig(data, "release_tag")),
+        release_published_at=as_text(dig(data, "release_published_at")),
+        pypi_version=as_text(dig(data, "pypi_version")),
+        pypi_release_date=as_text(dig(data, "pypi_release_date")),
+        pypi_downloads=as_int(dig(data, "pypi_downloads")),
+        gha_usage_count=as_int(dig(data, "gha_usage_count")),
+        gh_downloads=as_int(dig(data, "gh_downloads")),
+        gh_download_label=as_text(dig(data, "gh_download_label")) or "total",
+        jb_downloads=as_int(dig(data, "jb_downloads")),
+        jb_version=as_text(dig(data, "jb_version")),
+        jb_release_unix=as_int(dig(data, "jb_release_unix")),
+        fetched_at=as_text(dig(data, "fetched_at")),
+    )
+
+
+def collect_github(record: Stats, org: str, repo: str, attempt: Attempt) -> None:
+    if (repo_data := attempt("repo-info", lambda: gh(f"repos/{org}/{repo}"))) is not None:
+        record.default_branch = as_text(dig(repo_data, "default_branch")) or "main"
+        record.stars = as_int(dig(repo_data, "stargazers_count"))
+        record.open_total = as_int(dig(repo_data, "open_issues_count"))
 
     commits_url = f"repos/{org}/{repo}/commits?sha={record.default_branch}&per_page=1"
     if commits := as_list(attempt("commits", lambda: gh(commits_url))):
         record.last_commit_date = as_text(dig(commits[0], "commit", "committer", "date"))
 
-    release = attempt("release", lambda: gh(f"repos/{org}/{repo}/releases/latest"))
-    if tag := as_text(dig(release, "tag_name")):
+    if tag := as_text(
+        dig(release := attempt("release", lambda: gh(f"repos/{org}/{repo}/releases/latest")), "tag_name")
+    ):
         record.release_tag = tag
         record.release_published_at = as_text(dig(release, "published_at"))
 
-    if show_pypi:
-        collect_pypi(record, name, attempt)
-    elif not jetbrains_id:
-        collect_downloads(record, org, repo, types, attempt)
-
-    if jetbrains_id:
-        collect_jetbrains(record, jetbrains_id, attempt)
-
-    record.open_prs = len(as_list(attempt("gh-pulls", lambda: gh(f"repos/{org}/{repo}/pulls?state=open&per_page=100"))))
-    return record, errors
+    if (pulls := attempt("gh-pulls", lambda: gh(f"repos/{org}/{repo}/pulls?state=open&per_page=100"))) is not None:
+        record.open_prs = len(as_list(pulls))
 
 
 def collect_pypi(record: Stats, name: str, attempt: Attempt) -> None:
     pypi = attempt("pypi-version", lambda: get(f"https://pypi.org/pypi/{name}/json"))
-    record.pypi_version = as_text(dig(pypi, "info", "version"))
-    if urls := as_list(dig(pypi, "urls")):
-        record.pypi_release_date = as_text(dig(urls[0], "upload_time_iso_8601"))
+    if pypi is not None:
+        record.pypi_version = as_text(dig(pypi, "info", "version"))
+        if urls := as_list(dig(pypi, "urls")):
+            record.pypi_release_date = as_text(dig(urls[0], "upload_time_iso_8601"))
     recent = attempt("pypi-downloads", lambda: get(f"https://pypistats.org/api/packages/{name}/recent"))
-    record.pypi_downloads = as_int(dig(recent, "data", "last_month"))
+    if count := as_int(dig(recent, "data", "last_month")):
+        record.pypi_downloads = count
 
 
 def collect_downloads(record: Stats, org: str, repo: str, types: list[str], attempt: Attempt) -> None:
     if "github-action" in types:
         query = urllib.parse.quote(f'"uses: {org}/{repo}"')
-        record.gha_usage_count = as_int(dig(attempt("gha-usage", lambda: gh(f"search/code?q={query}")), "total_count"))
+        if (usage := attempt("gha-usage", lambda: gh(f"search/code?q={query}"))) is not None:
+            record.gha_usage_count = as_int(dig(usage, "total_count"))
         return
     if "pre-commit" not in types:
         releases = as_list(attempt("gh-releases", lambda: gh(f"repos/{org}/{repo}/releases?per_page=100")))
-        record.gh_downloads = sum(
+        if downloads := sum(
             as_int(dig(asset, "download_count")) for release in releases for asset in as_list(dig(release, "assets"))
-        )
-        if record.gh_downloads:
+        ):
+            record.gh_downloads = downloads
             return
     if clones := attempt("gh-clones", lambda: gh(f"repos/{org}/{repo}/traffic/clones")):
         record.gh_downloads = as_int(dig(clones, "count"))
@@ -163,7 +228,8 @@ def collect_downloads(record: Stats, org: str, repo: str, types: list[str], atte
 
 def collect_jetbrains(record: Stats, plugin_id: str, attempt: Attempt) -> None:
     plugin = attempt("jb-downloads", lambda: get(f"https://plugins.jetbrains.com/api/plugins/{plugin_id}"))
-    record.jb_downloads = as_int(dig(plugin, "downloads"))
+    if plugin is not None:
+        record.jb_downloads = as_int(dig(plugin, "downloads"))
     endpoint = f"https://plugins.jetbrains.com/api/plugins/{plugin_id}/updates?channel=&size=1"
     if updates := as_list(attempt("jb-version", lambda: get(endpoint))):
         record.jb_version = as_text(dig(updates[0], "version"))

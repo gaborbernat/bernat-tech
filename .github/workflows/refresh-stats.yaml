@@ -1,0 +1,43 @@
+name: Refresh project stats
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *"
+
+concurrency:
+  group: refresh-stats
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    environment: build
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@d31148d669074a8d0a63714ba94f3201e7020bc3 # v8.3.0
+        with:
+          cache-dependency-glob: scripts/*.py
+      - name: Restore last refreshed stats
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          # the previous run's numbers; the fetch merges onto them and keeps any it cannot refresh this time
+          path: data/project_stats.json
+          key: ${{ runner.os }}-project-stats-${{ github.run_id }}
+          restore-keys: ${{ runner.os }}-project-stats-
+      - name: Refresh
+        # exits non-zero when a record has gone unrefreshed for over three days, which fails the job
+        env:
+          HUGO_GITHUB_TOKEN: ${{ secrets.HUGO_GITHUB_TOKEN }}
+        run: uv run scripts/prefetch_projects.py
+      - name: Save refreshed stats
+        # save even on failure so the numbers it did manage to refresh carry into the next run
+        if: always()
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: data/project_stats.json
+          key: ${{ runner.os }}-project-stats-${{ github.run_id }}
