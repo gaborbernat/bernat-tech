@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.13"
-# dependencies = ["pyyaml>=6", "tenacity>=9"]
+# dependencies = ["pyyaml>=6", "rich>=13", "tenacity>=9"]
 # ///
 """Refresh the GitHub/PyPI/JetBrains stats the project tables show into data/project_stats.json, so Hugo
 reads a static file instead of making ~150 fragile API calls inside its render timeout. An hourly workflow
@@ -9,7 +9,7 @@ falls back to the committed file. project-row.html consumes it by the key keyed(
 
 The refresh is best effort: it starts from the previous values and overwrites a number only when its fetch
 succeeds, so a rate-limited call keeps the last known value instead of zeroing it. Each record carries the
-day it was last fetched cleanly (no transient failure); the stalest go first, and the run exits non-zero
+time it was last fetched cleanly (no transient failure); the stalest go first, and the run exits non-zero
 when any record has gone unrefreshed for more than three days so the workflow surfaces it."""
 
 # print is this CLI build script's progress output; stdout is intended
@@ -26,13 +26,15 @@ import urllib.parse
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass
-from datetime import UTC, date, datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from http import HTTPStatus
 from pathlib import Path
 from typing import TYPE_CHECKING, Final
 
 import tenacity
 import yaml
+from rich.console import Console
+from rich.table import Table
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -52,10 +54,11 @@ _RETRYABLE: Final = frozenset({
     HTTPStatus.SERVICE_UNAVAILABLE,
     HTTPStatus.GATEWAY_TIMEOUT,
 })
+_MAX_ATTEMPTS: Final = 5  # tenacity retries a retryable response this many times before giving up
 # pypistats.org throttles bursts hard (429); run off the hot path lets us serialize every hit to dodge it
 _PYPISTATS_GATE: Final = threading.Semaphore(1)
 _NOW: Final = datetime.now(tz=UTC)
-_TODAY: Final = _NOW.date().isoformat()
+_STAMP: Final = _NOW.isoformat(timespec="seconds")  # written to fetched_at when a record refreshes cleanly
 _STALE_AFTER: Final = timedelta(days=3)  # a record unrefreshed this long fails the job so it gets noticed
 # the previous run's records, keyed as below; the baseline every best-effort fetch merges onto
 _BASELINE: Final[dict[str, Json]] = json.loads(_OUT.read_text()) if _OUT.exists() else {}
@@ -89,12 +92,7 @@ def main() -> None:
     with ThreadPoolExecutor(max_workers=8) as pool:
         results = list(pool.map(stats_for, listing))
     stats = {keyed(project): asdict(record) for project, (record, _) in zip(listing, results, strict=True)}
-    for project, (record, errors) in zip(listing, results, strict=True):
-        note = f" | errors: {'; '.join(errors)}" if errors else ""
-        print(
-            f"{project['org']}/{project.get('repo') or project['name']} "
-            f"stars={record.stars} issues={record.open_total - record.open_prs} prs={record.open_prs}{note}"
-        )
+    render_summary(listing, results)
     _OUT.write_text(json.dumps(stats, indent=2, sort_keys=True) + "\n")
     hint = "" if _TOKEN else " (no token: GitHub calls rate-limited)"
     print(f"prefetch: wrote {len(stats)} project records to {_OUT}{hint}")
@@ -110,13 +108,83 @@ def baseline_fetched_at(project: dict[str, str]) -> str:
 def is_stale(fetched_at: object) -> bool:
     if not isinstance(fetched_at, str) or not fetched_at:
         return True
-    return date.fromisoformat(fetched_at) < _NOW.date() - _STALE_AFTER
+    moment = datetime.fromisoformat(fetched_at)
+    if moment.tzinfo is None:  # a date-only value from an older file parses naive; read it as UTC
+        moment = moment.replace(tzinfo=UTC)
+    return moment < _NOW - _STALE_AFTER
 
 
 def keyed(project: dict[str, str]) -> str:
     # the composite key project-row.html rebuilds; keep the two in lockstep
     parts = (project["org"], project.get("repo") or project["name"], project["name"])
     return "|".join((*parts, project.get("type") or "", project.get("pypi") or ""))
+
+
+def render_summary(listing: list[dict[str, str]], results: list[tuple[Stats, list[str]]]) -> None:
+    # colour the log in CI (no tty there); when a value could not be refreshed the row shows the kept value
+    console = Console(force_terminal=True, width=120) if os.environ.get("GITHUB_ACTIONS") else Console()
+    table = Table(title="Download stats refresh")
+    table.add_column("Project", no_wrap=True)
+    table.add_column("Previous update", justify="center")
+    table.add_column("Updated", justify="center")
+    table.add_column("Previous", justify="right")
+    table.add_column("New", justify="right")
+    notes: list[str] = []
+    for project, (record, errors) in sorted(
+        zip(listing, results, strict=True), key=lambda pair: pair[0]["name"].lower()
+    ):
+        prior = _BASELINE.get(keyed(project))
+        previous_at = as_text(dig(prior, "fetched_at"))
+        previous = as_int(dig(prior, tracked_field(project)))
+        current = as_int(dig(asdict(record), tracked_field(project)))
+        table.add_row(
+            f"{project['org']}/{project['name']}",
+            short_time(previous_at) or "[dim]never[/dim]",
+            update_cell(record.fetched_at, previous_at),
+            count_cell(previous),
+            delta_cell(previous, current),
+        )
+        if errors:
+            notes.append(f"[yellow]{project['name']}[/yellow] kept prior value: {'; '.join(errors)}")
+    console.print(table)
+    for note in notes:
+        console.print(note)
+
+
+def tracked_field(project: dict[str, str]) -> str:
+    if (project.get("pypi") or "") != "false":
+        return "pypi_downloads"
+    if project.get("jetbrains-id"):
+        return "jb_downloads"
+    if "github-action" in (project.get("type") or ""):
+        return "gha_usage_count"
+    return "gh_downloads"
+
+
+def update_cell(fetched_at: str, previous_at: str) -> str:
+    shown = short_time(fetched_at) or "never"
+    if is_stale(fetched_at):
+        return f"[red]{shown}[/red]"  # over the threshold: the job fails on this
+    if fetched_at != previous_at:
+        return f"[green]{shown}[/green]"  # advanced this run
+    return f"[yellow]{shown}[/yellow]"  # unchanged: kept the prior value, likely rate-limited
+
+
+def short_time(fetched_at: str) -> str:
+    return fetched_at[:16].replace("T", " ")  # trim the ISO stamp to "YYYY-MM-DD HH:MM"
+
+
+def count_cell(value: int) -> str:
+    return f"{value:,}" if value else "[dim]—[/dim]"
+
+
+def delta_cell(previous: int, current: int) -> str:
+    text = f"{current:,}" if current else "—"
+    if current > previous:
+        return f"[green]{text}[/green]"
+    if current < previous:
+        return f"[red]{text}[/red]"
+    return f"[dim]{text}[/dim]"
 
 
 def stats_for(project: dict[str, str]) -> tuple[Stats, list[str]]:
@@ -151,7 +219,7 @@ def stats_for(project: dict[str, str]) -> tuple[Stats, list[str]]:
         collect_jetbrains(record, jetbrains_id, attempt)
 
     if not transient:
-        record.fetched_at = _TODAY
+        record.fetched_at = _STAMP
     return record, errors
 
 
@@ -244,10 +312,17 @@ def _is_retryable(exc: BaseException) -> bool:
     return isinstance(exc, urllib.error.HTTPError) and exc.code in _RETRYABLE
 
 
+def _log_retry(state: tenacity.RetryCallState) -> None:
+    url = state.args[0] if state.args else ""
+    exc = state.outcome.exception() if state.outcome else None
+    print(f"  retry {state.attempt_number}/{_MAX_ATTEMPTS} after {exc}: {url}")
+
+
 @tenacity.retry(
     retry=tenacity.retry_if_exception(_is_retryable),
     wait=tenacity.wait_random_exponential(multiplier=1, max=10),
-    stop=tenacity.stop_after_attempt(5),
+    stop=tenacity.stop_after_attempt(_MAX_ATTEMPTS),
+    before_sleep=_log_retry,
     reraise=True,
 )
 def get(url: str, headers: dict[str, str] | None = None) -> Json:

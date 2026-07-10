@@ -1,7 +1,7 @@
 {
   "bloomberg|pytest-memray|pytest-memray||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -20,7 +20,7 @@
   },
   "gaborbernat|all-repos-self|all-repos-self||false": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "clones/14d",
     "gh_downloads": 85,
     "gha_usage_count": 0,
@@ -39,14 +39,14 @@
   },
   "gaborbernat|bernat-tech|bernat-tech||false": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "clones/14d",
     "gh_downloads": 2782,
     "gha_usage_count": 0,
     "jb_downloads": 0,
     "jb_release_unix": 0,
     "jb_version": "",
-    "last_commit_date": "2026-07-10T17:45:09Z",
+    "last_commit_date": "2026-07-10T18:13:50Z",
     "open_prs": 0,
     "open_total": 0,
     "pypi_downloads": 0,
@@ -58,7 +58,7 @@
   },
   "gaborbernat|bump-deps-index|bump-deps-index||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -77,7 +77,7 @@
   },
   "gaborbernat|cv|cv||false": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "clones/14d",
     "gh_downloads": 120,
     "gha_usage_count": 0,
@@ -96,7 +96,7 @@
   },
   "gaborbernat|dotfiles|dotfiles||false": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "clones/14d",
     "gh_downloads": 729,
     "gha_usage_count": 0,
@@ -115,7 +115,7 @@
   },
   "gaborbernat|gaborbernat|gaborbernat||false": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "clones/14d",
     "gh_downloads": 1166,
     "gha_usage_count": 0,
@@ -134,7 +134,7 @@
   },
   "gaborbernat|mdformat-hugo|mdformat-hugo||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -153,7 +153,7 @@
   },
   "gaborbernat|pypi-changes|pypi-changes||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -172,7 +172,7 @@
   },
   "gaborbernat|ropi_jegyzet_latex|ropi_jegyzet_latex|latex|false": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "clones/14d",
     "gh_downloads": 140,
     "gha_usage_count": 0,
@@ -191,7 +191,7 @@
   },
   "koxudaxi|datamodel-code-generator|datamodel-code-generator||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -210,7 +210,7 @@
   },
   "pypa|build|build||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -229,9 +229,9 @@
   },
   "pypa|get-virtualenv|get-virtualenv|python|false": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
-    "gh_downloads": 1515739,
+    "gh_downloads": 1515867,
     "gha_usage_count": 0,
     "jb_downloads": 0,
     "jb_release_unix": 0,
@@ -248,7 +248,7 @@
   },
   "pypa|pipx|pipx||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -267,7 +267,7 @@
   },
   "pypa|virtualenv|virtualenv||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -286,7 +286,7 @@
   },
   "pytest-dev|pytest-env|pytest-env||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -305,7 +305,7 @@
   },
   "pytest-dev|pytest-print|pytest-print||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -324,7 +324,7 @@
   },
   "tox-dev|PyVenvManage|PyVenvManage||false": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -343,7 +343,7 @@
   },
   "tox-dev|action-pre-commit-uv|action-pre-commit-uv|github-action|false": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 75,
@@ -362,7 +362,7 @@
   },
   "tox-dev|devpi-process|devpi-process||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -381,7 +381,7 @@
   },
   "tox-dev|filelock|filelock||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -400,7 +400,7 @@
   },
   "tox-dev|jetbrains-fish|jetbrains-fish||false": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -419,7 +419,7 @@
   },
   "tox-dev|mdformat-zola|mdformat-zola||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -438,7 +438,7 @@
   },
   "tox-dev|peryx|peryx|python,rust|false": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "clones/14d",
     "gh_downloads": 4545,
     "gha_usage_count": 0,
@@ -457,7 +457,7 @@
   },
   "tox-dev|pipdeptree|pipdeptree||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -476,7 +476,7 @@
   },
   "tox-dev|platformdirs|platformdirs||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -495,7 +495,7 @@
   },
   "tox-dev|pre-commit-uv|pre-commit-uv|pre-commit|": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -514,7 +514,7 @@
   },
   "tox-dev|pyproject-api|pyproject-api||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -533,7 +533,7 @@
   },
   "tox-dev|pyproject-fmt|pyproject-fmt|pre-commit|false": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "clones/14d",
     "gh_downloads": 56052,
     "gha_usage_count": 0,
@@ -552,7 +552,7 @@
   },
   "tox-dev|python-discovery|python-discovery||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -571,7 +571,7 @@
   },
   "tox-dev|sphinx-argparse-cli|sphinx-argparse-cli||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -590,7 +590,7 @@
   },
   "tox-dev|sphinx-autodoc-typehints|sphinx-autodoc-typehints||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -609,7 +609,7 @@
   },
   "tox-dev|toml-fmt|pyproject-fmt|python,rust|": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -628,7 +628,7 @@
   },
   "tox-dev|toml-fmt|toml-fmt||false": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "clones/14d",
     "gh_downloads": 2241,
     "gha_usage_count": 0,
@@ -647,7 +647,7 @@
   },
   "tox-dev|toml-fmt|tox-toml-fmt|python,rust|": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -666,7 +666,7 @@
   },
   "tox-dev|tox-gh|tox-gh||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -685,7 +685,7 @@
   },
   "tox-dev|tox-ini-fmt|tox-ini-fmt||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -704,7 +704,7 @@
   },
   "tox-dev|tox-toml-fmt|tox-toml-fmt|pre-commit|false": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "clones/14d",
     "gh_downloads": 1905,
     "gha_usage_count": 0,
@@ -723,7 +723,7 @@
   },
   "tox-dev|tox-uv|tox-uv||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:24:47+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -742,7 +742,7 @@
   },
   "tox-dev|tox|tox||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -761,7 +761,7 @@
   },
   "tox-dev|turbohtml|turbohtml||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
@@ -769,8 +769,8 @@
     "jb_release_unix": 0,
     "jb_version": "",
     "last_commit_date": "2026-07-10T00:39:03Z",
-    "open_prs": 0,
-    "open_total": 0,
+    "open_prs": 1,
+    "open_total": 1,
     "pypi_downloads": 12308,
     "pypi_release_date": "2026-07-10T01:08:39.433806Z",
     "pypi_version": "1.3.0",
@@ -780,7 +780,7 @@
   },
   "tox-dev|xml-fmt|xml-fmt||": {
     "default_branch": "main",
-    "fetched_at": "2026-07-10",
+    "fetched_at": "2026-07-10T18:25:17+00:00",
     "gh_download_label": "total",
     "gh_downloads": 0,
     "gha_usage_count": 0,
