@@ -316,7 +316,8 @@ def _is_retryable(exc: BaseException) -> bool:
     return isinstance(exc, (urllib.error.URLError, TimeoutError))  # connection reset, DNS, timeout
 
 
-_BLIND_BACKOFF: Final = tenacity.wait_random_exponential(multiplier=1, max=_BACKOFF_CAP)
+# deterministic doubling (1s, 2s, 4s, 8s) with a little jitter so 8 threads do not retry in lockstep
+_BLIND_BACKOFF: Final = tenacity.wait_exponential_jitter(initial=1, max=_BACKOFF_CAP, jitter=0.5)
 
 
 def retry_after(exc: BaseException | None) -> float | None:
