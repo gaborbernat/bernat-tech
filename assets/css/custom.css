@@ -1838,3 +1838,24 @@ body.colorscheme-dark .tag-cloud {
   font-size: 0.9em;
   opacity: 0.85;
 }
+
+/* Posts index: topic navigation above the table */
+.post-topics {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin: 0 0 1.5rem;
+}
+.post-topics-label {
+  font-weight: 600;
+  opacity: 0.7;
+}
+.post-topics .topic-pills {
+  margin: 0;
+}
+.post-feed {
+  margin-left: auto;
+  font-size: 0.9em;
+  white-space: nowrap;
+}

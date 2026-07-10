@@ -11,6 +11,17 @@
       </h1>
     </header>
     {{ .Content }}
+    {{ with site.Taxonomies.tags }}
+    <nav class="post-topics" aria-label="Browse posts by topic">
+      <span class="post-topics-label">Topics</span>
+      <ul class="topic-pills">
+        {{ range first 14 .ByCount }}
+        <li><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="topic-count">{{ .Count }}</span></a></li>
+        {{ end }}
+      </ul>
+      {{ with $.OutputFormats.Get "rss" }}<a class="post-feed" href="{{ .RelPermalink }}">RSS feed</a>{{ end }}
+    </nav>
+    {{ end }}
     <table class="post-list">
       <thead>
         <tr>
