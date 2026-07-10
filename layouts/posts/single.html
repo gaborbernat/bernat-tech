@@ -3,11 +3,13 @@
 {{ end }}
 {{ define "content" }}
   <section class="container post">
-    <article>
+    <article class="h-entry">
+      {{- /* hidden h-card so parsers (webmention.io, Bridgy) attribute the post to its author */ -}}
+      <a class="p-author h-card u-url" href="{{ .Site.BaseURL }}" hidden>{{ .Site.Params.author }}</a>
       <header>
         <div class="post-title">
-          <h1 class="title">
-            <a class="title-link" href="{{ .Permalink | safeURL }}">
+          <h1 class="title p-name">
+            <a class="title-link u-url u-uid" href="{{ .Permalink | safeURL }}">
               {{ .Title }}
             </a>
           </h1>
@@ -16,7 +18,7 @@
           <div class="date">
             <span class="posted-on">
               <i class="fa-solid fa-calendar" aria-hidden="true"></i>
-              <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+              <time class="dt-published" datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
                 {{ .Date | time.Format (.Site.Params.dateFormat | default "January 2, 2006" ) }}
               </time>
             </span>
@@ -42,7 +44,7 @@
 
       {{- $toc := default .Site.Params.Entry.toc .Params.toc -}}
       <div class="post-wrapper{{ if $toc }} has-toc{{ end }}">
-        <div class="post-content">
+        <div class="post-content e-content">
           {{- with (.Params.featuredImage | default .Params.image) }}
             {{- $alt := $.Params.imageAlt | default $.Title -}}
             {{- $resource := $.Resources.GetMatch . -}}
@@ -125,8 +127,10 @@
       </div>
 
       <footer>
+        {{ partial "posts/syndication.html" . }}
         {{ partial "posts/related.html" . }}
         {{ partial "posts/series.html" . }}
+        {{ partial "posts/webmentions.html" . }}
         {{ partial "posts/disqus.html" . }}
         {{ partial "posts/commento.html" . }}
         {{ partial "posts/utterances.html" . }}

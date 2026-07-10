@@ -1,0 +1,17 @@
+{{/* Received replies/likes/reposts, fetched client-side from webmention.io (public read API, no auth).
+     Names and text only — no remote avatars — to keep the page's strict CSP and privacy intact.
+     One-time setup (register the domain, wire up Bridgy) is documented in docs/indieweb.md. */}}
+{{ with .Site.Params.webmention.domain }}
+<section class="webmentions" data-target="{{ $.Permalink }}">
+  <h2 class="webmentions-title">Webmentions</h2>
+  <p class="webmentions-intro">
+    Reply, like, or repost on <a href="https://fosstodon.org/@gaborbernat" rel="me">Mastodon</a> or Bluesky, or
+    link this post from your own site — responses show up here via
+    <a href="https://webmention.io" rel="nofollow">webmention.io</a>.
+  </p>
+  <div class="webmentions-facepile" hidden></div>
+  <ol class="webmentions-list" hidden></ol>
+  {{ $wm := resources.Get "js/webmentions.js" | minify | fingerprint }}
+  <script defer src="{{ $wm.RelPermalink }}" integrity="{{ $wm.Data.Integrity }}"></script>
+</section>
+{{ end }}

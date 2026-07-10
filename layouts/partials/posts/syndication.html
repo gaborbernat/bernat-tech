@@ -1,0 +1,13 @@
+{{/* POSSE: link to the copies of this post syndicated elsewhere. Populate per post in front matter:
+     syndication = ["https://fosstodon.org/@gaborbernat/123", "https://bsky.app/profile/…/post/…"].
+     u-syndication lets Bridgy find the copies and backfeed their replies here as webmentions. */}}
+{{ with .Params.syndication }}
+<nav class="syndication" aria-label="Also posted on">
+  <span class="syndication-label">Also on</span>
+  <ul>
+    {{ range . }}
+    <li><a class="u-syndication" href="{{ . }}" rel="syndication nofollow">{{ (urls.Parse .).Host }}</a></li>
+    {{ end }}
+  </ul>
+</nav>
+{{ end }}

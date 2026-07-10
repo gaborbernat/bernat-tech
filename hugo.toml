@@ -36,6 +36,10 @@ toc = true
 [params.cloudflare]
 token = "3ead932f454449a799915b1721c18874"
 
+[params.webmention]
+# webmention.io username (the registered domain); see docs/indieweb.md for the one-time setup
+domain = "bernat.tech"
+
 [[params.social]]
 icon = "fa fa-github fa-2x"
 name = "GitHub"
