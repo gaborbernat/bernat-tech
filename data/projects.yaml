@@ -106,7 +106,7 @@ primary:
   - name: turbohtml
     org: tox-dev
     ci: check
-  - name: velodex
+  - name: peryx
     org: tox-dev
     ci: ci.yml
     pypi: "false"
