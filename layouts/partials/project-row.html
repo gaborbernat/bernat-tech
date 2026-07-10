@@ -8,8 +8,8 @@
 {{ $jetbrainsId := $p.jetbrains_id }}
 {{ $jetbrainsSlug := $p.jetbrains_slug }}
 {{ $noRelease := eq (or $p.no_release "") "true" }}
-{{/* Stats come from data/project_stats.json, refreshed out of band by scripts/prefetch-projects.mjs
-     so the content build makes no API calls. The key mirrors that script's keyOf(). */}}
+{{/* Stats come from data/project_stats.json, refreshed hourly out of band by scripts/prefetch_projects.py
+     so the content build makes no API calls. The key mirrors that script's keyed(). */}}
 {{ $key := printf "%s|%s|%s|%s|%s" $org $repo $name (or $p.type "") (or $p.pypi "") }}
 {{ $d := index (or hugo.Data.project_stats dict) $key | default dict }}
 
@@ -97,14 +97,16 @@
       {{- $monthly := 0 -}}
       {{- if $showPypi -}}{{ $monthly = $pypiDownloads -}}{{- end -}}
   <td class="dl-cell col-data" data-value="{{ $sortValue }}" data-monthly="{{ $monthly }}">
-      {{- if $showPypi -}}
+      {{- if gt $downloads 0 -}}
+        {{- if $showPypi -}}
         <a href="https://pepy.tech/projects/{{ $name }}"><span class="badge badge-green">{{ $formatted }}/mo</span></a>
-      {{- else if $jetbrainsId -}}
+        {{- else if $jetbrainsId -}}
         <a href="https://plugins.jetbrains.com/plugin/{{ $jetbrainsId }}-{{ $jetbrainsSlug }}"><span class="badge badge-green">{{ $formatted }} total</span></a>
-      {{- else if gt $ghaUsageCount 0 -}}
+        {{- else if gt $ghaUsageCount 0 -}}
         <a href="https://github.com/search?q=%22uses%3A+{{ $org }}/{{ $repo }}%22&type=code"><span class="badge badge-green">{{ $formatted }} repos</span></a>
-      {{- else if gt $ghDownloads 0 -}}
+        {{- else if gt $ghDownloads 0 -}}
         <a href="https://github.com/{{ $org }}/{{ $repo }}"><span class="badge badge-green">{{ $formatted }} {{ $ghDownloadLabel }}</span></a>
+        {{- end -}}
       {{- end -}}
   </td>
       {{- end -}}
