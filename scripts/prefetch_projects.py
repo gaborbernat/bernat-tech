@@ -27,6 +27,7 @@ import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime, timedelta
+from email.utils import parsedate_to_datetime
 from http import HTTPStatus
 from pathlib import Path
 from typing import TYPE_CHECKING, Final
@@ -55,6 +56,7 @@ _RETRYABLE: Final = frozenset({
     HTTPStatus.GATEWAY_TIMEOUT,
 })
 _MAX_ATTEMPTS: Final = 5  # tenacity retries a retryable response this many times before giving up
+_BACKOFF_CAP: Final = 60  # seconds; ceiling for both the blind backoff and a server's Retry-After
 # pypistats.org throttles bursts hard (429); run off the hot path lets us serialize every hit to dodge it
 _PYPISTATS_GATE: Final = threading.Semaphore(1)
 _NOW: Final = datetime.now(tz=UTC)
@@ -309,18 +311,46 @@ def gh(path: str) -> Json:
 
 
 def _is_retryable(exc: BaseException) -> bool:
-    return isinstance(exc, urllib.error.HTTPError) and exc.code in _RETRYABLE
+    if isinstance(exc, urllib.error.HTTPError):
+        return exc.code in _RETRYABLE
+    return isinstance(exc, (urllib.error.URLError, TimeoutError))  # connection reset, DNS, timeout
+
+
+_BLIND_BACKOFF: Final = tenacity.wait_random_exponential(multiplier=1, max=_BACKOFF_CAP)
+
+
+def retry_after(exc: BaseException | None) -> float | None:
+    # honour how long the server told us to wait: RFC 7231 Retry-After, then GitHub's rate-limit reset
+    if not isinstance(exc, urllib.error.HTTPError):
+        return None
+    if raw := exc.headers.get("Retry-After"):
+        if (raw := raw.strip()).isdigit():
+            return float(raw)
+        with contextlib.suppress(TypeError, ValueError):
+            return (parsedate_to_datetime(raw) - datetime.now(tz=UTC)).total_seconds()
+    if exc.headers.get("x-ratelimit-remaining") == "0" and (reset := exc.headers.get("x-ratelimit-reset")):
+        with contextlib.suppress(ValueError):
+            return int(reset) - datetime.now(tz=UTC).timestamp()
+    return None
+
+
+def retry_wait(state: tenacity.RetryCallState) -> float:
+    exc = state.outcome.exception() if state.outcome else None
+    if (told := retry_after(exc)) is not None:
+        return max(0.0, min(told, _BACKOFF_CAP))  # the server named a delay; obey it within the cap
+    return _BLIND_BACKOFF(state)  # nothing to go on (pypistats sends no header): jittered exponential
 
 
 def _log_retry(state: tenacity.RetryCallState) -> None:
     url = state.args[0] if state.args else ""
     exc = state.outcome.exception() if state.outcome else None
-    print(f"  retry {state.attempt_number}/{_MAX_ATTEMPTS} after {exc}: {url}")
+    wait = state.next_action.sleep if state.next_action else 0.0
+    print(f"  retry {state.attempt_number}/{_MAX_ATTEMPTS} in {wait:.1f}s after {exc}: {url}")
 
 
 @tenacity.retry(
     retry=tenacity.retry_if_exception(_is_retryable),
-    wait=tenacity.wait_random_exponential(multiplier=1, max=10),
+    wait=retry_wait,
     stop=tenacity.stop_after_attempt(_MAX_ATTEMPTS),
     before_sleep=_log_retry,
     reraise=True,
