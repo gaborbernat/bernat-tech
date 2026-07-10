@@ -6,7 +6,7 @@ draft = false
 image = "header.webp"
 images = [ "header.webp"]
 slug = "pep-517-518"
-tags = [ "python", "pip", "install", "packaging", "setuptools", "pep517", "pep518"]
+topics = [ "python", "pip", "install", "packaging", "setuptools", "pep517", "pep518"]
 title = "Python packaging - Past, Present, Future"
 +++
 

@@ -7,7 +7,7 @@ draft = false
 image = "typing-council-panel.webp"
 images = [ "typing-council-panel.webp"]
 slug = "pycon-us-2026-typing-summit-recap"
-tags = [ "python", "pycon", "pycon-us", "typing-summit", "typing", "type-hints", "pyrefly", "ty", "astral", "openai", "meta", "vercel", "pep-827", "intersection-types", "constraint-sets", "lean", "tensor-types", "pytorch", "typing-council", "guido"]
+topics = [ "python", "pycon", "pycon-us", "typing-summit", "typing", "type-hints", "pyrefly", "ty", "astral", "openai", "meta", "vercel", "pep-827", "intersection-types", "constraint-sets", "lean", "tensor-types", "pytorch", "typing-council", "guido"]
 title = "PyCon US 2026 Typing Summit Recap"
 +++
 

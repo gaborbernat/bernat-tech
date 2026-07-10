@@ -6,7 +6,7 @@ draft = false
 image = "splash.webp"
 images = [ "splash.webp"]
 slug = "pep-517-and-python-packaging"
-tags = [ "python", "packaging", "pip", "setuptools", "pep517", "pep518", "wheel", "sdist"]
+topics = [ "python", "packaging", "pip", "setuptools", "pep517", "pep518", "wheel", "sdist"]
 title = "The state of Python Packaging"
 +++
 

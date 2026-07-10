@@ -6,7 +6,7 @@ draft = false
 image = "splash.webp"
 images = [ "splash.webp"]
 slug = "blanket-deterministic-threading"
-tags = [ "python", "testing", "concurrency", "threading", "free-threading", "blanket", "pycon", "race-condition", "gil"]
+topics = [ "python", "testing", "concurrency", "threading", "free-threading", "blanket", "pycon", "race-condition", "gil"]
 title = "Deterministic Multithreaded Testing in Python with blanket"
 +++
 

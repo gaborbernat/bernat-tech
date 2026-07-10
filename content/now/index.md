@@ -10,12 +10,13 @@ A [now page](https://nownownow.com/about): what has my attention this month. Las
 
 - [**turbohtml**](https://pypi.org/project/turbohtml/) — a C-accelerated HTML and URL toolkit for Python. 1.0 shipped in
   July; I wrote up [how it works](/posts/blazing-fast-html-parser/) and am still widening WHATWG spec coverage.
-- **peryx** — a Python/Rust project under tox-dev.
+- [**peryx**](https://github.com/tox-dev/peryx) — a fast, open-source artifact vault for multiple ecosystems (PyPI and
+  OCI today), written in Rust.
 
 ## Maintaining
 
 tox, virtualenv, pipx, filelock, platformdirs, pyproject-fmt, tox-uv, and the rest of the tox-dev and PyPA tools I help
-look after. Most weeks that means triage, releases, and keeping CI green. The [projects page](/about/) tracks the full
+look after. Most weeks that means triage, releases, and keeping CI green. My [Open Source](/oss/) page tracks the full
 set.
 
 ## Writing

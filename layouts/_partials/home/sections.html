@@ -1,44 +1,42 @@
-{{/* Home landing content below the hero: recent writing, browse-by-topic, and the feed — so a first-time
-     visitor lands on the posts, not just the avatar. Dates use the go-live date (data/publish_dates.json,
-     keyed by content path) like the posts index, falling back to the front-matter date. */}}
+{{/* Landing content below the identity header: recent writing (with the feed line under its heading),
+     then browse-by-topic. Dates use the go-live date (data/publish_dates.json, keyed by content path)
+     like the posts index, falling back to the front-matter date. Rendered inside .home (home.html). */}}
 {{ $posts := where site.RegularPages "Section" "posts" }}
-<section class="container home-sections">
-  <div class="home-latest">
-    <div class="home-head">
-      <h2>Latest writing</h2>
-      <a class="home-all" href="{{ "posts/" | relURL }}">All posts &rarr;</a>
-    </div>
-    <ul class="home-posts">
-      {{ range first 5 $posts }}
-      {{ $live := or (index (or site.Data.publish_dates dict) .File.Path) (.Date.Format "2006-01-02") }}
-      <li>
-        <a class="home-post-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
-        <div class="home-post-meta">
-          <time datetime="{{ $live }}">{{ $live }}</time>
-          <span class="dot">·</span>
-          <span>{{ i18n "reading_time" .ReadingTime }}</span>
-        </div>
-        {{ with (or .Description (.Summary | plainify)) }}<p class="home-post-summary">{{ . | truncate 180 }}</p>{{ end }}
-      </li>
-      {{ end }}
-    </ul>
+<section class="home-latest">
+  <div class="home-head">
+    <h2>Latest writing</h2>
+    <a class="home-all" href="{{ "posts/" | relURL }}">All posts &rarr;</a>
   </div>
-
-  {{ with site.Taxonomies.tags }}
-  <div class="home-topics">
-    <h2>Browse by topic</h2>
-    <ul class="topic-pills">
-      {{ range first 12 .ByCount }}
-      <li><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="topic-count">{{ .Count }}</span></a></li>
-      {{ end }}
-    </ul>
-  </div>
-  {{ end }}
-
   <p class="home-subscribe">
     Follow along:
-    <a href="{{ "index.xml" | relURL }}">RSS</a>,
-    <a href="{{ "index.json" | relURL }}">JSON feed</a>,
-    or <a href="https://fosstodon.org/@gaborbernat" rel="me">Mastodon</a>. No tracking, no email wall.
+    <a href="{{ "index.xml" | relURL }}"><i class="fa-solid fa-rss" aria-hidden="true"></i> RSS</a>,
+    <a href="{{ "index.json" | relURL }}"><i class="fa-solid fa-code" aria-hidden="true"></i> JSON feed</a>,
+    or <a href="https://fosstodon.org/@gaborbernat" rel="me"><i class="fa-brands fa-mastodon" aria-hidden="true"></i> Mastodon</a>.
+    No tracking, no email wall.
   </p>
+  <ul class="home-posts">
+    {{ range first 5 $posts }}
+    {{ $live := or (index (or site.Data.publish_dates dict) .File.Path) (.Date.Format "2006-01-02") }}
+    <li>
+      <a class="home-post-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
+      <div class="home-post-meta">
+        <time datetime="{{ $live }}">{{ $live }}</time>
+        <span class="dot">·</span>
+        <span>{{ i18n "reading_time" .ReadingTime }}</span>
+      </div>
+      {{ with (or .Description (.Summary | plainify)) }}<p class="home-post-summary">{{ . | truncate 180 }}</p>{{ end }}
+    </li>
+    {{ end }}
+  </ul>
 </section>
+
+{{ with site.Taxonomies.topics }}
+<section class="home-topics">
+  <h2>Browse by topic</h2>
+  <ul class="topic-pills">
+    {{ range first 12 .ByCount }}
+    <li><a href="{{ printf "%s?topics=%s" ("posts/" | relURL) (.Page.Title | urlize) }}">{{ .Page.Title }} <span class="topic-count">{{ .Count }}</span></a></li>
+    {{ end }}
+  </ul>
+</section>
+{{ end }}

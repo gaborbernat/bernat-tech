@@ -38,7 +38,12 @@
           </div>
           {{ with .GetTerms "authors" }}{{ partial "taxonomy/authors.html" . }}{{ end }}
           {{ with .GetTerms "categories" }}{{ partial "taxonomy/categories.html" . }}{{ end }}
-          {{ with .GetTerms "tags" }}{{ partial "taxonomy/tags.html" . }}{{ end }}
+          {{ with .Params.topics }}
+          <div class="tags">
+            <i class="fa-solid fa-tag" aria-hidden="true"></i>
+            {{- range $i, $t := . }}{{ if $i }}<span class="separator">•</span>{{ end }}<span class="tag"><a href="{{ printf "%s?topics=%s" ("posts/" | relURL) ($t | urlize) }}">{{ $t | title }}</a></span>{{ end -}}
+          </div>
+          {{ end }}
         </div>
       </header>
 

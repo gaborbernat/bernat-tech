@@ -7,7 +7,7 @@ draft = false
 image = "pytexas-2026-duck-mascot-og.webp"
 images = [ "pytexas-2026-duck-mascot-og.webp", "pytexas-2026-duck-mascot.webp"]
 slug = "pytexas-2026-recap"
-tags = [ "python", "pytexas", "conference", "austin", "ai", "llm", "mcp", "keynote", "hynek", "packaging", "supply-chain", "pep-810", "free-threading", "ruff", "uv", "ty", "type-checking", "observability", "cli"]
+topics = [ "python", "pytexas", "conference", "austin", "ai", "llm", "mcp", "keynote", "hynek", "packaging", "supply-chain", "pep-810", "free-threading", "ruff", "uv", "ty", "type-checking", "observability", "cli"]
 title = "PyTexas 2026 Recap"
 +++
 

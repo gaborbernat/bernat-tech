@@ -1,15 +1,27 @@
-{{/* Override the theme's full-viewport centered hero so the landing leads with writing, not just the
-     author card: a compact hero, then recent posts and topic navigation (home/sections.html). */}}
-<section class="container home-hero">
-  <div class="about">
-    {{ partialCached "home/avatar.html" . }}
+{{/* Self-contained landing: a compact identity header, then recent writing, topics, and feeds.
+     Everything sits in ONE wrapper — the theme lays the home partial's direct children in a row, which
+     is what split the old hero and post list into two columns. Own classes, so it does not depend on the
+     theme's .centered/.about styling (dropping that is what turned the social list into vertical bullets). */}}
+<div class="home">
+  <header class="home-intro">
+    {{ with .Site.Params.avatarURL }}
+    <img class="home-avatar" src="{{ . | relURL }}" alt="{{ $.Site.Params.author }}" width="512" height="512" decoding="async">
+    {{ end }}
+    <div class="home-id">
+      <h1 class="home-name">{{ .Site.Params.author }}</h1>
+      <p class="home-pron">BEHR-naht GAH-bor</p>
+      <p class="home-tagline">from 🇭🇺🇷🇴🇬🇧, living in Los Angeles 🇺🇸</p>
+      <div class="home-social">
+        {{ partialCached "home/social.html" . }}
+      </div>
+    </div>
+  </header>
 
-    {{ partialCached "home/author.html" . }}
+  <p class="home-bio">
+    Software engineer on Bloomberg's Developer Experience team (Artifact Repository Hosting), and primary maintainer and
+    author of tox, virtualenv, pipx, filelock, platformdirs, and more — the
+    <a href="{{ "oss/" | relURL }}">Open Source</a> page has the full list.
+  </p>
 
-    {{ partialCached "home/social.html" . }}
-  </div>
-</section>
-
-{{ partialCached "home/extensions.html" . }}
-
-{{ partial "home/sections.html" . }}
+  {{ partial "home/sections.html" . }}
+</div>

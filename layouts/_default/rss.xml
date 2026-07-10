@@ -30,7 +30,7 @@
       <author>{{ $.Site.Params.author }}</author>
       <guid>{{ .Permalink }}</guid>
       <description>{{ .Summary | htmlEscape }}</description>
-      {{- with .Params.tags }}{{ range . }}
+      {{- with .Params.topics }}{{ range . }}
       <category>{{ . }}</category>
       {{- end }}{{ end }}
     </item>

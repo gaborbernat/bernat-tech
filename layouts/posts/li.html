@@ -6,7 +6,7 @@
 {{/* only surface Updated when the last edit lands on a different day than the go-live date */}}
 {{ $updated := "" }}
 {{ if ne (.Lastmod.Format "2006-01-02") ($published.Format "2006-01-02") }}{{ $updated = .Lastmod }}{{ end }}
-<tr>
+<tr{{ with .Params.topics }} data-topics="{{ range . }}{{ . | urlize }} {{ end }}"{{ end }}>
   <td class="post-num"></td>
   <td class="post-meta post-date" data-value="{{ $published.Unix }}">
     <time datetime="{{ $published.Format "2006-01-02" }}">{{ $published.Format $fmt }}</time>

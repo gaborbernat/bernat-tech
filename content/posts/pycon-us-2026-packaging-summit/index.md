@@ -7,7 +7,7 @@ draft = false
 image = "mike-fiedler-pypi-as-cdn.webp"
 images = [ "mike-fiedler-pypi-as-cdn.webp"]
 slug = "pycon-us-2026-packaging-summit-recap"
-tags = [ "python", "pycon", "pycon-us", "packaging-summit", "packaging", "pypi", "wheel", "pep-777", "pep-694", "pep-772", "pep-817", "pep-825", "pep-803", "conda", "trusted-publishing", "supply-chain", "mobile", "beeware", "wheel-variants"]
+topics = [ "python", "pycon", "pycon-us", "packaging-summit", "packaging", "pypi", "wheel", "pep-777", "pep-694", "pep-772", "pep-817", "pep-825", "pep-803", "conda", "trusted-publishing", "supply-chain", "mobile", "beeware", "wheel-variants"]
 title = "PyCon US 2026 Packaging Summit Recap"
 +++
 

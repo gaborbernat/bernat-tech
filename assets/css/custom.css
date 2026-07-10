@@ -226,39 +226,39 @@ body.colorscheme-dark table.project-table img {
   opacity: 0.6;
   letter-spacing: 0.03em;
 }
-/* brand-colour the social icons: the home page .about list and the /about/ .social-badges row */
-:is(.about ul, .social-badges) a .fa-twitter {
+/* brand-colour the social icons: the landing .home-social row and the /about/ .social-badges row */
+:is(.home-social, .social-badges) a .fa-twitter {
   color: #1da1f2;
 }
-:is(.about ul, .social-badges) a .fa-bluesky {
+:is(.home-social, .social-badges) a .fa-bluesky {
   color: #1185fe;
 }
-:is(.about ul, .social-badges) a .fa-mastodon {
+:is(.home-social, .social-badges) a .fa-mastodon {
   color: #6364ff;
 }
-:is(.about ul, .social-badges) a .fa-python {
+:is(.home-social, .social-badges) a .fa-python {
   color: #4b8bbe;
 }
-:is(.about ul, .social-badges) a .fa-linkedin {
+:is(.home-social, .social-badges) a .fa-linkedin {
   color: #0a66c2;
 }
-:is(.about ul, .social-badges) a .fa-twitch {
+:is(.home-social, .social-badges) a .fa-twitch {
   color: #9146ff;
 }
-:is(.about ul, .social-badges) a .fa-instagram {
+:is(.home-social, .social-badges) a .fa-instagram {
   color: #e4405f;
 }
-:is(.about ul, .social-badges) a .fa-heart {
+:is(.home-social, .social-badges) a .fa-heart {
   color: #e25555;
 }
-:is(.about ul, .social-badges) a .fa-github {
+:is(.home-social, .social-badges) a .fa-github {
   color: #1b1f24;
 }
-body.colorscheme-dark :is(.about ul, .social-badges) a .fa-github {
+body.colorscheme-dark :is(.home-social, .social-badges) a .fa-github {
   color: #e6edf3;
 }
 @media (prefers-color-scheme: dark) {
-  body.colorscheme-auto :is(.about ul, .social-badges) a .fa-github {
+  body.colorscheme-auto :is(.home-social, .social-badges) a .fa-github {
     color: #e6edf3;
   }
 }
@@ -1645,7 +1645,7 @@ body.colorscheme-dark table.bench-table td.bench-worst {
   }
 }
 
-/* /tags/ word cloud — size, weight and color all scale with how often the word appears */
+/* /topics/ word cloud — size, weight and color all scale with how often the word appears */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -1759,105 +1759,210 @@ body.colorscheme-dark .tag-cloud {
   paint-order: stroke;
 }
 
-/* Home: compact hero (not the theme's full-viewport centered card) so posts lead the page */
-.home-hero {
+/* Landing: single-column, content-first — a compact identity header, then recent writing */
+.home {
+  max-width: 93rem;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 3rem;
+}
+.home-intro {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+.home-bio {
+  margin: 0 0 2.5rem;
+  padding-bottom: 2.2rem;
+  font-size: 1.5rem;
+  text-align: justify;
+  line-height: 1.6;
+  opacity: 0.85;
+  border-bottom: 1px solid rgba(127, 127, 127, 0.25);
+}
+.home-avatar {
+  width: 15rem;
+  height: 15rem;
+  object-fit: cover;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+.home-id {
+  min-width: 0;
   text-align: center;
-  padding-top: 1.5rem;
 }
-.home-hero .avatar img {
-  width: 12rem;
-  height: 12rem;
+.home-name {
+  margin: 0;
+  font-size: 2.8rem;
+  line-height: 1.15;
 }
-.home-sections {
-  max-width: 46rem;
-  margin: 1rem auto 0;
+.home-pron {
+  margin: 0.1rem 0 0;
+  font-size: 1.3rem;
+  font-style: italic;
+  opacity: 0.55;
 }
-.home-head {
+.home-tagline {
+  margin: 0.3rem 0 0;
+  font-size: 1.6rem;
+  opacity: 0.85;
+}
+.home-social ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin: 0.9rem 0 0;
+  padding: 0;
+}
+.home-social li {
+  display: inline-flex;
+}
+.home-social a {
+  font-size: 1.9rem;
+  line-height: 1;
+}
+.home-latest .home-head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-  border-bottom: 1px solid var(--fg-muted, #999);
-  padding-bottom: 0.3rem;
 }
-.home-head h2 {
+.home-head h2,
+.home-topics h2 {
   margin: 0;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.55;
 }
 .home-all {
   white-space: nowrap;
-  font-size: 0.9em;
+  font-size: 1.4rem;
 }
 .home-posts {
   list-style: none;
-  margin: 1rem 0 0;
+  margin: 1.2rem 0 0;
   padding: 0;
 }
 .home-posts li {
-  margin-bottom: 1.4rem;
+  margin-bottom: 1.8rem;
 }
 .home-post-title {
-  font-size: 1.15em;
+  font-size: 1.9rem;
   font-weight: 600;
+  line-height: 1.25;
 }
 .home-post-meta {
-  margin-top: 0.15rem;
-  font-size: 0.82em;
-  opacity: 0.75;
+  margin-top: 0.3rem;
+  font-size: 1.3rem;
+  opacity: 0.6;
 }
 .home-post-meta .dot {
-  margin: 0 0.35em;
+  margin: 0 0.4em;
 }
 .home-post-summary {
-  margin: 0.35rem 0 0;
+  margin: 0.4rem 0 0;
   opacity: 0.9;
 }
 .home-topics {
-  margin-top: 2.5rem;
+  margin-top: 3rem;
 }
 .topic-pills {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 0.8rem 0 0;
+  gap: 0.6rem;
+  margin: 1rem 0 0;
   padding: 0;
 }
 .topic-pills a {
   display: inline-block;
-  padding: 0.2rem 0.7rem;
-  border: 1px solid var(--fg-muted, #999);
-  border-radius: 1rem;
-  font-size: 0.85em;
+  padding: 0.3rem 0.9rem;
+  border: 1px solid rgba(127, 127, 127, 0.3);
+  border-radius: 2rem;
+  font-size: 1.35rem;
+}
+.topic-pills a:hover {
+  border-color: currentColor;
 }
 .topic-pills .topic-count {
-  opacity: 0.6;
+  opacity: 0.55;
   font-size: 0.85em;
 }
 .home-subscribe {
-  margin-top: 2.5rem;
-  font-size: 0.9em;
-  opacity: 0.85;
+  margin: 0.3rem 0 1.4rem;
+  font-size: 1.4rem;
+  opacity: 0.8;
+}
+@media (max-width: 640px) {
+  .home-intro {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.2rem;
+  }
+  .home-social ul {
+    justify-content: center;
+  }
 }
 
-/* Posts index: topic navigation above the table */
+/* Posts index: the topic word cloud at the bottom is the additive filter */
 .post-topics {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 0.75rem;
-  margin: 0 0 1.5rem;
+  margin: 3rem 0 0;
+  text-align: center;
 }
-.post-topics-label {
-  font-weight: 600;
-  opacity: 0.7;
+.post-topics-title {
+  margin: 0;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.55;
 }
 .post-topics .topic-pills {
-  margin: 0;
+  justify-content: center;
+  margin-top: 1rem;
 }
-.post-feed {
-  margin-left: auto;
-  font-size: 0.9em;
-  white-space: nowrap;
+.topic-pill {
+  display: inline-block;
+  padding: 0.3rem 0.9rem;
+  border: 1px solid rgba(127, 127, 127, 0.35);
+  border-radius: 2rem;
+  font: inherit;
+  font-size: 1.35rem;
+  color: inherit;
+  background: none;
+  cursor: pointer;
+  line-height: 1.4;
+}
+.topic-pill:hover {
+  border-color: currentColor;
+}
+.topic-pill[aria-pressed="true"] {
+  background: #2b6cb0;
+  border-color: #2b6cb0;
+  color: #fff;
+}
+.topic-pill .topic-count {
+  opacity: 0.6;
+  font-size: 0.85em;
+}
+.topic-pill[aria-pressed="true"] .topic-count {
+  opacity: 0.85;
+}
+.topic-clear {
+  margin-top: 1rem;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 1.3rem;
+  text-decoration: underline;
+  opacity: 0.7;
+  cursor: pointer;
+}
+.post-list tbody tr[hidden] {
+  display: none;
 }
 
 /* POSSE syndication links + received webmentions */

@@ -11,17 +11,6 @@
       </h1>
     </header>
     {{ .Content }}
-    {{ with site.Taxonomies.tags }}
-    <nav class="post-topics" aria-label="Browse posts by topic">
-      <span class="post-topics-label">Topics</span>
-      <ul class="topic-pills">
-        {{ range first 14 .ByCount }}
-        <li><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="topic-count">{{ .Count }}</span></a></li>
-        {{ end }}
-      </ul>
-      {{ with $.OutputFormats.Get "rss" }}<a class="post-feed" href="{{ .RelPermalink }}">RSS feed</a>{{ end }}
-    </nav>
-    {{ end }}
     <table class="post-list">
       <thead>
         <tr>
@@ -40,7 +29,28 @@
     </table>
 
     {{ partial "pagination.html" . }}
+
+    {{/* Topic filter: one pill per topic with its post count. Pills toggle the table above
+         (post-filter.js) and mirror the selection in /posts/?topics= so it is shareable. */}}
+    {{ $posts := where site.RegularPages "Section" "posts" }}
+    {{ $counts := dict }}
+    {{ range $posts }}{{ range .Params.topics }}{{ $counts = merge $counts (dict . (add (int (index $counts . | default 0)) 1)) }}{{ end }}{{ end }}
+    {{ $items := slice }}
+    {{ range $topic, $count := $counts }}{{ $items = $items | append (dict "slug" ($topic | urlize) "label" ($topic | title) "count" $count) }}{{ end }}
+    {{ if $items }}
+      <section class="post-topics" aria-label="Filter posts by topic">
+        <h2 class="post-topics-title">Filter by topic</h2>
+        <ul class="topic-pills">
+          {{ range sort $items "count" "desc" }}
+          <li><button type="button" class="topic-pill" data-topic="{{ .slug }}" aria-pressed="false">{{ .label }} <span class="topic-count">{{ .count }}</span></button></li>
+          {{ end }}
+        </ul>
+        <button type="button" class="topic-clear" hidden>Clear filters</button>
+      </section>
+    {{ end }}
     {{ $sort := resources.Get "js/post-list.js" | minify | fingerprint }}
     <script defer src="{{ $sort.RelPermalink }}" integrity="{{ $sort.Data.Integrity }}"></script>
+    {{ $filter := resources.Get "js/post-filter.js" | minify | fingerprint }}
+    <script defer src="{{ $filter.RelPermalink }}" integrity="{{ $filter.Data.Integrity }}"></script>
   </section>
 {{ end }}

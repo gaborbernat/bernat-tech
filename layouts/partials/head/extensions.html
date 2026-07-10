@@ -17,8 +17,9 @@
 <link rel="preconnect" href="https://img.youtube.com" crossorigin>
 <link rel="preconnect" href="https://static.cloudflareinsights.com" crossorigin>
 
-{{- /* Mastodon identity verification */ -}}
+{{- /* rel=me identities for verification and IndieAuth sign-in (webmention.io logs in via these) */ -}}
 <link rel="me" href="https://fosstodon.org/@gaborbernat">
+<link rel="me" href="https://github.com/gaborbernat">
 
 {{- /* IndieWeb: receive replies/likes/reposts via webmention.io (register the domain there first) */ -}}
 {{- with .Site.Params.webmention.domain }}
@@ -30,7 +31,7 @@
 <meta name="twitter:site" content="@gjbernat">
 <meta name="twitter:creator" content="@gjbernat">
 
-{{- /* Keep the thin per-tag term listings out of the index (crawl budget + duplicate content), but let the /tags/ index itself be crawled — it is a useful navigation page. */ -}}
+{{- /* Keep the thin per-topic term listings out of the index (crawl budget + duplicate content). */ -}}
 {{- if eq .Kind "term" }}
 <meta name="robots" content="noindex,follow">
 {{- end }}
@@ -39,7 +40,7 @@
 {{- $author := dict
   "@type" "Person"
   "name" .Site.Params.author
-  "url" (printf "%sabout/" .Site.BaseURL)
+  "url" (printf "%soss/" .Site.BaseURL)
   "sameAs" (slice
     "https://github.com/gaborbernat/"
     "https://twitter.com/gjbernat/"
@@ -140,7 +141,7 @@
   "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00")
   "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
   "wordCount" .WordCount
-  "keywords" (delimit .Params.tags ", ")
+  "keywords" (delimit .Params.topics ", ")
   "author" $author
   "publisher" $author
   "url" .Permalink

@@ -6,7 +6,7 @@ draft = false
 image = "splash.webp"
 images = [ "splash.webp"]
 slug = "securing-python-supply-chain"
-tags = [ "python", "security", "dependencies", "supply-chain", "sbom", "pypi", "pip"]
+topics = [ "python", "security", "dependencies", "supply-chain", "sbom", "pypi", "pip"]
 title = "Defense in Depth: A Practical Guide to Python Supply Chain Security"
 +++
 

@@ -6,6 +6,9 @@ enableRobotsTXT = true
 enableEmoji = true
 enableGitInfo = true
 disableHugoGeneratorInject = true
+# topics have no standalone pages: the word cloud at the bottom of /posts/ is the only topic UI, and the
+# topics taxonomy stays only to power related-posts. Post links and the cloud filter /posts/?topics=.
+disableKinds = ["taxonomy", "term"]
 ignoreLogs = ["warning-goldmark-raw-html"]
 timeout = "120s" # network-free build (project stats come from data/project_stats.json); headroom for image processing
 
@@ -104,7 +107,7 @@ weight = 10
 author = "authors"
 category = "categories"
 series = "series"
-tag = "tags"
+topic = "topics"
 
 [[menu.main]]
 name = "Blog"
@@ -112,13 +115,13 @@ url = "posts"
 weight = 1
 
 [[menu.main]]
-name = "Presentations"
-url = "presentations"
+name = "Open Source"
+url = "oss"
 weight = 2
 
 [[menu.main]]
-name = "About"
-url = "about"
+name = "Talks"
+url = "talks"
 weight = 3
 
 [[menu.main]]
@@ -126,17 +129,12 @@ name = "Now"
 url = "now"
 weight = 4
 
-[[menu.main]]
-name = "Tags"
-url = "tags"
-weight = 5
-
 [related]
 includeNewer = true
 threshold = 80
 toLower = false
 [[related.indices]]
-name = "tags"
+name = "topics"
 weight = 100
 [[related.indices]]
 name = "date"

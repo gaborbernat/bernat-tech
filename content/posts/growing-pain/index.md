@@ -6,7 +6,7 @@ draft = false
 image = "cold_pug.webp"
 images = [ "cold_pug.webp"]
 slug = "growing-pain"
-tags = [ "python", "packaging", "pip", "setuptools", "pep517", "pep518"]
+topics = [ "python", "packaging", "pip", "setuptools", "pep517", "pep518"]
 title = "Python packaging - Growing Pains"
 +++
 

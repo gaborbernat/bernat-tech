@@ -2,7 +2,7 @@
 # requires-python = ">=3.13"
 # dependencies = ["pillow>=12.3", "numpy>=2.5.1", "fonttools[woff]>=4.63"]
 # ///
-"""Pack the /tags/ flex list into a horizontal spiral word cloud, emitted as SVG anchors
+"""Pack the /topics/ flex list into a horizontal spiral word cloud, emitted as SVG anchors
 (crawlable, focusable links) at build time: no runtime JS, no layout shift.
 
 Glyphs are measured with the exact font the page ships (static/fonts/tag-cloud.woff2), so the
@@ -23,7 +23,7 @@ import numpy as np
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
-_FILE: Final = Path("public/tags/index.html")
+_FILE: Final = Path("public/posts/index.html")
 _WOFF2: Final = Path("static/fonts/tag-cloud.woff2")
 _MIN_PX: Final = 16
 _MAX_PX: Final = 68
@@ -38,6 +38,7 @@ _ANCHOR: Final = re.compile(
 
 class Word(NamedTuple):
     href: str
+    topic: str  # slug carried onto the SVG anchor so the filter JS can toggle it
     text: str
     freq: int
     size: int
@@ -91,7 +92,8 @@ def parse_words(inner: str) -> list[Word]:
     words = []
     for (href, text, freq), weight in zip(raw, weights, strict=True):
         heat = (weight - lo) / span
-        words.append(Word(href, text, freq, round(_MIN_PX + heat * (_MAX_PX - _MIN_PX)), heat))
+        topic = href.rsplit("topics=", 1)[-1]
+        words.append(Word(href, topic, text, freq, round(_MIN_PX + heat * (_MAX_PX - _MIN_PX)), heat))
     return words
 
 
@@ -166,7 +168,7 @@ def render_svg(placed: list[Placed]) -> str:
     x1 = max(word.right for word in placed) + _MARGIN
     y1 = max(word.bottom for word in placed) + _MARGIN
     body = "".join(
-        f'<a href="{word.word.href}" aria-label="{esc(word.word.text)}">'
+        f'<a href="{word.word.href}" data-topic="{esc(word.word.topic)}" aria-label="{esc(word.word.text)}">'
         f'<text x="{word.x:.1f}" y="{word.y:.1f}" font-size="{word.word.size}" '
         f'style="--t:{word.word.heat:.3f}">{esc(word.word.text)}</text>'
         f"</a>"
