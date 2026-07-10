@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.13"
-# dependencies = ["pyyaml>=6"]
+# dependencies = ["pyyaml>=6", "tenacity>=9"]
 # ///
 """Fetch the GitHub/PyPI/JetBrains stats the project tables show into data/project_stats.json, so Hugo
 reads a static file instead of making ~150 fragile API calls inside its render timeout. CI runs this
@@ -12,16 +12,20 @@ is the fallback used for local `hugo serve` and when the refresh step is skipped
 
 from __future__ import annotations
 
+import contextlib
 import json
 import os
+import threading
 import urllib.error
 import urllib.parse
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass
+from http import HTTPStatus
 from pathlib import Path
 from typing import TYPE_CHECKING, Final
 
+import tenacity
 import yaml
 
 if TYPE_CHECKING:
@@ -35,6 +39,15 @@ _OUT: Final = Path("data/project_stats.json")
 _GROUPS: Final = ("primary", "maintenance")  # presentations render only static columns, no live stats
 _TOKEN: Final = os.environ.get("HUGO_GITHUB_TOKEN") or os.environ.get("GITHUB_TOKEN") or ""
 _GH_HEADERS: Final = {"Authorization": f"Bearer {_TOKEN}"} if _TOKEN else {}
+_RETRYABLE: Final = frozenset({
+    HTTPStatus.TOO_MANY_REQUESTS,
+    HTTPStatus.INTERNAL_SERVER_ERROR,
+    HTTPStatus.BAD_GATEWAY,
+    HTTPStatus.SERVICE_UNAVAILABLE,
+    HTTPStatus.GATEWAY_TIMEOUT,
+})
+# pypistats.org throttles bursts hard (429), zeroing download counts; cap concurrent hits to it
+_PYPISTATS_GATE: Final = threading.Semaphore(2)
 
 
 @dataclass
@@ -161,9 +174,20 @@ def gh(path: str) -> Json:
     return get(f"https://api.github.com/{path}", _GH_HEADERS)
 
 
+def _is_retryable(exc: BaseException) -> bool:
+    return isinstance(exc, urllib.error.HTTPError) and exc.code in _RETRYABLE
+
+
+@tenacity.retry(
+    retry=tenacity.retry_if_exception(_is_retryable),
+    wait=tenacity.wait_random_exponential(multiplier=1, max=10),
+    stop=tenacity.stop_after_attempt(5),
+    reraise=True,
+)
 def get(url: str, headers: dict[str, str] | None = None) -> Json:
     request = urllib.request.Request(url, headers={"User-Agent": "bernat-tech-prefetch", **(headers or {})})
-    with urllib.request.urlopen(request, timeout=30) as response:
+    gate = _PYPISTATS_GATE if "pypistats.org" in url else contextlib.nullcontext()
+    with gate, urllib.request.urlopen(request, timeout=30) as response:
         return json.load(response)
 
 
