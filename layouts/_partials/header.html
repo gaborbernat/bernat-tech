@@ -13,8 +13,11 @@
       <ul class="navigation-list">
         {{ with .Site.Menus.main }}
           {{ range sort . }}
+            {{ $url := index (apply (slice .URL) (.Params.urlFunc | default "relLangURL") ".") 0 }}
+            {{/* active tab = this page or anything under its section (e.g. a post under /posts/) */}}
+            {{ $active := hasPrefix $.RelPermalink (printf "%s/" (strings.TrimSuffix "/" $url)) }}
             <li class="navigation-item">
-              <a class="navigation-link {{ .Params.class }}" href="{{ index (apply (slice .URL) (.Params.urlFunc | default "relLangURL") ".") 0 }}">{{ .Name }}</a>
+              <a class="navigation-link {{ .Params.class }}{{ if $active }} navigation-active{{ end }}"{{ if $active }} aria-current="page"{{ end }} href="{{ $url }}">{{ .Name }}</a>
             </li>
           {{ end }}
         {{ end }}
