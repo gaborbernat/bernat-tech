@@ -104,7 +104,6 @@ jobs:
           # highlight and mermaid both rewrite the same HTML files, so keep them serial
           node scripts/highlight.mjs
           node scripts/mermaid.mjs
-          uv run scripts/wordcloud.py
           # HTML is final: validate it (a gate) while the fonts subset, since both only read the HTML
           java -jar "$(node -p 'String(require("vnu-jar"))')" --errors-only --skip-non-html public & validate=$!
           uv run scripts/subset-fa.py
