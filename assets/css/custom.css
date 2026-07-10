@@ -1758,3 +1758,83 @@ body.colorscheme-dark .tag-cloud {
   stroke-width: 0.6;
   paint-order: stroke;
 }
+
+/* Home: compact hero (not the theme's full-viewport centered card) so posts lead the page */
+.home-hero {
+  text-align: center;
+  padding-top: 1.5rem;
+}
+.home-hero .avatar img {
+  width: 12rem;
+  height: 12rem;
+}
+.home-sections {
+  max-width: 46rem;
+  margin: 1rem auto 0;
+}
+.home-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--fg-muted, #999);
+  padding-bottom: 0.3rem;
+}
+.home-head h2 {
+  margin: 0;
+}
+.home-all {
+  white-space: nowrap;
+  font-size: 0.9em;
+}
+.home-posts {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+.home-posts li {
+  margin-bottom: 1.4rem;
+}
+.home-post-title {
+  font-size: 1.15em;
+  font-weight: 600;
+}
+.home-post-meta {
+  margin-top: 0.15rem;
+  font-size: 0.82em;
+  opacity: 0.75;
+}
+.home-post-meta .dot {
+  margin: 0 0.35em;
+}
+.home-post-summary {
+  margin: 0.35rem 0 0;
+  opacity: 0.9;
+}
+.home-topics {
+  margin-top: 2.5rem;
+}
+.topic-pills {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.8rem 0 0;
+  padding: 0;
+}
+.topic-pills a {
+  display: inline-block;
+  padding: 0.2rem 0.7rem;
+  border: 1px solid var(--fg-muted, #999);
+  border-radius: 1rem;
+  font-size: 0.85em;
+}
+.topic-pills .topic-count {
+  opacity: 0.6;
+  font-size: 0.85em;
+}
+.home-subscribe {
+  margin-top: 2.5rem;
+  font-size: 0.9em;
+  opacity: 0.85;
+}

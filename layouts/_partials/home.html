@@ -1,0 +1,15 @@
+{{/* Override the theme's full-viewport centered hero so the landing leads with writing, not just the
+     author card: a compact hero, then recent posts and topic navigation (home/sections.html). */}}
+<section class="container home-hero">
+  <div class="about">
+    {{ partialCached "home/avatar.html" . }}
+
+    {{ partialCached "home/author.html" . }}
+
+    {{ partialCached "home/social.html" . }}
+  </div>
+</section>
+
+{{ partialCached "home/extensions.html" . }}
+
+{{ partial "home/sections.html" . }}

@@ -1,0 +1,44 @@
+{{/* Home landing content below the hero: recent writing, browse-by-topic, and the feed — so a first-time
+     visitor lands on the posts, not just the avatar. Dates use the go-live date (data/publish_dates.json,
+     keyed by content path) like the posts index, falling back to the front-matter date. */}}
+{{ $posts := where site.RegularPages "Section" "posts" }}
+<section class="container home-sections">
+  <div class="home-latest">
+    <div class="home-head">
+      <h2>Latest writing</h2>
+      <a class="home-all" href="{{ "posts/" | relURL }}">All posts &rarr;</a>
+    </div>
+    <ul class="home-posts">
+      {{ range first 5 $posts }}
+      {{ $live := or (index (or site.Data.publish_dates dict) .File.Path) (.Date.Format "2006-01-02") }}
+      <li>
+        <a class="home-post-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
+        <div class="home-post-meta">
+          <time datetime="{{ $live }}">{{ $live }}</time>
+          <span class="dot">·</span>
+          <span>{{ i18n "reading_time" .ReadingTime }}</span>
+        </div>
+        {{ with (or .Description (.Summary | plainify)) }}<p class="home-post-summary">{{ . | truncate 180 }}</p>{{ end }}
+      </li>
+      {{ end }}
+    </ul>
+  </div>
+
+  {{ with site.Taxonomies.tags }}
+  <div class="home-topics">
+    <h2>Browse by topic</h2>
+    <ul class="topic-pills">
+      {{ range first 12 .ByCount }}
+      <li><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="topic-count">{{ .Count }}</span></a></li>
+      {{ end }}
+    </ul>
+  </div>
+  {{ end }}
+
+  <p class="home-subscribe">
+    Follow along:
+    <a href="{{ "index.xml" | relURL }}">RSS</a>,
+    <a href="{{ "index.json" | relURL }}">JSON feed</a>,
+    or <a href="https://fosstodon.org/@gaborbernat" rel="me">Mastodon</a>. No tracking, no email wall.
+  </p>
+</section>
