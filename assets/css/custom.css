@@ -199,66 +199,39 @@ body.colorscheme-dark table.project-table img {
     filter: invert(1) hue-rotate(180deg);
   }
 }
-.social-badges a {
-  display: inline-block;
-  margin: 0;
-  padding: 0;
-  font-size: 0.85em;
-  text-decoration: none;
-  white-space: nowrap;
-}
-.social-badges a + a::before {
-  content: "·";
-  margin: 0 6px;
-  opacity: 0.5;
-}
-.social-badges a:hover {
-  opacity: 1;
-}
-.social-badges a i {
-  margin-right: 0;
-  font-size: 1.2em;
-}
-.about .name-pronounce {
-  margin: 0.15rem 0 0;
-  font-size: 0.95rem;
-  font-style: italic;
-  opacity: 0.6;
-  letter-spacing: 0.03em;
-}
-/* brand-colour the social icons: the landing .home-social row and the /about/ .social-badges row */
-:is(.home-social, .social-badges) a .fa-twitter {
+/* brand-colour the social icons on the landing .home-social row */
+.home-social a .fa-twitter {
   color: #1da1f2;
 }
-:is(.home-social, .social-badges) a .fa-bluesky {
+.home-social a .fa-bluesky {
   color: #1185fe;
 }
-:is(.home-social, .social-badges) a .fa-mastodon {
+.home-social a .fa-mastodon {
   color: #6364ff;
 }
-:is(.home-social, .social-badges) a .fa-python {
+.home-social a .fa-python {
   color: #4b8bbe;
 }
-:is(.home-social, .social-badges) a .fa-linkedin {
+.home-social a .fa-linkedin {
   color: #0a66c2;
 }
-:is(.home-social, .social-badges) a .fa-twitch {
+.home-social a .fa-twitch {
   color: #9146ff;
 }
-:is(.home-social, .social-badges) a .fa-instagram {
+.home-social a .fa-instagram {
   color: #e4405f;
 }
-:is(.home-social, .social-badges) a .fa-heart {
+.home-social a .fa-heart {
   color: #e25555;
 }
-:is(.home-social, .social-badges) a .fa-github {
+.home-social a .fa-github {
   color: #1b1f24;
 }
-body.colorscheme-dark :is(.home-social, .social-badges) a .fa-github {
+body.colorscheme-dark .home-social a .fa-github {
   color: #e6edf3;
 }
 @media (prefers-color-scheme: dark) {
-  body.colorscheme-auto :is(.home-social, .social-badges) a .fa-github {
+  body.colorscheme-auto .home-social a .fa-github {
     color: #e6edf3;
   }
 }
@@ -369,9 +342,6 @@ table.post-list .post-dash {
 .related-posts .date {
   opacity: 0.6;
   font-size: 0.9em;
-}
-.mastodon-comment .comment {
-  flex-wrap: wrap;
 }
 .youtube-lazy {
   position: relative;
@@ -1933,6 +1903,39 @@ body.colorscheme-dark table.bench-table td.bench-worst {
 }
 
 /* Top nav as tabs: highlight the active section so pages can drop their redundant H1 */
+/* header sits flush above the content: collapse the band's slack and the content's top margins */
+.navigation {
+  height: auto;
+}
+.navigation .container {
+  margin-bottom: 0;
+}
+.content {
+  margin-top: 0;
+}
+.content > .container {
+  margin-top: 0;
+}
+/* one distinct, colored icon per nav item */
+.nav-icon {
+  margin-right: 0.4rem;
+}
+/* extra .navigation qualifier so these beat the theme's dark `.navigation i` colour in dark mode */
+.navigation .navigation-title .fa-house {
+  color: #1565c0;
+}
+.navigation .navigation-link .fa-feather {
+  color: #2e8b57;
+}
+.navigation .navigation-link .fa-code-branch {
+  color: #8250df;
+}
+.navigation .navigation-link .fa-microphone-lines {
+  color: #d97706;
+}
+.navigation .navigation-link .fa-bolt {
+  color: #eab308;
+}
 .navigation-link {
   padding-bottom: 0.4rem;
   border-bottom: 2px solid transparent;
@@ -1943,23 +1946,30 @@ body.colorscheme-dark table.bench-table td.bench-worst {
 .navigation-link:hover {
   border-bottom-color: rgba(127, 127, 127, 0.45);
 }
-.navigation-link.navigation-active {
+/* active section (a tab, or the brand on the home page) turns accent-blue; only tabs get the underline */
+:is(.navigation-link, .navigation-title).navigation-active {
   color: #1565c0;
+}
+.navigation-link.navigation-active {
   border-bottom-color: #1565c0;
 }
-body.colorscheme-dark .navigation-link.navigation-active {
+body.colorscheme-dark :is(.navigation-link, .navigation-title).navigation-active {
   color: #64b5f6;
+}
+body.colorscheme-dark .navigation-link.navigation-active {
   border-bottom-color: #64b5f6;
 }
 @media (prefers-color-scheme: dark) {
-  body.colorscheme-auto .navigation-link.navigation-active {
+  body.colorscheme-auto :is(.navigation-link, .navigation-title).navigation-active {
     color: #64b5f6;
+  }
+  body.colorscheme-auto .navigation-link.navigation-active {
     border-bottom-color: #64b5f6;
   }
 }
 /* nav-destination pages (Blog list + plain pages) hide the visible title — the active tab names them;
    the H1 stays for screen readers. Blog posts (.container.post) keep their visible title. */
-:is(.container.list, .container.page) > header .title {
+:is(.container.list, .container.page) header .title {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -1969,4 +1979,45 @@ body.colorscheme-dark .navigation-link.navigation-active {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* the theme puts a 6.4rem margin above the page header; trim it, and drop it entirely on the pages
+   whose title we hide (the section then starts right under the tabs) */
+.content header {
+  margin-top: 1.5rem;
+}
+:is(.container.list, .container.page) header {
+  margin: 0;
+}
+
+/* color-scheme toggle lives in the nav bar, far right, beside the tabs (desktop) or hamburger (mobile) */
+.navigation .colorscheme-toggle {
+  cursor: pointer;
+  margin-left: 1.2rem;
+  font-size: 1.7rem;
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+}
+.navigation .colorscheme-toggle:hover {
+  opacity: 1;
+}
+@media only screen and (max-width: 768px) {
+  /* match the hamburger: same size, same flow top, so the two icons align */
+  .navigation .colorscheme-toggle {
+    font-size: 2.4rem;
+    line-height: 1;
+    margin-left: 1.5rem;
+  }
+}
+/* small colored icon on the home + posts section headers, echoing the nav */
+.home-head h2 .sec-icon {
+  color: #2e8b57;
+}
+.home-topics h2 .sec-icon,
+.post-topics-title .sec-icon {
+  color: #8250df;
+}
+.sec-icon {
+  margin-right: 0.45rem;
+  font-size: 0.9em;
 }

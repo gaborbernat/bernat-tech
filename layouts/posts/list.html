@@ -39,7 +39,7 @@
     {{ range $topic, $count := $counts }}{{ $items = $items | append (dict "slug" ($topic | urlize) "label" ($topic | title) "count" $count) }}{{ end }}
     {{ if $items }}
       <section class="post-topics" aria-label="Filter posts by topic">
-        <h2 class="post-topics-title">Filter by topic</h2>
+        <h2 class="post-topics-title"><i class="fa-solid fa-tag sec-icon" aria-hidden="true"></i>Filter by topic</h2>
         <ul class="topic-pills">
           {{ range sort $items "count" "desc" }}
           <li><button type="button" class="topic-pill" data-topic="{{ .slug }}" aria-pressed="false">{{ .label }} <span class="topic-count">{{ .count }}</span></button></li>

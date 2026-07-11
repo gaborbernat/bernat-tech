@@ -14,8 +14,7 @@
 {{ $csClass = "colorscheme-auto" }}
 {{ end }}
 
-<body class="preload-transitions {{ $csClass }}{{ if .Site.Params.rtl }} rtl{{ end }}">
-  {{ partial "float" . }}
+<body class="preload-transitions {{ $csClass }}">
   <main class="wrapper">
     {{ partial "header.html" . }}
 
@@ -26,44 +25,12 @@
     {{ partial "footer.html" . }}
   </main>
 
-  {{ if .HasShortcode "mermaid" }}
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@9.3.0/dist/mermaid.min.js"
-    integrity="sha256-QdTG1YTLLTwD3b95jLqFxpQX9uYuJMNAtVZgwKX4oYU=" crossorigin="anonymous"></script>
-  <script>
-    mermaid.initialize({startOnLoad: true});
-  </script>
-  {{ end }}
-
-  {{ if .Site.Params.disableDefaultJsScripts }}
-  {{ if not .Site.Params.hideColorSchemeToggle }}
-  {{ errorf "Invalid configuration. Default JS scripts are disabled, but 'hideColorSchemeToggle' is false." }}
-  {{end}}
-  {{ else if hugo.IsServer }}
+  {{ if hugo.IsServer }}
   {{ $script := resources.Get "js/coder.js" }}
   <script src="{{ $script.RelPermalink }}"></script>
   {{ else }}
   {{ $script := resources.Get "js/coder.js" | resources.Minify | resources.Fingerprint }}
   <script src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
-  {{ end }}
-
-  {{ range .Site.Params.customJS }}
-  {{ if hugo.IsServer }}
-  {{ $script := resources.Get . }}
-  <script src="{{ $script.RelPermalink }}"></script>
-  {{ else }}
-  {{ $script := resources.Get . | resources.Minify | resources.Fingerprint }}
-  <script src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
-  {{ end }}
-  {{ end }}
-
-  {{ range .Site.Params.customRemoteJS }}
-  {{ if hugo.IsServer }}
-  {{ $script := resources.GetRemote . }}
-  <script src="{{ $script.RelPermalink }}"></script>
-  {{ else }}
-  {{ $script := resources.GetRemote . | resources.Minify | resources.Fingerprint }}
-  <script src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
-  {{ end }}
   {{ end }}
 
   {{ if and .Site.Params.cloudflare .Site.Params.cloudflare.token }}

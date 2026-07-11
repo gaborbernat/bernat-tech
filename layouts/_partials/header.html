@@ -2,40 +2,30 @@
      the menu onto a second line. Use the short author name here; the long title still serves <title>/SEO. */}}
 <nav class="navigation">
   <section class="container">
-    <a class="navigation-title" href="{{ absLangURL "" }}">
-      {{ .Site.Params.author | default .Site.Title }}
+    <a class="navigation-title{{ if .IsHome }} navigation-active{{ end }}" href="{{ absLangURL "" }}">
+      <i class="fa-solid fa-house nav-icon" aria-hidden="true"></i>Home
     </a>
-    {{ if or .Site.Menus.main hugo.IsMultilingual }}
+    {{ if not .Site.Params.hideColorSchemeToggle }}
+      <a id="dark-mode-toggle" class="colorscheme-toggle float-right" role="button" tabindex="0" aria-label="{{ i18n "toggle_dark_mode" }}" title="{{ i18n "toggle_dark_mode" }}">
+        <i class="fa-solid fa-moon fa-fw" aria-hidden="true"></i>
+      </a>
+    {{ end }}
+    {{ if .Site.Menus.main }}
       <input type="checkbox" id="menu-toggle" />
       <label class="menu-button float-right" for="menu-toggle">
         <i class="fa-solid fa-bars fa-fw" aria-hidden="true"></i>
       </label>
       <ul class="navigation-list">
         {{ with .Site.Menus.main }}
+          {{ $icons := dict "posts" "fa-feather" "oss" "fa-code-branch" "talks" "fa-microphone-lines" "now" "fa-bolt" }}
           {{ range sort . }}
-            {{ $url := index (apply (slice .URL) (.Params.urlFunc | default "relLangURL") ".") 0 }}
+            {{ $url := .URL | relLangURL }}
             {{/* active tab = this page or anything under its section (e.g. a post under /posts/) */}}
             {{ $active := hasPrefix $.RelPermalink (printf "%s/" (strings.TrimSuffix "/" $url)) }}
+            {{ $icon := index $icons (strings.TrimPrefix "/" (strings.TrimSuffix "/" $url)) }}
             <li class="navigation-item">
-              <a class="navigation-link {{ .Params.class }}{{ if $active }} navigation-active{{ end }}"{{ if $active }} aria-current="page"{{ end }} href="{{ $url }}">{{ .Name }}</a>
+              <a class="navigation-link {{ .Params.class }}{{ if $active }} navigation-active{{ end }}"{{ if $active }} aria-current="page"{{ end }} href="{{ $url }}">{{ with $icon }}<i class="fa-solid {{ . }} nav-icon" aria-hidden="true"></i>{{ end }}{{ .Name }}</a>
             </li>
-          {{ end }}
-        {{ end }}
-        {{ if hugo.IsMultilingual }}
-          {{ $node := . }}
-          {{ .Scratch.Set "separator" true }}
-          {{ range (default .Site.Home.AllTranslations .Translations) }}
-            {{ if ne $.Site.Language .Language }}
-              {{ if $node.Scratch.Get "separator" }}
-                <li class="navigation-item menu-separator">
-                  <span>|</span>
-                </li>
-                {{ $node.Scratch.Set "separator" false }}
-              {{ end }}
-              <li class="navigation-item">
-                <a href="{{ .RelPermalink }}">{{ .Language.LanguageName | emojify }}</a>
-              </li>
-            {{ end }}
           {{ end }}
         {{ end }}
       </ul>

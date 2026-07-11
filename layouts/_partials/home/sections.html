@@ -4,7 +4,7 @@
 {{ $posts := where site.RegularPages "Section" "posts" }}
 <section class="home-latest">
   <div class="home-head">
-    <h2>Latest writing</h2>
+    <h2><i class="fa-solid fa-feather sec-icon" aria-hidden="true"></i>Latest writing</h2>
     <a class="home-all" href="{{ "posts/" | relURL }}">All posts &rarr;</a>
   </div>
   <p class="home-subscribe">
@@ -30,12 +30,18 @@
   </ul>
 </section>
 
-{{ with site.Taxonomies.topics }}
+{{/* Topic pills from each post's front-matter topics (site.Taxonomies is empty under disableKinds),
+     counted and ranked like the /posts/ filter; each links into /posts/?topics= to filter there. */}}
+{{ $counts := dict }}
+{{ range $posts }}{{ range .Params.topics }}{{ $counts = merge $counts (dict . (add (int (index $counts . | default 0)) 1)) }}{{ end }}{{ end }}
+{{ $topics := slice }}
+{{ range $topic, $count := $counts }}{{ $topics = $topics | append (dict "slug" ($topic | urlize) "label" ($topic | title) "count" $count) }}{{ end }}
+{{ with $topics }}
 <section class="home-topics">
-  <h2>Browse by topic</h2>
+  <h2><i class="fa-solid fa-tag sec-icon" aria-hidden="true"></i>Browse by topic</h2>
   <ul class="topic-pills">
-    {{ range first 12 .ByCount }}
-    <li><a href="{{ printf "%s?topics=%s" ("posts/" | relURL) (.Page.Title | urlize) }}">{{ .Page.Title }} <span class="topic-count">{{ .Count }}</span></a></li>
+    {{ range first 12 (sort . "count" "desc") }}
+    <li><a href="{{ printf "%s?topics=%s" ("posts/" | relURL) .slug }}">{{ .label }} <span class="topic-count">{{ .count }}</span></a></li>
     {{ end }}
   </ul>
 </section>
