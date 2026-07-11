@@ -30,7 +30,7 @@ const INLINE_CODE_RE = /<code>([^<]*?[.()\[\]=:][^<]*?)<\/code>/g;
 // WCAG 4.5:1 minimum for token text, enforced per theme after highlighting: syntax themes
 // de-emphasize comments (and github-light's orange) below the threshold, so nudge any failing
 // token toward the background's opposite, preserving hue, until it clears 4.5:1.
-const BG = { light: "e0e0e0", dark: "363636" }; // the coder theme's actual code backgrounds ($alt-bg-color[-dark])
+const BG = { light: "e0e0e0", dark: "303030" }; // the coder theme's actual code backgrounds ($alt-bg-color[-dark])
 const relLum = (r, g, b) => {
   const f = (c) => ((c /= 255), c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
   return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);

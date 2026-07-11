@@ -186,14 +186,14 @@ table.project-table img {
   vertical-align: middle;
 }
 body.colorscheme-dark table.project-table th {
-  background: #121212;
+  background: #070707;
 }
 body.colorscheme-dark table.project-table img {
   filter: invert(1) hue-rotate(180deg);
 }
 @media (prefers-color-scheme: dark) {
   body.colorscheme-auto table.project-table th {
-    background: #121212;
+    background: #070707;
   }
   body.colorscheme-auto table.project-table img {
     filter: invert(1) hue-rotate(180deg);
@@ -1954,17 +1954,17 @@ body.colorscheme-dark table.bench-table td.bench-worst {
   border-bottom-color: #1565c0;
 }
 body.colorscheme-dark :is(.navigation-link, .navigation-title).navigation-active {
-  color: #3990d5;
+  color: #378bce;
 }
 body.colorscheme-dark .navigation-link.navigation-active {
-  border-bottom-color: #3990d5;
+  border-bottom-color: #378bce;
 }
 @media (prefers-color-scheme: dark) {
   body.colorscheme-auto :is(.navigation-link, .navigation-title).navigation-active {
-    color: #3990d5;
+    color: #378bce;
   }
   body.colorscheme-auto .navigation-link.navigation-active {
-    border-bottom-color: #3990d5;
+    border-bottom-color: #378bce;
   }
 }
 /* nav-destination pages (Blog list + plain pages) hide the visible title — the active tab names them;
@@ -2028,10 +2028,10 @@ body.colorscheme-dark .navigation-link.navigation-active {
    deliberately not contrast-matched to light -- matching it exactly would put bold back at the body
    colour, which is the flatness this fixes. Headings/body/link/tag/code are matched in _variables. */
 body.colorscheme-dark :is(strong, b) {
-  color: #f5f5f5;
+  color: #f2f2f2;
 }
 @media (prefers-color-scheme: dark) {
   body.colorscheme-auto :is(strong, b) {
-    color: #f5f5f5;
+    color: #f2f2f2;
   }
 }
