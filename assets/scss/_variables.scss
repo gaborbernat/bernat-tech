@@ -30,12 +30,16 @@ $darker-alt-bg-color: #ccc !default;
 $link-color: #1565c0 !default;
 
 // Dark colors
-$bg-color-dark: #212121 !default;
-$fg-color-dark: #dadada !default;
-$alt-bg-color-dark: #424242 !default;
-$alt-fg-color-dark: #dadada !default;
-$lighter-alt-bg-color-dark: #4f4f4f !default;
-$link-color-dark: #42a5f5 !default;
+// Dark values are solved so each role's contrast ratio matches its light counterpart on #fafafa:
+// body 15.43 (=light), tag pill 12.14 (light 12.20), inline code 9.95 (light 10.03), link 5.46
+// (light 5.51). Headings are pure white at 18.73 -- light's #000-on-#fafafa is 20.12, which no text
+// can reach on this surface (white on #121212 caps at 18.73), so this is the physical ceiling.
+$bg-color-dark: #121212 !default;
+$fg-color-dark: #e9e9e9 !default;
+$alt-bg-color-dark: #282828 !default;
+$alt-fg-color-dark: #ffffff !default;
+$lighter-alt-bg-color-dark: #363636 !default;
+$link-color-dark: #3990d5 !default;
 
 // Path to FontAwesome TTF/WOFF files.
 $fa-font-path: "../fonts" !default;

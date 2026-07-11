@@ -186,14 +186,14 @@ table.project-table img {
   vertical-align: middle;
 }
 body.colorscheme-dark table.project-table th {
-  background: #212121;
+  background: #121212;
 }
 body.colorscheme-dark table.project-table img {
   filter: invert(1) hue-rotate(180deg);
 }
 @media (prefers-color-scheme: dark) {
   body.colorscheme-auto table.project-table th {
-    background: #212121;
+    background: #121212;
   }
   body.colorscheme-auto table.project-table img {
     filter: invert(1) hue-rotate(180deg);
@@ -1954,17 +1954,17 @@ body.colorscheme-dark table.bench-table td.bench-worst {
   border-bottom-color: #1565c0;
 }
 body.colorscheme-dark :is(.navigation-link, .navigation-title).navigation-active {
-  color: #64b5f6;
+  color: #3990d5;
 }
 body.colorscheme-dark .navigation-link.navigation-active {
-  border-bottom-color: #64b5f6;
+  border-bottom-color: #3990d5;
 }
 @media (prefers-color-scheme: dark) {
   body.colorscheme-auto :is(.navigation-link, .navigation-title).navigation-active {
-    color: #64b5f6;
+    color: #3990d5;
   }
   body.colorscheme-auto .navigation-link.navigation-active {
-    border-bottom-color: #64b5f6;
+    border-bottom-color: #3990d5;
   }
 }
 /* nav-destination pages (Blog list + plain pages) hide the visible title — the active tab names them;
@@ -2020,4 +2020,18 @@ body.colorscheme-dark .navigation-link.navigation-active {
 .sec-icon {
   margin-right: 0.45rem;
   font-size: 0.9em;
+}
+
+/* Light mode gets bold to pop on weight alone, because dark-on-light bold adds visible ink. On a dark
+   surface the glyphs bloom, which eats that weight delta, so bold needs a luminance step too: it sits
+   between body (#e9e9e9, 15.43:1) and headings (#ffffff, 18.73:1) at 17.18:1. This is the one role
+   deliberately not contrast-matched to light -- matching it exactly would put bold back at the body
+   colour, which is the flatness this fixes. Headings/body/link/tag/code are matched in _variables. */
+body.colorscheme-dark :is(strong, b) {
+  color: #f5f5f5;
+}
+@media (prefers-color-scheme: dark) {
+  body.colorscheme-auto :is(strong, b) {
+    color: #f5f5f5;
+  }
 }
