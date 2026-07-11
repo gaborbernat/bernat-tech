@@ -25,6 +25,10 @@
     {{ partial "footer.html" . }}
   </main>
 
+  <button id="back-to-top" class="back-to-top" type="button" aria-label="{{ i18n "back_to_top" }}" title="{{ i18n "back_to_top" }}">
+    <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+  </button>
+
   {{ if hugo.IsServer }}
   {{ $script := resources.Get "js/coder.js" }}
   <script src="{{ $script.RelPermalink }}"></script>
