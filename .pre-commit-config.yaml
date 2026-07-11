@@ -24,6 +24,8 @@ repos:
     hooks:
       - id: mdformat
         args: ["--wrap", "120", "--number"]
+        # layouts/*.md are Hugo templates (e.g. the raw-markdown output), not prose; reflowing breaks them
+        exclude: ^layouts/
         additional_dependencies:
           - mdformat-beautysh>=1
           - mdformat-simple-breaks>=0.1

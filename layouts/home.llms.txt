@@ -1,0 +1,15 @@
+# {{ .Site.Title }}
+
+> {{ .Site.Params.description }}
+
+Maintained by {{ .Site.Params.author }}. Every page links to its raw-markdown source; append it to any page URL to fetch clean markdown.
+
+## Posts
+{{ range (where .Site.RegularPages "Section" "posts").ByDate.Reverse }}
+- [{{ .Title }}]({{ (.OutputFormats.Get "md").Permalink }}){{ with .Description }}: {{ . }}{{ end }}
+{{- end }}
+
+## Pages
+{{ range (slice "/oss" "/talks" "/now") }}{{ with $.Site.GetPage . }}
+- [{{ .Title }}]({{ (.OutputFormats.Get "md").Permalink }}){{ with .Description }}: {{ . }}{{ end }}
+{{- end }}{{ end }}

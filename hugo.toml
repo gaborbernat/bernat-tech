@@ -138,7 +138,20 @@ name = "date"
 weight = 10
 
 [outputs]
-home = ["HTML", "RSS", "JSON"]
+home = ["HTML", "RSS", "JSON", "llms"]
+page = ["HTML", "md"]
+
+# llms.txt (llmstxt.org): a plain-text index for LLM crawlers; each page also gets a raw-markdown twin
+[outputFormats.llms]
+mediaType = "text/plain"
+baseName = "llms"
+isPlainText = true
+rel = "alternate"
+
+[outputFormats.md]
+mediaType = "text/markdown"
+isPlainText = true
+rel = "alternate"
 
 [languages.en]
 label = ":us:"
