@@ -471,8 +471,8 @@ body.colorscheme-dark figure.mermaid .mermaid-dark {
 }
 .toc-content {
   position: sticky;
-  top: 1rem;
-  max-height: calc(100vh - 2rem);
+  top: 6rem;
+  max-height: calc(100vh - 7rem);
   overflow-y: auto;
   font-size: 0.75em;
   line-height: 1.4;
@@ -2034,4 +2034,36 @@ body.colorscheme-dark :is(strong, b) {
   body.colorscheme-auto :is(strong, b) {
     color: #f2f2f2;
   }
+}
+
+/* Sticky nav so the tabs and the colour-scheme toggle stay reachable anywhere on the page. It slides
+   away while scrolling down -- costing no vertical space while reading, which is what matters on
+   mobile -- and slides back the instant you scroll up. Needs an opaque background, or content shows
+   through it. */
+.navigation {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fafafa;
+  transition: transform 0.25s ease;
+}
+.navigation.nav-hidden {
+  transform: translateY(-100%);
+}
+body.colorscheme-dark .navigation {
+  background: #070707;
+}
+@media (prefers-color-scheme: dark) {
+  body.colorscheme-auto .navigation {
+    background: #070707;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .navigation {
+    transition: none;
+  }
+}
+/* heading anchors and TOC jumps would otherwise land underneath the sticky bar */
+.post-content :is(h1, h2, h3, h4, h5, h6)[id] {
+  scroll-margin-top: 6rem;
 }

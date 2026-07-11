@@ -22,6 +22,8 @@
     <script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
     {{ $codeCopyJs := resources.Get "js/code-copy.js" | resources.Minify | resources.Fingerprint }}
     <script defer src="{{ $codeCopyJs.RelPermalink }}" integrity="{{ $codeCopyJs.Data.Integrity }}"></script>
+    {{ $navJs := resources.Get "js/nav-scroll.js" | resources.Minify | resources.Fingerprint }}
+    <script defer src="{{ $navJs.RelPermalink }}" integrity="{{ $navJs.Data.Integrity }}"></script>
     {{ if .Page.Store.Get "hasTurboViz" }}
     {{ $turboViz := resources.Get "js/turbo-viz.js" | resources.Minify | resources.Fingerprint }}
     <script defer src="{{ $turboViz.RelPermalink }}" integrity="{{ $turboViz.Data.Integrity }}"></script>
