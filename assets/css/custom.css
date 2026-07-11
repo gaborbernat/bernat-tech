@@ -2117,3 +2117,16 @@ body.colorscheme-dark .back-to-top {
     transition: none;
   }
 }
+
+/* The TOC "Start" entry targets the article head, which is not a heading, so it needs its own
+   scroll-margin to clear the sticky nav. The scroll-spy only tracks headings, so it never marks this
+   one active -- that is fine, it is a jump control, not a section indicator. */
+#top {
+  scroll-margin-top: 6rem;
+}
+.toc-content .toc-start {
+  opacity: 0.8;
+}
+.toc-content .toc-start:hover {
+  opacity: 1;
+}

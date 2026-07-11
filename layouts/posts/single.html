@@ -3,7 +3,7 @@
 {{ end }}
 {{ define "content" }}
   <section class="container post">
-    <article class="h-entry">
+    <article class="h-entry" id="top">
       {{- /* hidden h-card so parsers (webmention.io, Bridgy) attribute the post to its author */ -}}
       <a class="p-author h-card u-url" href="{{ .Site.BaseURL }}" hidden>{{ .Site.Params.author }}</a>
       <header>
@@ -64,7 +64,10 @@
         {{ if $toc }}
         <aside class="post-toc">
           <nav class="toc-content">
-            {{ .TableOfContents }}
+            {{/* Hugo builds the list from headings only, so graft a "Start" entry onto the front of the
+                 top-level <ol> -- it jumps back to the article head, which no heading anchors. */}}
+            {{ $start := `<ol><li class="toc-start"><a href="#top">Start</a></li>` }}
+            {{ replace .TableOfContents "<ol>" $start 1 | safeHTML }}
           </nav>
         </aside>
         <script>
