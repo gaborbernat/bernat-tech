@@ -11,7 +11,7 @@
   </p>
   <div class="webmentions-facepile" hidden></div>
   <ol class="webmentions-list" hidden></ol>
-  {{ $wm := resources.Get "js/webmentions.js" | minify | fingerprint }}
+  {{ $wm := resources.Get "js/webmentions.js" | resources.Minify | resources.Fingerprint }}
   <script defer src="{{ $wm.RelPermalink }}" integrity="{{ $wm.Data.Integrity }}"></script>
 </section>
 {{ end }}

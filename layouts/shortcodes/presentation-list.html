@@ -40,5 +40,5 @@
   {{- end -}}
 {{- end -}}
 {{- end }}
-{{ $js := resources.Get "js/youtube-lazy.js" | minify | fingerprint }}
+{{ $js := resources.Get "js/youtube-lazy.js" | resources.Minify | resources.Fingerprint }}
 <script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>

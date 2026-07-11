@@ -151,10 +151,11 @@ endLevel = 6
 ordered = true
 startLevel = 2
 
-[imaging]
+[imaging.jpeg]
 quality = 95
 
 [imaging.webp]
+quality = 95
 hint = "photo"
 
 [security]

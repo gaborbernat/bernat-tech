@@ -48,9 +48,9 @@
         <button type="button" class="topic-clear" hidden>Clear filters</button>
       </section>
     {{ end }}
-    {{ $sort := resources.Get "js/post-list.js" | minify | fingerprint }}
+    {{ $sort := resources.Get "js/post-list.js" | resources.Minify | resources.Fingerprint }}
     <script defer src="{{ $sort.RelPermalink }}" integrity="{{ $sort.Data.Integrity }}"></script>
-    {{ $filter := resources.Get "js/post-filter.js" | minify | fingerprint }}
+    {{ $filter := resources.Get "js/post-filter.js" | resources.Minify | resources.Fingerprint }}
     <script defer src="{{ $filter.RelPermalink }}" integrity="{{ $filter.Data.Integrity }}"></script>
   </section>
 {{ end }}

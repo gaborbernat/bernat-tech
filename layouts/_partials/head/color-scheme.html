@@ -1,11 +1,12 @@
 {{ if or (eq .Site.Params.colorScheme "auto") (eq .Site.Params.colorScheme "dark") }}
+  {{ $silence := slice "import" "if-function" "global-builtin" }}
   {{ if hugo.IsServer }}
-    {{ $cssOpts := (dict "targetPath" "css/coder-dark.css" "enableSourceMap" true ) }}
-    {{ $styles := resources.Get "scss/coder-dark.scss" | resources.ExecuteAsTemplate "style.coder-dark.css" . | toCSS $cssOpts }}
+    {{ $cssOpts := (dict "targetPath" "css/coder-dark.css" "transpiler" "dartsass" "enableSourceMap" true "silenceDeprecations" $silence ) }}
+    {{ $styles := resources.Get "scss/coder-dark.scss" | resources.ExecuteAsTemplate "style.coder-dark.css" . | css.Sass $cssOpts }}
     <link rel="stylesheet" href="{{ $styles.RelPermalink }}" media="screen">
   {{ else }}
-    {{ $cssOpts := (dict "targetPath" "css/coder-dark.css" ) }}
-    {{ $styles := resources.Get "scss/coder-dark.scss" | resources.ExecuteAsTemplate "style.coder-dark.css" . | toCSS $cssOpts | resources.Minify | resources.Fingerprint }}
+    {{ $cssOpts := (dict "targetPath" "css/coder-dark.css" "transpiler" "dartsass" "silenceDeprecations" $silence ) }}
+    {{ $styles := resources.Get "scss/coder-dark.scss" | resources.ExecuteAsTemplate "style.coder-dark.css" . | css.Sass $cssOpts | resources.Minify | resources.Fingerprint }}
     <link rel="stylesheet" href="{{ $styles.RelPermalink }}" integrity="{{ $styles.Data.Integrity }}" crossorigin="anonymous" media="screen" />
   {{ end }}
 {{ end }}

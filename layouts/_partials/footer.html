@@ -18,12 +18,12 @@
       via <a href="https://github.com/gaborbernat/bernat-tech/commit/{{ $hash }}">{{ . }}</a>.
     {{ end }}
     © 2018-{{now.Year }}
-    {{ $js := resources.Get "js/footer.js" | minify | fingerprint }}
+    {{ $js := resources.Get "js/footer.js" | resources.Minify | resources.Fingerprint }}
     <script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
-    {{ $codeCopyJs := resources.Get "js/code-copy.js" | minify | fingerprint }}
+    {{ $codeCopyJs := resources.Get "js/code-copy.js" | resources.Minify | resources.Fingerprint }}
     <script defer src="{{ $codeCopyJs.RelPermalink }}" integrity="{{ $codeCopyJs.Data.Integrity }}"></script>
     {{ if .Page.Store.Get "hasTurboViz" }}
-    {{ $turboViz := resources.Get "js/turbo-viz.js" | minify | fingerprint }}
+    {{ $turboViz := resources.Get "js/turbo-viz.js" | resources.Minify | resources.Fingerprint }}
     <script defer src="{{ $turboViz.RelPermalink }}" integrity="{{ $turboViz.Data.Integrity }}"></script>
     {{ end }}
   </section>

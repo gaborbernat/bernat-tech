@@ -2,12 +2,15 @@
 <link rel="preload" href="/fonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
 
+{{/* deprecations come from the vendored Font Awesome SCSS (global-builtin, if-function) and the
+     partial @import chain; silence them until the theme SCSS is ported to the @use module system. */}}
+{{ $silence := slice "import" "if-function" "global-builtin" }}
 {{ if hugo.IsServer }}
-  {{ $cssOpts := (dict "targetPath" "css/coder.css" "enableSourceMap" true ) }}
-  {{ $styles := resources.Get "scss/coder.scss" | resources.ExecuteAsTemplate "style.coder.css" . | toCSS $cssOpts }}
+  {{ $cssOpts := (dict "targetPath" "css/coder.css" "transpiler" "dartsass" "enableSourceMap" true "silenceDeprecations" $silence ) }}
+  {{ $styles := resources.Get "scss/coder.scss" | resources.ExecuteAsTemplate "style.coder.css" . | css.Sass $cssOpts }}
   <link rel="stylesheet" href="{{ $styles.RelPermalink }}" media="screen">
 {{ else }}
-  {{ $cssOpts := (dict "targetPath" "css/coder.css" ) }}
-  {{ $styles := resources.Get "scss/coder.scss" | resources.ExecuteAsTemplate "style.coder.css" . | toCSS $cssOpts | resources.Minify | resources.Fingerprint }}
+  {{ $cssOpts := (dict "targetPath" "css/coder.css" "transpiler" "dartsass" "silenceDeprecations" $silence ) }}
+  {{ $styles := resources.Get "scss/coder.scss" | resources.ExecuteAsTemplate "style.coder.css" . | css.Sass $cssOpts | resources.Minify | resources.Fingerprint }}
   <link rel="stylesheet" href="{{ $styles.RelPermalink }}" integrity="{{ $styles.Data.Integrity }}" crossorigin="anonymous" media="screen" />
 {{ end }}
