@@ -17,4 +17,4 @@ repositories helping with maintaining and self:
 {{< project-list group="maintenance" cols="last-commit,issues,stars,ci" >}}
 
 You can find my Curriculum Vitae (or résumé) on the following link
-[![View PDF](https://img.shields.io/badge/View%20as%20PDF-latest%20CV-blue?style=flat-square&logo=docusign)](https://gaborbernat.github.io/cv/main.pdf).
+[![View as PDF, latest CV](/img/cv-pdf-badge.svg)](https://gaborbernat.github.io/cv/main.pdf).

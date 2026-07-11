@@ -121,7 +121,7 @@ part of the public interface. You change it to solve what seems like a bug to yo
 find that you have angry hordes at the gate who, thanks to [Hyrum's Law](https://www.hyrumslaw.com/), depend on the old
 behavior.
 
-{{< figure src="https://imgs.xkcd.com/comics/workflow.png" alt="XKCD workflow comic" >}}
+{{< figure src="xkcd-workflow.png" alt="XKCD workflow comic" link="https://xkcd.com/1172/" caption="[xkcd 1172: Workflow](https://xkcd.com/1172/)" >}}
 
 While every maintainer would like to believe they've thought of every use case up-front and created the best API for
 everything, in practice, hindsight is our best teacher. As we run into more use cases, issues, and users, we get smarter
