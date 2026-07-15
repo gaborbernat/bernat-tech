@@ -144,26 +144,32 @@ maintenance:
     org: gaborbernat
     ci: check
     pypi: "false"
+    no-release: "true"
   - name: bernat-tech
     org: gaborbernat
     ci: build
     pypi: "false"
+    no-release: "true"
   - name: cv
     org: gaborbernat
     ci: build
     pypi: "false"
+    no-release: "true"
   - name: ropi_jegyzet_latex
     org: gaborbernat
     ci: build
     pypi: "false"
     type: latex
+    no-release: "true"
   - name: dotfiles
     org: gaborbernat
     pypi: "false"
+    no-release: "true"
   - name: gaborbernat
     org: gaborbernat
     ci: update-readme
     pypi: "false"
+    no-release: "true"
 
 presentations:
   - name: python-meets-crab

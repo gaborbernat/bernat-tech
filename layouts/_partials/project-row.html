@@ -136,6 +136,8 @@
       {{- if $ago.label -}}
         {{- $isoDate := (time (int $sortVal)).Format "2006-01-02T15:04:05Z" -}}
         <a href="{{ $releaseLink }}"><span class="badge badge-{{ $ago.color }} has-tip">{{ $ago.label }}<span class="tip">{{ $isoDate }}</span></span></a>
+      {{- else if not $noRelease -}}
+        <a href="{{ $releaseLink }}"><span class="badge badge-gray">No release yet</span></a>
       {{- end -}}
   </td>
     {{- else if eq $col "last-commit" -}}

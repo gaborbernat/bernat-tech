@@ -193,6 +193,7 @@ def stats_for(project: dict[str, str]) -> tuple[Stats, list[str]]:
     org, name = project["org"], project["name"]
     repo = project.get("repo") or name
     show_pypi = (project.get("pypi") or "") != "false"
+    no_release = (project.get("no-release") or "") == "true"  # never cuts releases: skip the always-404 lookup
     jetbrains_id = project.get("jetbrains-id")
     types = [entry.strip() for entry in (project.get("type") or "").split(",")]
     errors: list[str] = []
@@ -212,7 +213,7 @@ def stats_for(project: dict[str, str]) -> tuple[Stats, list[str]]:
             errors.append(f"{label}: {exc}")
             return None
 
-    collect_github(record, org, repo, attempt)
+    collect_github(record, org, repo, attempt, no_release=no_release)
     if show_pypi:
         collect_pypi(record, name, attempt)
     elif not jetbrains_id:
@@ -247,7 +248,7 @@ def from_baseline(data: Json) -> Stats:
     )
 
 
-def collect_github(record: Stats, org: str, repo: str, attempt: Attempt) -> None:
+def collect_github(record: Stats, org: str, repo: str, attempt: Attempt, *, no_release: bool) -> None:
     if (repo_data := attempt("repo-info", lambda: gh(f"repos/{org}/{repo}"))) is not None:
         record.default_branch = as_text(dig(repo_data, "default_branch")) or "main"
         record.stars = as_int(dig(repo_data, "stargazers_count"))
@@ -257,8 +258,10 @@ def collect_github(record: Stats, org: str, repo: str, attempt: Attempt) -> None
     if commits := as_list(attempt("commits", lambda: gh(commits_url))):
         record.last_commit_date = as_text(dig(commits[0], "commit", "committer", "date"))
 
-    if tag := as_text(
-        dig(release := attempt("release", lambda: gh(f"repos/{org}/{repo}/releases/latest")), "tag_name")
+    if not no_release and (
+        tag := as_text(
+            dig(release := attempt("release", lambda: gh(f"repos/{org}/{repo}/releases/latest")), "tag_name")
+        )
     ):
         record.release_tag = tag
         record.release_published_at = as_text(dig(release, "published_at"))
