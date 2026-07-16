@@ -13,12 +13,6 @@ repos:
       - id: mixed-line-ending
         args: ["--fix=lf"]
       - id: check-case-conflict
-  - repo: https://github.com/rbubley/mirrors-prettier
-    rev: "v3.9.4"
-    hooks:
-      - id: prettier
-        exclude: layouts/.*|.*\.md$|.*\.ya?ml$|package-lock\.json$
-        args: ["--print-width=120", "--prose-wrap=always"]
   - repo: https://github.com/executablebooks/mdformat
     rev: 1.0.0
     hooks:
