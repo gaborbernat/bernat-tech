@@ -56,7 +56,7 @@
             {{- if $resource -}}
               <img class="post-hero" src="{{ $resource.RelPermalink }}" alt="{{ $alt }}" width="{{ $resource.Width }}" height="{{ $resource.Height }}" fetchpriority="high" decoding="async"/>
             {{- else -}}
-              <img class="post-hero" src="{{ . | relURL }}" alt="{{ $alt }}"/>
+              {{- errorf "%s: featuredImage %q is not a page resource, so the hero would render without intrinsic dimensions and shift the layout in; co-locate the image with index.md" $.File.Path . -}}
             {{- end -}}
           {{- end }}
           {{ .Content }}
