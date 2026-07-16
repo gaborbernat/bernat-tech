@@ -15,6 +15,20 @@
 {{ end }}
 
 <body class="preload-transitions {{ $csClass }}">
+  {{/* Must stay inline and blocking, ahead of any markup: coder.js loads at the end of <body> and only runs
+       ~250ms after the stylesheets land, so a reader whose stored choice differs from their OS preference
+       paints in the wrong theme first and watches it snap over. Applying the stored class here beats paint. */}}
+  <script>
+    (() => {
+      const stored = localStorage.getItem("colorscheme");
+      if (stored) {
+        document.body.classList.remove("colorscheme-auto", "colorscheme-light", "colorscheme-dark");
+        document.body.classList.add("colorscheme-" + stored);
+        document.documentElement.style.colorScheme = stored;
+      }
+    })();
+  </script>
+
   <main class="wrapper">
     {{ partial "header.html" . }}
 
