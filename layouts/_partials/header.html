@@ -5,6 +5,12 @@
     <a class="navigation-title{{ if .IsHome }} navigation-active{{ end }}" href="{{ absLangURL "" }}">
       <i class="fa-solid fa-house nav-icon" aria-hidden="true"></i>Home
     </a>
+    {{/* home already leads with the big avatar; the nav one is for every other page */}}
+    {{ if not .IsHome }}
+      {{ with .Site.Params.avatarURL }}
+        <img class="nav-avatar" src="{{ . | relURL }}" alt="" width="512" height="512" decoding="async" aria-hidden="true">
+      {{ end }}
+    {{ end }}
     {{ if not .Site.Params.hideColorSchemeToggle }}
       <a id="dark-mode-toggle" class="colorscheme-toggle float-right" role="button" tabindex="0" aria-label="{{ i18n "toggle_dark_mode" }}" title="{{ i18n "toggle_dark_mode" }}">
         <i class="fa-solid fa-moon fa-fw" aria-hidden="true"></i>

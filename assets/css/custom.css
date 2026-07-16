@@ -1920,6 +1920,14 @@ body.colorscheme-dark table.bench-table td.bench-worst {
 .nav-icon {
   margin-right: 0.4rem;
 }
+.nav-avatar {
+  width: 2.6rem;
+  height: 2.6rem;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-left: 0.8rem;
+  vertical-align: -0.7rem;
+}
 /* extra .navigation qualifier so these beat the theme's dark `.navigation i` colour in dark mode */
 .navigation .navigation-title .fa-house {
   color: #1565c0;
