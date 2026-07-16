@@ -1,7 +1,7 @@
 +++
 author = "Bernat Gabor"
 title = "The state of type hints in Python"
-description = "How to use typing in Python via mypy"
+description = "How Python type hints work since PEP 484: annotations, type comments, stub files, protocols, mypy, and gotchas from str to contravariant arguments."
 image = "why.webp"
 images = [ "why.webp"]
 topics = [ "mypy", "python", "types", "type-hint"]
