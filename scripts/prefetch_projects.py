@@ -21,6 +21,7 @@ import contextlib
 import json
 import os
 import threading
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -57,8 +58,9 @@ _RETRYABLE: Final = frozenset({
 })
 _MAX_ATTEMPTS: Final = 5  # tenacity retries a retryable response this many times before giving up
 _BACKOFF_CAP: Final = 60  # seconds; ceiling for both the blind backoff and a server's Retry-After
-# pypistats.org throttles bursts hard (429); run off the hot path lets us serialize every hit to dodge it
-_PYPISTATS_GATE: Final = threading.Semaphore(1)
+# pypistats.org rate-limits by IP with no Retry-After header and 429s a burst of ~30 hits outright, so it
+# gets a self-tuning pacer (see _Pacer) and a longer retry budget than the other hosts
+_PYPISTATS_MAX_ATTEMPTS: Final = 8
 _NOW: Final = datetime.now(tz=UTC)
 _STAMP: Final = _NOW.isoformat(timespec="seconds")  # written to fetched_at when a record refreshes cleanly
 _STALE_AFTER: Final = timedelta(days=3)  # a record unrefreshed this long fails the job so it gets noticed
@@ -323,6 +325,40 @@ def _is_retryable(exc: BaseException) -> bool:
 _BLIND_BACKOFF: Final = tenacity.wait_exponential_jitter(initial=1, max=_BACKOFF_CAP, jitter=0.5)
 
 
+class _Pacer:
+    """Self-tuning request spacing for a host that rate-limits by IP and sends no Retry-After. The gap
+    between hits doubles after every 429 and halves on success, so the run settles on a cadence the server
+    tolerates instead of retrying into the same wall. The spacing is serialized; the requests are not."""
+
+    def __init__(self, *, floor: float, ceil: float) -> None:
+        self._floor: Final = floor
+        self._ceil: Final = ceil
+        self._gap = floor
+        self._ready = 0.0
+        self._lock = threading.Lock()
+
+    def wait(self) -> None:
+        with self._lock:
+            if (idle := self._ready - time.monotonic()) > 0:
+                time.sleep(idle)
+            self._ready = time.monotonic() + self._gap
+
+    def widen(self) -> None:
+        with self._lock:
+            self._gap = min(self._gap * 2, self._ceil)
+
+    def ease(self) -> None:
+        with self._lock:
+            self._gap = max(self._gap / 2, self._floor)
+
+
+_PYPISTATS_RATE: Final = _Pacer(floor=0.5, ceil=20)
+
+
+def paced(url: str) -> bool:
+    return "pypistats.org" in url
+
+
 def retry_after(exc: BaseException | None) -> float | None:
     # honour how long the server told us to wait: RFC 7231 Retry-After, then GitHub's rate-limit reset
     if not isinstance(exc, urllib.error.HTTPError):
@@ -340,30 +376,43 @@ def retry_after(exc: BaseException | None) -> float | None:
 
 def retry_wait(state: tenacity.RetryCallState) -> float:
     exc = state.outcome.exception() if state.outcome else None
+    too_many = isinstance(exc, urllib.error.HTTPError) and exc.code == HTTPStatus.TOO_MANY_REQUESTS
+    if too_many and state.args and paced(state.args[0]):
+        _PYPISTATS_RATE.widen()  # ramp the gap so the next pypistats hit waits longer
     if (told := retry_after(exc)) is not None:
         return max(0.0, min(told, _BACKOFF_CAP))  # the server named a delay; obey it within the cap
     return _BLIND_BACKOFF(state)  # nothing to go on (pypistats sends no header): jittered exponential
 
 
+def retry_stop(state: tenacity.RetryCallState) -> bool:
+    limit = _PYPISTATS_MAX_ATTEMPTS if state.args and paced(state.args[0]) else _MAX_ATTEMPTS
+    return state.attempt_number >= limit
+
+
 def _log_retry(state: tenacity.RetryCallState) -> None:
     url = state.args[0] if state.args else ""
+    limit = _PYPISTATS_MAX_ATTEMPTS if paced(url) else _MAX_ATTEMPTS
     exc = state.outcome.exception() if state.outcome else None
     wait = state.next_action.sleep if state.next_action else 0.0
-    print(f"  retry {state.attempt_number}/{_MAX_ATTEMPTS} in {wait:.1f}s after {exc}: {url}")
+    print(f"  retry {state.attempt_number}/{limit} in {wait:.1f}s after {exc}: {url}")
 
 
 @tenacity.retry(
     retry=tenacity.retry_if_exception(_is_retryable),
     wait=retry_wait,
-    stop=tenacity.stop_after_attempt(_MAX_ATTEMPTS),
+    stop=retry_stop,
     before_sleep=_log_retry,
     reraise=True,
 )
 def get(url: str, headers: dict[str, str] | None = None) -> Json:
     request = urllib.request.Request(url, headers={"User-Agent": "bernat-tech-prefetch", **(headers or {})})
-    gate = _PYPISTATS_GATE if "pypistats.org" in url else contextlib.nullcontext()
-    with gate, urllib.request.urlopen(request, timeout=30) as response:
-        return json.load(response)
+    if pypistats := paced(url):
+        _PYPISTATS_RATE.wait()  # discover a sustainable cadence instead of hammering into the IP limit
+    with urllib.request.urlopen(request, timeout=30) as response:
+        payload = json.load(response)
+    if pypistats:
+        _PYPISTATS_RATE.ease()
+    return payload
 
 
 def dig(value: Json, *keys: str) -> Json:
