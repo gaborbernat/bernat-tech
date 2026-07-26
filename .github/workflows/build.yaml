@@ -26,9 +26,7 @@ jobs:
     # fetch on the hourly cron, on push to main, and on a manual run unless opted out; PR builds
     # (incl. fork PRs with no secrets) skip it and build off the cached numbers
     if: >-
-      github.event_name == 'schedule'
-      || github.event_name == 'push'
-      || (github.event_name == 'workflow_dispatch' && inputs.refresh)
+      github.event_name == 'schedule' || github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.refresh)
     runs-on: ubuntu-latest
     environment: build
     steps:
