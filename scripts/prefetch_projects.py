@@ -20,8 +20,6 @@ from __future__ import annotations
 import contextlib
 import json
 import os
-import threading
-import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -49,6 +47,8 @@ _OUT: Final = Path("data/project_stats.json")
 _GROUPS: Final = ("primary", "maintenance")  # presentations render only static columns, no live stats
 _TOKEN: Final = os.environ.get("HUGO_GITHUB_TOKEN") or os.environ.get("GITHUB_TOKEN") or ""
 _GH_HEADERS: Final = {"Authorization": f"Bearer {_TOKEN}"} if _TOKEN else {}
+_PEPY_KEY: Final = os.environ.get("PEPY") or ""
+_PEPY_HEADERS: Final = {"X-API-Key": _PEPY_KEY} if _PEPY_KEY else {}
 _RETRYABLE: Final = frozenset({
     HTTPStatus.TOO_MANY_REQUESTS,
     HTTPStatus.INTERNAL_SERVER_ERROR,
@@ -58,9 +58,6 @@ _RETRYABLE: Final = frozenset({
 })
 _MAX_ATTEMPTS: Final = 5  # tenacity retries a retryable response this many times before giving up
 _BACKOFF_CAP: Final = 60  # seconds; ceiling for both the blind backoff and a server's Retry-After
-# pypistats.org rate-limits by IP with no Retry-After header and 429s a burst of ~30 hits outright, so it
-# gets a self-tuning pacer (see _Pacer) and a longer retry budget than the other hosts
-_PYPISTATS_MAX_ATTEMPTS: Final = 8
 _NOW: Final = datetime.now(tz=UTC)
 _STAMP: Final = _NOW.isoformat(timespec="seconds")  # written to fetched_at when a record refreshes cleanly
 _STALE_AFTER: Final = timedelta(days=3)  # a record unrefreshed this long fails the job so it gets noticed
@@ -278,9 +275,24 @@ def collect_pypi(record: Stats, name: str, attempt: Attempt) -> None:
         record.pypi_version = as_text(dig(pypi, "info", "version"))
         if urls := as_list(dig(pypi, "urls")):
             record.pypi_release_date = as_text(dig(urls[0], "upload_time_iso_8601"))
-    recent = attempt("pypi-downloads", lambda: get(f"https://pypistats.org/api/packages/{name}/recent"))
-    if count := as_int(dig(recent, "data", "last_month")):
-        record.pypi_downloads = count
+    stats = attempt("pypi-downloads", lambda: get(f"https://api.pepy.tech/api/v2/projects/{name}", _PEPY_HEADERS))
+    if month := last_month_downloads(stats):
+        record.pypi_downloads = month
+
+
+def last_month_downloads(stats: Json) -> int:
+    # pepy returns a per-day, per-version breakdown; sum the trailing 30 days to match the "/mo" the table
+    # shows (ISO dates sort lexically, so a string compare bounds the window)
+    daily = dig(stats, "downloads")
+    if not isinstance(daily, dict):
+        return 0
+    cutoff = (_NOW - timedelta(days=30)).date().isoformat()
+    return sum(
+        as_int(count)
+        for day, versions in daily.items()
+        if day >= cutoff and isinstance(versions, dict)
+        for count in versions.values()
+    )
 
 
 def collect_downloads(record: Stats, org: str, repo: str, types: list[str], attempt: Attempt) -> None:
@@ -325,42 +337,8 @@ def _is_retryable(exc: BaseException) -> bool:
 _BLIND_BACKOFF: Final = tenacity.wait_exponential_jitter(initial=1, max=_BACKOFF_CAP, jitter=0.5)
 
 
-class _Pacer:
-    """Self-tuning request spacing for a host that rate-limits by IP and sends no Retry-After. The gap
-    between hits doubles after every 429 and halves on success, so the run settles on a cadence the server
-    tolerates instead of retrying into the same wall. The spacing is serialized; the requests are not."""
-
-    def __init__(self, *, floor: float, ceil: float) -> None:
-        self._floor: Final = floor
-        self._ceil: Final = ceil
-        self._gap = floor
-        self._ready = 0.0
-        self._lock = threading.Lock()
-
-    def wait(self) -> None:
-        with self._lock:
-            if (idle := self._ready - time.monotonic()) > 0:
-                time.sleep(idle)
-            self._ready = time.monotonic() + self._gap
-
-    def widen(self) -> None:
-        with self._lock:
-            self._gap = min(self._gap * 2, self._ceil)
-
-    def ease(self) -> None:
-        with self._lock:
-            self._gap = max(self._gap / 2, self._floor)
-
-
-_PYPISTATS_RATE: Final = _Pacer(floor=0.5, ceil=20)
-
-
-def paced(url: str) -> bool:
-    return "pypistats.org" in url
-
-
 def retry_after(exc: BaseException | None) -> float | None:
-    # honour how long the server told us to wait: RFC 7231 Retry-After, then GitHub's rate-limit reset
+    # honour how long the server told us to wait: RFC 7231 Retry-After, then pepy's and GitHub's own headers
     if not isinstance(exc, urllib.error.HTTPError):
         return None
     if raw := exc.headers.get("Retry-After"):
@@ -368,6 +346,9 @@ def retry_after(exc: BaseException | None) -> float | None:
             return float(raw)
         with contextlib.suppress(TypeError, ValueError):
             return (parsedate_to_datetime(raw) - datetime.now(tz=UTC)).total_seconds()
+    if secs := exc.headers.get("X-Rate-Limit-Retry-After-Seconds"):  # pepy.tech
+        with contextlib.suppress(ValueError):
+            return float(secs)
     if exc.headers.get("x-ratelimit-remaining") == "0" and (reset := exc.headers.get("x-ratelimit-reset")):
         with contextlib.suppress(ValueError):
             return int(reset) - datetime.now(tz=UTC).timestamp()
@@ -376,43 +357,29 @@ def retry_after(exc: BaseException | None) -> float | None:
 
 def retry_wait(state: tenacity.RetryCallState) -> float:
     exc = state.outcome.exception() if state.outcome else None
-    too_many = isinstance(exc, urllib.error.HTTPError) and exc.code == HTTPStatus.TOO_MANY_REQUESTS
-    if too_many and state.args and paced(state.args[0]):
-        _PYPISTATS_RATE.widen()  # ramp the gap so the next pypistats hit waits longer
     if (told := retry_after(exc)) is not None:
         return max(0.0, min(told, _BACKOFF_CAP))  # the server named a delay; obey it within the cap
-    return _BLIND_BACKOFF(state)  # nothing to go on (pypistats sends no header): jittered exponential
-
-
-def retry_stop(state: tenacity.RetryCallState) -> bool:
-    limit = _PYPISTATS_MAX_ATTEMPTS if state.args and paced(state.args[0]) else _MAX_ATTEMPTS
-    return state.attempt_number >= limit
+    return _BLIND_BACKOFF(state)  # nothing to go on: jittered exponential
 
 
 def _log_retry(state: tenacity.RetryCallState) -> None:
     url = state.args[0] if state.args else ""
-    limit = _PYPISTATS_MAX_ATTEMPTS if paced(url) else _MAX_ATTEMPTS
     exc = state.outcome.exception() if state.outcome else None
     wait = state.next_action.sleep if state.next_action else 0.0
-    print(f"  retry {state.attempt_number}/{limit} in {wait:.1f}s after {exc}: {url}")
+    print(f"  retry {state.attempt_number}/{_MAX_ATTEMPTS} in {wait:.1f}s after {exc}: {url}")
 
 
 @tenacity.retry(
     retry=tenacity.retry_if_exception(_is_retryable),
     wait=retry_wait,
-    stop=retry_stop,
+    stop=tenacity.stop_after_attempt(_MAX_ATTEMPTS),
     before_sleep=_log_retry,
     reraise=True,
 )
 def get(url: str, headers: dict[str, str] | None = None) -> Json:
     request = urllib.request.Request(url, headers={"User-Agent": "bernat-tech-prefetch", **(headers or {})})
-    if pypistats := paced(url):
-        _PYPISTATS_RATE.wait()  # discover a sustainable cadence instead of hammering into the IP limit
     with urllib.request.urlopen(request, timeout=30) as response:
-        payload = json.load(response)
-    if pypistats:
-        _PYPISTATS_RATE.ease()
-    return payload
+        return json.load(response)
 
 
 def dig(value: Json, *keys: str) -> Json:
