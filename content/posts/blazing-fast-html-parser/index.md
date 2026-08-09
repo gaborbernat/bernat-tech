@@ -1,7 +1,7 @@
 +++
 author = "Bernat Gabor"
-title = "Building a fast HTML toolkit in C for Python"
-description = "How turbohtml builds a fast HTML toolkit in C for Python: SWAR, SIMD, zero-copy, interned atoms, IDNA, LTO/PGO, and honest benchmarking, 3-22x faster."
+title = "How turbohtml makes Python HTML work 3-22x faster"
+description = "C removes Python's loop overhead. turbohtml also skips clean spans, allocates exact buffers, reuses indexes, and trains the compiler."
 keywords = [ "html parser", "html toolkit", "python c extension", "simd", "swar", "zero-copy", "tokenizer", "idna", "punycode", "pgo", "lto", "free-threading", "benchmarking", "turbohtml", "lxml alternative", "beautifulsoup alternative"]
 image = "splash.webp"
 images = [ "splash.webp"]
@@ -11,134 +11,127 @@ slug = "blazing-fast-html-parser"
 date = 2026-06-18T09:00:00Z
 +++
 
-{{< callout kind="note" title="TLDR: turbohtml does HTML escape, unescape, tokenize, query, serialize, and URL work in C, 3-22x faster than Python's standard library. The recurring trick is skipping work:" >}}
+Python's `html.escape` can scan one string five times. Moving those loops into C removes the interpreter from the hot
+path, yet that change alone does not explain a 22x result on prose. Most prose contains nothing to escape. turbohtml
+gets the rest of the speedup by proving that sixteen bytes need no work, then moving past them in one step.
 
-- **Scan in blocks, not characters.** [SWAR](#the-swar-trick-checking-eight-bytes-with-one-subtraction) clears eight
-  bytes with a subtraction, [SIMD](#sixteen-bytes-with-one-shuffle) sixteen with one shuffle; a clean block costs almost
-  nothing.
-- **Measure, then write.** [One pass sizes the output exactly](#two-passes-measure-then-write), so the second allocates
-  once and bulk-copies the clean stretches.
-- **Keep text at its native width and copy it rarely.** The tokenizer stamps its state machine
-  [once per width](#stamping-the-machine-once-per-width) and hands back
-  [zero-copy slices](#never-copy-text-you-dont-have-to) into the input.
-- **The same instincts across the toolkit.** Tag names [interned to integers](#interning-names-to-integers), an
-  [id index built once](#building-the-index-once-instead-of-every-time) that turns an O(N²) path walk linear, and
-  [wrapper objects recycled](#recycling-the-wrapper-objects) on a free list.
-- **When the work is a standard, not a scan.** Host encoding needs
-  [Punycode, normalization, and Hangul by arithmetic](#when-the-work-is-a-standard-not-a-scan), with the Unicode tables
-  generated at build time.
-- **Down to the build and the benchmark.** [LTO and PGO](#teaching-the-compiler-what-is-hot) squeeze the machine code;
-  the CI gate [counts instructions under Callgrind](#measuring-without-lying-to-yourself) so a regression cannot hide in
-  the noise.
-- **Free-threaded.** No shared mutable state, so it declares `Py_MOD_GIL_NOT_USED` and runs on the
-  [no-GIL build](https://peps.python.org/pep-0703/) without forcing the lock back on.
-- **Safe under hostile input.** It
-  [caps nesting, dedups attributes in linear time, and overflow-checks every buffer](#when-the-input-is-trying-to-hurt-you),
-  and the sanitizer is validated against DOMPurify's own XSS corpus.
+I began with a small accelerator for [`html.escape`](https://docs.python.org/3/library/html.html#html.escape) and
+[`html.unescape`](https://docs.python.org/3/library/html.html#html.unescape). The Python implementation of `escape` runs
+up to five `str.replace` passes. `unescape` runs a regular expression and calls back into Python for each match in the
+2,231-entry HTML5 entity table. `html.parser.HTMLParser` calls `unescape` for each text run it encounters, so both
+functions sit on hot paths.
 
-{{< /callout >}}
+I [opened an issue](https://github.com/python/cpython/issues/151024) and a
+[pull request](https://github.com/python/cpython/pull/151025) to put a C accelerator behind the Python functions while
+retaining the [PEP 399](https://peps.python.org/pep-0399/) fallback. CPython's core developers declined it. They did not
+want to maintain a C extension with hand-written SIMD in the standard library while `HTMLParser` was under revision and
+a future `xml.escape` might need the same accelerator. One maintainer
+[recommended PyPI](https://github.com/python/cpython/issues/151024#issuecomment-4640666387), where that maintenance
+tradeoff belonged to me.
 
-_turbohtml was built with Claude (Opus 4.8), not by hand, over a month and close to 300 iterations. I review the code
-and own its correctness; [more on how, and my thanks, at the end](#how-this-was-built)._
+I had planned to contribute the accelerator to CPython, so the rejection changed more than its package name. The core
+developers' reasoning still held: code in the standard library must build across its platform range and remain
+maintainable for decades. Hand-written vector paths create a permanent cost while `HTMLParser` and a possible shared
+`xml.escape` design remain unsettled. PyPI moved that cost to the project choosing the speedup.
 
-I set out this year to contribute to CPython itself, and this is where that went. It started as a proposal to the
-standard library. The standard library's [`html.escape`](https://docs.python.org/3/library/html.html#html.escape) and
-[`html.unescape`](https://docs.python.org/3/library/html.html#html.unescape) are written in pure Python: `escape` runs
-up to five `str.replace` passes, and `unescape` runs a regex with a per-match Python callback over the 2,231-entry HTML5
-entity table. Both sit on hot paths, since `html.parser.HTMLParser` calls `unescape` on every run of text it sees, so I
-[opened an issue](https://github.com/python/cpython/issues/151024) and a
-[pull request](https://github.com/python/cpython/pull/151025) to add a small C accelerator behind them, keeping the
-Python versions as the [PEP 399](https://peps.python.org/pep-0399/) fallback.
+I took the experiment to PyPI, outside the standard library's portability constraint. Three functions grew into
+[turbohtml](https://turbohtml.readthedocs.io/), a typed HTML toolkit over one C core. It matches `html.escape`,
+`html.unescape`, and `html.parser` byte for byte. The toolkit also builds trees, runs CSS and XPath queries, serializes
+output, and sanitizes input. Its remaining APIs minify HTML, CSS, or JavaScript; extract metadata; and parse URLs. I
+used one test for each addition: find work the toolkit can omit without changing its answer.
 
-The core developers turned it down, and their reasons were fair. A C extension is a maintenance burden, hand-written
-SIMD more so, and they were clear they did not want to carry vector code in the standard library; on top of that
-`HTMLParser` is still being rewritten, and there is talk of a unified `xml.escape` that might one day want to share an
-accelerator. One of the maintainers
-[suggested PyPI as the better home](https://github.com/python/cpython/issues/151024#issuecomment-4640666387) for this
-rather than the standard library. So that is where it went, as [turbohtml](https://turbohtml.readthedocs.io/).
+The scope widened because these functions multiply across applications. Web rendering escapes each fragment. Parsing
+unescapes each text run and tokenizes each document. Scrapers repeat those operations across page collections. Removing
+a constant amount of work from one call becomes consequential when a process makes millions of calls. C removes the
+interpreter dispatch per character; the larger gains require reducing the characters and allocations the native code
+touches.
 
-I had meant to land something in CPython this year, so that stung a little, but the reasoning was sound and the outcome
-was better than the one I set out for: the biggest dent I could make on the same problem was just outside CPython, not
-in it. The standard library is right to be wary of SIMD in code that has to build everywhere and last decades. Once the
-code lived on PyPI instead, that caution stopped applying, and it left a question worth answering: if nothing is
-off-limits, how fast can HTML-domain work get? So I set the scope to the whole HTML domain and kept pushing. turbohtml
-grew from three functions into a toolkit. It still escapes, unescapes, and tokenizes, matching `html.escape`,
-`html.unescape`, and `html.parser` byte for byte; on top of that it builds a tree, queries it with CSS and XPath,
-serializes, sanitizes, minifies HTML and CSS and JavaScript, extracts metadata, and parses URLs, all over one C core and
-behind a thin typed Python facade. Before the techniques, two things are worth setting down: the size of the gap that
-makes any of this worth closing, and the short list of principles that decide what turbohtml is and what it refuses to
-be.
-
-## Why bother
-
-Escaping runs on every fragment of text a web app renders. Unescaping runs on every chunk of text an HTML parser hands
-back. Tokenizing runs on every document you scrape. These are the kind of functions that get called millions of times,
-so a constant-factor speedup on each call adds up to real time saved.
-
-Here is the shape of the gap, measured with [pyperf](https://pyperf.readthedocs.io) on CPython 3.14 against the standard
-library:
+The first measurements established the size of the gap. These [pyperf](https://pyperf.readthedocs.io) results compare
+turbohtml with the Python 3.14 standard library:
 
 {{< bench-table you=2 nums="3" >}} operation | input | turbohtml | Python stdlib ; escape | prose, nothing to escape |
 0.12 ms | 2.66 ms (22x) ; escape | real HTML (4 MiB) | 1.35 ms | 4.88 ms (3.6x) ; unescape | entity-heavy text | 10.4 ms
 | 78.5 ms (7.6x) ; tokenize | typical markup | 30.3 µs | 449 µs (14.8x) ; tokenize | a 7.9 MB HTML spec source | 37.0 ms
 | 399 ms (10.8x) {{< /bench-table >}}
 
-Numbers vary with input and hardware; reproduce them with `tox -e bench` against the
+Input and hardware affect the numbers. You can reproduce them with `tox -e bench` against the
 [benchmark corpus](https://github.com/tox-dev/turbohtml/tree/main/tools) (Project Gutenberg's
 [_War and Peace_](https://www.gutenberg.org/ebooks/2600), the [WHATWG](https://html.spec.whatwg.org/) and
 [ECMAScript](https://tc39.es/ecma262/) specs) in the repo.
 
-The standard library is not slow because its authors were careless. It is slow because it is written in Python, and
-Python pays an interpreter cost on every character it touches. `html.unescape` calls a Python function for every entity
-it finds. `html.parser` runs a regular expression and then steps through matches in Python. Rewriting in C removes the
-interpreter from the inner loop, and that alone buys a few times speedup. The rest of the gap comes from being clever
-about what work to do at all, which is the interesting part.
+{{< callout kind="note" title="TLDR: turbohtml makes common HTML work 3-22x faster by skipping work." >}}
 
-A recurring theme runs through everything below: **the fastest work is the work you skip.** Most text needs no escaping.
-Most characters in a document are ordinary letters. If you can confirm "nothing interesting here" for a big block of
-text in one cheap step, you have already won. Every rule turbohtml follows is a version of that one idea, which is why
-the principles come next, before the techniques that put them to work.
+- [SWAR](#one-subtraction-checks-eight-bytes) tests eight bytes with a subtraction; [SIMD](#one-shuffle-checks-sixteen)
+  tests sixteen with a shuffle.
+- [One pass measures the output](#two-passes-beat-one), so the writing pass allocates once and copies clean spans in
+  bulk.
+- The tokenizer compiles [one state machine per string width](#one-machine-becomes-three) and returns
+  [slices into the input](#text-can-move-zero-times).
+- The toolkit [interns tag names](#a-tag-name-becomes-an-integer), [builds indexes once](#one-index-removes-an-n2-walk),
+  and [recycles node wrappers](#a-free-list-removes-repeated-allocations).
+- Host encoding needs [Punycode, Unicode normalization, and generated tables](#a-url-breaks-the-scanning-rule).
+- [LTO and PGO](#a-file-split-cost-nine-percent) shape the machine code;
+  [Callgrind counts instructions](#the-clock-is-too-noisy) in CI.
+- The extension declares `Py_MOD_GIL_NOT_USED` because it has [no shared mutable state](#the-gil-cannot-be-the-lock).
+- Hostile input meets
+  [depth caps, linear attribute deduplication, checked buffer growth, fuzzers, and DOMPurify's XSS corpus](#speed-meets-hostile-input).
 
-## Design principles
+{{< /callout >}}
 
-A handful of rules decide what turbohtml is, and they explain most of the choices in the rest of this piece.
+_Anthropic's Opus 4.8 produced most of turbohtml over one month and close to 300 iterations. I reviewed the code and own
+its correctness; [the development and verification process appears near the end](#the-code-needed-oracles)._
 
-- **Speed over ease of maintenance.** The hot path is C: the tokenizer, the WHATWG tree builder, the CSS and XPath
-  engines, escaping, and serialization all run over one
-  [bump-allocated arena](https://en.wikipedia.org/wiki/Region-based_memory_management) that holds no Python objects.
-  Python appears only at the typed edge, a thin facade over the nodes you actually touch.
-- **A modern, fully typed API.** Every concept carries one name and the whole surface is annotated. turbohtml is not a
-  drop-in for what it replaces; the `turbohtml.migration` modules and guides translate
-  [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/), [lxml](https://lxml.de/),
-  [html5lib](https://github.com/html5lib/html5lib-python), [markupsafe](https://pypi.org/project/MarkupSafe/), and
-  standard-library code rather than aliasing their APIs.
-- **Still maintainable.** The C is split by subsystem and written to read as its own documentation, and both the Python
-  and C coverage gates require 100% line and branch coverage, on gcc and llvm-cov alike, before a change lands.
-- **WHATWG conformance first.** The tokenizer and tree builder follow the
-  [WHATWG HTML standard](https://html.spec.whatwg.org/multipage/parsing.html) state by state, validated against the
-  html5lib-tests suite browsers use. It matches a competitor's behavior only where the spec leaves the answer open.
-- **Free-threading ready.** The extension holds no shared mutable state and declares free-threading support, and every
-  tree edit and string read runs under a per-tree [critical section](https://en.wikipedia.org/wiki/Critical_section)
-  that snapshots the arena before any Python callback, so a concurrent mutation can never tear a walk.
-- **Native and dependency-free.** The core is pure C, no libxml2 or lxml underneath, accelerated with SIMD, SWAR, and an
-  incremental codec. It reuses the standard library for solved problems like
-  [regex matching](https://docs.python.org/3/library/re.html) instead of reimplementing them.
-- **Benchmark-driven and competitor-informed.** Designs are measured with pyperf against the fastest implementations
-  across C, Rust, and Go, and adopt their proven techniques: the [lexbor](https://github.com/lexbor/lexbor) and
-  [html5ever](https://github.com/servo/html5ever) arena layout, html5ever's bulk text scan, the Rust
-  [linkify](https://github.com/robinst/linkify) scanner. A change that regresses the benchmarks does not ship.
+## The constraints behind the numbers
 
-I want to walk you through how. None of the techniques are mine; they come from CPython itself, from
-[simdjson](https://github.com/simdjson/simdjson), from [html5ever](https://github.com/servo/html5ever), and from a
-decades-old page of [bit tricks](https://graphics.stanford.edu/~seander/bithacks.html). Putting them together in one
-place taught me a lot, and I think the ideas are worth knowing even if you never touch HTML. If you have written C
-before and know roughly what a CPU does, you have enough background to follow along. The smallest of the functions shows
-the whole trick, so let me start there, with escape and the cheapest way I know to clear a block of text.
+The standard library accepts a maintenance burden for decades and must build across its full platform range. turbohtml
+accepts a different tradeoff. Speed can justify hand-written SIMD on PyPI because the project carries that cost outside
+CPython.
 
-## Scanning sixteen bytes at a time
+That choice does not make maintainability irrelevant. The C source is split by subsystem and written to expose its
+invariants. Coverage gates run the Python and C paths under gcc and llvm-cov. PyPI changes who accepts the maintenance
+cost; it does not excuse code that future changes cannot verify.
 
-Take `escape`. Its job is to replace five characters (`&`, `<`, `>`, `"`, `'`) with their entity forms and leave
-everything else alone. The naive version looks at one character, decides, and moves on:
+The hot path stays in C. The tokenizer and WHATWG tree builder share a
+[bump-allocated arena](https://en.wikipedia.org/wiki/Region-based_memory_management) without Python objects. CSS and
+XPath queries operate on the same storage, as do escaping and serialization. A thin, typed Python facade wraps the nodes
+a caller touches. The API gives each concept one name rather than cloning the APIs it replaces; `turbohtml.migration`
+modules and guides translate code from [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/),
+[lxml](https://lxml.de/), [html5lib](https://github.com/html5lib/html5lib-python),
+[markupsafe](https://pypi.org/project/MarkupSafe/), and the standard library.
+
+The typed facade also marks an API decision. Emulating every replaced library would carry their names and edge cases
+into the core. turbohtml defines one representation and keeps compatibility knowledge in migration modules. Python
+objects appear for nodes the caller requests, leaving tree construction and query traversal in the C arena.
+
+Conformance remains a requirement. The tokenizer and tree builder follow the
+[WHATWG HTML standard](https://html.spec.whatwg.org/multipage/parsing.html) state by state and run against the
+html5lib-tests suite that browsers use. turbohtml follows a competitor only where the specification leaves a choice.
+Both gcc and llvm-cov enforce 100% line and branch coverage for the C and Python code before a change lands.
+
+The extension holds no shared mutable state. A per-tree
+[critical section](https://en.wikipedia.org/wiki/Critical_section) protects each edit and read, and it snapshots the
+arena before a Python callback. The same structure supports free-threaded Python. The core depends on no native library
+such as libxml2 or lxml; it uses the standard library for solved work such as
+[regular-expression matching](https://docs.python.org/3/library/re.html).
+
+Dependency-free does not mean reimplementing every primitive. Native HTML-domain state belongs in the C core; a solved
+general-purpose operation can remain in Python's standard library. Avoiding libxml2 or lxml keeps ownership of the tree
+layout and free-threading model inside turbohtml, where the optimizations can rely on them.
+
+Measurements decide whether an optimization ships. pyperf compares turbohtml with native implementations in C and Rust,
+plus tools written in Go. The design borrows the [lexbor](https://github.com/lexbor/lexbor) and
+[html5ever](https://github.com/servo/html5ever) arena layout, html5ever's bulk text scan, and the Rust
+[linkify](https://github.com/robinst/linkify) scanner. Other techniques come from CPython,
+[simdjson](https://github.com/simdjson/simdjson), and Sean Anderson's collection of
+[bit tricks](https://graphics.stanford.edu/~seander/bithacks.html).
+
+The smallest function exposes the governing idea. `escape` must find five special characters. Its first design choice
+sets the number of bytes examined by one test.
+
+## Sixteen bytes should not require sixteen questions
+
+`escape` replaces five characters (`&`, `<`, `>`, `"`, `'`) with entity forms. A direct implementation asks one question
+per character:
 
 ```c
 for each character:
@@ -146,17 +139,20 @@ for each character:
     else, append the character
 ```
 
-That is a branch per character. For a paragraph of prose where nothing needs escaping, you pay that branch thousands of
-times to confirm there was nothing to do. We can do better by asking a different question: instead of "is *this* byte
-special?", ask "does this *block* of bytes contain anything special?" and answer it for many bytes at once.
+The loop pays one branch for each character, including the thousands that need no replacement. A wider question removes
+those decisions: does this block contain any of the five special bytes? A clean block can move as one unit.
 
-### The SWAR trick: checking eight bytes with one subtraction
+The prediction changes on ordinary prose. A character loop performs almost the same control work whether it finds five
+specials or none. A block test makes those cases diverge. Clean input clears eight or sixteen bytes with one
+classification; dirty input still yields the positions that need rewriting. The 22x row comes from making the common
+answer, "none here," cheap.
 
-The oldest version of this idea needs no special hardware, just a 64-bit integer. It is called
-[SWAR](https://en.wikipedia.org/wiki/SWAR), short for "SIMD within a register": you treat one wide integer as a row of
-small lanes and operate on all of them together with ordinary arithmetic.
+### One subtraction checks eight bytes
 
-The building block is a test for whether a word contains a zero byte. Here it is, lifted from
+[SWAR](https://en.wikipedia.org/wiki/SWAR), short for "SIMD within a register," needs a 64-bit integer rather than a
+vector instruction. It treats the integer as eight byte lanes and applies normal arithmetic to the group.
+
+The block test begins with Sean Anderson's test for a zero byte:
 [Sean Anderson's bit-twiddling collection](https://graphics.stanford.edu/~seander/bithacks.html):
 
 ```c
@@ -168,16 +164,12 @@ uint64_t has_zero(uint64_t word) {
 }
 ```
 
-The result is nonzero exactly when some byte of `word` is zero. The reasoning fits in three steps. Subtracting `ONES`
-takes one off each byte lane. A lane holding `0x00` borrows and wraps to `0xFF`, which sets its high bit. The `& ~word`
-term keeps a high bit only where the original byte had its high bit clear, which rules out lanes that were already big
-(a byte like `0x80` would also look "set" after the subtraction, and we do not want that false alarm). The final
-`& HIGHS` throws away everything except the per-lane high bits. What survives is a high bit in each lane that started at
-zero.
+The expression returns a nonzero value when a lane contains zero. Subtracting `ONES` takes one from each lane. A `0x00`
+lane borrows and wraps to `0xFF`, setting its high bit. `& ~word` retains that bit where the input had its high bit
+clear, which rejects a false match from a value such as `0x80`. `& HIGHS` discards the remaining bits.
 
-That finds zero bytes. We want to find a specific byte, say `&`. The fix is a single XOR. Pick the byte you are hunting,
-broadcast it into all eight lanes by multiplying with `ONES`, and XOR it against the word. Every lane that held your
-byte becomes `0x00`, and now `has_zero` lights it up. turbohtml writes it like this:
+An XOR turns that zero test into a search for any byte. Multiplying the target by `ONES` broadcasts it across the eight
+lanes. XOR makes each matching lane zero, and `has_zero` detects the matches:
 
 ```c
 static inline uint64_t swar_hasbyte(uint64_t word, uint8_t byte) {
@@ -186,29 +178,27 @@ static inline uint64_t swar_hasbyte(uint64_t word, uint8_t byte) {
 }
 ```
 
-Eight bytes, one comparison, no per-character branch. To check all five specials in a block, you OR five of these
-together. If the combined result is zero, the whole eight-byte block is clean and you can copy it straight through.
+OR five results to search for all five special bytes. A zero result clears the eight-byte block without a per-character
+branch.
 
-Here is the trick running for real. Type eight characters, pick the byte to hunt for, and watch the XOR turn matches
-into `0x00` and the has-zero mask light up those lanes (the mask below is computed with real 64-bit math, so it is the
-same arithmetic the C runs):
+The widget runs the same 64-bit arithmetic as the C code. Change the text or target and watch XOR turn each match into
+`0x00` before the zero-byte expression marks its lane:
 
 {{< swar-viz text="Tom & cats" target="&" >}}
 
-This SWAR test is the portable fallback. It is also what `glibc` uses inside
-[`strlen`](https://en.cppreference.com/w/c/string/byte/strlen) and `memchr` when no vector instructions are available.
-On a real CPU we can do better, because the hardware has instructions built for exactly this.
+The portable path uses this SWAR test. `glibc` applies the same idea inside
+[`strlen`](https://en.cppreference.com/w/c/string/byte/strlen) and `memchr` when vector instructions are unavailable.
+Vector registers double the block size.
 
-### Sixteen bytes with one shuffle
+### One shuffle checks sixteen
 
-Every modern CPU has vector registers: 128 bits wide, holding sixteen bytes, with instructions that compare all sixteen
-lanes in one step. This is [SIMD](https://en.wikipedia.org/wiki/Single_instruction,_multiple_data) proper, one
-instruction working on many lanes. On x86 the relevant instruction set is [SSE2](https://en.wikipedia.org/wiki/SSE2); on
-ARM (including Apple Silicon) it is
-[NEON](<https://en.wikipedia.org/wiki/ARM_architecture_family#Advanced_SIMD_(Neon)>). turbohtml uses whichever the build
-target has and falls back to SWAR otherwise.
+Current x86 and ARM CPUs provide 128-bit vector registers with sixteen byte lanes. Their
+[SIMD](https://en.wikipedia.org/wiki/Single_instruction,_multiple_data) instructions operate on those lanes as a group.
+turbohtml uses [SSE2](https://en.wikipedia.org/wiki/SSE2) on x86 and
+[NEON](<https://en.wikipedia.org/wiki/ARM_architecture_family#Advanced_SIMD_(Neon)>) on ARM, including Apple Silicon.
+Other targets use SWAR.
 
-The straightforward way on x86 is to compare the sixteen bytes against each special and OR the results:
+The x86 path compares all sixteen bytes with each target and ORs the results:
 
 ```c
 __m128i bytes = _mm_loadu_si128((const __m128i *)block);
@@ -218,22 +208,22 @@ hits = _mm_or_si128(hits, _mm_cmpeq_epi8(bytes, _mm_set1_epi8('>')));
 // ... '"' and '\'' when quoting
 ```
 
-Each [`_mm_cmpeq_epi8`](https://www.felixcloutier.com/x86/pcmpeqb:pcmpeqw:pcmpeqd) sets a lane to `0xFF` on a match and
-`0x00` otherwise. After the ORs, `hits` has `0xFF` wherever any special sits.
+Each [`_mm_cmpeq_epi8`](https://www.felixcloutier.com/x86/pcmpeqb:pcmpeqw:pcmpeqd) writes `0xFF` to a matching lane and
+`0x00` to the rest. The OR leaves `0xFF` wherever the block contains a special byte. The `_mm_*` functions are SSE2 or
+SSSE3 _intrinsics_; the compiler maps each one to a CPU instruction. The
+[Intel Intrinsics Guide](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html) documents them. ARM
+provides the corresponding `v*` functions in its
+[NEON intrinsics reference](https://arm-software.github.io/acle/neon_intrinsics/advsimd.html).
 
-These `_mm_*` names are not magic incantations. Each is an SSE2 or SSSE3 _intrinsic_, a thin wrapper the compiler turns
-into a single CPU instruction, and you can look any of them up in the
-[Intel Intrinsics Guide](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html). The NEON `v*` names
-play the same role on ARM and live in
-[Arm's NEON intrinsics reference](https://arm-software.github.io/acle/neon_intrinsics/advsimd.html).
+An intrinsic names a CPU operation while the compiler assigns registers and schedules instructions. It avoids an
+assembly implementation for each compiler and calling convention. The source still states the lane-level algorithm, and
+the generated code retains one comparison across sixteen bytes.
 
-On ARM, turbohtml uses a sharper trick borrowed from [pulldown-cmark](https://github.com/pulldown-cmark/pulldown-cmark)
-and the [simdjson](https://arxiv.org/abs/1902.08318) line of work. Look at the five specials in hex: `"` is `0x22`, `&`
-is `0x26`, `'` is `0x27`, `<` is `0x3C`, `>` is `0x3E`. Their low four bits (the low nibble) are all different. So you
-can build a sixteen-entry table indexed by low nibble, put each special's byte value in its slot, and zero everywhere
-else. One NEON shuffle instruction ([`vqtbl1q_u8`](https://arm-software.github.io/acle/neon_intrinsics/advsimd.html))
-looks up all sixteen lanes against that table at once. Compare the lookup result against the original bytes, and a lane
-matches only when the byte is that special:
+The ARM path borrows a table-shuffle method from [pulldown-cmark](https://github.com/pulldown-cmark/pulldown-cmark) and
+[simdjson](https://arxiv.org/abs/1902.08318). The five bytes have distinct low nibbles: `"` is `0x22`, `&` is `0x26`,
+`'` is `0x27`, `<` is `0x3C`, and `>` is `0x3E`. A sixteen-entry table places each special byte at the index named by
+its low nibble. [`vqtbl1q_u8`](https://arm-software.github.io/acle/neon_intrinsics/advsimd.html) performs sixteen table
+lookups in one shuffle. Comparing the lookup results with the input identifies the special bytes:
 
 ```c
 static const uint8_t NIBBLE_SPECIALS[16] =
@@ -241,29 +231,29 @@ static const uint8_t NIBBLE_SPECIALS[16] =
 //   ^idx0 holds 0x7F so a byte like 0x10 (low nibble 0) never false-matches
 ```
 
-A whole block classified with one table lookup and one compare. The comment in the source calls it "the
-[PSHUFB](https://www.felixcloutier.com/x86/pshufb) trick," after the x86 instruction that started it.
-[Geoff Langdale](https://branchfree.org/) and [Daniel Lemire](https://lemire.me/blog/) have written it up in depth if
-you want to go deeper; their UTF-8 validator classifies bytes
-[in less than one instruction each](https://arxiv.org/abs/2010.03090) using the same nibble-table idea.
+One table lookup and one comparison classify the block. The source calls this the
+[PSHUFB](https://www.felixcloutier.com/x86/pshufb) trick after the x86 instruction that introduced it.
+[Geoff Langdale](https://branchfree.org/) and [Daniel Lemire](https://lemire.me/blog/) use the same nibble table to
+classify UTF-8 [in less than one instruction per byte](https://arxiv.org/abs/2010.03090).
 
-### From "something is here" to "here is where"
+### The mask points to each match
 
-Knowing a block is dirty is only half the job; the writing pass needs to know *which* lanes. The vector compare gives a
-sixteen-lane result, but we want it as a plain integer bitmask we can pick bits out of. On x86 that is one instruction,
-[`_mm_movemask_epi8`](https://www.felixcloutier.com/x86/pmovmskb), which takes the high bit of each of the sixteen lanes
-and packs them into a sixteen-bit number.
+The writing pass needs the position of each match. The vector comparison produces sixteen lanes, so x86 packs their high
+bits into one integer with [`_mm_movemask_epi8`](https://www.felixcloutier.com/x86/pmovmskb).
 
-ARM has no such instruction, which tripped me up the first time. The workaround comes from
+ARM lacks a matching instruction. The workaround comes from
 [Danila Kutenin](https://developer.arm.com/community/arm-community-blogs/b/servers-and-cloud-computing-blog/posts/porting-x86-vector-bitmask-optimizations-to-arm-neon):
-treat the comparison result as eight 16-bit lanes, shift each right by four and narrow it to a byte, and you get a
-64-bit value where each input byte contributed one nibble. A matched byte becomes `0xF`, an unmatched one becomes `0`.
-It costs two instructions instead of one, and it is good enough.
+treat the result as eight 16-bit lanes, shift each lane right by four, and narrow the lanes to bytes. The resulting
+64-bit integer holds one nibble per input byte. Matches become `0xF`; other lanes become zero. ARM spends two
+instructions where x86 spends one.
 
-Once the mask is an integer, two more bit tricks walk it. `__builtin_ctzll(mask)`
-[counts the trailing zeros](https://en.wikipedia.org/wiki/Find_first_set), which is the index of the lowest set bit, so
-it points at the first match. `mask & (mask - 1)` clears that lowest bit. Loop on those two and you visit every special
-in the block, in order, touching nothing in between:
+This difference prevents a direct port of the x86 loop. Retesting each lane on ARM would discard the benefit of vector
+classification. Packing one nibble per input byte preserves enough position information for trailing-zero count to find
+matches, even though ARM cannot produce the x86 one-bit mask.
+
+Two bit operations walk the integer mask. `__builtin_ctzll(mask)`
+[counts trailing zeros](https://en.wikipedia.org/wiki/Find_first_set), which locates the lowest set bit.
+`mask & (mask - 1)` removes that bit. Repeating those operations visits the special bytes in order and skips the gaps:
 
 ```c
 do {
@@ -275,34 +265,34 @@ do {
 } while (mask != 0);
 ```
 
-The clean stretch between two specials moves with one [`memcpy`](https://en.cppreference.com/w/c/string/byte/memcpy).
-Only the specials themselves get rewritten. A block with no specials skips the loop and copies all sixteen bytes at
-once.
+One [`memcpy`](https://en.cppreference.com/w/c/string/byte/memcpy) moves each clean gap. The loop rewrites the special
+bytes. A clean block bypasses the loop and copies all sixteen bytes.
 
-Try it on your own text below. The bytes group into blocks; each block reports whether it is clean (one `memcpy`) or
-dirty (copy the gaps, rewrite the specials), and the running total is the exact output size the counting pass computes.
-Flip the block size between the 8-byte SWAR word and the 16-byte SIMD register to see how much each step clears:
+The widget groups input into SWAR or SIMD blocks and shows the resulting mask. It also tracks the output size that the
+counting pass will need:
 
 {{< simd-scan text=`Tom & Jerry <3 "html" don't` >}}
 
-## Two passes: measure, then write
+## Two passes beat one
 
-There is a structural decision underneath all of this. To build the output string, turbohtml runs the input twice.
+A one-pass writer appears to do half the scanning. It pays elsewhere. A buffer that grows during the write must check
+its capacity for each append and copy prior output whenever it doubles.
 
-The first pass counts. It scans the input with the same block trick and adds up how much each special grows the output
-(`&amp;` adds four characters over `&`, `&lt;` adds three, and so on), without writing anything. At the end it knows the
-exact final length. Then it allocates the output string once, at exactly the right size, and the second pass fills it.
+The relevant comparison is total memory work rather than pass count. Two linear reads can cost less than one read mixed
+with capacity branches and reallocations. It also copies output already written. The measurement pass touches input
+through the block classifier and writes a counter. It purchases an exact allocation for the pass that writes data.
 
-Two scans of the input sounds wasteful next to one. It usually is not. The alternative, writing into a buffer that grows
-as you go, copies the data you already wrote every time the buffer doubles, and the growth path adds a bounds check to
-every append. Counting first means the second pass writes each output byte exactly once into a buffer it never has to
-resize. The counting pass is cheap because it is the block scan we already built, with no writes to slow it down.
+turbohtml scans twice. The first pass adds the growth from each replacement (`&amp;` adds four characters over `&`,
+`&lt;` adds three) and computes the final length. The second pass allocates that length once and writes each output byte
+once. The block scan keeps the measurement pass cheap because it performs no writes.
 
-The counting is branchless too, which matters because a branch the predictor cannot guess costs more than the work it
-guards. Rather than test each byte and add to a running total, turbohtml turns the comparison straight into a number.
-Each special's compare gives a lane of `0xFF` on a match; AND that with the special's growth amount and the matched
-lanes hold the growth while the rest hold zero. Summing all sixteen lanes with one instruction gives the block's total
-growth, no per-byte branch in sight:
+The counting path converts comparisons into numbers rather than branching on each byte. A comparison produces `0xFF` in
+each matching lane. ANDing that result with the replacement growth leaves the growth in matching lanes and zero in the
+rest. One instruction sums the sixteen lanes:
+
+Branch prediction explains this conversion. A branch attached to rare specials can be cheap on clean text and expensive
+where entity density changes. The vector comparison already contains the answer as lane bits. Turning those bits into
+growth values gives the total without asking the predictor to guess sixteen outcomes.
 
 ```c
 // each match becomes 0xFF; AND with the growth turns it into 4, 3, or 5
@@ -312,13 +302,11 @@ extras = _mm_add_epi8(extras, _mm_and_si128(_mm_cmpeq_epi8(bytes, _mm_set1_epi8(
 __m128i sums = _mm_sad_epu8(extras, _mm_setzero_si128());  // sum all 16 lanes at once
 ```
 
-[`_mm_sad_epu8`](https://www.felixcloutier.com/x86/psadbw) exists to add up sixteen bytes in one shot. On ARM the nibble
-table from earlier does double duty: a second table maps each special's low nibble to its growth, and one horizontal add
-([`vaddvq_u8`](https://arm-software.github.io/acle/neon_intrinsics/advsimd.html)) totals the lanes. Either way, sizing a
-clean block costs a few instructions and no branches.
+[`_mm_sad_epu8`](https://www.felixcloutier.com/x86/psadbw) adds the sixteen x86 lanes. On ARM, a second nibble table
+maps each special byte to its growth and [`vaddvq_u8`](https://arm-software.github.io/acle/neon_intrinsics/advsimd.html)
+performs the horizontal sum. A clean block costs a few instructions without a branch.
 
-The measure pass also hands us a shortcut. If the count comes back zero, nothing needs escaping, and the input is
-already its own answer:
+The measurement also exposes the best case. A zero count means the input needs no replacement:
 
 ```c
 if (extra == 0) {
@@ -326,28 +314,25 @@ if (extra == 0) {
 }
 ```
 
-That single check is why the "prose, nothing to escape" row up top shows a 22x speedup. The standard library walks the
-whole string building a new one; turbohtml scans it sixteen bytes at a step, sees nothing, and returns the string it was
-given.
+That branch produces the 22x result for prose. The standard library constructs a new string while turbohtml clears
+sixteen bytes per step and returns the input object.
 
-The sizing pass leans on a CPython detail worth knowing. A Python `str` is allocated for a known length and a known
-maximum character value, through
+The sizing pass uses CPython's flexible string representation. CPython allocates a `str` for a known length and maximum
+character value through
 [`PyUnicode_New(length, maxchar)`](https://docs.python.org/3/c-api/unicode.html#c.PyUnicode_New), part of CPython's
 public Unicode C API alongside the
 [`PyUnicode_1BYTE_KIND`](https://docs.python.org/3/c-api/unicode.html#c.PyUnicode_1BYTE_KIND),
 [`PyUnicode_DATA`](https://docs.python.org/3/c-api/unicode.html#c.PyUnicode_DATA), and
-[`PyUnicode_FindChar`](https://docs.python.org/3/c-api/unicode.html#c.PyUnicode_FindChar) calls in the later snippets.
-Because we computed both numbers in pass one, we get a correctly sized buffer in one allocation and write straight into
-it, no reallocation, no waste. I will come back to that `maxchar` in a moment, because it ties into how strings are
-stored.
+[`PyUnicode_FindChar`](https://docs.python.org/3/c-api/unicode.html#c.PyUnicode_FindChar), which later snippets use. The
+first pass supplies both allocation inputs, so the second pass writes into an exact buffer without reallocating. The
+`maxchar` value also determines the width of each stored character.
 
-## Going backwards: unescape
+## The same scan runs backward
 
-`unescape` is the mirror image, and it reuses the same instinct: hop to the next interesting spot, bulk-copy everything
-in between. The interesting character here is `&`, the start of every entity.
+`unescape` reverses the transformation. It searches for `&`, copies the span before it, and resolves the entity. The
+distance to the next `&` determines the best search method.
 
-To find the next `&`, turbohtml first probes the next sixteen bytes inline, and only if that comes up empty does it call
-`memchr` over the rest:
+turbohtml probes the next sixteen bytes inline. If that probe finds no ampersand, `memchr` searches the remaining span:
 
 ```c
 // in reference-dense text the next '&' is a handful of characters away,
@@ -359,14 +344,16 @@ for (Py_ssize_t pos = from; pos < probe_end; pos++) {
 const uint8_t *hit = memchr(input + probe_end, '&', length - probe_end);
 ```
 
-[`memchr`](https://en.cppreference.com/w/c/string/byte/memchr) is itself vectorized in any decent C library, so on a
-long clean span it races ahead at memory speed. The text between two entities copies in one `memcpy`. Every character
-that is not part of an entity is touched once, by a bulk copy, never inspected on its own.
+C libraries vectorize [`memchr`](https://en.cppreference.com/w/c/string/byte/memchr), so it moves across a long clean
+span at memory speed. One `memcpy` copies the text between two entities; no per-character loop inspects that text.
 
-When it lands on an `&`, it resolves the entity. Numeric ones like `&#127881;` parse the digits. Named ones like `&amp;`
-need a lookup, and HTML has about 2,000 of them. A [binary search](https://en.wikipedia.org/wiki/Binary_search) over a
-sorted table finds any of them in around eleven comparisons, but most real text uses only a handful, so turbohtml checks
-those first with one comparison each before falling back to the search:
+Numeric entities such as `&#127881;` require digit parsing. A named entity such as `&amp;` requires a lookup among about
+2,000 names. A [binary search](https://en.wikipedia.org/wiki/Binary_search) over the sorted table takes about eleven
+comparisons. Real documents concentrate on a few names, so turbohtml tests those names before starting the search:
+
+The inline probe and the entity fast paths make the same distance bet at two levels. Dense references put the next `&`
+close enough that a `memchr` call costs more than a short loop. Common names such as `amp`, `lt`, and `quot` make a full
+binary search unnecessary. Long clean spans and uncommon names fall through to the general algorithms.
 
 ```c
 switch (name[0]) {
@@ -381,26 +368,22 @@ case 'g':
 // fall through to the ~11-step binary search
 ```
 
-The longest-prefix rule is the subtle part. A reference does not need its trailing semicolon, so the matcher tries the
-whole name, then keeps dropping the last character until something in the table matches. That is why `&notit;` becomes
-`¬it;`: `not` is the longest prefix that is a real entity, and `it;` is left as plain text. Try a few below and watch
-the binary search narrow and the prefix shrink (the table here is a small sorted sample of the real ~2,000 entries):
+HTML's longest-prefix rule allows a reference without a trailing semicolon. The matcher tests the full candidate, then
+removes characters from the end until a table entry matches. `&notit;` becomes `¬it;` because `not` is the longest
+entity prefix and `it;` remains text. The widget shows that process against a small sorted sample of about 2,000
+entries:
 
 {{< entity-resolver text="&notit;" >}}
 
-There is one more wrinkle worth showing. Unescaping can introduce a character wider than the input had (an emoji hiding
-in `&#127881;` inside otherwise-ASCII text). To handle this without paying for wide storage when it never happens, the
-output buffer starts narrow, one byte per character, so clean spans are a plain `memcpy`. The first time an entity
-produces a character above `0xFF`, turbohtml widens what it has written so far in place, walking back to front so the
-copy never overwrites a byte it still needs to read. After that it stays wide. Text that never needs it never pays for
-it.
+An entity can produce a character wider than the input, as `&#127881;` does inside ASCII text. The output begins with
+one byte per character so clean spans use `memcpy`. When an entity yields a value above `0xFF`, turbohtml widens the
+written prefix in place. It walks backward to avoid overwriting unread bytes, then retains the wider storage. Inputs
+that stay narrow avoid that conversion.
 
-Picking the final width needs one more number, the largest character in the result, which tells `PyUnicode_New` how wide
-to make the output string. Tracking the exact maximum would mean a comparison on every character. turbohtml cheats with
-a bitwise OR instead. It keeps a `seen` value and ORs every emitted character into it. CPython only ever sorts a string
-into one of three bins, at `0x7F`, `0xFF`, and `0xFFFF`, and an OR can push `seen` past one of those boundaries only if
-some character crossed it. So the OR'd value lands in the same bin as the true maximum, for the price of one branchless
-operation:
+`PyUnicode_New` needs the largest output character to choose the storage width. Tracking the exact maximum would add a
+comparison for each character. turbohtml ORs emitted characters into `seen` instead. CPython places strings in width
+bins at `0x7F`, `0xFF`, and `0xFFFF`. A bitwise OR cannot cross one of those boundaries unless an emitted character
+crosses it, so `seen` selects the same bin as the true maximum with one branchless operation:
 
 ```c
 seen |= character;   // accumulate; can't cross a width bin unless a character did
@@ -408,26 +391,21 @@ seen |= character;   // accumulate; can't cross a width bin unless a character d
 PyUnicode_New(count, seen > 0xFFFF ? 0x10FFFF : seen);
 ```
 
-That idea, storing text at the narrowest width it needs, is the whole story of the tokenizer, so let me turn to that.
+The tokenizer applies the same narrow-storage decision to a larger problem.
 
-## The tokenizer: a spec-exact state machine
+## The specification appears to demand one step per character
 
-Escaping and unescaping are small. The tokenizer is where the interesting structure lives.
+Tokenization converts HTML into start tags, text runs, end tags, and comments. The
+[WHATWG HTML specification](https://html.spec.whatwg.org/multipage/parsing.html#tokenization) defines about eighty
+states. The machine begins in `data`; `<` moves it to `tag open`, and a letter moves it to `tag name`.
 
-Tokenizing means turning a string of HTML into a stream of pieces: a start tag here, a run of text, an end tag, a
-comment. The [WHATWG HTML specification](https://html.spec.whatwg.org/multipage/parsing.html#tokenization) defines this
-as a state machine with about eighty states, written out character by character. You start in the "data" state. A `<`
-moves you to "tag open." A letter after that moves you to "tag name." And so on, with a named state for every situation
-the messy reality of HTML can produce.
+Python's `html.parser` approximates this process with regular expressions. It handles tidy input but differs from
+browsers on malformed markup. Regular expressions also lack the parser context needed for cases such as `<script>`,
+where `<b>` is text rather than a tag. turbohtml implements the specification's state machine and checks it against
+[html5lib-tests](https://github.com/html5lib/html5lib-tests), the conformance suite used by browser engines. The speed
+work must preserve those answers.
 
-Python's `html.parser` does not implement this machine; it approximates it with regular expressions. That is faster to
-write and good enough for tidy input, but it diverges from real browsers on malformed markup, and a regex cannot express
-one thing the spec needs: the tokenizer's state sometimes depends on the tags it has already seen (inside `<script>`, a
-`<b>` is text, not a tag). turbohtml implements the actual state machine, and it is checked against
-[html5lib-tests](https://github.com/html5lib/html5lib-tests), the same conformance suite browsers use. Being correct and
-being fast pull in different directions here, and most of the cleverness is in not letting correctness cost speed.
-
-The dispatch loop is a plain `switch` over the current state, wrapped in a `for(;;)`:
+The dispatch loop uses a `switch` inside `for (;;)`:
 
 ```c
 for (;;) {
@@ -441,35 +419,29 @@ for (;;) {
 }
 ```
 
-The state enum is dense, so the compiler turns this into a [jump table](https://en.wikipedia.org/wiki/Branch_table): one
-indirect jump per step. A transition is a store to `self->state` and a `continue`. Suspending the machine when the input
-runs out is just leaving `self->state` alone and returning, which is what makes it resumable for streaming input. So far
-this is a textbook tokenizer. Three things make it quick.
+The dense state enum lets the compiler build a [jump table](https://en.wikipedia.org/wiki/Branch_table), producing one
+indirect jump per state transition. A transition stores the next state and continues. When a streaming input ends, the
+function returns without changing `self->state`; the next call resumes at the same point.
 
-The easiest way to feel how the machine works is to step it. Type some markup and walk it one character at a time: watch
-the current state light up, the cursor advance, and tokens pop out as tags and runs of text close. This widget models
-the tag and attribute states faithfully (it simplifies character references, which the next section covers):
+The widget exposes the state transitions. Step through the input and watch the cursor, active state, and emitted tokens.
+It models tag and attribute states and simplifies character references:
 
 {{< tok-stepper text=`<p class="x">Hi & bye</p>` >}}
 
-### Stamping the machine once per width
+### One machine becomes three
 
-Here is that `str` storage detail I promised. Since [PEP 393](https://peps.python.org/pep-0393/), CPython stores every
-string at the narrowest of three fixed widths, chosen by its largest character: one byte per character for Latin-1
-(anything up to `U+00FF`), two bytes for the rest of the basic multilingual plane (up to `U+FFFF`), four bytes once an
-astral character like an emoji appears (up to `U+10FFFF`). Type into the box below to watch a string land in one of the
-three bins; add an accent or an emoji and see the whole string jump to a wider storage:
+[PEP 393](https://peps.python.org/pep-0393/) stores a CPython string at the narrowest fixed width that holds its largest
+character. Latin-1 values through `U+00FF` use one byte, the rest of the basic multilingual plane through `U+FFFF` use
+two, and astral values through `U+10FFFF` use four. The widget shows the width change when an accent or emoji raises the
+largest value:
 
 {{< width-picker text="café 🎉" >}}
 
-A pure-ASCII document, which is most HTML, is one byte per character. Reading a character means indexing an array, and
-the stride depends on the width. The naive way to handle all three is to branch on the width on every read. That branch,
-on every character, is exactly the kind of cost we keep trying to avoid.
+ASCII documents use one byte per character. The string width controls the stride for each indexed read. Branching on
+that width inside the tokenizer would add a decision to each state-machine step.
 
-CPython solves this for its own string functions with a trick its source calls `stringlib`: write the algorithm once
-against an abstract character type, then `#include` the file three times, redefining the type each time, to stamp out
-three specialized copies. turbohtml does the same with its whole state machine. The core lives in a file
-`tokenizer_sm_run.inc`, and it gets included three times:
+CPython's `stringlib` avoids that branch by writing an algorithm against an abstract character type and including the
+source three times with different type definitions. turbohtml stamps `tokenizer_sm_run.inc` in the same way:
 
 ```c
 #define TH_CHAR  Py_UCS1                 // 1-byte build
@@ -479,9 +451,8 @@ three specialized copies. turbohtml does the same with its whole state machine. 
 // ... again with Py_UCS2, again with Py_UCS4
 ```
 
-Because `TH_CHAR` is a concrete type inside each copy, `TH_READ` compiles to a single indexed load with a fixed stride.
-There is no width branch in the inner loop at all. The one runtime decision happens once, at the top, when the code
-picks which of the three compiled machines to run:
+Each copy gives `TH_CHAR` a concrete type, so `TH_READ` compiles to one indexed load with a fixed stride. The caller
+selects a machine once before entering the loop:
 
 ```c
 if (kind == PyUnicode_1BYTE_KIND) return run_ucs1(self);
@@ -489,20 +460,17 @@ if (kind == PyUnicode_2BYTE_KIND) return run_ucs2(self);
 return run_ucs4(self);
 ```
 
-You write the machine once and the compiler hands you three fast ones. For the one-byte case that dominates real
-traffic, every read is plain byte arithmetic that the compiler is free to vectorize.
+One source file now produces three machines. The one-byte version that handles ASCII performs byte arithmetic and gives
+the compiler room to vectorize.
 
-### Scanning text runs, not characters
+### Plain text bypasses the state machine
 
-A textbook state machine takes one step per character, even through a long paragraph of plain text where every character
-does the same dull thing: append me to the current text run. That is a `switch`, a few comparisons, and some bookkeeping
-per character, to copy bytes that needed no decisions.
+A literal implementation dispatches once per character, even through paragraphs where each byte extends the same text
+token. That work adds a `switch`, comparisons, and bookkeeping to bytes that require no decision.
 
-[html5ever](https://github.com/servo/html5ever), the HTML parser in Servo, skips that. In the data state, when the
-current character is ordinary text, it scans ahead to the next character that matters and moves the whole run in one
-shot. turbohtml copies the approach. Only a few characters end a text run: `&` starts an entity, `<` starts a tag, and
-`\n` needs line-counting. Everything else is just text. So the data state asks "where is the next of those?" and hands
-over the entire span up to it:
+[html5ever](https://github.com/servo/html5ever), Servo's HTML parser, scans from ordinary text to the next character
+that can change state. turbohtml adopts the same approach. `&` starts an entity, `<` starts a tag, and `\n` updates line
+tracking. The data state moves the span before the next stop as one run:
 
 ```c
 if (ch != '&' && ch != '<' && ch != '\n') {
@@ -512,8 +480,8 @@ if (ch != '&' && ch != '<' && ch != '\n') {
 }
 ```
 
-And `scan_stops` is our friend from the escaping code: the same SIMD-or-SWAR block scan, now hunting for the first of
-several stop characters instead of HTML specials. Sixteen bytes a step on ARM and x86, eight in the portable fallback.
+`scan_stops` reuses the escape scanner with a different target set. ARM and x86 search sixteen bytes per step; the
+portable path searches eight.
 
 ```mermaid
 flowchart LR
@@ -534,14 +502,13 @@ flowchart LR
     class RUN good
 ```
 
-A document that is mostly text, which describes most documents, gets processed at close to `memcpy` speed, with the
-state machine waking up only at the tags.
+Text-heavy documents approach `memcpy` speed because the state machine wakes at a tag, entity, or newline rather than at
+each character.
 
-### Never copy text you don't have to
+### Text can move zero times
 
-There is one more level. When the machine moves a run of text, it does not copy the bytes. A run of plain text that came
-straight from the input and was not modified is recorded as a pair of numbers, a start index and a length, pointing back
-into the original string. turbohtml calls this a slice:
+Scanning a text run does not require copying it. turbohtml records an unchanged run as a start index and length into the
+input string:
 
 ```c
 // if this character is the next input byte, and contiguous
@@ -553,16 +520,12 @@ if (ch == input[self->pos] &&
 }
 ```
 
-The bytes get copied only when something forces it: an entity that decodes to a different character, a `\r\n` that needs
-normalizing, a stray `<` that turned out to be text. Plain runs never materialize; the text token carries the indices,
-and the actual `str` gets built lazily, with a single substring, only if the caller asks for the text.
+An entity, normalized `\r\n`, or stray `<` can force a copy. Unchanged text remains a slice until the caller requests
+`.data`, when one substring constructs the Python `str`.
 
-It goes one step further for whole-document tokenizing. The spec asks a tokenizer to normalize newlines first, turning
-every `\r\n` and lone `\r` into a single `\n`, and that rewrite is the one thing that forces the input to be copied.
-Streaming `feed` does it in bulk anyway: it uses `memchr` to jump to the next `\r` and appends the whole run before it
-in one move, so only the carriage returns themselves are handled character by character. But a document with no `\r` at
-all needs no rewriting, so for the common one-shot case turbohtml checks for that and borrows the original string's
-storage directly instead of copying the document in:
+The specification also requires newline normalization, converting `\r\n` and lone `\r` to `\n`. Streaming `feed` uses
+`memchr` to find each carriage return and appends the preceding span as one unit. A one-shot document without `\r` needs
+no normalization, so turbohtml borrows its storage:
 
 ```c
 if (PyUnicode_FindChar(arg, '\r', 0, length, 1) == -1) {
@@ -570,22 +533,23 @@ if (PyUnicode_FindChar(arg, '\r', 0, length, 1) == -1) {
 }
 ```
 
-Put these together and trace a clean ASCII paragraph through the system. The input is borrowed, not copied. The text run
-is a slice, a start and a length, not copied. The token carries those indices. Nothing in that paragraph gets copied
-anywhere until you ask for its `.data`, and even then it is one substring. The data moves zero times on the way through.
+A clean ASCII paragraph now follows a zero-copy path. turbohtml borrows the input, records the text run as two integers,
+and carries those integers in the token. Requesting `.data` causes one substring allocation; ignoring `.data` moves no
+text.
 
-### A token builds only what you ask for
+### Python values wait for the caller
 
-The state machine emits a plain C record. The `Token` you get back is a thin wrapper that copies that record, since the
-machine reuses its record storage for the next token, and then does as little as it can. None of the Python-visible
-values exist yet. Ask for `token.type` and you get back a cached enum member with one reference bump; the five
-`TokenType` members are built once when the module loads and kept in module state, so reading a type never does a
-lookup. Ask for `token.tag` or `token.attrs` and only then does turbohtml build the string or the list. A consumer that
-scans a document to count its start tags never builds a single attribute string. The same laziness keeps attribute
-lookup cheap: `token.attr("href")` walks the record's C array and compares bytes in place, returning the one value you
-asked for without building a dict.
+The state machine emits a C record and reuses its record storage for the next token. A thin `Token` wrapper copies the
+record without constructing its Python-visible fields. `token.type` returns one of five cached `TokenType` members with
+a reference increment. `token.tag` and `token.attrs` build a string or list when requested. A caller that counts start
+tags constructs no attribute strings. `token.attr("href")` scans the C attribute array in place and returns the named
+value without creating a dictionary.
 
-When the token does copy the record, it picks the cheapest of three strategies for where to put the bytes:
+The enum values enter module state during initialization, so reading `token.type` needs one reference increment rather
+than a lookup or allocation. Tag and attribute data stay in the C record until their properties run. A consumer that
+inspects token types while ignoring payloads avoids Python work for fields the API exposes but the caller does not read.
+
+When a record does own bytes, the wrapper selects among three storage paths:
 
 ```mermaid
 flowchart TD
@@ -605,27 +569,24 @@ flowchart TD
     class A proc
 ```
 
-The first branch is the zero-copy slice from above. The second handles a large block of text: rather than duplicate a
-long run, the token takes the machine's text buffer outright by swapping pointers, and the machine grows a fresh one for
-the next run. The third, the default for tags and short tokens, is the arena.
+An untouched input slice retains its indices. A large modified text run above 512 characters takes ownership of the
+machine's buffer by swapping pointers. Tags and short tokens use an arena.
 
-### One allocation per token, not a dozen
+### One arena replaces a dozen allocations
 
-Take that third branch, a tag with attributes. It has to hand the caller a tag name, and for each attribute a name and a
-value, plus the odd comment or doctype with a public and system identifier. These are variable-length pieces, so the
-obvious way to store them is one `malloc` each. A tag with five attributes works out to roughly a dozen small
-allocations, and a matching dozen `free` calls when the token is thrown away.
+A tag with five attributes can require about twelve variable-length pieces: the tag name, each attribute name and value,
+plus possible comment or doctype identifiers. Allocating each piece would require about twelve `malloc` calls and twelve
+matching `free` calls. Each allocation updates allocator metadata and takes a lock on a free-threaded build; the
+scattered blocks also hurt cache locality.
 
-That is wasteful for two reasons. The first is that `malloc` and `free` are not cheap when you call them this often:
-each one walks a free list, updates the allocator's bookkeeping, and on a free-threaded build takes a lock. Spending a
-dozen of them on a single token, millions of times, adds up. The second is locality. Twelve separate allocations land in
-twelve scattered spots on the heap, so reading the token back later chases pointers through cache-cold memory.
+The allocator cost continues after parsing. Releasing the token must find and free each piece, while an error during
+construction needs cleanup for each piece already allocated. Separate blocks also turn later reads into pointer chases
+across the heap. One arena combines the allocation and cleanup rules. Its contiguous layout also addresses locality
+before the copy begins.
 
-turbohtml uses an arena instead. The idea is to make one big allocation and carve all the pieces out of it by hand. It
-takes two quick passes over the token's parts. The first pass adds up how many bytes everything needs, rounding each
-piece up so the next one starts on an aligned boundary (wide UCS-2 or UCS-4 text has to sit at an even or four-aligned
-address). The second pass does a single `malloc` of that total and then walks a cursor through the block, copying each
-piece in and handing back a pointer to where it landed:
+turbohtml places the record and its variable data in one arena. A sizing pass totals the bytes and inserts alignment
+padding for UCS-2 or UCS-4 data. One `malloc` creates the block, and a cursor assigns each piece during the writing
+pass:
 
 ```c
 // pass 1: total the sizes, with alignment padding between pieces
@@ -643,7 +604,7 @@ text_ptr = cursor;  memcpy(cursor, text.data, text.len);  cursor += padded(text.
 // ... and so on for every attribute name and value
 ```
 
-The whole token, header and tag name and every attribute, is now one contiguous block of memory:
+The header, tag name, text, and attributes now occupy one contiguous block:
 
 ```mermaid
 flowchart LR
@@ -659,70 +620,51 @@ flowchart LR
     style A fill:none,stroke:#16a34a,stroke-width:2px,color:#16a34a
 ```
 
-This helps in three ways. A token costs one `malloc` and one `free` no matter how many attributes it carries, instead of
-one per field. The bytes sit next to each other, so reading the token touches one cache line region rather than a dozen
-scattered ones. And freeing is a single `free` of the base pointer, with no per-field cleanup to get wrong and no way to
-leak one piece while releasing the rest. It is the same instinct as the rest of the library, do the bookkeeping once up
-front so the common path stays cheap.
+Each token now needs one `malloc` and one `free`, independent of its attribute count. The adjacent data improves cache
+locality, and releasing the base pointer cannot leak an individual field.
 
-### Small things that add up
+The sizing pass includes alignment padding because UCS-2 and UCS-4 pointers require suitable addresses. The writing
+cursor assigns each field inside the proven total. A failure can occur before the arena exists; after allocation, the
+token owns one base pointer. Attribute count changes block size without changing the number of allocator calls.
 
-A few more touches keep the inner loop lean, none of them dramatic on their own:
+### The hot loop pays setup costs once
 
-- **Buffers are reused, not freed.** Between tokens, the growable buffers for tag names and text reset their length to
-  zero and keep their memory. After the first few tokens the machine stops allocating and just refills the same space.
-  When a buffer does grow, it doubles, so appends are amortized constant time.
-- **Tokens hold no Python references**, so they sit outside the
-  [garbage collector](https://github.com/python/cpython/blob/main/InternalDocs/garbage_collector.md). The most
-  frequently created object in the system never gets tracked or traversed.
-- **The line and column counters update without a branch.** A newline test becomes a `0` or `1` that is added to the
-  line count and used to reset the column, so the per-character bookkeeping carries no jump.
-- **Tag names are lowercased on the way in**, so every later comparison works on already-folded text. Deciding whether
-  `<script>` switches the tokenizer into raw-text mode is then a chain of
-  [`memcmp`](https://en.cppreference.com/w/c/string/byte/memcmp) calls against string literals, with the literal lengths
-  taken at compile time so there is no runtime `strlen`. Checking whether an end tag matches the open raw-text element
-  is a length comparison, a width comparison, and one `memcmp`, never a character loop.
-- **Error handling stays off the hot path.** A failed allocation sets one sticky `oom` flag that is checked once per
-  token rather than after every append, so the per-character code carries no error branch.
-- **Duplicate attributes are dropped lazily.** The spec keeps the first occurrence of a repeated attribute name; rather
-  than maintain a set while tokenizing, turbohtml resolves that only when you read `token.attrs`, scanning the few
-  attributes a real tag has.
-- **The pending-token queue is two slots.** The only time the machine emits two tokens at once is when a text run ends
-  and the tag that ended it follows, so a fixed two-entry ring is all it needs, with no dynamic queue to allocate.
+The tokenizer retains growable tag-name and text buffers between tokens. It resets their lengths and keeps the storage;
+when a buffer fills, doubling preserves amortized constant-time appends. Tokens hold no Python references, so CPython's
+[garbage collector](https://github.com/python/cpython/blob/main/InternalDocs/garbage_collector.md) does not track or
+traverse them.
 
-None of these would matter alone. Together they mean a steady stream of tokens runs with almost no allocation and no
-garbage-collector overhead.
+Line and column counters update without a branch. The newline comparison produces `0` or `1`, which increments the line
+and controls the column reset. The tokenizer lowercases tag names during input, so raw-text checks use
+[`memcmp`](https://en.cppreference.com/w/c/string/byte/memcmp) against literals whose lengths the compiler knows. An
+end-tag check compares length and width before one `memcmp`; it does not loop over characters.
 
-## What it all adds up to
+A failed allocation sets a sticky `oom` flag that the machine checks once per token. Duplicate attributes also wait
+until a caller reads `token.attrs`; the specification keeps the first occurrence, and typical tags contain few enough
+attributes for that scan. The pending-token queue uses two fixed slots because the machine emits at most a closing text
+run followed by the tag that ended it.
 
-Step back and the techniques rhyme. Escaping, unescaping, and tokenizing are different problems, but the fast versions
-all do the same four things:
+These choices remove allocation, garbage-collector work, and branches from the steady token stream.
 
-1. **Scan in blocks, not characters.** SWAR checks eight bytes with a subtraction; SIMD checks sixteen with a shuffle.
-   The common case, a clean block, costs almost nothing to clear.
-2. **Skip to the next interesting byte and bulk-copy the rest.** Whether the needle is a special character, an `&`, or a
-   tag opener, the long boring spans between them move at `memcpy` speed and never get inspected per character.
-3. **Keep text at its native width and copy it as few times as possible.** An ASCII document stays one byte per
-   character from input to output, and a clean run of text is often never copied at all.
-4. **Decide once, not per character.** Pick the storage width once, size the output once, choose the compiled machine
-   once, and the inner loop stays branch-light.
+## Three functions establish one rule
 
-For an ordinary ASCII web page, the path through turbohtml is: borrow the input, scan it sixteen bytes at a step, emit
-text tokens that are just offsets into the original, and build a `str` only when asked. The bytes barely move. That is
-where the speed comes from, and as far as I can tell none of it is magic, just a handful of old ideas stacked on top of
-each other.
+Escape, unescape, and tokenize combine four decisions. SWAR checks eight bytes per subtraction, while SIMD checks
+sixteen per shuffle. A scan jumps to the next special byte and sends the intervening span to `memcpy`. Text retains its
+native width and moves as few times as its output permits. Width selection, output sizing, and machine selection occur
+outside the character loop.
 
-## The rest of the library learned the same lessons
+An ASCII page can therefore borrow its input, scan sixteen bytes per step, represent text tokens as offsets, and create
+a `str` on request. Clean text reaches the caller with no intermediate copy.
 
-Everything above is the original three functions: escape, unescape, tokenize. turbohtml did not stay there. It grew a
-tree builder, a CSS and XPath query engine, a serializer, a sanitizer, an HTML and CSS and JavaScript minifier, metadata
-extraction, and a URL parser, all with the same C core underneath. The interesting part is that the four principles kept
-paying off, and the places they did not reach needed a different idea. Here are the ones worth knowing.
+## Three functions become a toolkit
 
-Before the techniques, here is the shape of the whole toolkit against the libraries people reach for, one representative
-input each. turbohtml is the green column; the parenthetical is the competitor's time against turbohtml's, so above one
-is slower and below one is faster. The full picture, every operation against every competitor, lives in the
-[migration guides](https://turbohtml.readthedocs.io/migration/index.html).
+Escape, unescape, and tokenize became the base of a tree builder, query engines for CSS and XPath, a serializer, a
+sanitizer, minifiers for HTML, CSS, and JavaScript, metadata extraction, and a URL parser. The complete toolkit exposes
+the next misconception: one optimization cannot explain performance across such different work.
+
+The table compares one representative input per operation. The green column is turbohtml. Each parenthetical gives the
+competitor's time divided by turbohtml's time; values above one are slower. The
+[migration guides](https://turbohtml.readthedocs.io/migration/index.html) contain every operation and competitor.
 
 {{< bench-table you=2 nums="3,4" >}} operation | input | turbohtml | a fast peer | a popular peer ; parse | 92 kB page |
 272 µs | resiliparse 282 µs (1.0x) | BeautifulSoup 15.3 ms (56x) ; query (CSS select) | 95 kB page | 1.3 µs | lxml 20.8
@@ -732,36 +674,36 @@ html.unescape 69.3 µs (8.6x) | w3lib 116 µs (14x) ; minify HTML | 95 kB page |
 htmlmin 6.77 ms (20x) ; minify CSS | bootstrap 274 kB | 229 kB in 1.65 ms | rcssmin 233 kB in 625 µs (0.4x) |
 lightningcss 229 kB in 4.82 ms (2.9x) ; minify JS | jquery 279 kB | 88 kB in 9.73 ms | rjsmin 141 kB in 335 µs (0.0x) |
 terser 87 kB in 122 ms (12x) ; sanitize | 4 KiB post | 42.1 µs | nh3 120 µs (2.9x) | bleach 1.92 ms (46x)
+
 {{< /bench-table >}}
 
-Two things the table makes concrete. Minification trades speed against size, which is why the minify rows carry both.
-The regex minifiers [`rcssmin`](https://pypi.org/project/rcssmin/) and [`rjsmin`](https://pypi.org/project/rjsmin/) are
-the fastest tools by a wide margin, but the size columns show they leave the file bigger; the full parsers
-[lightningcss](https://lightningcss.dev/) and [terser](https://github.com/terser/terser) match turbohtml's compression
-and pay several times the time for it; turbohtml sits at both corners at once. And
-[resiliparse](https://github.com/chatnoir-eu/chatnoir-resiliparse) ties turbohtml on parse because it too is a
-hand-written C parser. The point is not that turbohtml wins every row. It is that a fully typed, spec-conformant toolkit
-sits in the same class as the fastest native code, an order of magnitude ahead of the pure-Python libraries most
-projects run.
+The minifier rows include time and output size because either measure alone hides a cost. The regex minifiers
+[`rcssmin`](https://pypi.org/project/rcssmin/) and [`rjsmin`](https://pypi.org/project/rjsmin/) finish soonest and
+produce larger files. [lightningcss](https://lightningcss.dev/) and [terser](https://github.com/terser/terser) reach
+turbohtml's compression with longer runtimes. [resiliparse](https://github.com/chatnoir-eu/chatnoir-resiliparse) matches
+turbohtml on parsing with another hand-written C parser. Across the table, typed and conformant APIs retain native-code
+speed.
 
-### Interning names to integers
+That interpretation matters more than declaring a winner. A regex minifier can win the timing row by declining parser
+work, and the larger output records the consequence. A full parser can match the output size while spending more time on
+its representation. Parsing shows another boundary: two hand-written C implementations can converge on the same time
+even when the Python APIs around them differ. The table asks which work each program performs before attributing the
+result to its implementation language.
 
-A parser compares tag names constantly. Is this a `<script>`? Does this end tag close the open `<p>`? Does the selector
-`div.note` match this element? Done as written, each of those is a string comparison, and a string comparison walks
-bytes.
+### A tag name becomes an integer
 
-turbohtml almost never compares tag-name bytes after the tokenizer. Every tag and attribute name in the HTML namespace
-has a fixed small integer, its _atom_, assigned when the name is first seen. The tokenizer already lowercases names on
-the way in, the step I described earlier, so folding a name to its atom is a lookup, and after that a tag is an integer.
-Deciding whether an element is a `<div>` is `node->atom == TH_TAG_DIV`, one comparison, no memory touched past the node
-itself. The exception is a name outside the known table: those share a single `TH_TAG_UNKNOWN` atom and fall back to a
-byte compare, rare enough not to matter.
+Every comparison such as `<script>`, `</p>`, or `div.note` appears to require a byte walk. The tokenizer removes that
+work before the tree exists. Each HTML tag and attribute name receives a small integer called an _atom_. Lowercasing
+already occurred during tokenization, so the tree stores the lookup result. Matching `<div>` becomes
+`node->atom == TH_TAG_DIV`. Names outside the table share `TH_TAG_UNKNOWN` and use a byte comparison.
 
-That one integer compare shows up everywhere the query engine walks the tree. When `find_all("a")` looks for anchors, it
-does not test every descendant; the tree carries a per-tag index, and the search visits only the
-[pre-order](https://en.wikipedia.org/wiki/Tree_traversal) bucket of `a` elements. When the same call adds an attribute
-filter, `find_all("a", attrs={"href": True})`, the tag still selects the bucket and the filter runs only over those
-candidates:
+The distinction changes what the CPU reads. A string comparison loads bytes until it finds a mismatch or reaches the
+end. An atom comparison reads the integer stored beside the node. Known HTML names take that path throughout tree
+construction and querying. Unknown names need the byte fallback because they share one atom, but custom elements and
+foreign names occur too seldom to set the common cost.
+
+The tree also groups nodes in [pre-order](https://en.wikipedia.org/wiki/Tree_traversal) buckets by tag. `find_all("a")`
+visits the `a` bucket. Adding `attrs={"href": True}` applies the attribute test to those candidates:
 
 ```c
 static int tag_plain_matches(const query_t *query, th_node *node) {
@@ -790,33 +732,31 @@ flowchart LR
     class T bad
 ```
 
-The bucket, not the cheaper compare, is what produces the large numbers: it lets the search visit only the tag's
-elements and skip the rest of the tree, while the one-compare match keeps each candidate it does reach cheap on top.
-`find_all("a", attrs={"href": True})` over the WHATWG spec drops from 33.5 to 4.4 microseconds, and a rare-tag lookup
-like `find_all("meta", attrs={"name": "viewport"})` from 29.2 down to 0.17. The same integer compare rides into the CSS
-engine, which matches selectors right to left. A selector like `section > p` anchors on each `p` and checks its parent;
-when the left side of a combinator is a bare type selector, that step is `parent->atom == TH_TAG_SECTION` before the
-full compound matcher runs. Selector matching picks up 11 to 19 percent across the corpus pages. This is the same trick
-browsers use: an [interned name](https://en.wikipedia.org/wiki/String_interning), sometimes called an atom or a quark,
-so that the hot comparison is an integer identity test. It is the string-side equivalent of everything the tokenizer
-does to avoid touching bytes it does not need.
+The bucket supplies the large gain because unrelated descendants do not become candidates. Over the WHATWG
+specification, `find_all("a", attrs={"href": True})` falls from 33.5 to 4.4 microseconds.
+`find_all("meta", attrs={"name": "viewport"})` falls from 29.2 to 0.17 microseconds. The CSS engine matches selectors
+from right to left, so `section > p` anchors on each `p` and tests its parent with `parent->atom == TH_TAG_SECTION`
+before running the compound matcher. This change cuts selector work by 11 to 19 percent across the corpus. Browsers call
+this representation an [interned name](https://en.wikipedia.org/wiki/String_interning), an atom, or a quark. Its purpose
+is identical: compare integer identities after touching the name bytes once.
+
+The atom and the bucket remove different work. Atom identity lowers the cost of testing one candidate. The bucket lowers
+the number of candidates. Rare tags expose the second effect because their buckets bypass almost the whole document.
+Common tags leave more nodes to inspect, yet each node still receives the integer test. CSS selectors reuse both gains
+when a type selector appears in the rightmost compound or on the parent side of a combinator.
 
 {{< atom-index >}}
 
-### Building the index once instead of every time
+### One index removes an O(N²) walk
 
-`element.css_path()` hands back a CSS selector that locates one element from the document root, the thing your browser's
-devtools shows when you right-click and copy a selector. The short selector is an id, `#main > p:nth-of-type(3)`, but a
-selector may anchor on an id only if that id is unique in the document, because a repeated id would match more than one
-element and the path would be wrong.
+`element.css_path()` returns a selector that locates an element from the document root, like the selector copied from
+browser developer tools. An id provides a short anchor only when it occurs once. The first implementation established
+uniqueness by scanning the document for every candidate. Each candidate cost O(N), and pathing the document cost O(N²).
+A document with six thousand ids required 112 milliseconds.
 
-The first version checked uniqueness the obvious way: to see whether an id was unique, scan the whole document and count
-how many elements carried it. That is O(N) per candidate, and pathing every element in a document is then O(N squared).
-On a document with six thousand ids it took 112 milliseconds, which is slow enough to notice.
-
-The fix is an auxiliary index built once. The first `css_path()` call on a tree builds an id-occurrence map, an
-[open-addressed hash table](https://en.wikipedia.org/wiki/Open_addressing) from id value to the count of elements
-carrying it, and caches it on the tree. Uniqueness is then a probe of a few characters instead of a document scan:
+The first `css_path()` call now creates and caches an
+[open-addressed hash table](https://en.wikipedia.org/wiki/Open_addressing) that maps each id to its occurrence count.
+Uniqueness becomes a probe over the id characters:
 
 ```c
 static uint64_t path_id_hash(const Py_UCS4 *value, Py_ssize_t len, int ci) {
@@ -855,25 +795,27 @@ flowchart TB
     class INDEX,R2 good
 ```
 
-The probe terminates without a bounds check because the candidate's own id is always in the map, so the walk always
-lands on a filled slot: a `count` of one means the element owns its id alone. The map is cached on the tree and thrown
-away the moment the tree mutates, together with the element index it sits beside, so a stale count can never anchor a
-path on an id that a later edit duplicated. Building an index once and dropping it on write is the standard shape of
-this kind of cache, and it is worth reaching for whenever a per-item check secretly rescans the whole collection. The
-six-thousand-id document went from 112 milliseconds to 0.9, and `css_path` now runs about five times faster than
-libxml2's `getpath` where it used to trail.
+The candidate's id is present, so probing must reach a filled slot and needs no bounds check. A count of one proves
+uniqueness. A tree mutation discards this map and the adjacent element index, preventing stale counts. The
+six-thousand-id document falls from 112 to 0.9 milliseconds, about 125 times faster. `css_path` now takes one fifth of
+libxml2's `getpath` time.
+
+The cache lifetime forms part of the answer. An id that occurs once can become duplicated after an edit. Retaining the
+old count would then produce a selector that matches two elements. Invalidating both indexes on mutation makes the next
+read rebuild them for the new tree. The first `css_path()` call pays O(N), and subsequent paths pay for the id
+characters instead of rescanning the collection.
 
 {{< id-locator >}}
 
-### Recycling the wrapper objects
+### A free list removes repeated allocations
 
-Every node a query returns is a Python object wrapping a C tree node. A `find_all` over a large page builds thousands of
-them, and they die as soon as the caller is done iterating. Allocating and freeing a Python object is not free: it walks
-the allocator's [free list](https://en.wikipedia.org/wiki/Free_list), and on a free-threaded build it takes a lock.
+Query results wrap C tree nodes in Python objects. A large `find_all` creates thousands of wrappers that die after
+iteration. Allocation visits Python's [free list](https://en.wikipedia.org/wiki/Free_list); a free-threaded build also
+takes a lock. The default build parks deallocated wrappers on a local free list and revives them for later results:
 
-I noted earlier that the tokenizer reuses its buffers rather than freeing them. The query layer does the same for whole
-objects, with a small free list. When a node wrapper is deallocated it is parked on the list instead of released, and
-the next wrap revives it:
+The first result obtains a wrapper through `tp_alloc`. Deallocation releases the tree handle, then stores the wrapper
+instead of returning its 32 bytes to Python's allocator. The next query restores the object header with `PyObject_Init`
+and attaches another C node. Iteration moves wrappers between live results and this pool.
 
 ```c
 static void node_dealloc(PyObject *self) {
@@ -911,56 +853,64 @@ flowchart LR
     class FR good
 ```
 
-Two details make it cheap. The list is [_intrusive_](https://www.boost.org/doc/libs/release/doc/html/intrusive.html):
-the next-pointer rides inside the `node` field the parked object no longer needs, so the pool costs no extra storage.
-And one list serves every node type, because a `NodeObject` is a fixed 32 bytes whatever it wraps (the real payload
-lives in the C tree) and the concrete types the wrapper stamps, Element, Text, Comment and the rest, none accept a
-[subclass](https://docs.python.org/3/c-api/typeobj.html#c.Py_TPFLAGS_BASETYPE) or add a field (only the abstract base
-`Node` is subclassable, and it is never instantiated), so reviving one with
-[`PyObject_Init`](https://docs.python.org/3/c-api/allocation.html#c.PyObject_Init) and re-stamping its type is always
-sound. The list is capped at 1024 entries, about 32 KiB, so a burst of queries recycles freely without pinning memory
-afterward. On a 92 kB page, `find_all()` drops from 1.9 to 1.4 microseconds and a full descendant walk from 101 to 65,
-moving the lead over lxml from 2.9x to 4.3x. Where it does not help is holding every wrapper alive at once,
-`list(doc.descendants)`, where nothing is ever returned to recycle; that path is about 8 percent slower, a fair trade
-for the common one being faster.
+The list is [_intrusive_](https://www.boost.org/doc/libs/release/doc/html/intrusive.html): its next pointer occupies the
+unused `node` field of a parked wrapper. One list serves every concrete node type because `NodeObject` has a fixed
+32-byte size. Element, Text, Comment, and the other concrete types reject
+[subclasses](https://docs.python.org/3/c-api/typeobj.html#c.Py_TPFLAGS_BASETYPE) and add no fields. The abstract `Node`
+base permits subclasses, but callers cannot instantiate it. Reviving an object with
+[`PyObject_Init`](https://docs.python.org/3/c-api/allocation.html#c.PyObject_Init) and stamping its type remains sound.
 
-The pool exists only on the default build. The free-threaded build keeps the plain allocate-and-free path, because a
-shared list is safe only because the GIL serializes access to it, and that is the guarantee the free-threaded build
-removes. The section on free-threading below is the longer version of that argument.
+An external list node would add an allocation to the mechanism intended to remove allocations. Reusing `node` avoids
+that contradiction because a parked wrapper has no live C node. The common object layout lets one pool serve every
+concrete wrapper. `PyObject_Init` retakes the type reference released during deallocation, restoring the
+reference-counting contract along with the visible type.
+
+The 1,024-entry cap retains about 32 KiB. On a 92 kB page, `find_all()` falls from 1.9 to 1.4 microseconds, while a full
+descendant walk falls from 101 to 65 microseconds. The lead over lxml moves from 2.9x to 4.3x. Holding every wrapper in
+`list(doc.descendants)` prevents reuse and costs about 8 percent. The free-threaded build disables the pool because its
+shared list lacks the GIL protection required for safe access.
+
+The cap controls retained memory. A burst can leave 1,024 wrappers ready for reuse, about 32 KiB rather than the peak
+query size. A caller that keeps every wrapper alive receives no reuse and still pays the pool checks, which explains the
+8 percent loss. Synchronizing the pool on a no-GIL build would add a lock to the operation that reuse was meant to make
+cheaper, so that build follows the plain allocator path.
 
 {{< node-pool >}}
 
-## When the work is a standard, not a scan
+## A URL breaks the scanning rule
 
-The URL parser is one of those places the principles did not reach, where the block-scanning story runs out. Splitting a
-URL into its parts, percent-encoding a path, resolving a relative reference against a base: all of these moved into C
-and got several times faster, but the speedup is the plain one, no interpreter in the loop, the same reason the first C
-accelerator was faster than pure Python. The scanning tricks do not apply, and one of them runs backward: the URL code
-deliberately widens the whole input to four-byte characters up front, so the rest of the code reads one fixed width
-instead of branching on width per read. That is the opposite of the tokenizer, which refuses to widen and compiles three
-machines so an ASCII document stays one byte per character. The difference is size. A URL is short, so widening it once
-costs nothing and buys a simpler loop; a document is large, so widening it would be the 4x copy the tokenizer bends over
-backward to avoid. Different input, different answer.
+URL parsing resists the block-scanning design. Splitting components, percent-encoding paths, and resolving references
+moved into C and became several times faster by removing the interpreter loop. The implementation widens its input to
+four-byte characters at entry, giving every subsequent read one width. The tokenizer preserves the narrowest width.
+Input size explains the disagreement: widening a short URL simplifies its loop, while widening a document creates a 4x
+copy.
 
-Host encoding is the exception, and it is worth a section because it is a kind of work the rest of the library does not
-do. Turning `café.example` into the ASCII `xn--caf-dma.example` that DNS can carry is
-[Internationalized Domain Names](https://www.rfc-editor.org/rfc/rfc5890) (IDNA), and doing it the way the
-[WHATWG URL Standard](https://url.spec.whatwg.org/#idna) asks means [UTS #46](https://www.unicode.org/reports/tr46/)
-`ToASCII`, which pulls in three separate pieces of Unicode machinery. Python's `str.encode("idna")` implements an older
-version of the standard and gets several cases wrong (`faß.de` should become `xn--fa-hia.de`, not `fass.de`), so
-turbohtml implements the current one from scratch in C. That meant writing three things nothing else in this piece
-needed:
+This reversal tests the governing rule. Avoiding a copy helps only when that copy costs more than the branches it would
+remove. Documents can contain megabytes, so preserving their width saves substantial memory traffic. URLs contain few
+enough characters for one widening pass to disappear under the parsing work. A fixed-width representation then removes
+width dispatch from every state transition. The same cost model leads the tokenizer and URL parser to opposite storage
+decisions.
 
-- [**Punycode**](https://www.rfc-editor.org/rfc/rfc3492), the encoding that packs `café` into `caf-dma`. It is a
-  bootstring algorithm: a run of generalized variable-length integers with an adaptive bias, unlike anything else in the
-  library, and a fun one to implement against the RFC's reference pseudocode.
-- [**Normalization Form C**](https://www.unicode.org/reports/tr15/), because `é` can arrive as one code point or as `e`
-  plus a combining accent, and they have to encode identically. Composing them means canonical decomposition, a stable
-  sort of [combining marks by class](https://www.unicode.org/reports/tr44/#Canonical_Combining_Class), then
-  recomposition, reimplemented rather than borrowed from `unicodedata`.
-- **Hangul by arithmetic.** Korean syllables compose and decompose by a
-  [formula](https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-3/) rather than a table, so all 11,172
-  precomposed syllables cost zero table rows. It is the cleanest example I know of picking an algorithm over a lookup.
+Host encoding adds work with no analogue elsewhere in the parser. DNS carries `café.example` as `xn--caf-dma.example`
+through [Internationalized Domain Names](https://www.rfc-editor.org/rfc/rfc5890). The
+[WHATWG URL Standard](https://url.spec.whatwg.org/#idna) requires [UTS #46](https://www.unicode.org/reports/tr46/)
+`ToASCII`. Python's `str.encode("idna")` implements an older standard and maps `faß.de` to `fass.de`; the current answer
+is `xn--fa-hia.de`. turbohtml implements the current algorithm in C through these mechanisms:
+
+- [Punycode](https://www.rfc-editor.org/rfc/rfc3492) packs `café` into `caf-dma` with generalized variable-length
+  integers and an adaptive bias.
+- [Normalization Form C](https://www.unicode.org/reports/tr15/) gives one encoding to precomposed `é` and decomposed `e`
+  plus a combining accent. The implementation performs canonical decomposition, a stable sort by
+  [combining class](https://www.unicode.org/reports/tr44/#Canonical_Combining_Class), and recomposition instead of
+  calling `unicodedata`.
+- [Hangul composition](https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-3/) uses arithmetic. The formula
+  covers all 11,172 precomposed syllables without table rows.
+
+Punycode is a bootstring algorithm. It emits basic code points as themselves, then represents the rest through
+generalized variable-length integers. An adaptive bias changes how those integers encode later values. NFC prevents two
+Unicode spellings of the same host from producing different DNS labels. It decomposes characters, orders combining marks
+by class, and recomposes eligible pairs. Hangul needs no stored decomposition because the Unicode code-point layout
+defines each syllable through arithmetic.
 
 ```mermaid
 flowchart LR
@@ -976,49 +926,59 @@ flowchart LR
     class A good
 ```
 
-The mapping data that is left, which code points UTS #46 keeps, maps, or drops, is 6,960 ranges stored as
-`{first, last, status, offset, length}` rows and probed by binary search: the range says what happens to a code point,
-and a mapped range points at the replacement in a shared pool with the `offset` and `length`. It is a different
-structure from the direct-index tables the escaping code uses, because the key space is all of Unicode and mostly empty.
+UTS #46 handles code points through 6,960 ranges with keep, map, or drop statuses. Each mapped
+`{first, last, status, offset, length}` row points to a replacement in a shared pool. Binary search suits a sparse
+Unicode key space better than the escaping code's direct-index table.
 
-The part I would not have guessed in advance is that most of this code is generated. A
-[331-line build script](https://github.com/tox-dev/turbohtml/blob/main/tools/generate_idna.py) downloads the pinned
-[Unicode 16.0.0 database](https://www.unicode.org/Public/16.0.0/ucd/) and writes an 8,513-line C header: the mapping
-ranges, the combining classes, and the decompositions already expanded recursively so the C runtime never recurses. It
-is pinned to the exact Unicode version CPython 3.14's `unicodedata` ships, so the hand-written C normalizer and the
-interpreter always agree on the answer. Generating a spec's data tables at build time, pinned for reproducibility, is
-its own technique, and a better one than transcribing five thousand table rows by hand and hoping. The lesson that
-carried over from the scanning work was the smaller one: do the expensive preparation once, at build time here rather
-than in the first pass, so the runtime stays simple.
+A direct table indexed by every Unicode scalar would reserve memory for a sparse domain. The range table represents a
+long run with one record, while mapped runs point into one replacement pool. Binary search adds comparisons, but host
+labels remain short and the compact table fits caches better. Escaping chooses direct indexing because its domain is
+small and dense. The loop also queries it for each byte.
+
+Most of the runtime data comes from a
+[331-line generator](https://github.com/tox-dev/turbohtml/blob/main/tools/generate_idna.py). It reads the pinned
+[Unicode 16.0.0 database](https://www.unicode.org/Public/16.0.0/ucd/) and emits an 8,513-line C header. The generator
+expands decompositions, leaving no runtime recursion. Unicode 16.0.0 matches CPython 3.14's `unicodedata`, so both
+normalizers return the same answer. Build-time preparation removes runtime work while keeping the source data
+reviewable.
+
+Generation removes transcription as a source of defects. The 331-line script records the conversion from source rows to
+C data, while the generated diff exposes the result of a Unicode update. Expanding recursive decompositions in the
+header leaves the runtime normalizer with table walks. Matching CPython's database version also gives differential tests
+an oracle built from the same character data.
 
 {{< idna-encode >}}
 
-## Teaching the compiler what is hot
+## A file split costs nine percent
 
-Everything so far is source-level. Two build-level techniques squeeze the same code further, and both come with a catch
-worth explaining.
+The query engine grew past 4,200 lines because splitting it carried a hidden price. Under gcc, moving the CSS selector
+engine into another [translation unit](<https://en.wikipedia.org/wiki/Translation_unit_(programming)>) made `select`
+about 9 percent slower. The compiler had lost sight of functions it inlined in the monolithic file.
 
-The first is [link-time optimization](https://gcc.gnu.org/onlinedocs/gccint/LTO-Overview.html) (LTO). As the query
-engine grew, one source file had swollen past 4,200 lines, accreting the select, regex, and xpath entry points, because
-splitting anything out of it would have cost speed: the compiler can only inline across a function-call boundary when
-both sides sit in the same [translation unit](<https://en.wikipedia.org/wiki/Translation_unit_(programming)>), and the
-query code leaned on calls into the tree code being inlined. Pulling the hot CSS selector engine into its own file costs
-about 9 percent on `select` under gcc for exactly that reason. LTO buys it back. With LTO the compiler defers
-optimization to link time, when it can see the whole program at once and
-[re-inline across the file boundary](http://hubicka.blogspot.com/2014/04/linktime-optimization-in-gcc-1-brief.html) it
-just split, landing within 0.1 percent of the monolith. So LTO landed first and the split followed, in that order,
-because the split is only free once LTO is there to undo its cost. The related move is telling the compiler which code
-is cold: the long bulk-text scan in the tokenizer is marked
-[`noinline`](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html) and pulled out of line, so the compact
-markup-heavy path that runs far more often stays small and stays in cache.
+Keeping unrelated engines in one file would preserve that inlining while making the source harder to navigate. Splitting
+first and accepting the regression would make maintainability consume user time. The measurement set a condition for the
+refactor: recover cross-file visibility before moving the code.
 
-The second is [profile-guided optimization](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html) (PGO), and it buys
-more than LTO does. The build runs in two phases. First it compiles an instrumented binary, runs it over a training
-workload while it records which branches are taken and which functions are hot, then recompiles using that profile to
-lay out the code the way the run used it. CPython builds itself this way, and the standard advice holds: the gain is
-only as good as the training workload is representative. Measured against a plain `-O3` build with
-[cachegrind](https://valgrind.org/docs/manual/cg-manual.html), PGO cut instructions by 15.7 percent on parse, 27.5 on
-select, and 13.2 on serialize.
+[Link-time optimization](https://gcc.gnu.org/onlinedocs/gccint/LTO-Overview.html) (LTO) restores program-wide visibility
+at link time and can
+[inline across that boundary](http://hubicka.blogspot.com/2014/04/linktime-optimization-in-gcc-1-brief.html). The split
+then lands within 0.1 percent of the monolithic file. LTO entered the build before the source split. The tokenizer also
+marks its long bulk-text scan [`noinline`](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html), keeping
+the markup-heavy path compact enough for the instruction cache.
+
+Inlining is not a universal gain. The bulk-text scanner contains a long path used when the current region has little
+markup. Pulling it into every caller would enlarge the loop that handles transitions. Marking that path `noinline` keeps
+infrequent code out of the compact loop while LTO joins small functions whose call overhead and context matter.
+
+[Profile-guided optimization](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html) (PGO) records hot functions and
+branch directions in an instrumented build, then rebuilds with that profile. Against plain `-O3`,
+[Cachegrind](https://valgrind.org/docs/manual/cg-manual.html) reports 15.7 percent fewer instructions for parse, 27.5
+percent for select, and 13.2 percent for serialize.
+
+The build performs two compilations around a training run. The first binary records branch directions and function
+frequency. The second compilation uses those observations for layout and inlining decisions. CPython uses the same
+process. The compiler has no knowledge of representative HTML beyond the workload supplied during training, which makes
+the corpus part of the optimization.
 
 ```mermaid
 flowchart LR
@@ -1040,103 +1000,120 @@ flowchart LR
     class REJ bad
 ```
 
-Getting there took two rounds of learning what "representative" means. The first training corpus was one clean UTF-8
-document, so the profile never saw the messy branches: the
+The first training corpus contained one clean UTF-8 document. It omitted the
 [adoption-agency algorithm](https://html.spec.whatwg.org/multipage/parsing.html#adoptionAgency), foreign-content
-breakout, legacy encodings, tag soup. The corpus now spans those branch classes on purpose, mixing clean markup with
-deliberately broken fixtures from the [html5lib test suite](https://github.com/html5lib/html5lib-tests) and real saved
-pages. Representativeness is code-path coverage, not input volume.
+breakout, legacy encodings, and malformed markup. The current corpus joins saved pages with broken fixtures from the
+[html5lib tests](https://github.com/html5lib/html5lib-tests). Representative training means branch coverage rather than
+raw input volume.
 
-The subtler bug was in how the training run spent its time. It first ran every operation a flat eight times, which
-sounds fair and is not. A whole-document parse runs orders of magnitude more instructions per call than a read-path
-query like `text-content`, so under a flat count the cheap operation's hot blocks landed below the profile's global hot
-cutoff, the compiler read them as cold, and their layout flipped a few percent between rebuilds. That was a phantom
-regression that kept tripping the benchmark gate. The fix is to budget by time, not by iterations: give every operation
-an equal slice of wall-clock, so a cheap operation repeats into the thousands and clears the hot cutoff decisively. This
-is a real pitfall of PGO that the textbook description skips, and it took a flaky CI signal to find.
+The clean document trained the common parse path and left recovery code looking cold. Real pages still enter adoption
+agency repair, foreign namespaces, old encodings, and malformed tag handling. Adding more clean bytes would reinforce
+the same omission. A smaller collection that reaches each branch gives the compiler a more faithful map.
 
-One guard makes the whole thing trustworthy. PGO's failure mode is overfitting, laying out the code for the training
-inputs at the expense of everything else, and the way to catch it is a held-out set. A validation step measures a third
-group of pages that appear in neither the training corpus nor the benchmark suite, and the build passes only on a net
-gain with no single operation regressing past 2 percent, which is the signature of an overfit profile. On the held-out
-pages the real gain is 13.9 percent [geometric mean](https://en.wikipedia.org/wiki/Geometric_mean), below the 15-to-27
-percent that parse and select showed on the training inputs, because those were measured on the very data the profile
-trained on, which is measuring your own homework.
+An initial run invoked every operation eight times. A document parse executes far more instructions than a read query
+such as `text-content`, leaving the query's blocks below the profile's global hot cutoff. Their layout moved between
+builds and produced phantom regressions. Giving each operation equal wall-clock time lets cheap operations repeat enough
+to register as hot.
 
-## Where the numbers come from
+Eight calls gave each API equal iteration count and unequal influence. A parse consumed orders of magnitude more
+instructions than `text-content`, so the profile's global cutoff discarded blocks belonging to the cheap call. Minor
+run-to-run changes could move those blocks across the threshold and rearrange their layout. Equal time lets a cheap
+operation execute thousands of times and puts its hot path above the cutoff with room to spare.
 
-Every figure in this article, the held-out PGO gain just quoted included, comes from one benchmark suite built to
-produce numbers you can trust, and that suite is as much a part of the project as the C underneath it. It is worth a
-look.
+A held-out corpus detects overfitting. It shares no pages with training or benchmarks. Validation requires a net gain
+and rejects any operation that regresses by more than 2 percent. The held-out
+[geometric mean](https://en.wikipedia.org/wiki/Geometric_mean) is 13.9 percent, below the 15.7-to-27.5-percent figures
+measured on workloads seen during training.
 
-Every published speedup comes from `tox -e bench`, which times each operation with
-[pyperf](https://pyperf.readthedocs.io) on a quiet, tuned machine (`pyperf system tune` first, with `--rigorous` and CPU
-pinning available). pyperf runs each case in isolated worker processes, calibrates the loop count, warms up, and reports
-a mean with a relative standard deviation, so every figure carries its own noise estimate. An operation that mutates the
-tree gets special handling: the tree is rebuilt untimed before each iteration, because timing the second mutation of an
-already-mutated tree measures neither the real work nor anything stable.
+The separation prevents the training inputs from grading their own layout. A profile can improve every page it has seen
+while harming another branch class. Requiring aggregate improvement catches a profile with no useful gain. The
+per-operation 2 percent bound catches a profile that purchases that gain by sacrificing one API. The lower 13.9 percent
+held-out result is the number I use for the general claim.
 
-The corpus is chosen for code-path coverage, not size. Clean layout markup comes from the WHATWG and ECMAScript specs
-and the [web-platform-test](https://github.com/web-platform-tests/wpt) fixtures; the nested divs and links that
-selectors and `:has()` actually chase come from real saved pages in Mozilla's
-[readability](https://github.com/mozilla/readability) corpus; recovery paths come from deliberately broken
-[html5lib fixtures](https://github.com/html5lib/html5lib-tests) that fire the adoption-agency and foster-parenting
-algorithms; escaping and unescaping run over Tolstoy's [_War and Peace_](https://www.gutenberg.org/ebooks/2600);
-encoding detection runs over prose re-encoded into [Shift-JIS](https://en.wikipedia.org/wiki/Shift_JIS),
-[GBK](<https://en.wikipedia.org/wiki/GBK_(character_encoding)>), and the Windows codepages; and CSS and JavaScript
-minification climb a size ladder from a 6 kB reset to a 745 kB framework. Every branch that matters gets exercised by
-something real.
+## The benchmark suite needs two kinds of truth
 
-The comparison is against 59 other libraries, from lxml and BeautifulSoup to selectolax, minify-html, nh3, trafilatura,
-and courlan, and each one runs in its own [uv](https://docs.astral.sh/uv/) virtual environment holding only that
-library. The harness never imports a competitor; it reads each one's requirements out of the source with the
-[`ast`](https://docs.python.org/3/library/ast.html) module, so one library's dependency pins can never perturb
-another's, and every library sees the identical input for a like-for-like ratio. A library that fails to install drops
-its column with a note; one that installs and then crashes fails the run, because that is a real result, not an
-environment quirk.
+One suite produced every figure in this article, including the held-out PGO gain. Its setup answers a second
+misconception: repeated timing alone does not make a benchmark trustworthy.
 
-That suite feeds two consumers, and the split is the whole point. The wall-clock timings are the human-facing answer to
-how fast, so they run on a tuned machine and never in CI, where wall-clock is the noise the next section is about. The
-same operation registry also drives a Callgrind instruction-count gate on every pull request, a reproducible regression
-alarm a wall-clock bench could never be. Instruction counts catch the small regression wall-clock is too jittery to see;
-wall-clock measures the real speed an instruction count cannot express. Neither on its own is enough.
+Published speedups come from `tox -e bench`. [pyperf](https://pyperf.readthedocs.io) runs isolated worker processes on a
+quiet machine prepared with `pyperf system tune`; rigorous mode and CPU pinning are available. It calibrates loop
+counts, warms each case, and reports the mean with relative standard deviation. A mutation benchmark rebuilds its tree
+outside the timed iteration, ensuring each measurement starts from the same state.
 
-## Measuring without lying to yourself
+Isolation prevents one measurement from warming or mutating state for the next worker. Calibration gives fast and slow
+operations enough samples without assigning both an arbitrary loop count. Relative standard deviation attaches a noise
+estimate to every mean. Mutation needs an extra rule because timing the second edit of an altered tree would measure a
+different operation; rebuilding outside the timer preserves the input without charging setup to the result.
 
-The benchmark numbers in this article are only worth printing if they are stable, and a benchmark that runs in CI is
-fighting a losing battle for stability. Shared runners have neighbors, frequencies scale, and the same benchmark can
-read
-[as much as 50 percent apart from one run to the next on cloud CI](https://pythonspeed.com/articles/consistent-benchmarking-in-ci/)
-with nothing changed. A wall-clock regression alarm in that environment cries wolf until you stop believing it, which is
-worse than having no alarm.
+The corpus targets code paths. WHATWG and ECMAScript specifications plus
+[web-platform-tests](https://github.com/web-platform-tests/wpt) supply clean markup. Mozilla's
+[readability corpus](https://github.com/mozilla/readability) supplies saved pages with the nesting and links exercised
+by selectors and `:has()`. Broken [html5lib fixtures](https://github.com/html5lib/html5lib-tests) invoke adoption agency
+and foster parenting. Escape and unescape process Tolstoy's [_War and Peace_](https://www.gutenberg.org/ebooks/2600).
+Encoding detection reads prose encoded as [Shift-JIS](https://en.wikipedia.org/wiki/Shift_JIS),
+[GBK](<https://en.wikipedia.org/wiki/GBK_(character_encoding)>), and Windows code pages. CSS and JavaScript minification
+span inputs from a 6 kB reset to a 745 kB framework.
 
-The way out is to stop measuring time. [CodSpeed](https://codspeed.io/) runs each benchmark under
-[Callgrind](https://valgrind.org/docs/manual/cl-manual.html), which executes the code on a simulated CPU and counts the
-instructions it runs. An instruction count does not care how busy the runner is; the same code produces the same count
-to well under one percent, so a real change stands out from the noise instead of drowning in it. The cost is that the
-simulator's cache and branch predictor are idealized models rather than the runner's real silicon, so the count is a
-proxy for time rather than time itself, but for catching a regression on a pull request a stable proxy beats a true
-measurement you cannot trust.
+Each source earns its place by reaching a behavior. Specifications provide large clean documents. Readability pages
+provide the structures that production selectors traverse. html5lib fixtures make recovery algorithms run. Re-encoded
+prose exercises detection without changing the underlying text. The minifier ladder shows whether setup cost or input
+growth controls the result. Corpus size alone would establish none of these properties.
 
-Making the count reproducible took chasing down two sources of drift, and both are instructive because neither is
-obviously a benchmarking problem. The first is PGO itself. A fresh profile is collected on every CI run, and it is not
-byte-identical from one run to the next, so the hot-path layout shifts and a marginal operation swings a few percent for
-no source reason. The fix is to measure a different binary than you ship: the benchmark gate builds with LTO only, which
-is reproducible, while the wheels you download keep the full PGO profile. The measured binary and the shipped binary are
-not the same, and that is the point.
+The suite compares 59 libraries, including lxml, BeautifulSoup, selectolax, minify-html, nh3, trafilatura, and courlan.
+Each runs in an isolated [uv](https://docs.astral.sh/uv/) environment. The harness reads competitor requirements from
+source with [`ast`](https://docs.python.org/3/library/ast.html), avoiding imports and dependency conflicts. Every
+competitor receives identical input. An installation failure removes its column with a note; a runtime crash fails the
+run.
 
-The second is the C library, and it is the article's own SIMD tricks turned against it. GitHub hands the job whatever
-CPU is free, an Intel Xeon with [AVX-512](https://en.wikipedia.org/wiki/AVX-512) one run and an AMD EPYC without it the
-next, and
-[glibc dispatches a different vectorized `memcpy` and `memmove` per CPU](https://sourceware.org/glibc/wiki/Tunables).
-The same source then runs a different number of instructions depending on which `memcpy` the hardware selected, so
-untouched benchmarks drift a few percent between the base run and the pull-request run, wide enough to bury a small real
-regression. Pinning `GLIBC_TUNABLES` to switch off the newer AVX and fast-string paths that differ across those CPUs
-forces every runner down to the SSE2 baseline glibc always has, and the count reproduces. That baseline is slower and,
-since it moves fewer bytes per instruction than the AVX copy it replaces, it even raises the absolute count, but it
-costs the gate nothing: the tunable is set only for the CI measurement, never for the wheels you install, and the gate
-compares a base run against a pull-request run with both pinned to the same path, so a higher-but-reproducible count
-shifts them together and hides no regression.
+Importing all competitors into one interpreter would let incompatible dependency pins change which versions execute.
+Separate environments make each tool responsible only for its declared requirements. Reading those requirements with
+`ast` avoids executing competitor setup code in the harness. Installation failure describes environment coverage;
+crashing after installation describes behavior and therefore remains a failed benchmark.
+
+One registry serves two measurements. Tuned wall-clock runs answer how long an operation takes. Pull requests use
+Callgrind instruction counts to detect small regressions. Time reflects real hardware; instructions provide a stable CI
+signal.
+
+The measurements answer different questions. Wall time includes real cache behavior, branch prediction, CPU frequency,
+and operating-system effects. Instruction count removes those variables and can identify a small source regression on a
+shared runner. Publishing only instruction counts would misstate user-visible speed. Gating on cloud wall time would
+bury the change the gate needs to find.
+
+## The clock is too noisy
+
+Cloud CI can report the same wall-clock benchmark
+[50 percent apart between runs](https://pythonspeed.com/articles/consistent-benchmarking-in-ci/) because shared-runner
+load and CPU frequency change. Such noise masks small regressions.
+
+A noisy alarm also changes maintainer behavior. If unchanged code crosses the threshold often enough, rerunning the job
+becomes the normal response. A real regression can then receive the same dismissal. The gate needs a signal whose
+variance stays below the changes it intends to reject.
+
+[CodSpeed](https://codspeed.io/) runs the suite through [Callgrind](https://valgrind.org/docs/manual/cl-manual.html),
+whose simulated CPU counts executed instructions. Repeated counts stay within one percent. The simulated cache and
+branch predictor make the count a proxy for time, so release claims still use wall-clock measurements.
+
+Callgrind executes the instruction stream on a model rather than the runner's silicon. That design removes neighboring
+jobs and frequency scaling from the count. It also means modeled caches cannot establish an end-user latency claim. For
+pull requests, a reproducible proxy can compare two revisions; the release benchmark retains the physical measurement.
+
+Two variables first prevented reproducibility. PGO profiles differ between CI runs and alter code layout. The regression
+gate measures an LTO-only build, while release wheels retain PGO.
+
+This means the gate and release use different binaries by design. Regenerating a profile for each comparison allows
+profile noise to move the result without a source change. LTO produces stable layout and still exposes instruction
+regressions in the code under review. PGO-specific layout failures remain outside this gate and require the held-out PGO
+validation.
+
+Runner CPUs also select different glibc implementations. One job can receive an Intel Xeon with
+[AVX-512](https://en.wikipedia.org/wiki/AVX-512); another can receive an AMD EPYC without it.
+[glibc dispatches `memcpy` and `memmove` by CPU](https://sourceware.org/glibc/wiki/Tunables), changing instruction
+counts for identical source. The gate sets `GLIBC_TUNABLES` to use the SSE2 baseline on every runner. Its absolute count
+is higher than an AVX path, but the base and pull-request revisions share it. Release wheels receive no such setting.
+
+The baseline can move fewer bytes per instruction and increase the reported total. That absolute increase has no effect
+on a paired comparison because both revisions use the same implementation. The setting exists only inside the CI
+measurement, so installed wheels keep the dispatch path chosen for their CPU.
 
 ```mermaid
 flowchart TB
@@ -1159,48 +1136,40 @@ flowchart TB
 
 {{< bench-determinism >}}
 
-Both fixes buy the same thing, an instruction count a real regression can move on its own instead of one that already
-wobbles for reasons unrelated to the code. There is a limit worth naming: this gate measures a reproducible LTO-only
-build, so it catches source-level regressions, which show up in the shipped PGO build too, but a regression that lived
-only in the PGO code layout would slip past it. That is the price of measuring a stable binary instead of the exact one
-you ship, and a trade I would make again over an alarm nobody believes.
+The gate cannot detect a regression caused only by PGO layout because it measures the reproducible LTO binary. It does
+detect source-level instruction regressions that carry into the release build.
 
-Reporting what the numbers really say means owning the experiments that went nowhere, too. Fusing the
-metadata-extraction walks into one tree pass moved it a few percent at most, because parsing and property extraction
-dominate that path and the walks were already cheap, so it stayed on the list.
+Some plausible optimizations failed. Combining metadata extraction into one tree walk saved a few percent because
+parsing and property extraction dominate that operation, so the separate walks remain.
 
-The [`:has()`](https://developer.mozilla.org/en-US/docs/Web/CSS/:has) selector was the harder admission, and it is the
-one I get to take back. Its evaluation re-walked each candidate anchor's subtree, so a deeply nested tree drove it
-quadratic, and the clean fix, a bottom-up pass, wanted a scratch field on every node that the 80-byte struct had no room
-for. The 1.0 answer routes around the struct instead of growing it. A per-query memo, an open-addressing table keyed on
-the pair of the relative selector and a subtree root, computes "does this subtree contain a match" once and reuses the
-answer across every anchor that asks, so the re-walk collapses to one amortized-linear pass. It costs ordinary markup
-nothing: the memo is consulted only past 24 levels of nesting and allocated only when the selector actually uses
-`:has()` and the tree is actually that deep, so a page that nests eight levels runs the same direct walk it always did,
-and only the pathological tree that used to blow up now stays linear. The one thing I said I had not fixed is fixed.
+The [`:has()`](https://developer.mozilla.org/en-US/docs/Web/CSS/:has) selector did contain avoidable work. Rewalking
+each candidate's subtree becomes quadratic under deep nesting. A bottom-up pass required a scratch field in the full
+80-byte node. turbohtml instead uses a per-query open-addressed memo keyed by relative selector and subtree root. Each
+subtree answer enters the memo once, yielding an amortized-linear pass. A query allocates the memo for `:has()` on trees
+deeper than 24 levels. Shallower pages retain the direct walk.
 
-## Making it free-threaded
+The threshold protects ordinary pages from the cure. A shallow `:has()` walk costs less than allocating and probing a
+hash table, so the direct traversal remains preferable there. Past 24 levels, repeated subtree visits can dominate.
+Memoization begins at that point and computes each relative-selector answer once. This resolves the denial-of-service
+shape without adding a scratch field to every 80-byte node in every tree.
 
-Speed is one half of why I wrote this now. The other half is that Python is in the middle of removing the
-[global interpreter lock](https://docs.python.org/3/glossary.html#term-global-interpreter-lock), the lock that lets only
-one thread run Python bytecode at a time. [PEP 703](https://peps.python.org/pep-0703/) added a build of CPython with the
-GIL switched off; it
-[shipped experimentally in 3.13](https://docs.python.org/3/whatsnew/3.13.html#free-threaded-cpython) and became
-[officially supported in 3.14](https://docs.python.org/3.14/whatsnew/3.14.html) once
-[PEP 779](https://peps.python.org/pep-0779/) signed off on it. On that build, threads run Python in parallel across
-every core, and code that quietly leaned on the GIL for safety stops being safe. I have written more about that rollout
-in my [PyTexas 2026 recap](/posts/pytexas-2026-recap), and about how to test threaded code for the races it surfaces in
-[Deterministic Multithreaded Testing with blanket](/posts/blanket-deterministic-threading).
+## The GIL cannot be the lock
 
-A C extension is exactly the kind of code that might have leaned on it. So the free-threaded build refuses to trust an
-extension unless the extension says it is ready, and the
-[rule is blunt](https://docs.python.org/3/howto/free-threading-extensions.html): if a module does not declare that it is
-safe without the GIL, importing it on a free-threaded interpreter prints a warning and switches the GIL back on for the
-whole process. One unprepared extension and every thread loses the parallelism.
+[PEP 703](https://peps.python.org/pep-0703/) introduced CPython without the
+[global interpreter lock](https://docs.python.org/3/glossary.html#term-global-interpreter-lock). Free-threaded CPython
+[entered 3.13 as an experiment](https://docs.python.org/3/whatsnew/3.13.html#free-threaded-cpython) and gained
+[official support in 3.14](https://docs.python.org/3.14/whatsnew/3.14.html) through
+[PEP 779](https://peps.python.org/pep-0779/). Threads can execute Python on separate cores, which exposes extension
+state that the GIL once protected. My [PyTexas 2026 recap](/posts/pytexas-2026-recap) covers the rollout;
+[Deterministic Multithreaded Testing with blanket](/posts/blanket-deterministic-threading) covers race testing.
 
-Declaring readiness is one slot in the module definition. turbohtml uses
-[multi-phase initialization](https://peps.python.org/pep-0489/), the modern module setup that also makes per-module
-state and sub-interpreters work, and hangs two slots off it:
+An extension must [declare free-threading support](https://docs.python.org/3/howto/free-threading-extensions.html).
+Without that declaration, importing it warns and enables the GIL for the process. turbohtml uses
+[multi-phase initialization](https://peps.python.org/pep-0489/) and sets two module slots:
+
+That fallback protects users from extensions that relied on implicit serialization, but it has process-wide cost. One
+undeclared module can remove parallel execution from code unrelated to that module. The slot therefore represents a
+claim about the extension's whole state model, not a switch added for packaging.
 
 ```c
 static PyModuleDef_Slot html_slots[] = {
@@ -1211,147 +1180,162 @@ static PyModuleDef_Slot html_slots[] = {
 };
 ```
 
-[`Py_mod_gil` set to `Py_MOD_GIL_NOT_USED`](https://docs.python.org/3/c-api/module.html#c.Py_mod_gil) is the promise
-that keeps the GIL off. The other slot,
-[`Py_mod_multiple_interpreters`](https://docs.python.org/3/c-api/module.html#c.Py_mod_multiple_interpreters) set to
-`Py_MOD_PER_INTERPRETER_GIL_SUPPORTED`, is the neighbouring promise from [PEP 684](https://peps.python.org/pep-0684/):
-the module is happy inside sub-interpreters that each carry their own GIL. Both rest on the same property, and both are
-guarded with [`PY_VERSION_HEX`](https://docs.python.org/3/c-api/apiabiversion.html#c.PY_VERSION_HEX) checks so the one
-source still builds on CPython 3.10 through 3.15.
+[`Py_mod_gil = Py_MOD_GIL_NOT_USED`](https://docs.python.org/3/c-api/module.html#c.Py_mod_gil) keeps the GIL disabled.
+[`Py_mod_multiple_interpreters = Py_MOD_PER_INTERPRETER_GIL_SUPPORTED`](https://docs.python.org/3/c-api/module.html#c.Py_mod_multiple_interpreters)
+declares support for [PEP 684](https://peps.python.org/pep-0684/) subinterpreters with per-interpreter GILs. Version
+guards based on [`PY_VERSION_HEX`](https://docs.python.org/3/c-api/apiabiversion.html#c.PY_VERSION_HEX) keep one source
+compatible with CPython 3.10 through 3.15.
 
-That property is the absence of shared mutable state, and it is real rather than a label I stuck on. The state machine
-keeps all of its scratch space, the input buffer, the reusable token buffers, the attribute array, inside the
-`th_tokenizer` struct it owns; nothing sits in a global. The lookup tables, the 2,231 entities and the nibble tables,
-are `const`, written once at compile time and only ever read. `escape` and `unescape` take an immutable `str` and return
-a fresh one. Two threads escaping two strings, or tokenizing two documents, never write the same memory, so there is
-nothing to lock. The one thing that is not safe, and the docs flag this for any stateful object, is feeding a single
-`Tokenizer` from several threads at once: that object has mutable state, so sharing it is your lock to take.
+The two slots cover distinct interpreter designs. `Py_mod_gil` addresses one interpreter whose threads execute without a
+global lock. `Py_mod_multiple_interpreters` addresses isolated interpreters, each with its own GIL. Multi-phase
+initialization stores state per module instance, which supports both promises. The version guards omit slots on Python
+releases that predate them while preserving one extension source.
 
-Absence of shared mutable state is an argument, and an argument about thread safety is worth exactly what its tests are.
-Two of them back the claim. [`pytest-run-parallel`](https://github.com/Quansight-Labs/pytest-run-parallel) reruns each
-test on every core at once, twenty iterations deep, so a race that the single-threaded run steps over gets thousands of
-chances to tear; and the same suite runs again under [ThreadSanitizer](https://clang.llvm.org/docs/ThreadSanitizer.html)
-on a no-GIL 3.14 build, whose suppression list is empty on purpose on the principle that any race it reports against the
-extension is a real bug in the C, not interpreter noise. The one place a tree edit does share memory, the lazy per-tree
-indexes, is walked under a per-object
-[critical section](https://docs.python.org/3/c-api/init.html#c.Py_BEGIN_CRITICAL_SECTION) so a concurrent mutation
-cannot rewire the tree mid-walk.
+The declarations rest on ownership. A `th_tokenizer` owns its input, scratch space, token buffers, and attribute array.
+The 2,231-entity table and nibble tables are compile-time `const` data. `escape` and `unescape` receive immutable
+strings and return new ones. Independent operations share no writable memory. A single `Tokenizer` remains stateful and
+requires caller-side synchronization when shared across threads.
 
-Shipping it is the last piece. A free-threaded interpreter has its own ABI, tagged with a trailing `t` (`cp313t`,
-`cp314t`), so it needs
-[its own wheels](https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/). turbohtml builds
-them with [cibuildwheel](https://cibuildwheel.pypa.io/en/stable/options/#enable), which can add the free-threaded
-interpreters to the build matrix, so `pip install turbohtml` lands a ready wheel whether or not your Python has the GIL.
+Ownership gives each thread a separate place to write. Token buffers live inside their tokenizer rather than a process
+global. Escape and unescape allocate outputs instead of filling a shared scratch buffer. Entity and nibble tables permit
+concurrent reads because compilation fixes their contents. Sharing one tokenizer crosses that ownership boundary, so the
+caller must serialize access to that object.
 
-If you maintain a C extension and want to walk this path, the ecosystem has collected the how-to in one place: the
-[Python Free-Threading Guide](https://py-free-threading.github.io/) and its
-[extension-porting pages](https://py-free-threading.github.io/porting-extensions/), Quansight Labs' write-ups on the
+[`pytest-run-parallel`](https://github.com/Quansight-Labs/pytest-run-parallel) runs each test on every core for 20
+iterations. The suite also runs under [ThreadSanitizer](https://clang.llvm.org/docs/ThreadSanitizer.html) on
+free-threaded Python 3.14 with an empty suppression list. Lazy per-tree indexes are the one shared mutation surface;
+tree walks protect them with a per-object
+[critical section](https://docs.python.org/3/c-api/init.html#c.Py_BEGIN_CRITICAL_SECTION).
+
+The tests attack different evidence gaps. `pytest-run-parallel` repeats public behavior under enough interleavings to
+expose state corruption. ThreadSanitizer instruments memory accesses and reports a data race even when the observed
+answer happens to remain correct. An empty suppression list treats a report in extension code as a defect. Tree indexes
+need the critical section because a mutation can invalidate or rebuild them while another thread traverses the tree.
+
+Free-threaded ABIs use `cp313t` and `cp314t` tags and need
+[separate wheels](https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/).
+[cibuildwheel](https://cibuildwheel.pypa.io/en/stable/options/#enable) adds those interpreters to turbohtml's matrix, so
+`pip install turbohtml` selects the matching build.
+
+ABI tags prevent a wheel compiled for the GIL build from entering a free-threaded interpreter by mistake. Adding the `t`
+variants to cibuildwheel produces artifacts with the declarations and C API expected by that interpreter. The
+source-level safety argument would have little practical value if installation still required a local compiler.
+
+Porting references include the [Python Free-Threading Guide](https://py-free-threading.github.io/), its
+[extension pages](https://py-free-threading.github.io/porting-extensions/), Quansight Labs' accounts of the
 [rollout](https://labs.quansight.org/blog/free-threaded-python-rollout) and
-[the first year](https://labs.quansight.org/blog/free-threaded-one-year-recap), and the
-[official extension HOWTO](https://docs.python.org/3/howto/free-threading-extensions.html) for the slots above. The same
-design that keeps turbohtml fast, no shared scratch space and no hidden globals, is what lets it keep its hands off the
-lock.
+[first year](https://labs.quansight.org/blog/free-threaded-one-year-recap), and the
+[official extension HOWTO](https://docs.python.org/3/howto/free-threading-extensions.html).
 
-## When the input is trying to hurt you
+## Speed meets hostile input
 
-Free-threading makes turbohtml safe to run in parallel. This section is about a harder kind of safe: running it on input
-it cannot trust. A toolkit that reads the open web takes its bytes from scraped pages, submitted comments, and URLs from
-wherever, so much of what it parses was written by someone who might want it to misbehave, and speed makes that worse
-rather than better. Several of the tricks that make it fast are exactly where a crafted input turns dangerous: a
-doubling buffer can be made to wrap, a pairwise scan can be driven quadratic, a recursive walk can be driven off the end
-of the stack. The faster the parser, the more hot paths invite it in, and the more hostile input it sees. The 1.0 work
-hardened those paths on four fronts: a small input that costs a lot, memory the C could corrupt, the sanitizer's own
-job, and the tables the build trusts.
+Open-web parsing accepts adversarial input. A crafted document can wrap buffer arithmetic, force a quadratic scan, or
+exhaust the C stack. The 1.0 release addresses those failure modes across complexity limits, memory checks,
+sanitization, and generated data.
 
-### A small input that costs a lot
+Performance code enlarges this attack surface because it manages capacities and indexes by hand. It also sets traversal
+limits. The same skipped check that saves work on ordinary input can become an unbounded path on crafted input. Each
+optimization therefore needs a cost bound and a memory-safety argument alongside its benchmark.
 
-The first class is the [algorithmic-complexity attack](https://en.wikipedia.org/wiki/Algorithmic_complexity_attack): a
-short input that makes a linear job run quadratically, or blows a fixed budget, so a few kilobytes hang the process. Two
-of turbohtml's paths had one.
+### A short input can consume quadratic work
 
-Deduplicating attributes is the first. The
-[WHATWG tokenizer](https://html.spec.whatwg.org/multipage/parsing.html#attribute-name-state) treats a repeated attribute
-name on one tag as a `duplicate-attribute` parse error and drops the later copy, first occurrence winning. The obvious
-way to enforce that compares each new name against the ones already kept, which is O(n) per attribute and O(n²) for the
-tag, so a tag carrying thousands of distinct names becomes a cheap way to burn CPU. turbohtml keeps a per-tag
-[open-addressed](https://en.wikipedia.org/wiki/Open_addressing) hash set of the names it has seen, keyed on an
-[FNV-1a](https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vaughan_hash_function) hash carried on the attribute,
-so a duplicate is a probe rather than a scan and the tag costs O(n). The detail that keeps it honest is the reset:
-clearing the table between tags with a `memset` would be O(table) per tag and hand the quadratic straight back, so each
-slot carries an epoch instead, a slot counts as filled only when its epoch matches the tokenizer's current one, and a
-new tag bumps a single 64-bit counter to invalidate the whole table at once. A counter bumped once per tag cannot wrap
-in a run that finishes.
+An [algorithmic-complexity attack](https://en.wikipedia.org/wiki/Algorithmic_complexity_attack) turns a small input into
+disproportionate CPU or memory use. turbohtml had two relevant paths.
 
-Deep nesting is the second. `<div>` repeated twenty thousand times is a linear run of start tags, but the recursive
-walks that later serialize, sanitize, or convert the tree recurse once per level, so a deeply nested document walks the
-C stack right off its end, a stack-overflow crash rather than a slow answer. The tree builder itself is iterative,
-keeping an explicit
-[stack of open elements](https://html.spec.whatwg.org/multipage/parsing.html#the-stack-of-open-elements) rather than
-recursing, and it caps that stack at `TH_MAX_TREE_DEPTH`, 512 levels, the runaway-nesting bound browsers like Blink and
-WebKit also apply. Past the cap the over-deep element still lands in the tree, as a sibling instead of a child, so
-nothing is dropped and no error fires: twenty thousand nested divs parse to a tree that stops nesting at the cap and
-still holds all twenty thousand elements and serializes back unchanged. A second, looser cap of 1024 backstops the
-recursive walks themselves, because the mutation API can build a tree deeper than any parse would, and the 2x headroom
-means a parsed tree always walks identically while only a hand-built pathological one is ever truncated.
+The [WHATWG tokenizer](https://html.spec.whatwg.org/multipage/parsing.html#attribute-name-state) reports a repeated
+attribute name and keeps its first occurrence. Comparing each new name with all retained names costs O(n²) per tag.
+turbohtml uses a per-tag [open-addressed hash set](https://en.wikipedia.org/wiki/Open_addressing), keyed by an
+[FNV-1a](https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vaughan_hash_function) hash stored on each attribute.
+Insertion and duplicate detection then cost O(n) across the tag. Clearing the table with `memset` for every tag would
+restore the unwanted cost. Each slot carries an epoch, and incrementing one 64-bit counter invalidates all prior slots.
+A counter incremented once per tag cannot wrap during a run that completes.
 
-The third algorithmic-complexity case is the [`:has()`](https://developer.mozilla.org/en-US/docs/Web/CSS/:has) selector,
-which re-walks each candidate's subtree and goes quadratic on a deep tree, the same shape a `:has()` denial-of-service
-would feed it. It is as much a speed bug as a safety one, so its fix, the memo that
-[the measurement section](#measuring-without-lying-to-yourself) once admitted it lacked, sits with that story rather
-than here.
+The epoch avoids moving the cost into reset. Clearing a table sized for a hostile tag after each normal tag would make
+subsequent work proportional to the attacker's peak allocation. A slot belongs to the current tag only when its stored
+epoch matches the tokenizer counter. Incrementing that counter invalidates every slot in constant time. Reaching a
+64-bit wrap would require more tags than a completing process can consume.
 
-### Memory the C could corrupt
+Deep nesting threatens the C stack. Twenty thousand opening `<div>` tags make recursive serialization, sanitization, or
+conversion descend twenty thousand levels. The iterative tree builder uses an explicit
+[stack of open elements](https://html.spec.whatwg.org/multipage/parsing.html#the-stack-of-open-elements) capped by
+`TH_MAX_TREE_DEPTH` at 512, matching the runaway-nesting bound in Blink and WebKit. Deeper elements become siblings. The
+tree retains all twenty thousand elements and serializes them unchanged. A 1,024-level limit protects recursive walks
+against trees created through the mutation API. Its 2x headroom leaves parsed trees unaffected.
 
-C has no bounds checks, so a parser written in it is only as safe as its arithmetic. Two changes close that gap.
+The parse cap changes structure rather than dropping bytes. Once the open-element stack reaches 512, another element
+enters as a sibling at the capped level. All twenty thousand elements remain available and serialization preserves the
+input sequence. Mutation can create shapes the parser refuses to create, so recursive consumers retain a separate
+1,024-level guard. The 2x gap prevents the walk limit from changing any parser-produced tree.
 
-Every growable buffer in the core, the open-element stack, the token buffers, the serializer output, the two minifiers,
-doubles when it fills, and a doubling loop is a classic
-[integer-overflow](https://cwe.mitre.org/data/definitions/190.html) site: feed it a length crafted to wrap `size_t` and
-the size computation comes out small, the buffer under-allocates, and the next write runs off the end. That is the shape
-of [libxml2's CVE-2022-29824](https://gitlab.gnome.org/GNOME/libxml2/-/commit/2554a2408e09f13652049e5ffb0d26196b02ebab).
-turbohtml routes every one of those buffers through a single `th_grow_cap` helper that checks the arithmetic before it
-runs it: it tests `cap > SIZE_MAX / 2` before doubling and `cap > SIZE_MAX / elem_size` before sizing the bytes, so the
-multiply can never wrap, and a caller that would have overflowed gets a clean failure instead. Dividing by a constant
-rather than reaching for `__builtin_mul_overflow` keeps the check working on the toolchains that lack the builtin.
-Closed once, for the whole core.
+Deep inputs also make [`:has()`](https://developer.mozilla.org/en-US/docs/Web/CSS/:has) quadratic. The memo described in
+[the benchmark section](#the-clock-is-too-noisy) bounds that cost.
 
-Finding the bugs that arithmetic review misses is a separate discipline, so every entry point that takes untrusted bytes
-runs under a [fuzzer](https://en.wikipedia.org/wiki/Fuzzing) built with
-[AddressSanitizer and UndefinedBehaviorSanitizer](https://clang.llvm.org/docs/AddressSanitizer.html), which turn an
-out-of-bounds read or a signed overflow from silent corruption into an immediate, located crash. The surfaces that
-decouple from the interpreter, the [IDNA](https://www.unicode.org/reports/tr46/) `ToASCII` engine and the JavaScript
-minifier, get standalone C harnesses; parse, serialize, sanitize, the URL pipeline, and the HTML and CSS minifiers are
-driven in-process through the public API against a sanitizer-instrumented build. A per-pull-request job replays a seed
-corpus so a regression fails deterministically, and a weekly job runs a mutation loop for a wall-clock budget to hunt
-for new ones. The IDNA harness names the CVE classes it is looking for: the
-[RFC 3492](https://www.rfc-editor.org/rfc/rfc3492) Punycode accumulator is
-[Libidn2's CVE-2017-14062](https://gitlab.com/libidn/libidn2/-/issues/54) integer-overflow class, and its output bound
-is [OpenSSL's CVE-2022-3602](https://www.openssl.org/news/secadv/20221101.txt) off-by-one class. Writing the algorithm
-the RFC describes means inheriting the footguns the RFC hides, so the harness aims straight at them.
+### Buffer growth must fail before arithmetic wraps
 
-### The sanitizer, where correctness is the security
+Every growable buffer, including the open-element stack, token storage, serializer output, and minifier output, doubles
+when full. An unchecked [`size_t` overflow](https://cwe.mitre.org/data/definitions/190.html) can allocate a small buffer
+and permit an out-of-bounds write, as in
+[libxml2 CVE-2022-29824](https://gitlab.gnome.org/GNOME/libxml2/-/commit/2554a2408e09f13652049e5ffb0d26196b02ebab). The
+shared `th_grow_cap` helper checks `cap > SIZE_MAX / 2` before doubling and `cap > SIZE_MAX / elem_size` before
+multiplication. It reports failure before overflow. Division keeps the code portable to toolchains without
+`__builtin_mul_overflow`.
 
-One surface is different in kind. [`turbohtml.clean`](https://turbohtml.readthedocs.io/) sanitizes untrusted HTML
-against an allowlist, the job [bleach](https://github.com/mozilla/bleach) did, and there the correct answer is a
-security boundary: the output goes straight into a live page, so a wrong answer is a cross-site-scripting hole, not a
-rendering glitch. The hard part is that HTML parsing is not a
-[fixpoint](<https://en.wikipedia.org/wiki/Fixed_point_(mathematics)>). Serialize a parsed tree and parse it again and
-you can get a different tree, and the gap between the two is where
-[mutation-XSS](https://research.securitum.com/dompurify-bypass-mxss/) lives: an attacker writes markup that is inert
-when you parse it and reshuffles into something executable when the browser parses your output.
+The order of checks matters. Testing after multiplication would inspect a value that had already wrapped. Comparing the
+capacity with `SIZE_MAX / 2` proves doubling is representable; comparing it with `SIZE_MAX / elem_size` proves the byte
+count is representable. Centralizing both proofs in `th_grow_cap` gives every dynamic core buffer the same failure path.
 
-turbohtml answers it the way [DOMPurify](https://github.com/cure53/DOMPurify) does, in a single pass. It mutates the
-parsed tree in place, dropping and rewriting nodes through the tree builder's own edit primitives, then serializes once,
-and the documentation is blunt that the output is safe to insert as it stands and must never be parsed again. The safety
-baseline, scripting and framing elements, `on*` handlers, and `javascript:` and `data:` URLs, lives in C beneath the
-policy so no allowlist can route around it. On top of that sits the check that catches the mutation case: a
-[namespace-reachability](https://github.com/cure53/DOMPurify) test, DOMPurify's `_checkValidNamespace`, that asks
-whether each element's namespace is reachable from its parent's under the WHATWG
-[foreign-content](https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign) rules. You enter SVG only
-through `<svg>`, MathML only through `<math>`, and return to HTML only through an
-[integration point](https://html.spec.whatwg.org/multipage/parsing.html#html-integration-point) like SVG
-`foreignObject`. A tree the parser built always passes; a node spliced in by mutation, an HTML element reparented under
-SVG or a foreign element escaped into HTML, fails and is dropped even when the allowlist admits its name.
+Every public entry point for untrusted bytes also runs under [fuzzing](https://en.wikipedia.org/wiki/Fuzzing) with
+[AddressSanitizer and UndefinedBehaviorSanitizer](https://clang.llvm.org/docs/AddressSanitizer.html). The
+[IDNA](https://www.unicode.org/reports/tr46/) `ToASCII` engine and JavaScript minifier have standalone C harnesses.
+Instrumented public-API harnesses cover parsing, serialization, sanitization, URLs, and HTML and CSS minification. Pull
+requests replay a seed corpus; a weekly mutation job searches for new failures under a wall-clock budget.
+
+The two schedules serve different purposes. Seed replay makes each pull request reproduce every known crash input.
+Mutation needs time to explore unseen combinations and therefore runs for a fixed weekly budget. Standalone C harnesses
+reach IDNA and JavaScript logic without interpreter startup. The other harnesses use the public Python API so their
+instrumented runs include argument conversion and integration with the extension.
+
+The IDNA harness targets known failure classes. Its [RFC 3492](https://www.rfc-editor.org/rfc/rfc3492) accumulator
+covers the integer overflow behind [Libidn2 CVE-2017-14062](https://gitlab.com/libidn/libidn2/-/issues/54). Its output
+bound covers the off-by-one behind [OpenSSL CVE-2022-3602](https://www.openssl.org/news/secadv/20221101.txt).
+
+Those CVEs identify the boundaries the harness must stress. Punycode's accumulator combines input-dependent arithmetic
+with variable-length output, matching the overflow class from Libidn2. Computing the destination bound carries the
+off-by-one risk seen in OpenSSL. Standards pseudocode defines valid results; it does not remove the implementation
+hazards around fixed-width integers and buffers.
+
+### Sanitization has one security answer
+
+[`turbohtml.clean`](https://turbohtml.readthedocs.io/) replaces the allowlist role once served by
+[bleach](https://github.com/mozilla/bleach). Its output enters live pages, making an incorrect answer an XSS defect.
+HTML parsing has no guaranteed [fixpoint](<https://en.wikipedia.org/wiki/Fixed_point_(mathematics)>): serializing and
+parsing a tree can alter its structure. [Mutation XSS](https://research.securitum.com/dompurify-bypass-mxss/) exploits
+markup that begins inert and becomes executable when a browser reparses sanitized output.
+
+That behavior changes the oracle. String equality with another sanitizer cannot prove safety because policies and
+serialization choices differ. Parsing once is insufficient because the browser performs the parse that matters after
+insertion. The test must determine whether executable structure survives the same reparse an attacker intends to use.
+
+Following [DOMPurify](https://github.com/cure53/DOMPurify), turbohtml mutates the parsed tree and serializes it once.
+Callers insert the result into a page without reparsing it. A C-level baseline removes scripting and framing elements,
+`on*` handlers, and dangerous `javascript:` or `data:` URLs irrespective of the supplied policy.
+
+Keeping the baseline beneath policy prevents an allowlist from authorizing an active primitive by mistake. Tree edits
+use the builder's mutation operations, so parent links and indexes follow the same update path as ordinary API changes.
+Serializing once fixes the handoff point: the returned bytes are the value to insert, and another application parse
+would create a new security boundary.
+
+DOMPurify's `_checkValidNamespace` supplies a namespace-reachability check based on WHATWG
+[foreign-content rules](https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign). SVG begins through
+`<svg>`, MathML through `<math>`, and HTML resumes through an
+[integration point](https://html.spec.whatwg.org/multipage/parsing.html#html-integration-point) such as SVG
+`foreignObject`. The check removes mutated nodes under an unreachable namespace even when their names appear in the
+allowlist.
+
+A parser-created tree reaches each namespace through one of those transitions. Mutation can splice an HTML element under
+SVG or move a foreign element into HTML without the tag that would authorize the transition. Name-based policy can admit
+the element while missing that impossible ancestry. Namespace reachability rejects the placement rather than trying to
+enumerate every mutation-XSS spelling.
 
 ```mermaid
 flowchart TB
@@ -1370,60 +1354,68 @@ flowchart TB
     class RE,XSS bad
 ```
 
-The proof it works is borrowed. The test suite vendors
-[DOMPurify's own XSS corpus](https://github.com/cure53/DOMPurify/blob/main/test/fixtures/expect.mjs), 219 payloads
-pinned at a source commit, and because turbohtml's default allowlist is not DOMPurify's it checks security equivalence
-rather than string equality: it reparses each sanitized output the way a browser would and asserts that nothing
-executable survives, a scriptable element, an event handler, a dangerous URL, under the default policy and under a
-deliberately maximal one that keeps the whole SVG, MathML, and CSS surface so only the C baseline stands between payload
-and page. The guarantee is inertness rather than a stable string: parsing is not a fixpoint even for safe markup, so a
-benign document can serialize to something that reparses a little differently, and the test allows that. A separate
-curated corpus of known mutation-XSS shapes gets the stronger check, `sanitize(sanitize(x)) == sanitize(x)`, because for
-markup whose whole trick is to reshuffle on a second parse, a sanitized form that changes again is the tell that the
-reshuffle is still live.
+The test suite vendors 219 payloads from
+[DOMPurify's XSS corpus](https://github.com/cure53/DOMPurify/blob/main/test/fixtures/expect.mjs), pinned to a source
+commit. Since the default allowlists differ, tests compare security rather than serialized strings. Each result is
+parsed as a browser would parse it, then inspected for scriptable elements, event handlers, and dangerous URLs. The
+check runs under the default policy and a maximal policy that retains SVG, MathML, and CSS, leaving the C baseline as
+the defense.
 
-### The tables the build trusts
+The maximal policy makes the baseline observable. Removing SVG, MathML, or CSS through a restrictive default could hide
+a defect in the C checks. Keeping those surfaces forces the namespace and URL rules to stop each payload themselves. The
+default-policy run verifies the API users receive; the maximal-policy run verifies the invariant beneath it.
 
-The last surface is not the input, it is the data. turbohtml generates its Unicode,
-[Public Suffix List](https://publicsuffix.org/), and [IANA TLD](https://data.iana.org/TLD/tlds-alpha-by-domain.txt)
-tables from their network sources at build time, the technique the IDNA section described, and a generated table is a
-supply-chain question. Pinning the version says which release you built against, but a poisoned or silently rewritten
-mirror can still serve altered content under that version's stable URL, and no review of the C would catch a bad row in
-an eight-thousand-line generated header. So each generator pins a [SHA-256](https://en.wikipedia.org/wiki/SHA-2) of the
-exact bytes it expects, the Public Suffix List additionally by [source commit](https://github.com/publicsuffix/list)
-rather than `main`, and the build recomputes the digest on every fetch and aborts on any mismatch instead of
-regenerating from whatever it was served. Updating a table is then a deliberate act: a maintainer reviews the diff and
-bumps the pin on purpose, so a rebuild is reproducible or it fails loudly. It is the same instinct as pinning the
-Unicode version so the normalizer and the interpreter agree, carried one step down to the bytes.
+Safe HTML can change across parsing, so the main oracle requires inertness. A curated mutation-XSS corpus adds the
+stronger condition `sanitize(sanitize(x)) == sanitize(x)` for payloads designed to change on a second parse.
 
-None of these four is a speed technique, which is the point. Speed is why I started; being safe to point at the open web
-is what earns the toolkit the right to be there. The section that follows is the other half of the same commitment, the
-harness that checks every answer is correct, because fast and safe still have to be right.
+Idempotence would reject harmless serialization changes if imposed on all HTML. The broad corpus therefore checks the
+property that matters, absence of executable content after browser-style reparsing. Known mutation shapes receive the
+stronger equality check because a second change in those inputs signals that their structural trick may remain active.
 
-If you want to read the real thing, it is on [GitHub](https://github.com/tox-dev/turbohtml) and
-[PyPI](https://pypi.org/project/turbohtml/) (`pip install turbohtml`), and the C is meant to be read side by side with
-the spec. I learned these tricks by reading other people's code, so it seems only fair to make mine easy to read back.
+### Generated tables need byte-level pins
 
-## How this was built
+Build-time generators fetch Unicode, the [Public Suffix List](https://publicsuffix.org/), and the
+[IANA TLD list](https://data.iana.org/TLD/tlds-alpha-by-domain.txt). A versioned URL can still return altered bytes.
+Each generator pins the expected [SHA-256](https://en.wikipedia.org/wiki/SHA-2), and the Public Suffix List also pins a
+[source commit](https://github.com/publicsuffix/list). A mismatched download aborts generation. Updating data requires
+reviewing the generated diff and changing the pin.
 
-One more thing, since leaving it out would be dishonest. I did not write turbohtml by hand. It came together over about
-a month of continuous background work with Anthropic's Opus 4.8, with a little Fable in the mix, across close to 300
-pull requests and many more iterations than that. I reviewed most of the code that landed, but I did not type most of
-it.
+Version pinning alone identifies a release name, not the bytes returned by its URL. A compromised mirror could serve a
+changed table under that name, and review of the hand-written C would not expose the row. The digest makes the fetched
+bytes part of the build input. Pinning the Public Suffix List to a commit also avoids a moving `main` branch. A data
+update becomes a reviewed source change rather than an effect of rebuilding on another day.
 
-The hours I did put in went to the half that matters more than speed: making sure the answers are correct, because a
-fast parser that is subtly wrong is worse than a slow one. Most of that work is harness rather than features. turbohtml
-is checked byte for byte against the Python standard library, against the html5lib conformance suite browsers use, and
-against the output of the libraries it replaces; the URL, encoding, and Unicode-normalization code is validated against
-the standards' own reference test vectors. Where a spec already has a trusted implementation in another language, I ran
-differential tests against it, so a result has to satisfy Python, Rust, C, C++, and Go implementations and the specs at
-once before I believe it. That cross-checking is why I am comfortable publishing something a model and I wrote together.
+These checks establish the boundary for the speed work: skipped operations must preserve the answer on adversarial
+input. The source is available on [GitHub](https://github.com/tox-dev/turbohtml) and
+[PyPI](https://pypi.org/project/turbohtml/) as `pip install turbohtml`.
 
-None of it would exist on its own. The techniques are borrowed and credited throughout, and the correctness is borrowed
-too: every competing library I measured against, across the Python, Rust, C, C++, and Go ecosystems, doubled as an
-oracle for the right answer, and the people who wrote the HTML, CSS, URL, and ECMAScript specs and the conformance
-suites that go with them are the reason any of it can be checked at all. Standing on the shoulders of giants is just the
-accurate description here. My thanks to all of them.
+## The code needed oracles
+
+I developed turbohtml over about one month of continuous background work with Anthropic's Opus 4.8 and some Fable,
+across close to 300 pull requests. I reviewed most merged code and typed a minority of it.
+
+That disclosure shifts the final question from authorship to verification. A fast result generated by a model provides
+no reason to trust parsing behavior. The project needed independent systems capable of rejecting plausible but wrong
+code at each boundary.
+
+Correctness work centered on executable oracles. Byte-for-byte tests compare turbohtml with the Python standard library,
+the browser-oriented html5lib conformance suite, and libraries providing the same APIs. URL, encoding, and Unicode
+normalization use standards' reference vectors. Differential tests compare trusted implementations written in Python,
+Rust, C, C++, and Go with the relevant specification.
+
+The harness chooses the oracle by surface. Standard-library replacements require byte-for-byte compatibility. HTML
+parsing requires the browser conformance corpus. URL processing and encodings use standards vectors because another
+library may share the same mistake. Implementations in other languages provide differential checks where the standard
+already has mature independent code. Agreement across those sources turns a model-produced patch into a result I can
+review and reproduce.
+
+Those libraries, specifications, and conformance suites made this project testable. Their authors supplied both the
+techniques credited throughout the article and the independent answers used to verify this implementation. I thank them.
+
+The same relationship runs through the performance work. lexbor and html5ever supplied memory-layout and scanning ideas.
+simdjson and CPython supplied vector and string-representation patterns. Competitors supplied timing baselines and
+correctness comparisons. The project combines those published ideas; its evidence comes from checking the combination
+against their independent results.
 
 ## Further reading
 
