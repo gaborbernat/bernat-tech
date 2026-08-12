@@ -1,23 +1,4 @@
 {
-  "bloomberg|pytest-memray|pytest-memray||": {
-    "default_branch": "main",
-    "fetched_at": "2026-07-10T18:35:59+00:00",
-    "gh_download_label": "total",
-    "gh_downloads": 0,
-    "gha_usage_count": 0,
-    "jb_downloads": 0,
-    "jb_release_unix": 0,
-    "jb_version": "",
-    "last_commit_date": "2026-07-01T21:25:15Z",
-    "open_prs": 0,
-    "open_total": 18,
-    "pypi_downloads": 2973209,
-    "pypi_release_date": "2026-07-01T21:37:05.565335Z",
-    "pypi_version": "1.9.0",
-    "release_published_at": "2026-07-01T21:36:32Z",
-    "release_tag": "v1.9.0",
-    "stars": 419
-  },
   "gaborbernat|all-repos-self|all-repos-self||false": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
@@ -188,25 +169,6 @@
     "release_published_at": "",
     "release_tag": "",
     "stars": 13
-  },
-  "koxudaxi|datamodel-code-generator|datamodel-code-generator||": {
-    "default_branch": "main",
-    "fetched_at": "2026-07-10T18:35:59+00:00",
-    "gh_download_label": "total",
-    "gh_downloads": 0,
-    "gha_usage_count": 0,
-    "jb_downloads": 0,
-    "jb_release_unix": 0,
-    "jb_version": "",
-    "last_commit_date": "2026-07-08T01:47:03Z",
-    "open_prs": 4,
-    "open_total": 24,
-    "pypi_downloads": 15305191,
-    "pypi_release_date": "2026-07-08T00:47:54.903627Z",
-    "pypi_version": "0.68.1",
-    "release_published_at": "2026-07-08T00:45:44Z",
-    "release_tag": "0.68.1",
-    "stars": 3964
   },
   "pypa|build|build||": {
     "default_branch": "main",

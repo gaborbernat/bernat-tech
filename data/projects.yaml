@@ -22,9 +22,6 @@ primary:
   - name: pytest-env
     org: pytest-dev
     ci: check
-  - name: datamodel-code-generator
-    org: koxudaxi
-    ci: cli-docs,codeql,codespell,lint,llms-txt,readme,schema-docs,test
   - name: pipdeptree
     org: tox-dev
     ci: check
@@ -134,10 +131,6 @@ primary:
   - name: pipx
     org: pypa
     ci: tests.yml
-  - name: pytest-memray
-    org: bloomberg
-    ci: build.yml,build_dist.yml
-    role: co-maintained
 
 maintenance:
   - name: all-repos-self
