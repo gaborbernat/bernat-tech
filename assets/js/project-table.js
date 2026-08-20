@@ -1,4 +1,67 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // the page is a static build refreshed out of band, so ages would freeze at build time in an open tab;
+  // each badge reschedules itself for the moment its own label would next change
+  var formatAge = function (timestamp, now) {
+    var seconds = Math.max(0, now - timestamp);
+    var unitSeconds;
+    var unitEnd;
+    var unit;
+    if (seconds < 60) {
+      return { label: "just now", color: "green", refreshIn: 60 - seconds };
+    }
+    if (seconds < 3600) {
+      unitSeconds = 60;
+      unitEnd = 3600;
+      unit = "minute";
+    } else if (seconds < 86400) {
+      unitSeconds = 3600;
+      unitEnd = 86400;
+      unit = "hour";
+    } else if (seconds < 2592000) {
+      unitSeconds = 86400;
+      unitEnd = 2592000;
+      unit = "day";
+    } else if (seconds < 31536000) {
+      unitSeconds = 2592000;
+      unitEnd = 31536000;
+      unit = "month";
+    } else {
+      unitSeconds = 31536000;
+      unitEnd = Infinity;
+      unit = "year";
+    }
+    var hundredths = Math.floor((seconds * 100) / unitSeconds);
+    var value = hundredths / 100;
+    var refreshIn = Math.min(((hundredths + 1) * unitSeconds) / 100 - seconds, unitEnd - seconds);
+    var color;
+    // thresholds mirror layouts/_partials/time-ago.html so the first paint and the refresh agree
+    if (seconds < 2592000) {
+      color = "green";
+      refreshIn = Math.min(refreshIn, 2592000 - seconds);
+    } else if (seconds < 15638400) {
+      color = "yellow";
+      refreshIn = Math.min(refreshIn, 15638400 - seconds);
+    } else {
+      color = "red";
+    }
+    return {
+      label: value + " " + unit + (value === 1 ? "" : "s") + " ago",
+      color: color,
+      refreshIn: refreshIn,
+    };
+  };
+
+  var updateRelativeTime = function (badge) {
+    var age = formatAge(Number(badge.dataset.timestamp), Date.now() / 1000);
+    badge.querySelector(".relative-time-label").textContent = age.label;
+    badge.classList.remove("badge-gray", "badge-green", "badge-yellow", "badge-red");
+    badge.classList.add("badge-" + age.color);
+    setTimeout(function () {
+      updateRelativeTime(badge);
+    }, Math.max(1, Math.ceil(age.refreshIn * 1000)));
+  };
+  document.querySelectorAll(".relative-time[data-timestamp]").forEach(updateRelativeTime);
+
   var btn = document.getElementById("ci-toggle-btn");
   if (btn) {
     btn.addEventListener("click", function () {

@@ -135,7 +135,7 @@
   <td class="col-data" data-value="{{ $sortVal }}">
       {{- if $ago.label -}}
         {{- $isoDate := (time (int $sortVal)).Format "2006-01-02T15:04:05Z" -}}
-        <a href="{{ $releaseLink }}"><span class="badge badge-{{ $ago.color }} has-tip">{{ $ago.label }}<span class="tip">{{ $isoDate }}</span></span></a>
+        <a href="{{ $releaseLink }}"><span class="badge badge-{{ $ago.color }} has-tip relative-time" data-timestamp="{{ $sortVal }}"><span class="relative-time-label">{{ $ago.label }}</span><span class="tip">{{ $isoDate }}</span></span></a>
       {{- else if not $noRelease -}}
         <a href="{{ $releaseLink }}"><span class="badge badge-gray">No release yet</span></a>
       {{- end -}}
@@ -149,7 +149,7 @@
       {{- end -}}
   <td class="col-data" data-value="{{ $sortVal }}">
         {{- if $lastCommitDate -}}
-        <a href="https://github.com/{{ $org }}/{{ $repo }}/commits"><span class="badge badge-{{ $ago.color }} has-tip">{{ $ago.label }}<span class="tip">{{ $lastCommitDate }}</span></span></a>
+        <a href="https://github.com/{{ $org }}/{{ $repo }}/commits"><span class="badge badge-{{ $ago.color }} has-tip relative-time" data-timestamp="{{ $sortVal }}"><span class="relative-time-label">{{ $ago.label }}</span><span class="tip">{{ $lastCommitDate }}</span></span></a>
         {{- end -}}
   </td>
     {{- else if eq $col "issues" -}}
