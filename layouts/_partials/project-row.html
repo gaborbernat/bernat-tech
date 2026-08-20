@@ -43,13 +43,16 @@
 {{ $typeLabels := dict "python" "Python" "rust" "Rust" "jetbrains" "JetBrains plugin" "monorepo" "Monorepo" "pre-commit" "Pre-commit hook" "github-action" "GitHub Action" "latex" "LaTeX document" "presentation" "Presentation" "other" "Repository" }}
 
 {{ $types := split $type "," }}
+{{- /* data-filter-* drive the filter pills in project-table.js; the pills take their icon from this markup
+       and their label from data-label, since .tip shows the combined "Python + Rust" text instead */ -}}
+{{ $slugs := slice }}{{ range $types }}{{ $slugs = $slugs | append (trim . " ") }}{{ end }}
 
-<tr{{ with $p.role }} class="{{ . }}"{{ end }}>
+<tr{{ with $p.role }} class="{{ . }}"{{ end }} data-filter-types="{{ delimit $slugs "," }}" data-filter-orgs="{{ $org }}">
   <td class="row-num"></td>
   <td>
     {{- $tipText := "" -}}
     {{- with $p.monorepo }}{{ $tipText = . }}{{ else }}{{ $labels := slice }}{{ range $types }}{{ $labels = $labels | append (index $typeLabels (trim . " ")) }}{{ end }}{{ $tipText = delimit $labels " + " }}{{ end -}}
-    {{- range $types -}}<span class="pkg-type has-tip"><i class="{{ index $typeIcons (trim . " ") }}"></i><span class="tip">{{ $tipText }}</span></span>{{- end -}}
+    {{- range $types -}}{{- $t := trim . " " -}}<span class="pkg-type has-tip" data-slug="{{ $t }}" data-label="{{ index $typeLabels $t }}"><i class="{{ index $typeIcons $t }}"></i><span class="tip">{{ $tipText }}</span></span>{{- end -}}
     {{- if ne $repo $name -}}
       <a href="https://github.com/{{ $org }}/{{ $repo }}/tree/{{ $defaultBranch }}/{{ $name }}">{{ $label }}</a>
     {{- else -}}
