@@ -15,7 +15,7 @@ primary:
     type: python
   - name: tox
     org: tox-dev
-    ci: check,weekly
+    ci: check
   - name: pyproject-api
     org: tox-dev
     ci: check
@@ -25,6 +25,7 @@ primary:
   - name: pipdeptree
     org: tox-dev
     ci: check
+    type: python,rust
   - name: sphinx-autodoc-typehints
     org: tox-dev
     ci: check
@@ -147,6 +148,7 @@ maintenance:
     org: gaborbernat
     ci: build
     pypi: "false"
+    type: latex
     no-release: "true"
   - name: ropi_jegyzet_latex
     org: gaborbernat

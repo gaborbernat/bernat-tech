@@ -56,7 +56,7 @@
     "release_tag": "1.13.0",
     "stars": 0
   },
-  "gaborbernat|cv|cv||false": {
+  "gaborbernat|cv|cv|latex|false": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "clones/14d",
@@ -417,7 +417,7 @@
     "release_tag": "",
     "stars": 0
   },
-  "tox-dev|pipdeptree|pipdeptree||": {
+  "tox-dev|pipdeptree|pipdeptree|python,rust|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
