@@ -13,6 +13,12 @@
   slides: https://gaborbernat.github.io/python-meets-crab/
   id: python-meets-crab-pytexas-25
 
+- title: "The new wave of Python Packaging"
+  event: PyTexas 2025
+  year: 2025
+  slides: https://gaborbernat.github.io/new-wave-of-python-packaging/
+  id: new-wave-packaging-pytexas-25
+
 - title: "Lessons learned maintaining open source Python projects"
   event: EuroPython 2024
   year: 2024
@@ -62,6 +68,13 @@
   slides: https://gaborbernat.github.io/packaging-tutorial-pycon-us-21/#/
   id: py-packaging-us-21
 
+- title: "Python packaging demystified"
+  event: EuroPython 2021
+  type: tutorial
+  year: 2021
+  slides: https://gaborbernat.github.io/packaging-tutorial-euro-21/
+  id: py-packaging-eu-21
+
 - title: "Virtualenv - A Deep Dive"
   event: PyCharm Webinar 2021
   year: 2021
@@ -100,6 +113,12 @@
   start: 47
   slides: https://gaborbernat.github.io/pycon-us-2019/#/
   id: type-hinting-and-mypy-us-19
+
+- title: "Type hinting with mypy"
+  event: London Python 2018
+  year: 2018
+  slides: https://gaborbernat.github.io/presentation-london-apr-2018-type-hints/
+  id: type-hinting-mypy-london-18
 
 - title: "Standardize Testing in Python"
   event: EuroPython 2018
