@@ -1,11 +1,14 @@
 {{- $alertTypes := dict "note" "info" "tip" "success" "important" "important" "warning" "warning" "caution" "danger" -}}
 {{- $alertIcons := dict "note" "fa-circle-info" "tip" "fa-lightbulb" "important" "fa-circle-exclamation" "warning" "fa-triangle-exclamation" "caution" "fa-fire" -}}
+{{- $alertTitles := dict "note" "Note" "tip" "Tip" "important" "Important" "warning" "Warning" "caution" "Caution" -}}
 {{- if eq .Type "alert" -}}
   {{- $kind := .AlertType -}}
   {{- $class := index $alertTypes $kind | default "info" -}}
   {{- $icon := index $alertIcons $kind | default "fa-circle-info" -}}
+  {{- /* a bare `> [!NOTE]` carries no AlertTitle, which would render an icon with no label */ -}}
+  {{- $title := .AlertTitle | plainify | default (index $alertTitles $kind) | default (title $kind) -}}
   <div class="alert alert-{{ $class }}">
-    <p class="alert-title"><i class="fa-solid {{ $icon }}" aria-hidden="true"></i> {{ .AlertTitle | plainify }}</p>
+    <p class="alert-title"><i class="fa-solid {{ $icon }}" aria-hidden="true"></i> {{ $title }}</p>
     {{ .Text }}
   </div>
 {{- else -}}
