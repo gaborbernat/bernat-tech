@@ -165,45 +165,49 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // multi-select filters (type and org), each reflected in the URL (?types=python,rust&orgs=tox-dev) so they
-  // survive reload and are shareable. Within a bar the selections OR together; the two bars AND, so picking
-  // Python + tox-dev means "Python projects under tox-dev". Labels come off the rendered rows, so the
-  // toolbars never drift from what data/projects.yaml + project-row.html actually produce.
+  // multi-select filters over three independent axes, each reflected in the URL
+  // (?langs=rust&kinds=pre-commit&orgs=tox-dev) so they survive reload and are shareable. Within a bar the
+  // selections OR together; the bars AND, so Rust + Pre-commit hook asks for Rust pre-commit hooks. Labels
+  // come off the rendered rows, so the toolbars never drift from what data/projects.yaml produces.
   document.querySelectorAll(".project-table").forEach(function (table) {
     var rows = Array.from(table.querySelectorAll("tbody tr"));
     var params = new URLSearchParams(location.search);
 
-    var dimensions = [
-      {
-        key: "types",
-        attr: "filterTypes",
-        label: "Filter by type",
-        // icon + label, read off the first row that renders each slug; .tip carries the combined
-        // "Python + Rust" text for the row, so the per-type name comes from data-label instead
-        entries: function () {
-          var order = [];
-          var by = {};
-          rows.forEach(function (row) {
-            row.querySelectorAll(".pkg-type[data-slug]").forEach(function (span) {
-              var slug = span.dataset.slug;
+    // every lang and kind slug is rendered as a .pkg-type badge, so the pill borrows that badge's icon
+    // and label rather than keeping a second copy of the mapping here
+    var fromBadges = function (attr) {
+      return function () {
+        var by = {};
+        rows.forEach(function (row) {
+          (row.dataset[attr] || "")
+            .split(",")
+            .filter(Boolean)
+            .forEach(function (slug) {
               if (by[slug]) return;
-              var icon = span.querySelector("i");
-              if (!icon) return;
-              by[slug] = { icon: icon.cloneNode(true), label: span.dataset.label || slug };
-              order.push(slug);
+              var badge = row.querySelector('.pkg-type[data-slug="' + slug + '"]');
+              if (!badge) return;
+              by[slug] = { slug: slug, icon: badge.querySelector("i").cloneNode(true), label: badge.dataset.label || slug };
             });
+        });
+        return Object.keys(by)
+          .map(function (slug) {
+            return by[slug];
+          })
+          .sort(function (a, b) {
+            return a.label.localeCompare(b.label);
           });
-          return order.map(function (slug) {
-            return { slug: slug, icon: by[slug].icon, label: by[slug].label };
-          });
-        },
-      },
+      };
+    };
+
+    var dimensions = [
+      { key: "langs", attr: "filterLangs", label: "Filter by language", entries: fromBadges("filterLangs") },
+      { key: "kinds", attr: "filterKinds", label: "Filter by kind", entries: fromBadges("filterKinds") },
       {
         key: "orgs",
         attr: "filterOrgs",
         label: "Filter by org",
         // orgs have no per-org logo, so they share one building glyph; it still separates them from the
-        // type pills at a glance and keeps both bars visually consistent
+        // other pills at a glance and keeps the bars visually consistent
         entries: function () {
           var seen = [];
           rows.forEach(function (row) {

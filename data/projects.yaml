@@ -1,48 +1,68 @@
 primary:
   - name: platformdirs
     org: tox-dev
+    lang: python
+    kind: library
     ci: check
   - name: filelock
     org: tox-dev
+    lang: python
+    kind: library
     ci: check
   - name: virtualenv
     org: pypa
+    lang: python
+    kind: cli,library
     ci: check
   - name: get-virtualenv
     org: pypa
+    lang: python
+    kind: cli
     ci: release.yml
     pypi: "false"
-    type: python
   - name: tox
     org: tox-dev
+    lang: python
+    kind: cli
     ci: check
   - name: pyproject-api
     org: tox-dev
+    lang: python
+    kind: library
     ci: check
   - name: pytest-env
     org: pytest-dev
+    lang: python
+    kind: plugin
     ci: check
   - name: pipdeptree
     org: tox-dev
+    lang: python,rust
+    kind: cli
     ci: check
-    type: python,rust
   - name: sphinx-autodoc-typehints
     org: tox-dev
+    lang: python
+    kind: plugin
     ci: check
   - name: pre-commit-uv
     org: tox-dev
+    lang: python
+    kind: plugin
     ci: check
-    type: pre-commit
   - name: action-pre-commit-uv
     org: tox-dev
+    kind: action
     ci: main.yml
     pypi: "false"
-    type: github-action
   - name: tox-uv
     org: tox-dev
+    lang: python
+    kind: plugin
     ci: check
   - name: toml-fmt
     org: tox-dev
+    kind: monorepo
     ci: common,toml_fmt_common_build,toml_fmt_common_test
     pypi: "false"
     no-release: "true"
@@ -50,222 +70,161 @@ primary:
   - name: pyproject-fmt
     org: tox-dev
     repo: toml-fmt
+    lang: python,rust
+    kind: cli,pre-commit
     ci: pyproject_fmt_build,pyproject_fmt_test
     monorepo: Part of toml-fmt monorepo
-    type: python,rust
   - name: pyproject-fmt
     org: tox-dev
+    label: pyproject-fmt
+    kind: pre-commit
     ci: main
     pypi: "false"
-    type: pre-commit
-    label: pyproject-fmt
   - name: tox-toml-fmt
     org: tox-dev
     repo: toml-fmt
+    lang: python,rust
+    kind: cli,pre-commit
     ci: tox_toml_fmt_build,tox_toml_fmt_test
     monorepo: Part of toml-fmt monorepo
-    type: python,rust
   - name: tox-toml-fmt
     org: tox-dev
+    label: tox-toml-fmt
+    kind: pre-commit
     ci: main
     pypi: "false"
-    type: pre-commit
-    label: tox-toml-fmt
   - name: pytest-print
     org: pytest-dev
+    lang: python
+    kind: plugin
     ci: check
   - name: tox-gh
     org: tox-dev
+    lang: python
+    kind: plugin
     ci: check
   - name: sphinx-argparse-cli
     org: tox-dev
+    lang: python
+    kind: plugin
     ci: check
   - name: python-discovery
     org: tox-dev
+    lang: python
+    kind: library
     ci: check
   - name: devpi-process
     org: tox-dev
+    lang: python
+    kind: library
     ci: check
   - name: tox-ini-fmt
     org: tox-dev
+    lang: python
+    kind: cli,pre-commit
     ci: check
   - name: bump-deps-index
     org: gaborbernat
+    lang: python
+    kind: cli
     ci: check
   - name: pypi-changes
     org: gaborbernat
+    lang: python
+    kind: cli
     ci: check
   - name: mdformat-hugo
     org: gaborbernat
+    lang: python
+    kind: plugin
     ci: check
   - name: xml-fmt
     org: tox-dev
+    lang: python
+    kind: cli,pre-commit
     ci: check
   - name: turbohtml
     org: tox-dev
+    lang: python,c
+    kind: cli,library
     ci: check
   - name: peryx
     org: tox-dev
+    lang: rust
+    kind: service
     ci: ci.yml
     pypi: "false"
-    type: python,rust
   - name: mdformat-zola
     org: tox-dev
+    lang: python
+    kind: plugin
     ci: check
   - name: PyVenvManage
     org: tox-dev
+    label: PyVenv Manage 2
+    lang: kotlin
+    kind: jetbrains
     ci: check
     pypi: "false"
     jetbrains-id: "20536"
     jetbrains-slug: pyvenv-manage-2
-    label: PyVenv Manage 2
   - name: jetbrains-fish
     org: tox-dev
+    label: Fish Shell
+    lang: kotlin,shell
+    kind: jetbrains
     ci: check
     pypi: "false"
     jetbrains-id: "29973"
     jetbrains-slug: fish-shell
-    label: Fish Shell
   - name: build
     org: pypa
+    lang: python
+    kind: cli,library
     ci: test.yml
   - name: pipx
     org: pypa
+    lang: python
+    kind: cli
     ci: tests.yml
 
 maintenance:
   - name: all-repos-self
     org: gaborbernat
+    lang: python
+    kind: cli
     ci: check
     pypi: "false"
     no-release: "true"
   - name: bernat-tech
     org: gaborbernat
+    kind: site
     ci: build
     pypi: "false"
     no-release: "true"
   - name: cv
     org: gaborbernat
+    lang: tex
+    kind: document
     ci: build
     pypi: "false"
-    type: latex
     no-release: "true"
   - name: ropi_jegyzet_latex
     org: gaborbernat
+    lang: tex
+    kind: document
     ci: build
     pypi: "false"
-    type: latex
     no-release: "true"
   - name: dotfiles
     org: gaborbernat
+    lang: python,shell
+    kind: config
     pypi: "false"
     no-release: "true"
   - name: gaborbernat
     org: gaborbernat
+    kind: document
     ci: update-readme
     pypi: "false"
     no-release: "true"
-
-presentations:
-  - name: python-meets-crab
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "Python meets the crab - PyCon US - 2025"
-    date: "2025-05-15"
-  - name: new-wave-of-python-packaging
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "The new wave of Python Packaging - PyTexas - 2025"
-    date: "2025-04-11"
-  - name: europython-24
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "Lessons learned maintaining open source Python projects - EuroPython - 2024"
-    date: "2024-07-10"
-  - name: py-texas-24
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "Lessons learned maintaining open source Python projects - PyTexas - 2024"
-    date: "2024-04-20"
-  - name: pycon-us-23-lighting
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "What's new in tox 4 - PyCon US - 2023"
-    date: "2023-04-22"
-  - name: pep-660-662-2022
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "How we standardized editable installs - PyCon US - 2022"
-    date: "2022-04-29"
-  - name: type-hint-recr-2022
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "Type hints - Inside the snake pit - Bloomberg - 2022"
-    date: "2022-03-01"
-  - name: type-hint-recr-2021
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "Type hints - Inside the snake pit - Bloomberg - 2021"
-    date: "2021-04-01"
-  - name: packaging-tutorial-euro-21
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "Python packaging tutorial - EuroPython - 2021"
-    date: "2021-07-26"
-  - name: packaging-tutorial-pycon-us-21
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "Python packaging tutorial - PyCon US - 2021"
-    date: "2021-05-12"
-  - name: pycon-us-21-lighting
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "tox 4 - coming soon - PyCon US - 2021"
-    date: "2021-05-14"
-  - name: euro_python_2019
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "How a virtual environment works - EuroPython - 2019"
-    date: "2019-07-10"
-  - name: pylondinium2019
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "How to best package your library - PyLondinium - 2019"
-    date: "2019-06-15"
-  - name: pycon-us-2019
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "Type hints inside the snake pit - PyCon US - 2019"
-    date: "2019-05-03"
-  - name: pycon-eu-2018
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "Standardize testing in Python - EuroPython - 2018"
-    date: "2018-07-26"
-  - name: pylondinium18
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "Type hints inside the snake pit - PyLondinium - 2018"
-    date: "2018-06-09"
-  - name: presentation-london-apr-2018-type-hints
-    org: gaborbernat
-    pypi: "false"
-    type: presentation
-    label: "Type hinting with mypy - London Python - 2018"
-    date: "2018-04-01"

@@ -13,7 +13,7 @@ time it was last fetched cleanly (no transient failure); the stalest go first, a
 when any record has gone unrefreshed for more than three days so the workflow surfaces it."""
 
 # print is this CLI build script's progress output; stdout is intended
-# ruff: noqa: T201
+# ruff: file-ignore[print]
 
 from __future__ import annotations
 
@@ -44,7 +44,7 @@ type Attempt = Callable[[str, Callable[[], Json]], Json]
 
 _SRC: Final = Path("data/projects.yaml")
 _OUT: Final = Path("data/project_stats.json")
-_GROUPS: Final = ("primary", "maintenance")  # presentations render only static columns, no live stats
+_GROUPS: Final = ("primary", "maintenance")  # every group data/projects.yaml defines
 _TOKEN: Final = os.environ.get("HUGO_GITHUB_TOKEN") or os.environ.get("GITHUB_TOKEN") or ""
 _GH_HEADERS: Final = {"Authorization": f"Bearer {_TOKEN}"} if _TOKEN else {}
 _PEPY_KEY: Final = os.environ.get("PEPY") or ""
@@ -116,9 +116,10 @@ def is_stale(fetched_at: object) -> bool:
 
 
 def keyed(project: dict[str, str]) -> str:
-    # the composite key project-row.html rebuilds; keep the two in lockstep
+    # the composite key project-row.html rebuilds; keep the two in lockstep. `lang` is deliberately absent:
+    # it never changes which endpoints get hit, so reclassifying one must not throw away its numbers.
     parts = (project["org"], project.get("repo") or project["name"], project["name"])
-    return "|".join((*parts, project.get("type") or "", project.get("pypi") or ""))
+    return "|".join((*parts, project.get("kind") or "", project.get("pypi") or ""))
 
 
 def render_summary(listing: list[dict[str, str]], results: list[tuple[Stats, list[str]]]) -> None:
@@ -152,12 +153,16 @@ def render_summary(listing: list[dict[str, str]], results: list[tuple[Stats, lis
         console.print(note)
 
 
+def kinds_of(project: dict[str, str]) -> list[str]:
+    return [entry.strip() for entry in (project.get("kind") or "").split(",")]
+
+
 def tracked_field(project: dict[str, str]) -> str:
     if (project.get("pypi") or "") != "false":
         return "pypi_downloads"
     if project.get("jetbrains-id"):
         return "jb_downloads"
-    if "github-action" in (project.get("type") or ""):
+    if "action" in kinds_of(project):
         return "gha_usage_count"
     return "gh_downloads"
 
@@ -194,7 +199,7 @@ def stats_for(project: dict[str, str]) -> tuple[Stats, list[str]]:
     show_pypi = (project.get("pypi") or "") != "false"
     no_release = (project.get("no-release") or "") == "true"  # never cuts releases: skip the always-404 lookup
     jetbrains_id = project.get("jetbrains-id")
-    types = [entry.strip() for entry in (project.get("type") or "").split(",")]
+    kinds = kinds_of(project)
     errors: list[str] = []
     transient: list[str] = []
     record = from_baseline(_BASELINE.get(keyed(project)))  # keep prior values for any fetch that fails
@@ -216,7 +221,7 @@ def stats_for(project: dict[str, str]) -> tuple[Stats, list[str]]:
     if show_pypi:
         collect_pypi(record, name, attempt)
     elif not jetbrains_id:
-        collect_downloads(record, org, repo, types, attempt)
+        collect_downloads(record, org, repo, kinds, attempt)
     if jetbrains_id:
         collect_jetbrains(record, jetbrains_id, attempt)
 
@@ -295,13 +300,13 @@ def last_month_downloads(stats: Json) -> int:
     )
 
 
-def collect_downloads(record: Stats, org: str, repo: str, types: list[str], attempt: Attempt) -> None:
-    if "github-action" in types:
+def collect_downloads(record: Stats, org: str, repo: str, kinds: list[str], attempt: Attempt) -> None:
+    if "action" in kinds:
         query = urllib.parse.quote(f'"uses: {org}/{repo}"')
         if (usage := attempt("gha-usage", lambda: gh(f"search/code?q={query}"))) is not None:
             record.gha_usage_count = as_int(dig(usage, "total_count"))
         return
-    if "pre-commit" not in types:
+    if "pre-commit" not in kinds:
         releases = as_list(attempt("gh-releases", lambda: gh(f"repos/{org}/{repo}/releases?per_page=100")))
         if downloads := sum(
             as_int(dig(asset, "download_count")) for release in releases for asset in as_list(dig(release, "assets"))

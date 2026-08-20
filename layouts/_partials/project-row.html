@@ -10,7 +10,7 @@
 {{ $noRelease := eq (or $p.no_release "") "true" }}
 {{/* Stats come from data/project_stats.json, refreshed hourly out of band by scripts/prefetch_projects.py
      so the content build makes no API calls. The key mirrors that script's keyed(). */}}
-{{ $key := printf "%s|%s|%s|%s|%s" $org $repo $name (or $p.type "") (or $p.pypi "") }}
+{{ $key := printf "%s|%s|%s|%s|%s" $org $repo $name (or $p.kind "") (or $p.pypi "") }}
 {{ $d := index (or hugo.Data.project_stats dict) $key | default dict }}
 
 {{ $defaultBranch := or $d.default_branch "main" }}
@@ -32,27 +32,36 @@
 
 {{ $nowUnix := now.Unix }}
 
-{{ $type := "other" }}
-{{ if $p.monorepo }}{{ $type = "monorepo" }}
-{{ else if $jetbrainsId }}{{ $type = "jetbrains" }}
-{{ else if $showPypi }}{{ $type = "python" }}
-{{ end }}
-{{ with $p.type }}{{ $type = . }}{{ end }}
+{{/* lang and kind are independent axes — what it is written in, and what it is to whoever installs it.
+     Each drives its own filter bar in project-table.js through the data-filter-* attributes below, so
+     "Rust" and "Pre-commit hook" can be asked for together rather than as one flat list. */}}
+{{ $langIcons := dict "python" "fab fa-python" "rust" "fab fa-rust" "c" "fas fa-microchip" "kotlin" "fab fa-java" "tex" "fas fa-book" "shell" "fas fa-scroll" }}
+{{ $langLabels := dict "python" "Python" "rust" "Rust" "c" "C" "kotlin" "Kotlin" "tex" "TeX" "shell" "Shell" }}
+{{ $kindIcons := dict "library" "fas fa-cube" "cli" "fas fa-terminal" "plugin" "fas fa-plug" "pre-commit" "fab fa-git-alt" "action" "fas fa-bolt" "jetbrains" "fas fa-lightbulb" "monorepo" "fas fa-layer-group" "service" "fas fa-server" "document" "fas fa-file-lines" "site" "fas fa-globe" "config" "fas fa-gear" }}
+{{ $kindLabels := dict "library" "Library" "cli" "Command-line tool" "plugin" "Plugin" "pre-commit" "Pre-commit hook" "action" "GitHub Action" "jetbrains" "JetBrains plugin" "monorepo" "Monorepo" "service" "Service" "document" "Document" "site" "Website" "config" "Configuration" }}
 
-{{ $typeIcons := dict "python" "fab fa-python" "rust" "fab fa-rust" "jetbrains" "fas fa-plug" "monorepo" "fas fa-layer-group" "pre-commit" "fab fa-git-alt" "github-action" "fas fa-bolt" "latex" "fas fa-book" "presentation" "fas fa-desktop" "other" "fab fa-github" }}
-{{ $typeLabels := dict "python" "Python" "rust" "Rust" "jetbrains" "JetBrains plugin" "monorepo" "Monorepo" "pre-commit" "Pre-commit hook" "github-action" "GitHub Action" "latex" "LaTeX document" "presentation" "Presentation" "other" "Repository" }}
+{{ $langs := slice }}{{ range split (or $p.lang "") "," }}{{ with trim . " " }}{{ $langs = $langs | append . }}{{ end }}{{ end }}
+{{ $kinds := slice }}{{ range split (or $p.kind "") "," }}{{ with trim . " " }}{{ $kinds = $kinds | append . }}{{ end }}{{ end }}
 
-{{ $types := split $type "," }}
-{{- /* data-filter-* drive the filter pills in project-table.js; the pills take their icon from this markup
-       and their label from data-label, since .tip shows the combined "Python + Rust" text instead */ -}}
-{{ $slugs := slice }}{{ range $types }}{{ $slugs = $slugs | append (trim . " ") }}{{ end }}
+{{ $badges := slice }}
+{{- range $langs -}}
+  {{- $badges = $badges | append (dict "slug" . "icon" (index $langIcons .) "label" (index $langLabels .) "tip" (index $langLabels .)) -}}
+{{- end -}}
+{{- range $kinds -}}
+  {{- $label := index $kindLabels . -}}
+  {{- /* the parent repo says which packages it holds, which beats a bare "Monorepo" tooltip */ -}}
+  {{- $tip := $label -}}{{ if and (eq . "monorepo") $p.monorepo }}{{ $tip = $p.monorepo }}{{ end -}}
+  {{- $badges = $badges | append (dict "slug" . "icon" (index $kindIcons .) "label" $label "tip" $tip) -}}
+{{- end -}}
+{{- /* a package that merely lives inside a monorepo gets the note without joining the monorepo filter */ -}}
+{{- if and $p.monorepo (not (in $kinds "monorepo")) -}}
+  {{- $badges = $badges | append (dict "slug" "" "icon" "fas fa-layer-group" "label" "" "tip" $p.monorepo) -}}
+{{- end }}
 
-<tr{{ with $p.role }} class="{{ . }}"{{ end }} data-filter-types="{{ delimit $slugs "," }}" data-filter-orgs="{{ $org }}">
+<tr{{ with $p.role }} class="{{ . }}"{{ end }} data-filter-langs="{{ delimit $langs "," }}" data-filter-kinds="{{ delimit $kinds "," }}" data-filter-orgs="{{ $org }}">
   <td class="row-num"></td>
   <td>
-    {{- $tipText := "" -}}
-    {{- with $p.monorepo }}{{ $tipText = . }}{{ else }}{{ $labels := slice }}{{ range $types }}{{ $labels = $labels | append (index $typeLabels (trim . " ")) }}{{ end }}{{ $tipText = delimit $labels " + " }}{{ end -}}
-    {{- range $types -}}{{- $t := trim . " " -}}<span class="pkg-type has-tip" data-slug="{{ $t }}" data-label="{{ index $typeLabels $t }}"><i class="{{ index $typeIcons $t }}"></i><span class="tip">{{ $tipText }}</span></span>{{- end -}}
+    {{- range $badges -}}{{- $b := . -}}<span class="pkg-type has-tip"{{ with $b.slug }} data-slug="{{ . }}" data-label="{{ $b.label }}"{{ end }}><i class="{{ $b.icon }}"></i><span class="tip">{{ $b.tip }}</span></span>{{- end -}}
     {{- if ne $repo $name -}}
       <a href="https://github.com/{{ $org }}/{{ $repo }}/tree/{{ $defaultBranch }}/{{ $name }}">{{ $label }}</a>
     {{- else -}}

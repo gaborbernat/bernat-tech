@@ -1,5 +1,5 @@
 {
-  "gaborbernat|all-repos-self|all-repos-self||false": {
+  "gaborbernat|all-repos-self|all-repos-self|cli|false": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "clones/14d",
@@ -18,7 +18,7 @@
     "release_tag": "",
     "stars": 0
   },
-  "gaborbernat|bernat-tech|bernat-tech||false": {
+  "gaborbernat|bernat-tech|bernat-tech|site|false": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "clones/14d",
@@ -37,7 +37,7 @@
     "release_tag": "",
     "stars": 2
   },
-  "gaborbernat|bump-deps-index|bump-deps-index||": {
+  "gaborbernat|bump-deps-index|bump-deps-index|cli|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -56,7 +56,7 @@
     "release_tag": "1.13.0",
     "stars": 0
   },
-  "gaborbernat|cv|cv|latex|false": {
+  "gaborbernat|cv|cv|document|false": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "clones/14d",
@@ -75,7 +75,7 @@
     "release_tag": "",
     "stars": 0
   },
-  "gaborbernat|dotfiles|dotfiles||false": {
+  "gaborbernat|dotfiles|dotfiles|config|false": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "clones/14d",
@@ -94,7 +94,7 @@
     "release_tag": "",
     "stars": 0
   },
-  "gaborbernat|gaborbernat|gaborbernat||false": {
+  "gaborbernat|gaborbernat|gaborbernat|document|false": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "clones/14d",
@@ -113,7 +113,7 @@
     "release_tag": "",
     "stars": 5
   },
-  "gaborbernat|mdformat-hugo|mdformat-hugo||": {
+  "gaborbernat|mdformat-hugo|mdformat-hugo|plugin|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -132,7 +132,7 @@
     "release_tag": "0.1.0",
     "stars": 0
   },
-  "gaborbernat|pypi-changes|pypi-changes||": {
+  "gaborbernat|pypi-changes|pypi-changes|cli|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -151,7 +151,7 @@
     "release_tag": "1.5.1",
     "stars": 29
   },
-  "gaborbernat|ropi_jegyzet_latex|ropi_jegyzet_latex|latex|false": {
+  "gaborbernat|ropi_jegyzet_latex|ropi_jegyzet_latex|document|false": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "clones/14d",
@@ -170,7 +170,7 @@
     "release_tag": "",
     "stars": 13
   },
-  "pypa|build|build||": {
+  "pypa|build|build|cli,library|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -189,7 +189,7 @@
     "release_tag": "1.5.1",
     "stars": 852
   },
-  "pypa|get-virtualenv|get-virtualenv|python|false": {
+  "pypa|get-virtualenv|get-virtualenv|cli|false": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -208,7 +208,7 @@
     "release_tag": "21.6.0",
     "stars": 17
   },
-  "pypa|pipx|pipx||": {
+  "pypa|pipx|pipx|cli|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -227,7 +227,7 @@
     "release_tag": "1.15.0",
     "stars": 12874
   },
-  "pypa|virtualenv|virtualenv||": {
+  "pypa|virtualenv|virtualenv|cli,library|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -246,7 +246,7 @@
     "release_tag": "21.6.0",
     "stars": 5043
   },
-  "pytest-dev|pytest-env|pytest-env||": {
+  "pytest-dev|pytest-env|pytest-env|plugin|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -265,7 +265,7 @@
     "release_tag": "1.6.0",
     "stars": 231
   },
-  "pytest-dev|pytest-print|pytest-print||": {
+  "pytest-dev|pytest-print|pytest-print|plugin|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -284,7 +284,7 @@
     "release_tag": "1.2.2",
     "stars": 81
   },
-  "tox-dev|PyVenvManage|PyVenvManage||false": {
+  "tox-dev|PyVenvManage|PyVenvManage|jetbrains|false": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -303,7 +303,7 @@
     "release_tag": "v2.4.1",
     "stars": 9
   },
-  "tox-dev|action-pre-commit-uv|action-pre-commit-uv|github-action|false": {
+  "tox-dev|action-pre-commit-uv|action-pre-commit-uv|action|false": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -322,7 +322,7 @@
     "release_tag": "v1.0.4",
     "stars": 22
   },
-  "tox-dev|devpi-process|devpi-process||": {
+  "tox-dev|devpi-process|devpi-process|library|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -341,7 +341,7 @@
     "release_tag": "1.1.1",
     "stars": 10
   },
-  "tox-dev|filelock|filelock||": {
+  "tox-dev|filelock|filelock|library|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -360,7 +360,7 @@
     "release_tag": "3.29.7",
     "stars": 963
   },
-  "tox-dev|jetbrains-fish|jetbrains-fish||false": {
+  "tox-dev|jetbrains-fish|jetbrains-fish|jetbrains|false": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -379,7 +379,7 @@
     "release_tag": "v0.1.8",
     "stars": 5
   },
-  "tox-dev|mdformat-zola|mdformat-zola||": {
+  "tox-dev|mdformat-zola|mdformat-zola|plugin|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -398,7 +398,7 @@
     "release_tag": "1.0.0",
     "stars": 0
   },
-  "tox-dev|peryx|peryx|python,rust|false": {
+  "tox-dev|peryx|peryx|service|false": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "clones/14d",
@@ -417,7 +417,7 @@
     "release_tag": "",
     "stars": 0
   },
-  "tox-dev|pipdeptree|pipdeptree|python,rust|": {
+  "tox-dev|pipdeptree|pipdeptree|cli|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -436,7 +436,7 @@
     "release_tag": "3.1.1",
     "stars": 3002
   },
-  "tox-dev|platformdirs|platformdirs||": {
+  "tox-dev|platformdirs|platformdirs|library|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -455,7 +455,7 @@
     "release_tag": "4.10.0",
     "stars": 955
   },
-  "tox-dev|pre-commit-uv|pre-commit-uv|pre-commit|": {
+  "tox-dev|pre-commit-uv|pre-commit-uv|plugin|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -474,7 +474,7 @@
     "release_tag": "4.2.2",
     "stars": 203
   },
-  "tox-dev|pyproject-api|pyproject-api||": {
+  "tox-dev|pyproject-api|pyproject-api|library|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -512,7 +512,7 @@
     "release_tag": "v2.25.2",
     "stars": 214
   },
-  "tox-dev|python-discovery|python-discovery||": {
+  "tox-dev|python-discovery|python-discovery|library|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -531,7 +531,7 @@
     "release_tag": "1.4.4",
     "stars": 13
   },
-  "tox-dev|sphinx-argparse-cli|sphinx-argparse-cli||": {
+  "tox-dev|sphinx-argparse-cli|sphinx-argparse-cli|plugin|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -550,7 +550,7 @@
     "release_tag": "1.21.4",
     "stars": 28
   },
-  "tox-dev|sphinx-autodoc-typehints|sphinx-autodoc-typehints||": {
+  "tox-dev|sphinx-autodoc-typehints|sphinx-autodoc-typehints|plugin|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -569,7 +569,7 @@
     "release_tag": "3.12.1",
     "stars": 585
   },
-  "tox-dev|toml-fmt|pyproject-fmt|python,rust|": {
+  "tox-dev|toml-fmt|pyproject-fmt|cli,pre-commit|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -588,7 +588,7 @@
     "release_tag": "pyproject-fmt/2.25.2",
     "stars": 82
   },
-  "tox-dev|toml-fmt|toml-fmt||false": {
+  "tox-dev|toml-fmt|toml-fmt|monorepo|false": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "clones/14d",
@@ -607,7 +607,7 @@
     "release_tag": "pyproject-fmt/2.25.2",
     "stars": 82
   },
-  "tox-dev|toml-fmt|tox-toml-fmt|python,rust|": {
+  "tox-dev|toml-fmt|tox-toml-fmt|cli,pre-commit|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -626,7 +626,7 @@
     "release_tag": "pyproject-fmt/2.25.2",
     "stars": 82
   },
-  "tox-dev|tox-gh|tox-gh||": {
+  "tox-dev|tox-gh|tox-gh|plugin|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -645,7 +645,7 @@
     "release_tag": "1.7.1",
     "stars": 66
   },
-  "tox-dev|tox-ini-fmt|tox-ini-fmt||": {
+  "tox-dev|tox-ini-fmt|tox-ini-fmt|cli,pre-commit|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -683,7 +683,7 @@
     "release_tag": "v1.9.3",
     "stars": 4
   },
-  "tox-dev|tox-uv|tox-uv||": {
+  "tox-dev|tox-uv|tox-uv|plugin|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -702,7 +702,7 @@
     "release_tag": "1.35.2",
     "stars": 346
   },
-  "tox-dev|tox|tox||": {
+  "tox-dev|tox|tox|cli|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -721,7 +721,7 @@
     "release_tag": "4.56.4",
     "stars": 3912
   },
-  "tox-dev|turbohtml|turbohtml||": {
+  "tox-dev|turbohtml|turbohtml|cli,library|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
@@ -740,7 +740,7 @@
     "release_tag": "1.3.1",
     "stars": 10
   },
-  "tox-dev|xml-fmt|xml-fmt||": {
+  "tox-dev|xml-fmt|xml-fmt|cli,pre-commit|": {
     "default_branch": "main",
     "fetched_at": "2026-07-10T18:35:59+00:00",
     "gh_download_label": "total",
