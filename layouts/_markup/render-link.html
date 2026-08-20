@@ -1,5 +1,6 @@
 {{- $u := urls.Parse .Destination -}}
-{{- $external := and $u.IsAbs (ne $u.Hostname "") (not (strings.HasSuffix $u.Hostname "bernat.tech")) -}}
+{{- $siteHost := (urls.Parse site.BaseURL).Hostname -}}
+{{- $external := and $u.IsAbs (ne $u.Hostname "") (not (strings.HasSuffix $u.Hostname $siteHost)) -}}
 <a href="{{ .Destination | safeURL }}"
   {{- with .Title }} title="{{ . }}"{{ end }}
   {{- if $external }} target="_blank" rel="noopener noreferrer"{{ end -}}
