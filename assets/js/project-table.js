@@ -308,18 +308,29 @@ document.addEventListener("DOMContentLoaded", function () {
       history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash);
     };
 
-    // three stacked bars read as a lot of chrome above the table, so they live inside a native <details>
-    // disclosure instead of always-visible divs. Open by default only when a URL-supplied filter is
-    // already active, so a shared filtered link still shows what's applied instead of hiding it.
-    var accordion = document.createElement("details");
-    accordion.className = "type-filters";
-    var summary = document.createElement("summary");
-    accordion.appendChild(summary);
+    // three stacked bars read as a lot of chrome above the table, so they live in a panel toggled by a
+    // dedicated button. The toggle is a sibling of the panel, not its container, so showing the panel
+    // only pushes the table down — it never resizes or moves the toggle itself. Open by default only
+    // when a URL-supplied filter is already active, so a shared filtered link still shows what's applied.
+    var panel = document.createElement("div");
+    panel.className = "type-filters-panel";
+    panel.id = "project-filters-" + tableIndex;
+    var filterToggle = document.createElement("button");
+    filterToggle.type = "button";
+    filterToggle.className = "type-filters-toggle";
+    filterToggle.setAttribute("aria-controls", panel.id);
+    var setPanelOpen = function (open) {
+      panel.hidden = !open;
+      filterToggle.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+    filterToggle.addEventListener("click", function () {
+      setPanelOpen(panel.hidden);
+    });
     var updateSummary = function () {
       var activeCount = dimensions.reduce(function (n, dim) {
         return n + dim.selected.size;
       }, 0);
-      summary.textContent = "Filters" + (activeCount ? " (" + activeCount + ")" : "");
+      filterToggle.textContent = "Filters" + (activeCount ? " (" + activeCount + ")" : "");
     };
 
     var hasBar = false;
@@ -357,12 +368,14 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         bar.appendChild(pill);
       });
-      accordion.appendChild(bar);
+      panel.appendChild(bar);
     });
     if (hasBar) {
-      accordion.open = dimensions.some(function (dim) {
-        return dim.selected.size > 0;
-      });
+      setPanelOpen(
+        dimensions.some(function (dim) {
+          return dim.selected.size > 0;
+        }),
+      );
       updateSummary();
       var toolbar = document.createElement("div");
       toolbar.className = "table-toolbar";
@@ -372,7 +385,8 @@ document.addEventListener("DOMContentLoaded", function () {
         var ciToggle = document.getElementById("ci-toggle-btn");
         if (ciToggle) toolbar.appendChild(ciToggle);
       }
-      toolbar.appendChild(accordion);
+      toolbar.appendChild(filterToggle);
+      toolbar.appendChild(panel);
       table.parentNode.insertBefore(toolbar, table);
     }
     applyFilter();

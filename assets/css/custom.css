@@ -68,7 +68,8 @@ table.project-table.ci-view .col-ci {
   white-space: normal;
   max-width: 350px;
 }
-button.ci-toggle {
+button.ci-toggle,
+button.type-filters-toggle {
   background: none;
   border: 1px solid currentColor;
   color: inherit;
@@ -78,11 +79,13 @@ button.ci-toggle {
   border-radius: 4px;
   opacity: 0.6;
 }
-button.ci-toggle:hover {
+button.ci-toggle:hover,
+button.type-filters-toggle:hover,
+button.type-filters-toggle[aria-expanded="true"] {
   opacity: 1;
 }
-/* the page-wide CI toggle and the first table's Filters accordion share one row; collapsed they read as
-   two same-height pill buttons, and an open accordion claims the full row width to wrap its pills below */
+/* the page-wide CI toggle and the first table's Filters toggle share one row; the panel is a separate
+   sibling that claims the full row width when shown, so opening it never moves either button */
 .table-toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -90,40 +93,15 @@ button.ci-toggle:hover {
   gap: 8px;
   margin-bottom: 8px;
 }
-.table-toolbar .type-filters[open] {
+.type-filters-panel {
   flex-basis: 100%;
 }
-.type-filters > summary {
-  display: inline-block;
-  background: none;
-  border: 1px solid currentColor;
-  color: inherit;
-  cursor: pointer;
-  font-size: 0.8em;
-  /* buttons default to a form-control line-height; <summary> instead inherits the page's ~2x prose
-     line-height, which alone made it nearly twice as tall as button.ci-toggle at the same padding */
-  line-height: normal;
-  padding: 2px 8px;
-  border-radius: 4px;
-  opacity: 0.6;
-  list-style: none;
-}
-.type-filters > summary::-webkit-details-marker {
-  display: none;
-}
-.type-filters > summary::marker {
-  content: "";
-}
-.type-filters > summary:hover,
-.type-filters[open] > summary {
-  opacity: 1;
-}
-.type-filters > summary::after {
+.type-filters-toggle::after {
   content: "\25be"; /* ▾, flips to ▸ when collapsed so the affordance reads as expandable either way */
   display: inline-block;
   margin-left: 6px;
 }
-.type-filters:not([open]) > summary::after {
+.type-filters-toggle[aria-expanded="false"]::after {
   content: "\25b8"; /* ▸ */
 }
 .type-filter {
