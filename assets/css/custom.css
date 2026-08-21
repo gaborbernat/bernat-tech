@@ -73,11 +73,47 @@ button.ci-toggle {
 button.ci-toggle:hover {
   opacity: 1;
 }
+.type-filters {
+  margin-bottom: 8px;
+}
+.type-filters > summary {
+  display: inline-block;
+  background: none;
+  border: 1px solid currentColor;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.8em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  opacity: 0.6;
+  list-style: none;
+}
+.type-filters > summary::-webkit-details-marker {
+  display: none;
+}
+.type-filters > summary::marker {
+  content: "";
+}
+.type-filters > summary:hover,
+.type-filters[open] > summary {
+  opacity: 1;
+}
+.type-filters > summary::after {
+  content: "\25be"; /* ▾, flips to ▸ when collapsed so the affordance reads as expandable either way */
+  display: inline-block;
+  margin-left: 6px;
+}
+.type-filters:not([open]) > summary::after {
+  content: "\25b8"; /* ▸ */
+}
 .type-filter {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-bottom: 8px;
+  margin-top: 8px;
+}
+.type-filter:first-of-type {
+  margin-top: 10px;
 }
 .type-filter-pill {
   display: inline-flex;

@@ -308,10 +308,25 @@ document.addEventListener("DOMContentLoaded", function () {
       history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash);
     };
 
-    // each insertBefore(bar, table) appends just above the table, so bars land in declaration order
+    // three stacked bars read as a lot of chrome above the table, so they live inside a native <details>
+    // disclosure instead of always-visible divs. Open by default only when a URL-supplied filter is
+    // already active, so a shared filtered link still shows what's applied instead of hiding it.
+    var accordion = document.createElement("details");
+    accordion.className = "type-filters";
+    var summary = document.createElement("summary");
+    accordion.appendChild(summary);
+    var updateSummary = function () {
+      var activeCount = dimensions.reduce(function (n, dim) {
+        return n + dim.selected.size;
+      }, 0);
+      summary.textContent = "Filters" + (activeCount ? " (" + activeCount + ")" : "");
+    };
+
+    var hasBar = false;
     dimensions.forEach(function (dim) {
       // a lone option filters nothing, so the smaller tables get no bar for that dimension
       if (dim.items.length < 2) return;
+      hasBar = true;
       var bar = document.createElement("div");
       bar.className = "type-filter";
       bar.setAttribute("role", "group");
@@ -338,11 +353,19 @@ document.addEventListener("DOMContentLoaded", function () {
           pill.setAttribute("aria-pressed", active ? "true" : "false");
           applyFilter();
           syncUrl();
+          updateSummary();
         });
         bar.appendChild(pill);
       });
-      table.parentNode.insertBefore(bar, table);
+      accordion.appendChild(bar);
     });
+    if (hasBar) {
+      accordion.open = dimensions.some(function (dim) {
+        return dim.selected.size > 0;
+      });
+      updateSummary();
+      table.parentNode.insertBefore(accordion, table);
+    }
     applyFilter();
   });
 });
