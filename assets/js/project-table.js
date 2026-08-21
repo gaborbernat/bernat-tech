@@ -315,12 +315,6 @@ document.addEventListener("DOMContentLoaded", function () {
     accordion.className = "type-filters";
     var summary = document.createElement("summary");
     accordion.appendChild(summary);
-    // the bars live in their own panel, absolutely positioned below the summary, so opening/closing
-    // never resizes the <details> box itself — the Filters button stays put in the toolbar row instead
-    // of the whole row reflowing to make room for it
-    var panel = document.createElement("div");
-    panel.className = "type-filters-panel";
-    accordion.appendChild(panel);
     var updateSummary = function () {
       var activeCount = dimensions.reduce(function (n, dim) {
         return n + dim.selected.size;
@@ -363,7 +357,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         bar.appendChild(pill);
       });
-      panel.appendChild(bar);
+      accordion.appendChild(bar);
     });
     if (hasBar) {
       accordion.open = dimensions.some(function (dim) {
