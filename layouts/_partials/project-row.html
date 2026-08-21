@@ -61,12 +61,14 @@
 <tr{{ with $p.role }} class="{{ . }}"{{ end }} data-filter-langs="{{ delimit $langs "," }}" data-filter-kinds="{{ delimit $kinds "," }}" data-filter-orgs="{{ $org }}">
   <td class="row-num"></td>
   <td>
-    {{- range $badges -}}{{- $b := . -}}<span class="pkg-type has-tip"{{ with $b.slug }} data-slug="{{ . }}" data-label="{{ $b.label }}"{{ end }}><i class="{{ $b.icon }}"></i><span class="tip">{{ $b.tip }}</span></span>{{- end -}}
     {{- if ne $repo $name -}}
       <a href="https://github.com/{{ $org }}/{{ $repo }}/tree/{{ $defaultBranch }}/{{ $name }}">{{ $label }}</a>
     {{- else -}}
       <a href="https://github.com/{{ $org }}/{{ $repo }}">{{ $label }}</a>
     {{- end -}}
+  </td>
+  <td class="col-type">
+    {{- range $badges -}}{{- $b := . -}}<span class="pkg-type has-tip"{{ with $b.slug }} data-slug="{{ . }}" data-label="{{ $b.label }}"{{ end }}><i class="{{ $b.icon }}"></i><span class="tip">{{ $b.tip }}</span></span>{{- end -}}
   </td>
   {{- range $cols -}}
     {{- $col := trim . " " -}}

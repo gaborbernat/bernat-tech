@@ -1,7 +1,8 @@
 {{ $group := .Get "group" }}
 {{ $projects := index hugo.Data.projects $group }}
 {{ $cols := split (or (.Get "cols") "downloads,version,release,last-commit,issues,stars,ci") "," }}
-{{ $headerRow := slice (printf `<th>#</th><th data-sort="name">%s</th>` (or (.Get "name") "Name")) }}
+{{/* unlabeled, like "#" — a "Type" header would force the column wider than the badges it actually holds */}}
+{{ $headerRow := slice (printf `<th>#</th><th data-sort="name">%s</th><th class="col-type" title="Language / Kind" aria-label="Language / Kind"></th>` (or (.Get "name") "Name")) }}
 {{- range $cols -}}
   {{- $col := trim . " " -}}
   {{- if eq $col "downloads" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="downloads">Downloads</th>` }}
@@ -42,7 +43,7 @@
     {{- end -}}
   </tbody>
   {{- if eq ($.Get "footer") "true" }}
-  {{- $footRow := slice `<td></td><td class="summary-label">Total</td>` -}}
+  {{- $footRow := slice `<td></td><td class="summary-label">Total</td><td class="col-type"></td>` -}}
   {{- range $cols -}}
     {{- $col := trim . " " -}}
     {{- if eq $col "downloads" -}}{{ $footRow = $footRow | append `<td class="dl-cell col-data summary-downloads"></td>` }}
