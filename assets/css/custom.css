@@ -90,8 +90,9 @@ button.ci-toggle:hover {
   gap: 8px;
   margin-bottom: 8px;
 }
-.table-toolbar .type-filters[open] {
-  flex-basis: 100%;
+/* anchors .type-filters-panel, so opening it never resizes this box or the toolbar row it sits in */
+.type-filters {
+  position: relative;
 }
 .type-filters > summary {
   display: inline-block;
@@ -100,6 +101,9 @@ button.ci-toggle:hover {
   color: inherit;
   cursor: pointer;
   font-size: 0.8em;
+  /* buttons default to a form-control line-height; <summary> instead inherits the page's ~2x prose
+     line-height, which alone made it nearly twice as tall as button.ci-toggle at the same padding */
+  line-height: normal;
   padding: 2px 8px;
   border-radius: 4px;
   opacity: 0.6;
@@ -123,6 +127,31 @@ button.ci-toggle:hover {
 .type-filters:not([open]) > summary::after {
   content: "\25b8"; /* ▸ */
 }
+/* floating below the summary (not in normal flow) means opening it overlays the table instead of
+   pushing it down, and closing it can't leave the toolbar row a different height than before */
+.type-filters-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 20;
+  min-width: 320px;
+  max-width: min(90vw, 700px);
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+body.colorscheme-dark .type-filters-panel {
+  background: #303030;
+  border-color: #444;
+}
+@media (prefers-color-scheme: dark) {
+  body.colorscheme-auto .type-filters-panel {
+    background: #303030;
+    border-color: #444;
+  }
+}
 .type-filter {
   display: flex;
   flex-wrap: wrap;
@@ -130,7 +159,7 @@ button.ci-toggle:hover {
   margin-top: 8px;
 }
 .type-filter:first-of-type {
-  margin-top: 10px;
+  margin-top: 0;
 }
 .type-filter-pill {
   display: inline-flex;
