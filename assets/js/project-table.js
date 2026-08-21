@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // totals cover the rows currently on screen, so they stay honest once a filter narrows the table
-  var updateSummary = function (table) {
+  var updateTotals = function (table) {
     var row = table.querySelector("tfoot tr.summary-row");
     if (!row) return;
     var sum = function (selector, attr) {
@@ -284,7 +284,7 @@ document.addEventListener("DOMContentLoaded", function () {
           return !row.hidden;
         }),
       );
-      updateSummary(table);
+      updateTotals(table);
     };
 
     var syncUrl = function () {
