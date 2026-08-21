@@ -7,17 +7,24 @@ then verify every used codepoint survived. Runs after Hugo, against the rendered
 each icon's codepoint as a CSS variable (`.fa-name { --fa: "\\fXXXX" }`), so we map used `fa-name`
 classes to codepoints via the built CSS and drop everything else from the fonts.
 
+Some icon names get more than one `--fa` rule: FA6 keeps a legacy codepoint under the bare `.fa-name`
+selector and overrides it to the current one only under a more specific selector like `.fa.fa-name`.
+Our markup (`class="fas fa-name"`) never matches that override, so the plain, less-specific rule is the
+one that actually applies — but it isn't always the one that appears last in the CSS. Keep every
+codepoint ever associated with a used name rather than guessing which rule wins the cascade.
+
 Fail-safe: if the extraction finds nothing, or a used codepoint is missing from every font after
 subsetting, exit non-zero so the build fails instead of shipping broken icons."""
 
 # print is this CLI build script's progress output; stdout is intended
-# ruff: noqa: T201
+# ruff: file-ignore[print]
 
 from __future__ import annotations
 
 import re
 import subprocess
 import sys
+from collections import defaultdict
 from pathlib import Path
 from typing import Final
 
@@ -29,11 +36,10 @@ _FONTS: Final = Path("public/fonts")
 
 
 def main() -> None:
-    name_to_cp = {
-        name: int(codepoint, 16)
-        for css in Path("public").rglob("*.css")
-        for name, codepoint in _FA_DEF.findall(css.read_text(encoding="utf-8", errors="ignore"))
-    }
+    name_to_cps: defaultdict[str, set[int]] = defaultdict(set)
+    for css in Path("public").rglob("*.css"):
+        for name, codepoint in _FA_DEF.findall(css.read_text(encoding="utf-8", errors="ignore")):
+            name_to_cps[name].add(int(codepoint, 16))
     used_names = {
         name
         # scan JS too: the copy button and other scripts inject fa- icons that never appear in the HTML
@@ -41,7 +47,7 @@ def main() -> None:
         for path in Path("public").rglob(pattern)
         for name in _FA_USE.findall(path.read_text(encoding="utf-8", errors="ignore"))
     }
-    used = sorted({name_to_cp[name] for name in used_names if name in name_to_cp})
+    used = sorted({cp for name in used_names for cp in name_to_cps.get(name, ())})
     if not used:
         sys.exit("subset-fa: found no FontAwesome codepoints; refusing to empty the fonts")
 
