@@ -66,15 +66,23 @@ button.ci-toggle {
   cursor: pointer;
   font-size: 0.8em;
   padding: 2px 8px;
-  margin-bottom: 4px;
   border-radius: 4px;
   opacity: 0.6;
 }
 button.ci-toggle:hover {
   opacity: 1;
 }
-.type-filters {
+/* the page-wide CI toggle and the first table's Filters accordion share one row; collapsed they read as
+   two same-height pill buttons, and an open accordion claims the full row width to wrap its pills below */
+.table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 8px;
+}
+.table-toolbar .type-filters[open] {
+  flex-basis: 100%;
 }
 .type-filters > summary {
   display: inline-block;

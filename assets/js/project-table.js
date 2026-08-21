@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // (?langs=rust&kinds=pre-commit&orgs=tox-dev) so they survive reload and are shareable. Within a bar the
   // selections OR together; the bars AND, so Rust + Pre-commit hook asks for Rust pre-commit hooks. Labels
   // come off the rendered rows, so the toolbars never drift from what data/projects.yaml produces.
-  document.querySelectorAll(".project-table").forEach(function (table) {
+  document.querySelectorAll(".project-table").forEach(function (table, tableIndex) {
     var rows = Array.from(table.querySelectorAll("tbody tr"));
     var params = new URLSearchParams(location.search);
 
@@ -364,7 +364,16 @@ document.addEventListener("DOMContentLoaded", function () {
         return dim.selected.size > 0;
       });
       updateSummary();
-      table.parentNode.insertBefore(accordion, table);
+      var toolbar = document.createElement("div");
+      toolbar.className = "table-toolbar";
+      // the single, page-wide CI toggle switches every table at once; pair it with the first table's
+      // filter row so collapsed they read as one compact line instead of two stacked controls
+      if (tableIndex === 0) {
+        var ciToggle = document.getElementById("ci-toggle-btn");
+        if (ciToggle) toolbar.appendChild(ciToggle);
+      }
+      toolbar.appendChild(accordion);
+      table.parentNode.insertBefore(toolbar, table);
     }
     applyFilter();
   });
