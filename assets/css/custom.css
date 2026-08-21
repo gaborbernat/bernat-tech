@@ -18,6 +18,15 @@ li p {
   margin: 0;
   display: inline;
 }
+/* the project-list shortcode only appears on the OSS page. ci-toggle bundles a <script> tag alongside its
+   button, so the paragraph before the FIRST table has one in between (invisible — script has no box, but
+   :has()'s "+" is structural and still has to skip over it); the paragraph before any later table doesn't. */
+p:has(+ .project-table),
+p:has(+ .table-toolbar),
+p:has(+ script + .project-table),
+p:has(+ script + .table-toolbar) {
+  margin-bottom: 0.5rem;
+}
 table.project-table {
   counter-reset: row-num;
   margin-bottom: 1.5em;
