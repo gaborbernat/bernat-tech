@@ -10,7 +10,9 @@ on:
     branches: ["main"]
   pull_request:
   schedule:
-    - cron: "0 * * * *"
+    # the top of the hour is the most contended cron slot and GitHub delays or drops runs in it;
+    # an off-minute keeps the hourly refresh actually hourly
+    - cron: "23 * * * *"
 
 concurrency:
   # keep the event kinds in separate groups so the hourly cron never cancels a push (or vice versa);
