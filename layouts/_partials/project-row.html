@@ -35,10 +35,10 @@
 {{/* lang and kind are independent axes — what it is written in, and what it is to whoever installs it.
      Each drives its own filter bar in project-table.js through the data-filter-* attributes below, so
      "Rust" and "Pre-commit hook" can be asked for together rather than as one flat list. */}}
-{{ $langIcons := dict "python" "fab fa-python" "rust" "fab fa-rust" "c" "fas fa-microchip" "kotlin" "fab fa-java" "tex" "fas fa-book" "shell" "fas fa-scroll" }}
-{{ $langLabels := dict "python" "Python" "rust" "Rust" "c" "C" "kotlin" "Kotlin" "tex" "TeX" "shell" "Shell" }}
-{{ $kindIcons := dict "library" "fas fa-cube" "cli" "fas fa-terminal" "plugin" "fas fa-plug" "pre-commit" "fab fa-git-alt" "action" "fas fa-bolt" "jetbrains" "fas fa-lightbulb" "monorepo" "fas fa-layer-group" "service" "fas fa-server" "document" "fas fa-file-lines" "site" "fas fa-globe" "config" "fas fa-gear" }}
-{{ $kindLabels := dict "library" "Library" "cli" "Command-line tool" "plugin" "Plugin" "pre-commit" "Pre-commit hook" "action" "GitHub Action" "jetbrains" "JetBrains plugin" "monorepo" "Monorepo" "service" "Service" "document" "Document" "site" "Website" "config" "Configuration" }}
+{{ $langIcons := dict "python" "fab fa-python" "rust" "fab fa-rust" "c" "fas fa-microchip" "kotlin" "fab fa-java" "swift" "fab fa-swift" "tex" "fas fa-book" "shell" "fas fa-scroll" }}
+{{ $langLabels := dict "python" "Python" "rust" "Rust" "c" "C" "kotlin" "Kotlin" "swift" "Swift" "tex" "TeX" "shell" "Shell" }}
+{{ $kindIcons := dict "library" "fas fa-cube" "cli" "fas fa-terminal" "plugin" "fas fa-plug" "pre-commit" "fab fa-git-alt" "action" "fas fa-bolt" "jetbrains" "fas fa-lightbulb" "monorepo" "fas fa-layer-group" "service" "fas fa-server" "app" "fas fa-desktop" "document" "fas fa-file-lines" "site" "fas fa-globe" "config" "fas fa-gear" }}
+{{ $kindLabels := dict "library" "Library" "cli" "Command-line tool" "plugin" "Plugin" "pre-commit" "Pre-commit hook" "action" "GitHub Action" "jetbrains" "JetBrains plugin" "monorepo" "Monorepo" "service" "Service" "app" "Desktop app" "document" "Document" "site" "Website" "config" "Configuration" }}
 
 {{ $langs := slice }}{{ range split (or $p.lang "") "," }}{{ with trim . " " }}{{ $langs = $langs | append . }}{{ end }}{{ end }}
 {{ $kinds := slice }}{{ range split (or $p.kind "") "," }}{{ with trim . " " }}{{ $kinds = $kinds | append . }}{{ end }}{{ end }}

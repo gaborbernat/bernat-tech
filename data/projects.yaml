@@ -187,6 +187,13 @@ primary:
     lang: python
     kind: cli
     ci: tests.yml
+  - name: token-menu-bar-macos
+    org: tox-dev
+    label: Token Menu Bar
+    lang: swift
+    kind: app
+    ci: ci.yml
+    pypi: "false"
 
 maintenance:
   - name: all-repos-self
