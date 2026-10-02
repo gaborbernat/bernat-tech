@@ -1,0 +1,3 @@
+# actionlint 1.7.12 predates this hosted image: https://github.com/rhysd/actionlint/issues/682
+self-hosted-runner:
+  labels: [ubuntu-26.04]
