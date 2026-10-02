@@ -23,7 +23,7 @@ repos:
         additional_dependencies:
           - mdformat-beautysh>=1
           - mdformat-simple-breaks>=0.1
-          - mdformat-hugo>=0.1
+          - mdformat-hugo>=0.3
   - repo: https://github.com/rhysd/actionlint
     rev: "v1.7.12"
     hooks:
