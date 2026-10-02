@@ -14,6 +14,7 @@ primary:
     lang: python
     kind: cli,library
     ci: check
+    homebrew: virtualenv
   - name: get-virtualenv
     org: pypa
     lang: python
@@ -25,6 +26,7 @@ primary:
     lang: python
     kind: cli
     ci: check
+    homebrew: tox
   - name: pyproject-api
     org: tox-dev
     lang: python
@@ -40,6 +42,7 @@ primary:
     lang: python,rust
     kind: cli
     ci: check
+    homebrew: pipdeptree
   - name: sphinx-autodoc-typehints
     org: tox-dev
     lang: python
@@ -182,11 +185,13 @@ primary:
     lang: python
     kind: cli,library
     ci: test.yml
+    homebrew: python-build
   - name: pipx
     org: pypa
     lang: python
     kind: cli
     ci: tests.yml
+    homebrew: pipx
   - name: token-menu-bar-macos
     org: tox-dev
     label: Token Menu Bar

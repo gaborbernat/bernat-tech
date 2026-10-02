@@ -2,7 +2,7 @@
 # requires-python = ">=3.13"
 # dependencies = ["pyyaml>=6", "rich>=13", "tenacity>=9"]
 # ///
-"""Refresh the GitHub/PyPI/JetBrains stats the project tables show into data/project_stats.json, so Hugo
+"""Refresh the GitHub/PyPI/JetBrains/Homebrew stats the project tables show into data/project_stats.json, so Hugo
 reads a static file instead of making ~150 fragile API calls inside its render timeout. An hourly workflow
 runs this off the build's hot path and stores the result in the Actions cache; the build restores it and
 falls back to the committed file. project-row.html consumes it by the key keyed() builds here.
@@ -10,7 +10,11 @@ falls back to the committed file. project-row.html consumes it by the key keyed(
 The refresh is best effort: it starts from the previous values and overwrites a number only when its fetch
 succeeds, so a rate-limited call keeps the last known value instead of zeroing it. Each record carries the
 time it was last fetched cleanly (no transient failure); the stalest go first, and the run exits non-zero
-when any record has gone unrefreshed for more than three days so the workflow surfaces it."""
+when any record has gone unrefreshed for more than three days so the workflow surfaces it.
+
+Popularity ranks ride along: PyPI and Homebrew publish a ranked list each, loaded once per run, while JetBrains has
+none, so its rank comes from a binary search over the marketplace's download-sorted listing, at most once a day. A
+failed rank fetch keeps the prior rank and does not hold back fetched_at."""
 
 # print is this CLI build script's progress output; stdout is intended
 # ruff: file-ignore[print]
@@ -20,13 +24,15 @@ from __future__ import annotations
 import contextlib
 import json
 import os
+import re
 import urllib.error
 import urllib.parse
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime, timedelta
 from email.utils import parsedate_to_datetime
+from functools import partial
 from http import HTTPStatus
 from pathlib import Path
 from typing import TYPE_CHECKING, Final
@@ -61,8 +67,27 @@ _BACKOFF_CAP: Final = 60  # seconds; ceiling for both the blind backoff and a se
 _NOW: Final = datetime.now(tz=UTC)
 _STAMP: Final = _NOW.isoformat(timespec="seconds")  # written to fetched_at when a record refreshes cleanly
 _STALE_AFTER: Final = timedelta(days=3)  # a record unrefreshed this long fails the job so it gets noticed
+_RANK_EVERY: Final = timedelta(days=1)  # JetBrains costs ~14 requests per rank; neighbours sit days of downloads apart
+_PYPI_TOP: Final = "https://hugovk.dev/top-pypi-packages/top-pypi-packages.min.json"
+_BREW_TOP: Final = "https://formulae.brew.sh/api/analytics/install-on-request/30d.json"
+_JB_RANKED: Final = 10_000  # the marketplace listing refuses offset + max past this
+_FETCH_ERRORS: Final = (urllib.error.URLError, TimeoutError, json.JSONDecodeError)
 # the previous run's records, keyed as below; the baseline every best-effort fetch merges onto
 _BASELINE: Final[dict[str, Json]] = json.loads(_OUT.read_text()) if _OUT.exists() else {}
+
+
+@dataclass
+class Rank:
+    position: int
+    of: int  # how many the source ranks; 0 when it does not say
+    as_of: str  # the upstream data date, or the fetch time when the source has none
+
+
+@dataclass(frozen=True)
+class Board:
+    positions: dict[str, int]
+    of: int
+    as_of: str
 
 
 @dataclass
@@ -83,6 +108,7 @@ class Stats:
     jb_downloads: int = 0
     jb_version: str = ""
     jb_release_unix: int = 0
+    ranks: dict[str, Rank] = field(default_factory=dict)  # keyed by source: pypi, homebrew, jetbrains
     fetched_at: str = ""  # day this record last fetched with no transient failure; drives staleness
 
 
@@ -90,8 +116,9 @@ def main() -> None:
     projects: dict[str, list[dict[str, str]]] = yaml.safe_load(_SRC.read_text())
     listing = [project for group in _GROUPS for project in (projects.get(group) or [])]
     listing.sort(key=baseline_fetched_at)  # stalest (and never-fetched) first, so they win the rate-limit budget
+    boards = load_boards()
     with ThreadPoolExecutor(max_workers=8) as pool:
-        results = list(pool.map(stats_for, listing))
+        results = list(pool.map(partial(stats_for, boards=boards), listing))
     stats = {keyed(project): asdict(record) for project, (record, _) in zip(listing, results, strict=True)}
     render_summary(listing, results)
     _OUT.write_text(json.dumps(stats, indent=2, sort_keys=True) + "\n")
@@ -100,6 +127,43 @@ def main() -> None:
     if stale := sorted(key for key, record in stats.items() if is_stale(record["fetched_at"])):
         print(f"::error::{len(stale)} record(s) unrefreshed for over {_STALE_AFTER.days} days: {', '.join(stale)}")
         raise SystemExit(1)
+
+
+def load_boards() -> dict[str, Board]:
+    boards: dict[str, Board] = {}
+    for source, load in (("pypi", pypi_board), ("homebrew", homebrew_board)):
+        try:
+            board = load()
+        except _FETCH_ERRORS as exc:
+            print(f"prefetch: {source} ranking unavailable, keeping prior ranks: {exc}")
+            continue
+        if board.positions:  # an empty list means the format changed; dropping every rank would be wrong
+            boards[source] = board
+    return boards
+
+
+def pypi_board() -> Board:
+    data = get(_PYPI_TOP)
+    rows = as_list(dig(data, "rows"))  # sorted by 30-day downloads, so the position is the rank
+    return Board(
+        positions={normalize(as_text(dig(row, "project"))): index for index, row in enumerate(rows, 1)},
+        of=len(rows),
+        as_of=as_text(dig(data, "last_update"))[:10],
+    )
+
+
+def homebrew_board() -> Board:
+    data = get(_BREW_TOP)
+    items = as_list(dig(data, "items"))
+    return Board(
+        positions={as_text(dig(item, "formula")): as_int(dig(item, "number")) for item in items},
+        of=len(items),  # total_items overstates what the list holds
+        as_of=as_text(dig(data, "end_date")),
+    )
+
+
+def normalize(name: str) -> str:
+    return re.sub(r"[-_.]+", "-", name).lower()  # PEP 503, so pytest_env and pytest-env meet
 
 
 def baseline_fetched_at(project: dict[str, str]) -> str:
@@ -193,7 +257,7 @@ def delta_cell(previous: int, current: int) -> str:
     return f"[dim]{text}[/dim]"
 
 
-def stats_for(project: dict[str, str]) -> tuple[Stats, list[str]]:
+def stats_for(project: dict[str, str], boards: dict[str, Board]) -> tuple[Stats, list[str]]:
     org, name = project["org"], project["name"]
     repo = project.get("repo") or name
     show_pypi = (project.get("pypi") or "") != "false"
@@ -212,7 +276,7 @@ def stats_for(project: dict[str, str]) -> tuple[Stats, list[str]]:
                 transient.append(label)  # rate-limited/5xx: a real refresh failure, not a missing resource
             errors.append(f"{label}: {exc}")
             return None
-        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
+        except _FETCH_ERRORS as exc:
             transient.append(label)
             errors.append(f"{label}: {exc}")
             return None
@@ -224,6 +288,8 @@ def stats_for(project: dict[str, str]) -> tuple[Stats, list[str]]:
         collect_downloads(record, org, repo, kinds, attempt)
     if jetbrains_id:
         collect_jetbrains(record, jetbrains_id, attempt)
+
+    collect_ranks(record, project, boards, errors)
 
     if not transient:
         record.fetched_at = _STAMP
@@ -248,6 +314,14 @@ def from_baseline(data: Json) -> Stats:
         jb_downloads=as_int(dig(data, "jb_downloads")),
         jb_version=as_text(dig(data, "jb_version")),
         jb_release_unix=as_int(dig(data, "jb_release_unix")),
+        ranks={
+            source: Rank(
+                position=as_int(dig(entry, "position")),
+                of=as_int(dig(entry, "of")),
+                as_of=as_text(dig(entry, "as_of")),
+            )
+            for source, entry in as_dict(dig(data, "ranks")).items()
+        },
         fetched_at=as_text(dig(data, "fetched_at")),
     )
 
@@ -328,6 +402,47 @@ def collect_jetbrains(record: Stats, plugin_id: str, attempt: Attempt) -> None:
         record.jb_release_unix = int(as_text(dig(updates[0], "cdate")) or 0) // 1000
 
 
+def collect_ranks(record: Stats, project: dict[str, str], boards: dict[str, Board], errors: list[str]) -> None:
+    if (project.get("pypi") or "") != "false" and (board := boards.get("pypi")):
+        place(record, "pypi", board, normalize(project["name"]))
+    if (formula := project.get("homebrew")) and (board := boards.get("homebrew")):
+        place(record, "homebrew", board, formula)
+    if project.get("jetbrains-id") and record.jb_downloads and rank_due(record.ranks.get("jetbrains")):
+        try:
+            jetbrains = jetbrains_rank(record.jb_downloads)
+        except _FETCH_ERRORS as exc:  # outside attempt(): a missed rank must not hold back fetched_at
+            errors.append(f"jb-rank: {exc}")
+            return
+        record.ranks.pop("jetbrains", None)
+        if jetbrains.position:
+            record.ranks["jetbrains"] = jetbrains
+
+
+def place(record: Stats, source: str, board: Board, key: str) -> None:
+    if position := board.positions.get(key):
+        record.ranks[source] = Rank(position=position, of=board.of, as_of=board.as_of)
+    else:  # fell off the list, so the old rank no longer holds
+        record.ranks.pop(source, None)
+
+
+def rank_due(rank: Rank | None) -> bool:
+    return rank is None or datetime.fromisoformat(rank.as_of) < _NOW - _RANK_EVERY
+
+
+def jetbrains_rank(downloads: int) -> Rank:
+    # the listing sorts by all-time downloads but cannot filter by them, so binary-search the first offset whose
+    # plugin has no more downloads than ours; everything before it outranks us
+    low, high = 0, _JB_RANKED
+    while low < high:
+        middle = (low + high) // 2
+        page = get(f"https://plugins.jetbrains.com/api/searchPlugins?orderBy=downloads&max=1&offset={middle}")
+        if (plugins := as_list(dig(page, "plugins"))) and as_int(dig(plugins[0], "downloads")) > downloads:
+            low = middle + 1
+        else:
+            high = middle
+    return Rank(position=0 if low == _JB_RANKED else low + 1, of=0, as_of=_STAMP)
+
+
 def gh(path: str) -> Json:
     return get(f"https://api.github.com/{path}", _GH_HEADERS)
 
@@ -391,6 +506,10 @@ def dig(value: Json, *keys: str) -> Json:
     for key in keys:
         value = value.get(key) if isinstance(value, dict) else None
     return value
+
+
+def as_dict(value: Json) -> dict[str, Json]:
+    return value if isinstance(value, dict) else {}
 
 
 def as_list(value: Json) -> list[Json]:

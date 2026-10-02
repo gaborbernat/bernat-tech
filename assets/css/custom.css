@@ -252,6 +252,19 @@ table.project-table td:has(.has-tip:hover) {
   opacity: 1;
   pointer-events: auto;
 }
+.rank-badge {
+  margin-left: 6px;
+  cursor: help;
+}
+/* the badge sits near the table's left edge, so a centred tip would run off-screen; anchor it left and wrap */
+.rank-badge > .tip {
+  left: 0;
+  transform: none;
+  white-space: normal;
+  width: max-content;
+  max-width: min(28em, 80vw);
+  line-height: 1.4;
+}
 table.project-table tr.co-maintained {
   opacity: 0.55;
 }

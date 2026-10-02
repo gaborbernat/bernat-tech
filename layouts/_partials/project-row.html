@@ -66,6 +66,22 @@
     {{- else -}}
       <a href="https://github.com/{{ $org }}/{{ $repo }}">{{ $label }}</a>
     {{- end -}}
+    {{- range slice "pypi" "jetbrains" "homebrew" -}}
+      {{- $source := . -}}
+      {{- with index (or $d.ranks dict) $source -}}
+        {{- $position := replace (lang.FormatNumber 0 .position) "," "_" -}}
+        {{- $of := replace (lang.FormatNumber 0 .of) "," "_" -}}
+        {{- $asOf := (time .as_of).Format "2006-01-02" -}}
+        {{- $icon := index (dict "pypi" "fab fa-python" "jetbrains" "fas fa-lightbulb" "homebrew" "fas fa-beer-mug-empty") $source -}}
+        {{- $tip := printf "#%s of the %s most downloaded PyPI packages over 30 days (hugovk/top-pypi-packages, %s)" $position $of $asOf -}}
+        {{- if eq $source "jetbrains" -}}
+          {{- $tip = printf "#%s JetBrains Marketplace plugin by all-time downloads (as of %s)" $position $asOf -}}
+        {{- else if eq $source "homebrew" -}}
+          {{- $tip = printf "#%s of %s Homebrew formulae by installs on request over 30 days (formulae.brew.sh, %s)" $position $of $asOf -}}
+        {{- end -}}
+        <span class="badge badge-gray has-tip rank-badge"><i class="{{ $icon }}"></i> #{{ $position }}<span class="tip">{{ $tip }}</span></span>
+      {{- end -}}
+    {{- end -}}
   </td>
   <td class="col-type">
     {{- range $badges -}}{{- $b := . -}}<span class="pkg-type has-tip"{{ with $b.slug }} data-slug="{{ . }}" data-label="{{ $b.label }}"{{ end }}><i class="{{ $b.icon }}"></i><span class="tip">{{ $b.tip }}</span></span>{{- end -}}
