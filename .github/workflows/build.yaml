@@ -29,7 +29,7 @@ jobs:
     # (incl. fork PRs with no secrets) skip it and build off the cached numbers
     if: >-
       github.event_name == 'schedule' || github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.refresh)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     environment: build
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -64,7 +64,7 @@ jobs:
     # build even when refresh is skipped (PR) or fails (>3-day-stale); the site ships the
     # last-good cache while refresh keeps its own status as the staleness alarm
     if: ${{ !cancelled() }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     environment: build
     env:
       HUGO_CACHEDIR: /tmp/hugo_cache
@@ -172,7 +172,7 @@ jobs:
           include-hidden-files: true
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     if: github.ref == 'refs/heads/main'
     needs:
       - build
