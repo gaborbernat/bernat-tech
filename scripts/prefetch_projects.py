@@ -272,7 +272,7 @@ def stats_for(project: dict[str, str], boards: dict[str, Board]) -> tuple[Stats,
         try:
             return fetch()
         except urllib.error.HTTPError as exc:
-            if exc.code in _RETRYABLE:
+            if _is_transient_http(exc):
                 transient.append(label)  # rate-limited/5xx: a real refresh failure, not a missing resource
             errors.append(f"{label}: {exc}")
             return None
@@ -447,9 +447,18 @@ def gh(path: str) -> Json:
     return get(f"https://api.github.com/{path}", _GH_HEADERS)
 
 
+def _is_transient_http(exc: urllib.error.HTTPError) -> bool:
+    # GitHub answers an exhausted rate limit with 403 as often as 429; only the headers tell it apart from a 403
+    # for a resource the token may not read (traffic/clones without push access), which no retry fixes
+    rate_limited = exc.code == HTTPStatus.FORBIDDEN and (
+        exc.headers.get("x-ratelimit-remaining") == "0" or exc.headers.get("Retry-After") is not None
+    )
+    return exc.code in _RETRYABLE or rate_limited
+
+
 def _is_retryable(exc: BaseException) -> bool:
     if isinstance(exc, urllib.error.HTTPError):
-        return exc.code in _RETRYABLE
+        return _is_transient_http(exc)
     return isinstance(exc, (urllib.error.URLError, TimeoutError))  # connection reset, DNS, timeout
 
 
