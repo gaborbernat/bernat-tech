@@ -29,7 +29,7 @@
       <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
       <author>{{ $.Site.Params.author }}</author>
       <guid>{{ .Permalink }}</guid>
-      <description>{{ .Summary | htmlEscape }}</description>
+      <description>{{ .Summary | transform.XMLEscape | safeHTML }}</description>
       {{- with .Params.topics }}{{ range . }}
       <category>{{ . }}</category>
       {{- end }}{{ end }}
