@@ -18,8 +18,9 @@
     {{ end }}
     {{ if .Site.Menus.main }}
       <input type="checkbox" id="menu-toggle" />
-      <label class="menu-button float-right" for="menu-toggle" aria-label="{{ i18n "menu" }}" title="{{ i18n "menu" }}">
+      <label class="menu-button float-right" for="menu-toggle" title="{{ i18n "menu" }}">
         <i class="fa-solid fa-bars fa-fw" aria-hidden="true"></i>
+        <span class="sr-only">{{ i18n "menu" }}</span>
       </label>
       <ul class="navigation-list">
         {{ with .Site.Menus.main }}
