@@ -2,8 +2,26 @@ const body = document.body;
 const darkModeToggle = document.getElementById("dark-mode-toggle");
 const darkModeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
-if (localStorage.getItem("colorscheme")) {
-  setTheme(localStorage.getItem("colorscheme"));
+// localStorage throws when storage is blocked (cookies off, sandboxed frame); the toggle still works per page
+function storedTheme() {
+  try {
+    return localStorage.getItem("colorscheme");
+  } catch (error) {
+    if (!(error instanceof DOMException)) throw error;
+    return null;
+  }
+}
+
+function storeTheme(theme) {
+  try {
+    localStorage.setItem("colorscheme", theme);
+  } catch (error) {
+    if (!(error instanceof DOMException)) throw error;
+  }
+}
+
+if (storedTheme()) {
+  setTheme(storedTheme());
 } else if (body.classList.contains("colorscheme-light") || body.classList.contains("colorscheme-dark")) {
   setTheme(body.classList.contains("colorscheme-dark") ? "dark" : "light");
 } else {
@@ -14,11 +32,13 @@ if (darkModeToggle) {
   darkModeToggle.addEventListener("click", () => {
     const theme = body.classList.contains("colorscheme-dark") ? "light" : "dark";
     setTheme(theme);
-    localStorage.setItem("colorscheme", theme);
+    storeTheme(theme);
   });
 }
 
-darkModeMediaQuery.addEventListener("change", (event) => setTheme(event.matches ? "dark" : "light"));
+darkModeMediaQuery.addEventListener("change", (event) => {
+  if (!storedTheme()) setTheme(event.matches ? "dark" : "light");
+});
 
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelector(".preload-transitions")?.classList.remove("preload-transitions");
