@@ -1,5 +1,6 @@
 +++
 title = "Talks by Bernát Gábor"
+description = "Recorded talks by Bernát Gábor from PyCon US, EuroPython, PyTexas and PyLondinium, 2018 to 2025: Python packaging, tox, virtualenv, type hints and maintaining open source."
 aliases = [ "/presentations/"]
 +++
 
