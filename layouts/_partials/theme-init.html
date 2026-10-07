@@ -1,0 +1,3 @@
+{{- /* Shared by baseof.html, which inlines it, and the CSP, which allows it by hash; both must see the same bytes. */ -}}
+{{- $themeInit := resources.Get "js/theme-init.js" | resources.Minify | resources.Fingerprint "sha256" -}}
+{{- return $themeInit -}}

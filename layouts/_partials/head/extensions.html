@@ -5,13 +5,16 @@
 {{- /* Dev only: the footer's client-side shiki/mermaid fallbacks pull from these CDNs and shiki
   compiles a WASM regex engine. Production pre-renders both at build time and ships no runtime, so the
   live CSP stays tight. */ -}}
-{{- $script := "" -}}{{- $connect := "" -}}
+{{- /* The only inline script in production is the blocking theme init in baseof.html, allowed by its hash.
+  Browsers ignore 'unsafe-inline' once a hash is present, so the dev server, whose shiki/mermaid fallbacks are
+  inline modules, gets 'unsafe-inline' instead of the hash. */ -}}
+{{- $script := printf " '%s'" (partial "theme-init.html" .).Data.Integrity -}}{{- $connect := "" -}}
 {{- if hugo.IsServer -}}
-  {{- $script = " https://esm.sh https://cdn.jsdelivr.net 'wasm-unsafe-eval'" -}}
+  {{- $script = " 'unsafe-inline' https://esm.sh https://cdn.jsdelivr.net 'wasm-unsafe-eval'" -}}
   {{- $connect = " https://esm.sh https://cdn.jsdelivr.net ws:" -}}
 {{- end -}}
 {{- /* webmention.io is fetched client-side for received mentions; names/links only, no remote images */ -}}
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com{{ $script }}; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://github.com https://img.youtube.com; font-src 'self'; connect-src 'self' https://static.cloudflareinsights.com https://cloudflareinsights.com https://webmention.io{{ $connect }}; frame-src https://www.youtube-nocookie.com https://www.youtube.com; base-uri 'self'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com{{ $script }}; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://github.com https://img.youtube.com; font-src 'self'; connect-src 'self' https://static.cloudflareinsights.com https://cloudflareinsights.com https://webmention.io{{ $connect }}; frame-src https://www.youtube-nocookie.com https://www.youtube.com; base-uri 'self'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 
 <link rel="preconnect" href="https://github.com" crossorigin>
