@@ -2100,6 +2100,10 @@ body.colorscheme-dark .navigation-link.navigation-active {
 
 /* color-scheme toggle lives in the nav bar, far right, beside the tabs (desktop) or hamburger (mobile) */
 .navigation .colorscheme-toggle {
+  background: none;
+  border: 0;
+  padding: 0;
+  line-height: inherit;
   cursor: pointer;
   margin-left: 1.2rem;
   font-size: 1.7rem;

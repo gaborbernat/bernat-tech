@@ -2,11 +2,13 @@
   .navigation {
 
     a,
-    span {
+    span,
+    .colorscheme-toggle {
       color: $fg-color-dark;
     }
 
-    a {
+    a,
+    .colorscheme-toggle {
 
       &:hover,
       &:focus {

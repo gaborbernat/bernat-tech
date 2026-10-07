@@ -12,13 +12,13 @@
       {{ end }}
     {{ end }}
     {{ if not .Site.Params.hideColorSchemeToggle }}
-      <a id="dark-mode-toggle" class="colorscheme-toggle float-right" role="button" tabindex="0" aria-label="{{ i18n "toggle_dark_mode" }}" title="{{ i18n "toggle_dark_mode" }}">
+      <button id="dark-mode-toggle" class="colorscheme-toggle float-right" type="button" aria-label="{{ i18n "toggle_dark_mode" }}" title="{{ i18n "toggle_dark_mode" }}">
         <i class="fa-solid fa-moon fa-fw" aria-hidden="true"></i>
-      </a>
+      </button>
     {{ end }}
     {{ if .Site.Menus.main }}
       <input type="checkbox" id="menu-toggle" />
-      <label class="menu-button float-right" for="menu-toggle">
+      <label class="menu-button float-right" for="menu-toggle" aria-label="{{ i18n "menu" }}" title="{{ i18n "menu" }}">
         <i class="fa-solid fa-bars fa-fw" aria-hidden="true"></i>
       </label>
       <ul class="navigation-list">

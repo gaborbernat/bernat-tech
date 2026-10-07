@@ -3,7 +3,8 @@
   width: 100%;
 
   a,
-  span {
+  span,
+  .colorscheme-toggle {
     display: inline;
     font-size: 1.7rem;
     font-family: $font-family;
@@ -11,7 +12,8 @@
     color: $fg-color;
   }
 
-  a {
+  a,
+  .colorscheme-toggle {
 
     &:hover,
     &:focus {

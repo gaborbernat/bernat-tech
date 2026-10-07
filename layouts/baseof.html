@@ -21,15 +21,15 @@
   {{- $themeInit := partial "theme-init.html" . }}
   <script>{{ $themeInit.Content | safeJS }}</script>
 
-  <main class="wrapper">
+  <div class="wrapper">
     {{ partial "header.html" . }}
 
-    <div class="content">
+    <main class="content">
       {{ block "content" . }}{{ end }}
-    </div>
+    </main>
 
     {{ partial "footer.html" . }}
-  </main>
+  </div>
 
   <button id="back-to-top" class="back-to-top" type="button" aria-label="{{ i18n "back_to_top" }}" title="{{ i18n "back_to_top" }}">
     <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>

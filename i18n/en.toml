@@ -11,5 +11,8 @@ other = "Link to heading"
 [toggle_dark_mode]
 other = "Toggle dark mode"
 
+[menu]
+other = "Menu"
+
 [back_to_top]
 other = "Back to top"
