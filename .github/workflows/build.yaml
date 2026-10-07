@@ -146,22 +146,34 @@ jobs:
       - name: Install Chromium for mermaid rendering
         if: steps.mermaid.outputs.misses != '0'
         run: npx playwright install chromium
-      - name: Post-process, optimize, and validate in parallel
+      - name: Optimize images
+        id: images
+        background: true
+        continue-on-error: true
         run: |
-          # images are independent of the HTML/font work, so optimize them in the background
-          ( sudo apt-get update -qq && sudo apt-get install -y -qq optipng libjpeg-turbo-progs &&
-            find public -name '*.png' -print0 | xargs -0 -r optipng -quiet -o2 -strip all &&
-            find public \( -name '*.jpg' -o -name '*.jpeg' \) -print0 | while IFS= read -r -d '' f; do
-              if jpegtran -optimize -progressive -copy none "$f" >"$f.opt" 2>/dev/null; then mv "$f.opt" "$f"; else rm -f "$f.opt"; fi
-            done ) & images=$!
-          # highlight and mermaid both rewrite the same HTML files, so keep them serial
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq optipng libjpeg-turbo-progs
+          find public -name '*.png' -print0 | xargs -0 -r optipng -quiet -o2 -strip all
+          find public \( -name '*.jpg' -o -name '*.jpeg' \) -print0 | while IFS= read -r -d '' image; do
+            if jpegtran -optimize -progressive -copy none "$image" >"$image.opt" 2>/dev/null; then
+              mv "$image.opt" "$image"
+            else
+              rm -f "$image.opt"
+            fi
+          done
+      - name: Post-process HTML
+        run: |
           node scripts/highlight.mjs
           node scripts/mermaid.mjs
-          # HTML is final: validate it (a gate) while the fonts subset, since both only read the HTML
-          java -jar "$(node -p 'String(require("vnu-jar"))')" --errors-only --skip-non-html public & validate=$!
-          uv run scripts/subset-fa.py
-          wait "$validate"
-          wait "$images" || echo "::warning::image optimization failed"
+      - parallel:
+          - name: Validate HTML
+            run: java -jar "$(node -p 'String(require("vnu-jar"))')" --errors-only --skip-non-html public
+          - name: Subset fonts
+            run: uv run scripts/subset-fa.py
+      - wait: images
+      - name: Report image optimization failure
+        if: steps.images.outcome == 'failure'
+        run: echo "::warning::image optimization failed"
       - name: Validate RSS feed
         run: python3 -c "import xml.etree.ElementTree as ET; ET.parse('public/index.xml')"
       - name: Upload Pages artifact
