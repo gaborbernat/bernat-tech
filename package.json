@@ -12,5 +12,8 @@
   "dependencies": {
     "mermaid": "12.1.0",
     "playwright": "1.63.0"
+  },
+  "overrides": {
+    "katex": "^0.18.2"
   }
 }
