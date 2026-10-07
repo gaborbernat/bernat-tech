@@ -12,6 +12,10 @@
      so the content build makes no API calls. The key mirrors that script's keyed(). */}}
 {{ $key := printf "%s|%s|%s|%s|%s" $org $repo $name (or $p.kind "") (or $p.pypi "") }}
 {{ $d := index (or hugo.Data.project_stats dict) $key | default dict }}
+{{/* a project added to projects.yaml after the last stats refresh has no record; leave its stat cells empty
+     (sorted last, counted as 0 in the totals) rather than rendering defaults as 0 stars and "No release yet" */}}
+{{ $missing := not $d }}
+{{ $statCols := slice "version" "downloads" "release" "last-commit" "issues" "stars" }}
 
 {{ $defaultBranch := or $d.default_branch "main" }}
 {{ $lastCommitDate := or $d.last_commit_date "" }}
@@ -88,7 +92,9 @@
   </td>
   {{- range $cols -}}
     {{- $col := trim . " " -}}
-    {{- if eq $col "version" -}}
+    {{- if and $missing (in $statCols $col) -}}
+  <td class="col-data{{ if eq $col "downloads" }} dl-cell{{ else if eq $col "stars" }} star-cell{{ end }}" data-value=""></td>
+    {{- else if eq $col "version" -}}
   <td class="col-data">
       {{- if $showPypi -}}
         {{- if $pypiVersion -}}
