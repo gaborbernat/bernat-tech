@@ -5,3 +5,5 @@
 /.hugo_build.lock
 __pycache__/
 /.cache
+# lives in the Actions cache, refreshed hourly by scripts/prefetch_projects.py
+/data/project_stats.json

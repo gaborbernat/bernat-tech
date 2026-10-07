@@ -4,8 +4,9 @@
 # ///
 """Refresh the GitHub/PyPI/JetBrains/Homebrew stats the project tables show into data/project_stats.json, so Hugo
 reads a static file instead of making ~150 fragile API calls inside its render timeout. An hourly workflow
-runs this off the build's hot path and stores the result in the Actions cache; the build restores it and
-falls back to the committed file. project-row.html consumes it by the key keyed() builds here.
+runs this off the build's hot path and stores the result in the Actions cache, the file's only home: it is not
+committed, so the build restores it and a cache miss renders the tables without stats. project-row.html consumes it
+by the key keyed() builds here.
 
 The refresh is best effort: it starts from the previous values and overwrites a number only when its fetch
 succeeds, so a rate-limited call keeps the last known value instead of zeroing it. Each record carries the

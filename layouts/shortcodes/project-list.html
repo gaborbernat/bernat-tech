@@ -1,4 +1,7 @@
 {{ $group := .Get "group" }}
+{{ if not hugo.Data.project_stats }}
+  {{ warnf "%s: data/project_stats.json is missing (Actions cache miss, or a local build: run scripts/prefetch_projects.py), so the %s table renders without stats" .Page.File.Path $group }}
+{{ end }}
 {{ $projects := index hugo.Data.projects $group }}
 {{ $cols := split (or (.Get "cols") "downloads,version,release,last-commit,issues,stars,ci") "," }}
 {{/* unlabeled, like "#" — a "Type" header would force the column wider than the badges it actually holds */}}
