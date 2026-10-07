@@ -3,11 +3,13 @@
 
   codeBlocks.forEach(function (codeBlock) {
     const pre = codeBlock.parentNode;
-    const wrapper = document.createElement("div");
-    wrapper.className = "code-block-wrapper";
-
-    pre.parentNode.insertBefore(wrapper, pre);
-    wrapper.appendChild(pre);
+    let wrapper = pre.parentNode;
+    if (!wrapper.classList.contains("code-block-wrapper")) {
+      wrapper = document.createElement("div");
+      wrapper.className = "code-block-wrapper";
+      pre.parentNode.insertBefore(wrapper, pre);
+      wrapper.appendChild(pre);
+    }
 
     const copyButton = document.createElement("button");
     copyButton.className = "code-copy-button";
