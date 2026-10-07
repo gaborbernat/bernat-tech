@@ -138,8 +138,18 @@ name = "date"
 weight = 10
 
 [outputs]
-home = ["HTML", "RSS", "JSON", "llms"]
+home = ["HTML", "RSS", "jsonfeed", "llms"]
 page = ["HTML", "md"]
+
+# JSON Feed 1.1 asks for application/feed+json, which feed readers key their autodiscovery on
+[mediaTypes."application/feed+json"]
+suffixes = ["json"]
+
+[outputFormats.jsonfeed]
+mediaType = "application/feed+json"
+baseName = "index"
+isPlainText = true
+rel = "alternate"
 
 # llms.txt (llmstxt.org): a plain-text index for LLM crawlers; each page also gets a raw-markdown twin
 [outputFormats.llms]
