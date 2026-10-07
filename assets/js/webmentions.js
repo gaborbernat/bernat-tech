@@ -1,5 +1,5 @@
-// Render webmentions for this post from webmention.io's public read API. Escapes all remote strings and
-// never injects remote HTML or images, so the page's strict CSP and privacy hold.
+// Render webmentions for this post from webmention.io's public read API. Every remote value reaches the DOM
+// through textContent or a URL-checked href, never as markup, because anyone can send a mention.
 (function () {
   const root = document.querySelector(".webmentions");
   if (!root) return;
@@ -7,11 +7,6 @@
   const facepile = root.querySelector(".webmentions-facepile");
   const list = root.querySelector(".webmentions-list");
 
-  const esc = (value) => {
-    const node = document.createElement("div");
-    node.textContent = value == null ? "" : String(value);
-    return node.innerHTML;
-  };
   const nameOf = (author) => (author && (author.name || author.url)) || "Someone";
   const initials = (name) =>
     name
@@ -20,6 +15,24 @@
       .join("")
       .slice(0, 2)
       .toUpperCase() || "•";
+  // a javascript: or data: URL from a hostile h-card would run on click, so only http(s) links survive
+  const safeHref = (value) => {
+    try {
+      const url = new URL(String(value));
+      return url.protocol === "http:" || url.protocol === "https:" ? url.href : null;
+    } catch (_error) {
+      return null;
+    }
+  };
+  const link = (className, href, text) => {
+    const anchor = document.createElement("a");
+    anchor.className = className;
+    anchor.rel = "nofollow noopener";
+    const checked = safeHref(href);
+    if (checked) anchor.href = checked;
+    anchor.textContent = text;
+    return anchor;
+  };
 
   fetch("https://webmention.io/api/mentions.jf2?per-page=200&target=" + encodeURIComponent(target))
     .then((response) => (response.ok ? response.json() : Promise.reject(response.status)))
@@ -37,52 +50,38 @@
         else if (kind === "in-reply-to" || kind === "mention-of") replies.push(item);
       }
 
-      const faces = [];
       const addFaces = (arr, label) => {
         for (const item of arr) {
           const author = item.author || {};
           const name = nameOf(author);
-          const href = author.url || item.url || "#";
-          faces.push(
-            '<a class="webmention-face" href="' +
-              esc(href) +
-              '" rel="nofollow noopener" title="' +
-              esc(name + " " + label) +
-              '">' +
-              esc(initials(name)) +
-              "</a>",
-          );
+          const face = link("webmention-face", author.url || item.url, initials(name));
+          face.title = name + " " + label;
+          facepile.append(face);
         }
       };
       addFaces(reposts, "reposted");
       addFaces(likes, "liked");
-      if (faces.length) {
-        facepile.innerHTML = faces.join("");
-        facepile.hidden = false;
-      }
+      if (facepile.childElementCount) facepile.hidden = false;
 
-      const rows = replies.map((item) => {
+      for (const item of replies) {
         const author = item.author || {};
-        const name = nameOf(author);
-        const href = author.url || "#";
+        const row = document.createElement("li");
+        row.className = "webmention";
+        row.append(link("webmention-author", author.url, nameOf(author)));
         const when = String(item.published || item["wm-received"] || "").slice(0, 10);
-        const body = (item.content && item.content.text) || "";
-        return (
-          '<li class="webmention"><a class="webmention-author" href="' +
-          esc(href) +
-          '" rel="nofollow noopener">' +
-          esc(name) +
-          "</a>" +
-          (when ? ' <time class="webmention-date">' + esc(when) + "</time>" : "") +
-          '<p class="webmention-body">' +
-          esc(body) +
-          "</p></li>"
-        );
-      });
-      if (rows.length) {
-        list.innerHTML = rows.join("");
-        list.hidden = false;
+        if (when) {
+          const time = document.createElement("time");
+          time.className = "webmention-date";
+          time.textContent = when;
+          row.append(" ", time);
+        }
+        const body = document.createElement("p");
+        body.className = "webmention-body";
+        body.textContent = (item.content && item.content.text) || "";
+        row.append(body);
+        list.append(row);
       }
+      if (list.childElementCount) list.hidden = false;
     })
     .catch(() => {});
 })();
