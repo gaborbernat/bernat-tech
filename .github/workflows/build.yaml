@@ -127,7 +127,8 @@ jobs:
       - name: Restore refreshed project stats
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          # exact hit when the refresh job ran this build; a miss falls back to the committed file
+          # exact hit when the refresh job ran this build, else the newest earlier refresh; a full miss builds
+          # the tables without stats (the file is not committed) and project-list logs a warning
           path: data/project_stats.json
           key: ${{ runner.os }}-project-stats-${{ github.run_id }}
           restore-keys: ${{ runner.os }}-project-stats-
