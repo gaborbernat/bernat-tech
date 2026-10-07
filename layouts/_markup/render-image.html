@@ -28,6 +28,8 @@
     width="{{ $img.Width }}" height="{{ $img.Height }}"
     loading="lazy" decoding="async">
   {{- end }}
-{{- else -}}
+{{- else if or $u.IsAbs (fileExists (path.Join "static" $u.Path)) -}}
   <img src="{{ $src }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+{{- else -}}
+  {{- errorf "%s: image %q is not a page resource, global resource or static file, so it would ship as a broken <img>" .Page.File.Path .Destination -}}
 {{- end -}}

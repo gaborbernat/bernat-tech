@@ -2,6 +2,9 @@
   {{- if .Get "link" -}}
     <a href="{{ .Get "link" }}"{{ with .Get "target" }} target="{{ . }}"{{ end }}{{ with .Get "rel" }} rel="{{ . }}"{{ end }}>
   {{- end -}}
+  {{- if not (.Get "src") -}}
+    {{- errorf "%s: figure needs a src" .Page.File.Path -}}
+  {{- end -}}
   {{- $u := urls.Parse (.Get "src") -}}
   {{- $src := $u.String -}}
   {{- $img := false -}}
@@ -35,11 +38,13 @@
       width="{{ $img.Width }}" height="{{ $img.Height }}"
       loading="lazy" decoding="async">
     {{- end }}
-  {{- else -}}
+  {{- else if or $u.IsAbs (fileExists (path.Join "static" $u.Path)) -}}
     <img src="{{ $src }}" alt="{{ $alt }}"
       {{- with .Get "width" }} width="{{ . }}"{{ end }}
       {{- with .Get "height" }} height="{{ . }}"{{ end }}
       loading="lazy" decoding="async">
+  {{- else -}}
+    {{- errorf "%s: figure src %q is not a page resource, global resource or static file, so it would ship as a broken <img>" .Page.File.Path (.Get "src") -}}
   {{- end -}}
   {{- if .Get "link" }}</a>{{ end -}}
   {{- if or (or (.Get "title") (.Get "caption")) (.Get "attr") -}}

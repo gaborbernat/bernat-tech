@@ -1,8 +1,9 @@
 {{- /* Custom-titled callout. Mirrors the standard alert renderer in
        layouts/_markup/render-blockquote.html but accepts an explicit
        title that the GFM alert syntax loses when mdformat normalizes
-       the standard types. Use the percent variant for invocation so
-       the inner content renders as markdown. */ -}}
+       the standard types. Invoke it as {{< callout >}}, not {{% %}}:
+       it renders .Inner as markdown itself, and with goldmark's unsafe
+       = false the percent form drops this raw <div> entirely. */ -}}
 {{- $kind := .Get "kind" | default "note" -}}
 {{- $title := .Get "title" -}}
 {{- $alertTypes := dict "note" "info" "tip" "success" "important" "important" "warning" "warning" "caution" "danger" -}}

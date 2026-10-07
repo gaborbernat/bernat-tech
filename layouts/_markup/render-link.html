@@ -1,7 +1,10 @@
 {{- $u := urls.Parse .Destination -}}
 {{- $siteHost := (urls.Parse site.BaseURL).Hostname -}}
-{{- $external := and $u.IsAbs (ne $u.Hostname "") (not (strings.HasSuffix $u.Hostname $siteHost)) -}}
-<a href="{{ .Destination | safeURL }}"
+{{- /* Hostname is set for protocol-relative //host links too; match the site host or its subdomains only, so
+     evilbernat.tech counts as external */ -}}
+{{- $host := $u.Hostname -}}
+{{- $external := and (ne $host "") (ne $host $siteHost) (not (strings.HasSuffix $host (printf ".%s" $siteHost))) -}}
+<a href="{{ .Destination }}"
   {{- with .Title }} title="{{ . }}"{{ end }}
   {{- if $external }} target="_blank" rel="noopener noreferrer"{{ end -}}
 >{{ .Text | safeHTML }}</a>
