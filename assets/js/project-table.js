@@ -94,13 +94,16 @@ document.addEventListener("DOMContentLoaded", function () {
       var tbody = table.querySelector("tbody");
       var rows = Array.from(tbody.querySelectorAll("tr"));
       var colIndex = Array.from(this.parentNode.children).indexOf(this);
-      var asc = this.dataset.dir === "asc";
-      this.dataset.dir = asc ? "desc" : "asc";
+      // first click sorts descending, so the biggest projects lead
+      var asc = this.dataset.dir === "desc";
+      this.dataset.dir = asc ? "asc" : "desc";
 
       table.querySelectorAll("th[data-sort]").forEach(function (h) {
         h.classList.remove("sort-asc", "sort-desc");
+        h.setAttribute("aria-sort", "none");
       });
-      this.classList.add(asc ? "sort-desc" : "sort-asc");
+      this.classList.add(asc ? "sort-asc" : "sort-desc");
+      this.setAttribute("aria-sort", asc ? "ascending" : "descending");
 
       var sortType = this.dataset.sort;
       rows.sort(function (a, b) {
