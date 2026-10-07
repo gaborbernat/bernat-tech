@@ -71,10 +71,10 @@ Input and hardware affect the numbers. You can reproduce them with `tox -e bench
   bulk.
 - The tokenizer compiles [one state machine per string width](#one-machine-becomes-three) and returns
   [slices into the input](#text-can-move-zero-times).
-- The toolkit [interns tag names](#a-tag-name-becomes-an-integer), [builds indexes once](#one-index-removes-an-n2-walk),
+- The toolkit [interns tag names](#a-tag-name-becomes-an-integer), [builds indexes once](#one-index-removes-an-on-walk),
   and [recycles node wrappers](#a-free-list-removes-repeated-allocations).
 - Host encoding needs [Punycode and Unicode normalization, backed by generated tables](#a-url-breaks-the-scanning-rule).
-- [LTO and PGO](#a-file-split-cost-nine-percent) shape the machine code;
+- [LTO and PGO](#a-file-split-costs-nine-percent) shape the machine code;
   [Callgrind counts instructions](#the-clock-is-too-noisy) in CI.
 - The extension declares `Py_MOD_GIL_NOT_USED` because it has [no shared mutable state](#the-gil-cannot-be-the-lock).
 - [Hostile input meets depth caps and linear attribute deduplication; checked buffer growth and fuzzers cover separate failure classes; DOMPurify's XSS corpus tests the sanitizer](#speed-meets-hostile-input).
