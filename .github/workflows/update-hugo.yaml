@@ -5,6 +5,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: write
   contents: write
   pull-requests: write
 
@@ -24,9 +25,16 @@ jobs:
 
       - name: Get latest Hugo version
         id: latest
+        # an unauthenticated, unchecked call turned a rate-limit reply into "null" and a PR bumping Hugo to it
         run: |
-          LATEST_VERSION=$(curl -s https://api.github.com/repos/gohugoio/hugo/releases/latest | jq -r '.tag_name' | sed 's/^v//')
+          LATEST_VERSION=$(gh api repos/gohugoio/hugo/releases/latest --jq '.tag_name | ltrimstr("v")')
+          if [[ ! "$LATEST_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::unexpected latest Hugo release tag: $LATEST_VERSION"
+            exit 1
+          fi
           echo "version=$LATEST_VERSION" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: Check if update needed
         id: check
@@ -48,6 +56,7 @@ jobs:
           STEPS_LATEST_OUTPUTS_VERSION: ${{ steps.latest.outputs.version }}
 
       - name: Create Pull Request
+        id: cpr
         if: steps.check.outputs.needed == 'true'
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
@@ -72,3 +81,12 @@ jobs:
           labels: |
             dependencies
             automated
+
+      - name: Build the site with the new Hugo
+        # a pull_request run from a GITHUB_TOKEN-opened PR waits for approval and never starts, so nothing
+        # would build with the new Hugo before the merge deploys it; a workflow_dispatch from the token always runs
+        if: steps.cpr.outputs.pull-request-operation == 'created' || steps.cpr.outputs.pull-request-operation == 'updated'
+        run: gh workflow run build.yaml --repo "$GITHUB_REPOSITORY" --ref "$BRANCH" -f refresh=false
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ steps.cpr.outputs.pull-request-branch }}
