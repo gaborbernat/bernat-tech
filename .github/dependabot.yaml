@@ -12,3 +12,15 @@ updates:
     open-pull-requests-limit: 10
     cooldown:
       default-days: 7
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+    groups:
+      npm:
+        patterns:
+          - "*"
+    open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
