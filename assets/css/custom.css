@@ -31,9 +31,17 @@ table.project-table {
   counter-reset: row-num;
   margin-bottom: 1.5em;
 }
-/* the primary table is ~950px of nowrap cells; below that width let it scroll inside its own box instead of
-   dragging the whole page sideways. Only then: a scroll container also captures the sticky header, which
-   should keep sticking to the page wherever the table fits. */
+/* the primary table is ~1,190px of nowrap cells, wider than the 90rem text column: project-table.js sets
+   --project-table-width to the widest table so the column grows to fit it (capped by the window, as max-width
+   never exceeds the space available), keeping text, filters and tables in one centred column. When the window
+   is narrower still, it marks the box is-overflowing and the table scrolls inside it instead of dragging the
+   whole page sideways. The media query is the no-JS fallback for phones. */
+.container.page:has(.project-table-scroll) {
+  max-width: max(90rem, calc(var(--project-table-width, 0px) + 4rem));
+}
+.project-table-scroll.is-overflowing {
+  overflow-x: auto;
+}
 @media (max-width: 1024px) {
   .project-table-scroll {
     overflow-x: auto;
@@ -57,10 +65,10 @@ table.project-table thead th {
   transition: top 0.25s ease;
 }
 /* while the sticky nav shows, the sticky header sits just below it rather than underneath; the matching
-   transition makes the two slide together. Only where the table fits: below that it scrolls in its own box,
+   transition makes the two slide together. Only where the table fits: otherwise it scrolls in its own box,
    which also anchors the sticky header, so the offset would push the header down onto the first rows. */
 @media (min-width: 1025px) {
-  body:has(.navigation:not(.nav-hidden)) table.project-table thead th {
+  body:has(.navigation:not(.nav-hidden)) .project-table-scroll:not(.is-overflowing) table.project-table thead th {
     top: var(--nav-height, 0);
   }
 }

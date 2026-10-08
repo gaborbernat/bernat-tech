@@ -403,4 +403,34 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     applyFilter();
   });
+
+  // The tables are wider than the 90rem text column, so they spilled past it and the page looked off centre on
+  // wide windows. Size the column to the widest table's natural width instead (the stylesheet caps it at the
+  // window), and scroll a table sideways only when the window is too narrow for it: a scroll box also anchors
+  // the sticky header, which should keep sticking to the page whenever the table fits. Re-measured whenever a
+  // table or its box changes size (window resize, CI view, filters).
+  var tables = Array.from(document.querySelectorAll(".project-table"));
+  var column = tables.length ? tables[0].closest(".container") : null;
+  var fitTables = function () {
+    var widest = 0;
+    tables.forEach(function (table) {
+      var previous = table.style.width;
+      table.style.width = "max-content";
+      widest = Math.max(widest, table.offsetWidth);
+      table.style.width = previous;
+    });
+    if (column) column.style.setProperty("--project-table-width", widest + "px");
+    tables.forEach(function (table) {
+      var scroller = table.parentNode;
+      scroller.classList.toggle("is-overflowing", table.offsetWidth > scroller.clientWidth + 1);
+    });
+  };
+  if (tables.length) {
+    fitTables();
+    var observer = new ResizeObserver(fitTables);
+    tables.forEach(function (table) {
+      observer.observe(table);
+      observer.observe(table.parentNode);
+    });
+  }
 });
