@@ -4,14 +4,17 @@ on:
     - cron: "0 0 * * 1"
   workflow_dispatch:
 
-permissions:
-  actions: write
-  contents: write
-  pull-requests: write
+permissions: {}
 
 jobs:
   update-hugo:
     runs-on: ubuntu-26.04
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      operation: ${{ steps.cpr.outputs.pull-request-operation }}
+      branch: ${{ steps.cpr.outputs.pull-request-branch }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -82,11 +85,18 @@ jobs:
             dependencies
             automated
 
+  build-bump:
+    # a pull_request run from a GITHUB_TOKEN-opened PR waits for approval and never starts, so nothing would
+    # build with the new Hugo before the merge deploys it; a workflow_dispatch from the token always runs. Its
+    # own job keeps actions: write away from the third-party create-pull-request step.
+    needs: update-hugo
+    if: needs.update-hugo.outputs.operation == 'created' || needs.update-hugo.outputs.operation == 'updated'
+    runs-on: ubuntu-26.04
+    permissions:
+      actions: write
+    steps:
       - name: Build the site with the new Hugo
-        # a pull_request run from a GITHUB_TOKEN-opened PR waits for approval and never starts, so nothing
-        # would build with the new Hugo before the merge deploys it; a workflow_dispatch from the token always runs
-        if: steps.cpr.outputs.pull-request-operation == 'created' || steps.cpr.outputs.pull-request-operation == 'updated'
         run: gh workflow run build.yaml --repo "$GITHUB_REPOSITORY" --ref "$BRANCH" -f refresh=false
         env:
           GH_TOKEN: ${{ github.token }}
-          BRANCH: ${{ steps.cpr.outputs.pull-request-branch }}
+          BRANCH: ${{ needs.update-hugo.outputs.branch }}
