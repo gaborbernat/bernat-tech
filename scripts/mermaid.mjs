@@ -12,6 +12,9 @@ const MERMAID = "node_modules/mermaid/dist/mermaid.min.js";
 const CACHE_DIR = ".cache/mermaid";
 const CACHE_VERSION = "1"; // bump when the render config below changes so stale renders are dropped
 const BLOCK = /<pre class=["']?mermaid["']?>([\s\S]*?)<\/pre>/g;
+// mermaid.min.js inlines its own KaTeX 0.16 (GHSA-238p-pmpm-9mq7), which npm overrides cannot replace, and
+// calls it only for label text matching this pattern; refusing math keeps that copy from ever running
+const KATEX_MATH = /\$\$(.*?)\$\$/;
 
 const decode = (s) =>
   s
@@ -53,6 +56,11 @@ for (const file of files) {
   if (!html.includes("<pre class=mermaid>") && !html.includes('<pre class="mermaid">')) continue;
   const codes = [];
   html.replace(BLOCK, (_m, body) => codes.push(decode(body.trim())));
+  const math = codes.find((code) => KATEX_MATH.test(code));
+  if (math) {
+    console.error(`mermaid: ${file} has $$ math, which would run mermaid's bundled KaTeX 0.16:\n${math}`);
+    process.exit(1);
+  }
   targets.push(file);
   codesByFile.set(file, codes);
 }
