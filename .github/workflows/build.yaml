@@ -96,15 +96,9 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - name: Cache node_modules
-        id: node-modules
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          # the whole tree (incl. the vnu.jar the html validator downloads on install) keyed on the lockfile
-          path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
-      - if: steps.node-modules.outputs.cache-hit != 'true'
-        run: npm ci
+      # always npm ci: it checks every package against the lockfile's integrity hashes, which a restored
+      # node_modules cache would skip; setup-node's npm cache still keeps the downloads local
+      - run: npm ci
       - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
         with:
           # scripts carry PEP 723 inline deps and there is no lockfile, so key the cache off the scripts
