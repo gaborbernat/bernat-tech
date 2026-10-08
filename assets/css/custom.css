@@ -234,8 +234,13 @@ table.project-table td.col-age > a {
   display: block;
   min-width: 8.4em;
 }
+/* inline-block with normal line-height: a block badge paints the cell's full 32px line-height, which made the ages
+   twice as tall as every other badge in the row */
 table.project-table td.col-age .relative-time {
-  display: block;
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+  line-height: normal;
 }
 table.project-table td.dl-cell {
   text-align: right;
