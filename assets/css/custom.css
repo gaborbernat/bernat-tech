@@ -57,9 +57,12 @@ table.project-table thead th {
   transition: top 0.25s ease;
 }
 /* while the sticky nav shows, the sticky header sits just below it rather than underneath; the matching
-   transition makes the two slide together */
-body:has(.navigation:not(.nav-hidden)) table.project-table thead th {
-  top: var(--nav-height, 0);
+   transition makes the two slide together. Only where the table fits: below that it scrolls in its own box,
+   which also anchors the sticky header, so the offset would push the header down onto the first rows. */
+@media (min-width: 1025px) {
+  body:has(.navigation:not(.nav-hidden)) table.project-table thead th {
+    top: var(--nav-height, 0);
+  }
 }
 table.project-table tfoot th {
   bottom: 0;
@@ -2292,3 +2295,4 @@ body.colorscheme-dark .back-to-top {
 .toc-content .toc-start:hover {
   opacity: 1;
 }
+
