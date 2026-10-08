@@ -20,18 +20,22 @@
     try {
       const url = new URL(String(value));
       return url.protocol === "http:" || url.protocol === "https:" ? url.href : null;
-    } catch (_error) {
+    } catch (error) {
+      if (!(error instanceof TypeError)) throw error; // new URL() throws TypeError for anything unparseable
       return null;
     }
   };
-  const link = (className, href, text) => {
-    const anchor = document.createElement("a");
-    anchor.className = className;
-    anchor.rel = "nofollow noopener";
-    const checked = safeHref(href);
-    if (checked) anchor.href = checked;
-    anchor.textContent = text;
-    return anchor;
+  // the author's site first, else the mention's own permalink; with neither, plain text rather than a dead link
+  const link = (className, item, text) => {
+    const href = safeHref((item.author || {}).url) || safeHref(item.url);
+    const node = document.createElement(href ? "a" : "span");
+    node.className = className;
+    if (href) {
+      node.href = href;
+      node.rel = "nofollow ugc noopener";
+    }
+    node.textContent = text;
+    return node;
   };
 
   fetch("https://webmention.io/api/mentions.jf2?per-page=200&target=" + encodeURIComponent(target))
@@ -54,7 +58,7 @@
         for (const item of arr) {
           const author = item.author || {};
           const name = nameOf(author);
-          const face = link("webmention-face", author.url || item.url, initials(name));
+          const face = link("webmention-face", item, initials(name));
           face.title = name + " " + label;
           facepile.append(face);
         }
@@ -67,7 +71,7 @@
         const author = item.author || {};
         const row = document.createElement("li");
         row.className = "webmention";
-        row.append(link("webmention-author", author.url, nameOf(author)));
+        row.append(link("webmention-author", item, nameOf(author)));
         const when = String(item.published || item["wm-received"] || "").slice(0, 10);
         if (when) {
           const time = document.createElement("time");
