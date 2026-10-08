@@ -227,12 +227,15 @@ table.project-table th.sort-desc::after {
 }
 /* the Release and Last Commit ages tick live ("4.49 minutes ago"), and the widest one set the column width, so
    every tick nudged the later columns. The link around each badge reserves room for the longest label ("59.99
-   minutes ago") while the badge keeps its natural size. A plain cell width would not hold: the primary table is
-   squeezed below its natural width, where a cell width is only a hint, but a column never shrinks below its
-   content. */
+   minutes ago") and the badge fills it, so every age spans its whole cell. A plain cell width would not hold: the
+   primary table is squeezed below its natural width, where a cell width is only a hint, but a column never
+   shrinks below its content. */
 table.project-table td.col-age > a {
-  display: inline-block;
+  display: block;
   min-width: 8.4em;
+}
+table.project-table td.col-age .relative-time {
+  display: block;
 }
 table.project-table td.dl-cell {
   text-align: right;
