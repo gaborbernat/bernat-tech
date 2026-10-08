@@ -4,8 +4,11 @@
 /* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
 readers do not read off random characters that represent icons */
 
+// filtered to the icons the site uses (assets/scss/_fa-used.scss); the full map emits ~1,960 unused rules
 @each $name, $icon in $fa-icons {
-  .#{$fa-css-prefix}-#{$name} {
-    #{$fa-icon-property}: unquote("\"#{ $icon }\"");
+  @if index($fa-used-icons, $name) {
+    .#{$fa-css-prefix}-#{$name} {
+      #{$fa-icon-property}: unquote("\"#{ $icon }\"");
+    }
   }
 }

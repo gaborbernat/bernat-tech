@@ -1,0 +1,12 @@
+// Font Awesome defines about 2,500 icon rules and the site uses these. font-awesome/_icons.scss and brands.scss emit
+// only the listed names, and scripts/subset-fa.py fails the build when a page uses an fa- class that has no rule, so
+// a newly used icon has to be added here.
+$fa-used-icons: (
+  arrow-up, bars, beer-mug-empty, bolt, book, building, calendar, check, circle-exclamation, circle-info, clock,
+  code, code-branch, copy, cube, desktop, envelope, feather, file-lines, fire, folder, gear, globe, heart, house,
+  layer-group, lightbulb, link, microchip, microphone-lines, moon, pen-to-square, plug, rss, scroll, server, sun,
+  tag, terminal, triangle-exclamation, user
+);
+$fa-used-brands: (
+  bluesky, git-alt, github, instagram, java, linkedin-in, mastodon, python, rust, swift, twitch, twitter
+);

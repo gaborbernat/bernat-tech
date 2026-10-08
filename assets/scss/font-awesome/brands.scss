@@ -25,6 +25,9 @@
   font-weight: 400;
 }
 
+// filtered to the brands the site uses (assets/scss/_fa-used.scss)
 @each $name, $icon in $fa-brand-icons {
-  .#{$fa-css-prefix}-#{$name} { #{$fa-icon-property}: unquote("\"#{ $icon }\""); }
+  @if index($fa-used-brands, $name) {
+    .#{$fa-css-prefix}-#{$name} { #{$fa-icon-property}: unquote("\"#{ $icon }\""); }
+  }
 }

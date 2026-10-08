@@ -13,8 +13,9 @@ Our markup (`class="fas fa-name"`) never matches that override, so the plain, le
 one that actually applies — but it isn't always the one that appears last in the CSS. Keep every
 codepoint ever associated with a used name rather than guessing which rule wins the cascade.
 
-Fail-safe: if the extraction finds nothing, or a used codepoint is missing from every font after
-subsetting, exit non-zero so the build fails instead of shipping broken icons."""
+Fail-safe: if the extraction finds nothing, a used codepoint is missing from every font after subsetting, or a
+page uses an fa- class that no stylesheet defines, exit non-zero so the build fails instead of shipping broken
+icons. The last one guards assets/scss/_fa-used.scss, which limits the compiled icon rules to a fixed list."""
 
 # print is this CLI build script's progress output; stdout is intended
 # ruff: file-ignore[print]
@@ -32,14 +33,21 @@ from fontTools.ttLib import TTFont
 
 _FA_DEF: Final = re.compile(r'\.fa-([a-z0-9-]+)\s*\{\s*--fa:\s*"\\([0-9a-fA-F]+)"')
 _FA_USE: Final = re.compile(r"fa-([a-z0-9-]+)")
+_FA_SELECTOR: Final = re.compile(r"\.fa-([a-z0-9-]+)")
+# minified HTML drops the quotes around a single-token class value
+_CLASS_ATTR: Final = re.compile(r"""class=(?:"([^"]*)"|'([^']*)'|([^\s>"']+))""")
 _FONTS: Final = Path("public/fonts")
 
 
 def main() -> None:
+    styles = [css.read_text(encoding="utf-8", errors="ignore") for css in Path("public").rglob("*.css")]
     name_to_cps: defaultdict[str, set[int]] = defaultdict(set)
-    for css in Path("public").rglob("*.css"):
-        for name, codepoint in _FA_DEF.findall(css.read_text(encoding="utf-8", errors="ignore")):
-            name_to_cps[name].add(int(codepoint, 16))
+    for name, codepoint in (pair for text in styles for pair in _FA_DEF.findall(text)):
+        name_to_cps[name].add(int(codepoint, 16))
+    if undefined := sorted(used_classes() - {name for text in styles for name in _FA_SELECTOR.findall(text)}):
+        sys.exit(
+            "subset-fa: fa- classes with no CSS rule, add them to assets/scss/_fa-used.scss: " + ", ".join(undefined)
+        )
     used_names = {
         name
         # scan JS too: the copy button and other scripts inject fa- icons that never appear in the HTML
@@ -71,6 +79,17 @@ def main() -> None:
     if missing := [codepoint for codepoint in used if codepoint not in surviving_codepoints()]:
         sys.exit("subset-fa: used codepoints missing after subset: " + ",".join(f"U+{cp:04X}" for cp in missing))
     print(f"subset-fa: OK, kept {len(used)} glyphs used across {len(used_names)} classes")
+
+
+def used_classes() -> set[str]:
+    return {
+        token.removeprefix("fa-")
+        for pattern in ("*.html", "*.js")
+        for path in Path("public").rglob(pattern)
+        for match in _CLASS_ATTR.finditer(path.read_text(encoding="utf-8", errors="ignore"))
+        for token in "".join(match.groups(default="")).split()
+        if token.startswith("fa-")
+    }
 
 
 def surviving_codepoints() -> set[int]:
