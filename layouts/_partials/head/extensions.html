@@ -64,10 +64,6 @@
   "description" .Site.Params.description
   "inLanguage" .Site.Language.Locale
   "author" $author
-  "potentialAction" (dict
-    "@type" "SearchAction"
-    "target" (printf "%s?q={search_term_string}" .Site.BaseURL)
-    "query-input" "required name=search_term_string")
   | jsonify | safeJS -}}
 </script>
 <script type="application/ld+json">
