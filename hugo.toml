@@ -41,19 +41,19 @@ token = "3ead932f454449a799915b1721c18874"
 domain = "bernat.tech"
 
 [[params.social]]
-icon = "fa fa-github fa-2x"
+icon = "fa-brands fa-github fa-2x"
 name = "GitHub"
 url = "https://github.com/gaborbernat/"
 weight = 1
 
 [[params.social]]
-icon = "fa fa-heart fa-2x"
+icon = "fa-solid fa-heart fa-2x"
 name = "GitHub Sponsor"
 url = "https://github.com/sponsors/gaborbernat"
 weight = 2
 
 [[params.social]]
-icon = "fa fa-twitter fa-2x"
+icon = "fa-brands fa-twitter fa-2x"
 name = "Twitter"
 url = "https://twitter.com/gjbernat/"
 weight = 6
@@ -77,25 +77,25 @@ url = "https://pypi.org/user/gaborbernat/"
 weight = 3
 
 [[params.social]]
-icon = "fa fa-linkedin fa-2x"
+icon = "fa-brands fa-linkedin-in fa-2x"
 name = "Linkedin"
 url = "https://www.linkedin.com/in/gaborbernat/"
 weight = 7
 
 [[params.social]]
-icon = "fa fa-envelope fa-2x"
+icon = "fa-solid fa-envelope fa-2x"
 name = "Google Mail"
 url = "mailto:gaborjbernat@gmail.com"
 weight = 8
 
 [[params.social]]
-icon = "fa fa-twitch fa-2x"
+icon = "fa-brands fa-twitch fa-2x"
 name = "Twitch"
 url = "https://www.twitch.tv/gaborbernat"
 weight = 9
 
 [[params.social]]
-icon = "fa fa-instagram fa-2x"
+icon = "fa-brands fa-instagram fa-2x"
 name = "Instagram"
 url = "https://instagram.com/gabor_bernat"
 weight = 10
