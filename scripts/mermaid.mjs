@@ -48,6 +48,35 @@ const canonicalize = (svg, prefix) => {
     .replace(/ name="[^"]*"/g, ""); // mermaid emits name= on rect/line, not a valid SVG attribute
 };
 
+const DIAGRAM_KINDS = {
+  flowchart: "Flowchart",
+  graph: "Flowchart",
+  sequenceDiagram: "Sequence diagram",
+  timeline: "Timeline",
+  "xychart-beta": "Chart",
+};
+
+// name the diagram for screen readers: an accTitle in the source wins (mermaid wires it to <title> itself),
+// otherwise the diagram kind and the heading it sits under
+const label = (svg, code, heading) => {
+  if (svg.includes("aria-labelledby=")) return svg;
+  const kind = DIAGRAM_KINDS[code.split(/\s/)[0]] ?? "Diagram";
+  // the heading comes straight from the page, already HTML-escaped; only the attribute quote needs escaping
+  const text = heading ? `${kind}: ${heading}` : kind;
+  return svg.replace(/<svg\b/, `<svg aria-label="${text.replaceAll('"', "&quot;")}"`);
+};
+
+// the nearest heading above a diagram, as escaped HTML text without its tags or anchor link
+const headingBefore = (html, offset) => {
+  const headings = [...html.slice(0, offset).matchAll(/<h[2-4][^>]*>([\s\S]*?)<\/h[2-4]>/g)];
+  const last = headings.at(-1)?.[1] ?? "";
+  return last
+    .replace(/<a\b[^>]*class=["']?heading-link[\s\S]*?<\/a>/g, "")
+    .replace(/<[^>]+>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+};
+
 const files = await glob("public/**/*.html");
 const targets = [];
 const codesByFile = new Map();
@@ -125,20 +154,25 @@ if (misses.length) {
 let placed = 0;
 let diagram = 0;
 for (const file of targets) {
+  const html = await readFile(file, "utf-8");
+  const codes = codesByFile.get(file);
   const figs = [];
-  for (const code of codesByFile.get(file)) {
+  for (const match of html.matchAll(BLOCK)) {
+    const code = codes[figs.length];
+    const heading = headingBefore(html, match.index);
     diagram++;
-    const light = canonicalize(await readFile(rawPath(code, "default"), "utf-8"), `ml${diagram}`);
-    const dark = canonicalize(await readFile(rawPath(code, "dark"), "utf-8"), `md${diagram}`);
+    // both variants carry the name; CSS display:none on the inactive one already keeps it out of the
+    // accessibility tree, so a fixed aria-hidden would hide the diagram from dark-mode screen readers
+    const light = label(canonicalize(await readFile(rawPath(code, "default"), "utf-8"), `ml${diagram}`), code, heading);
+    const dark = label(canonicalize(await readFile(rawPath(code, "dark"), "utf-8"), `md${diagram}`), code, heading);
     figs.push(
-      `<figure class="mermaid"><span class="mermaid-light" aria-hidden="false">${light}</span>` +
-        `<span class="mermaid-dark" aria-hidden="true">${dark}</span></figure>`,
+      `<figure class="mermaid"><span class="mermaid-light">${light}</span>` +
+        `<span class="mermaid-dark">${dark}</span></figure>`,
     );
     placed++;
   }
   let index = 0;
-  const html = (await readFile(file, "utf-8")).replace(BLOCK, () => figs[index++]);
-  await writeFile(file, html);
+  await writeFile(file, html.replace(BLOCK, () => figs[index++]));
 }
 console.log(`mermaid: ${placed} diagrams across ${targets.length} files (${misses.length} rendered, rest cached)`);
 process.exit(0);
