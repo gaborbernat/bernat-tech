@@ -225,6 +225,17 @@ table.project-table th.sort-asc::after {
 table.project-table th.sort-desc::after {
   content: " \25BC";
 }
+/* the Release and Last Commit ages tick live ("4.49 minutes ago"), and the widest one sets the column width:
+   proportional digits and labels that change length nudged every later column on each tick. Equal-width digits
+   plus a badge at least as wide as the longest label ("59.99 minutes ago", 9.7em) pin the columns. The width sits
+   on the badge, not the cell: the primary table is squeezed below its natural width, where a cell width is only
+   a hint, but the browser never shrinks a column below its content. */
+table.project-table .col-age .relative-time {
+  display: inline-block;
+  min-width: 10.5em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
 table.project-table td.dl-cell {
   text-align: right;
   font-family: monospace;

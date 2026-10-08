@@ -168,7 +168,7 @@
       {{- if gt $sortVal 0 -}}
         {{- $ago = partial "time-ago.html" (dict "seconds" (sub $nowUnix $sortVal)) -}}
       {{- end -}}
-  <td class="col-data" data-value="{{ $sortVal }}">
+  <td class="col-data col-age" data-value="{{ $sortVal }}">
       {{- if $ago.label -}}
         {{- $isoDate := (time (int $sortVal)).Format "2006-01-02T15:04:05Z" -}}
         <a href="{{ $releaseLink }}"><span class="badge badge-{{ $ago.color }} has-tip relative-time" data-timestamp="{{ $sortVal }}"><span class="relative-time-label">{{ $ago.label }}</span><span class="tip">{{ $isoDate }}</span></span></a>
@@ -183,7 +183,7 @@
       {{- if gt $sortVal 0 -}}
         {{- $ago = partial "time-ago.html" (dict "seconds" (sub $nowUnix $sortVal)) -}}
       {{- end -}}
-  <td class="col-data" data-value="{{ $sortVal }}">
+  <td class="col-data col-age" data-value="{{ $sortVal }}">
         {{- if $lastCommitDate -}}
         <a href="https://github.com/{{ $org }}/{{ $repo }}/commits"><span class="badge badge-{{ $ago.color }} has-tip relative-time" data-timestamp="{{ $sortVal }}"><span class="relative-time-label">{{ $ago.label }}</span><span class="tip">{{ $lastCommitDate }}</span></span></a>
         {{- end -}}
