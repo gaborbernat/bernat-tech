@@ -2296,3 +2296,12 @@ body.colorscheme-dark .back-to-top {
   opacity: 1;
 }
 
+/* markdown tables (render-table.html) scroll inside their own box when wider than the column, instead of
+   pushing the page sideways on a phone */
+.table-scroll {
+  overflow-x: auto;
+}
+.table-scroll:focus-visible {
+  outline: 2px solid var(--link-color, #42a5f5);
+  outline-offset: 2px;
+}

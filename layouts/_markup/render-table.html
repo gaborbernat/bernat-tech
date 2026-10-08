@@ -1,0 +1,28 @@
+{{- /* Markdown tables sized by their content (identifiers in inline code do not wrap) ran past a phone's width
+     and scrolled the whole page sideways; wrap each in a box that scrolls on its own. role, tabindex and the
+     label let keyboard and screen reader users reach and scroll it. */ -}}
+<div class="table-scroll" role="region" tabindex="0" aria-label="Table">
+<table
+  {{- range $k, $v := .Attributes }}
+    {{- if $v }} {{ printf "%s=%q" $k $v | safeHTMLAttr }}{{ end }}
+  {{- end }}>
+  <thead>
+    {{- range .THead }}
+      <tr>
+        {{- range . }}
+          <th{{ with .Alignment }} style="text-align: {{ . }}"{{ end }}>{{- .Text -}}</th>
+        {{- end }}
+      </tr>
+    {{- end }}
+  </thead>
+  <tbody>
+    {{- range .TBody }}
+      <tr>
+        {{- range . }}
+          <td{{ with .Alignment }} style="text-align: {{ . }}"{{ end }}>{{- .Text -}}</td>
+        {{- end }}
+      </tr>
+    {{- end }}
+  </tbody>
+</table>
+</div>
