@@ -226,5 +226,5 @@ The difference between a source tree, a source distribution, and a wheel:
 
 {{< figure src="smart_pug.webp" alt="Smart pug" >}}
 
-\[Read the next post of the series here\]({{< ref "pep-517-518" >}}) to determine what happens when we install a
-package. Thanks for reading!
+[Read the next post of the series here](/posts/pep-517-518/) to determine what happens when we install a package. Thanks
+for reading!

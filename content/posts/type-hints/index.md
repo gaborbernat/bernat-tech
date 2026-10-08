@@ -585,7 +585,7 @@ def func_str(param: MagicGetter[str]) -> str:
 # Gotchas
 
 Once you start adding type hints to a codebase, watch out that sometimes you may experience some oddities. During these
-moments, you might have the \*what the hell\*\* expression of the following seal:
+moments, you might have the *what the hell* expression of the following seal:
 
 {{< figure src="gotcha.webp" width="700" alt="Confused seal" >}}
 

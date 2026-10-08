@@ -359,7 +359,7 @@ ad-hoc plots it's great. As a daily workflow, understanding a library still beat
 Christopher's thesis: the primary risk of installing Python packages is arbitrary code execution, and every other threat
 follows. That code runs with the user's privileges, which is enough to do damage without root. Transitive dependencies
 carry the same risk as top-level packages and are easy to overlook. For a broader treatment of the defenses in this
-space, see my earlier post on \[Python supply chain security\]({{< ref "posts/securing-python-supply-chain" >}}).
+space, see my earlier post on [Python supply chain security](/posts/securing-python-supply-chain/).
 
 **Three attack surfaces**:
 
@@ -596,8 +596,8 @@ Closing: he thanked his employer Variomedia, and pointed to his YouTube channel,
 Python 3.15 will introduce a `lazy` import keyword via
 [PEP 810, Explicit Lazy Imports](https://peps.python.org/pep-0810/) (accepted November 3, 2025). Rather than import a
 module at startup, Python creates a lightweight proxy in the namespace and resolves the real module on first attribute
-access. For the wider context on how Python's import machinery has evolved, see my earlier post on \[the state of Python
-packaging\]({{< ref "posts/pep-517-and-python-packaging" >}}).
+access. For the wider context on how Python's import machinery has evolved, see my earlier post on
+[the state of Python packaging](/posts/pep-517-and-python-packaging/).
 
 Real-world numbers he cited:
 
@@ -739,8 +739,8 @@ tool: [github.com/ab93/shap-monitor](https://github.com/ab93/shap-monitor).
 
 Miguel's framing: AI agents produce cleaner, safer, faster code in codebases that are already clean, well-typed, and
 well-tested. Quality is an input to AI productivity, and without guardrails, AI accelerates technical debt. For
-background on the typing side of this argument, see my earlier post on \[the state of type hints in
-Python\]({{< ref "posts/type-hints" >}}).
+background on the typing side of this argument, see my earlier post on
+[the state of type hints in Python](/posts/the-state-of-type-hints-in-python/).
 
 Key terms:
 

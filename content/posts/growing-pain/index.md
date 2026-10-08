@@ -10,11 +10,11 @@ topics = [ "python", "packaging", "pip", "setuptools", "pep517", "pep518"]
 title = "Python packaging - Growing Pains"
 +++
 
-In my previous two posts, I've gone over \[what package types python has\]({{< ref "pep-517-and-python-packaging" >}}),
-and \[how the package building works\]({{< ref "pep-517-518" >}}), especially with the introduction of the PEP-517/518.
-Although the changes were meant to make things more robust, we did run into a few issues while implementing and
-releasing them. The following are a few of those, serving as lessons learned for all of us and presenting some
-interesting problems to solve in the future.
+In my previous two posts, I've gone over [what package types python has](/posts/pep-517-and-python-packaging/), and
+[how the package building works](/posts/pep-517-518/), especially with the introduction of the PEP-517/518. Although the
+changes were meant to make things more robust, we did run into a few issues while implementing and releasing them. The
+following are a few of those, serving as lessons learned for all of us and presenting some interesting problems to solve
+in the future.
 
 Looking at the changes of PEP-517 and PEP-518, build backends (aka setuptools, flit) had very little to do, only to
 expose their functionality via a Python module. Most heavy work falls on the build frontend, which now needs to generate
