@@ -2,6 +2,14 @@
   const toc = document.querySelector('.toc-content');
   if (!toc) return;
 
+  const details = toc.querySelector('.toc-details');
+  const narrow = window.matchMedia('(max-width: 900px)');
+  const fold = function() {
+    details.open = !narrow.matches;
+  };
+  fold();
+  narrow.addEventListener('change', fold);
+
   const headings = document.querySelectorAll('.post-content h2[id], .post-content h3[id], .post-content h4[id], .post-content h5[id], .post-content h6[id]');
   if (!headings.length) return;
 

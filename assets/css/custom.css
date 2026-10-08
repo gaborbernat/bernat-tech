@@ -690,6 +690,17 @@ body.colorscheme-dark .toc-content a.toc-active {
     position: static;
     max-height: none;
   }
+  .toc-details > summary {
+    cursor: pointer;
+    font-weight: 600;
+    padding: 0.4rem 0;
+  }
+}
+@media (min-width: 901px) {
+  /* beside the article the list is always shown, so the fold control has nothing to do */
+  .toc-details > summary {
+    display: none;
+  }
 }
 
 /* Code copy button */

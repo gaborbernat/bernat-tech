@@ -65,10 +65,15 @@
         {{ if $toc }}
         <aside class="post-toc">
           <div class="toc-content">
-            {{/* Hugo builds the list from headings only, so graft a "Start" entry onto the front of the
-                 top-level <ol> -- it jumps back to the article head, which no heading anchors. */}}
-            {{ $start := `<ol><li class="toc-start"><a href="#top">Start</a></li>` }}
-            {{ replace .TableOfContents "<ol>" $start 1 | safeHTML }}
+            {{/* open by default so it shows without JS; toc.js folds it on narrow screens, where the list sits
+                 above the article and would otherwise push the first paragraph a screen or more down */}}
+            <details class="toc-details" open>
+              <summary>Contents</summary>
+              {{/* Hugo builds the list from headings only, so graft a "Start" entry onto the front of the
+                   top-level <ol> -- it jumps back to the article head, which no heading anchors. */}}
+              {{ $start := `<ol><li class="toc-start"><a href="#top">Start</a></li>` }}
+              {{ replace .TableOfContents "<ol>" $start 1 | safeHTML }}
+            </details>
           </div>
         </aside>
         {{ $tocJs := resources.Get "js/toc.js" | resources.Minify | resources.Fingerprint }}
