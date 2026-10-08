@@ -1,5 +1,5 @@
 +++
-title = "Open source projects — Bernát Gábor"
+title = "Open source projects"
 description = "Bernát Gábor — Bloomberg software engineer in Los Angeles and primary maintainer of the PyPA projects tox, virtualenv, pipx, filelock, and platformdirs."
 aliases = [ "/about/"]
 +++

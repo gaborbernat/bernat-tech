@@ -1,5 +1,5 @@
 {{ define "title" }}
-  {{ title (i18n (lower .Title)) | default .Title }} · {{ .Site.Title }}
+  {{ title (i18n (lower .Title)) | default .Title }} · {{ .Site.Params.author }}
 {{ end }}
 {{ define "content" }}
   <section class="container list">

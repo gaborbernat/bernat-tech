@@ -3,7 +3,7 @@
     {{- i18n .Data.Plural 1 | title -}}
     {{- print ": " -}}
   {{- end -}}
-  {{- i18n (lower .Title) | default .Title | title }} · {{ .Site.Title -}}
+  {{- i18n (lower .Title) | default .Title | title }} · {{ .Site.Params.author -}}
 {{ end }}
 {{ define "content" }}
   {{ partial "list.html" . }}
