@@ -209,7 +209,7 @@
           {{- $workflow := trim . " " -}}
           {{- $file := $workflow -}}
           {{- if not (or (strings.HasSuffix $workflow ".yaml") (strings.HasSuffix $workflow ".yml")) }}{{ $file = printf "%s.yaml" $workflow }}{{ end -}}
-          <a href="https://github.com/{{ $org }}/{{ $repo }}/actions/workflows/{{ $file }}"><img src="https://github.com/{{ $org }}/{{ $repo }}/actions/workflows/{{ $file }}/badge.svg" alt="{{ $workflow }}"></a>
+          <a href="https://github.com/{{ $org }}/{{ $repo }}/actions/workflows/{{ $file }}"><img src="https://github.com/{{ $org }}/{{ $repo }}/actions/workflows/{{ $file }}/badge.svg" alt="{{ $label }} {{ $workflow }} workflow status"></a>
         {{- end -}}
       {{- end -}}
   </td>
