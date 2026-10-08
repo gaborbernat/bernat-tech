@@ -570,6 +570,16 @@ figure.mermaid svg {
   max-width: 100%;
   height: auto;
 }
+/* scaled down to a phone column, wide diagrams drew their labels at 4-6px; hold each at the width where labels
+   stay near 12px (--mmd-min, set by scripts/mermaid.mjs) and let the figure scroll sideways instead */
+@media (max-width: 768px) {
+  figure.mermaid {
+    overflow-x: auto;
+  }
+  figure.mermaid svg {
+    min-width: var(--mmd-min, 0);
+  }
+}
 figure.mermaid .mermaid-light {
   display: block;
 }

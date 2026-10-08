@@ -66,6 +66,13 @@ const label = (svg, code, heading) => {
   return svg.replace(/<svg\b/, `<svg aria-label="${text.replaceAll('"', "&quot;")}"`);
 };
 
+// the narrowest width at which the 16px labels still render at 12px; on a phone column the diagrams otherwise
+// shrink to fit and labels drop to 4-6px, so the stylesheet holds them at this width and lets the figure scroll
+const readable = (svg) => {
+  const width = Number(svg.match(/<svg\b[^>]*\bviewBox="[-\d.]+ [-\d.]+ ([\d.]+)/)?.[1]);
+  return width ? svg.replace(/(<svg\b[^>]*\bstyle=")/, `$1--mmd-min: ${Math.round(width * 0.75)}px; `) : svg;
+};
+
 // the nearest heading above a diagram, as escaped HTML text without its tags or anchor link
 const headingBefore = (html, offset) => {
   const headings = [...html.slice(0, offset).matchAll(/<h[2-4][^>]*>([\s\S]*?)<\/h[2-4]>/g)];
@@ -163,8 +170,8 @@ for (const file of targets) {
     diagram++;
     // both variants carry the name; CSS display:none on the inactive one already keeps it out of the
     // accessibility tree, so a fixed aria-hidden would hide the diagram from dark-mode screen readers
-    const light = label(canonicalize(await readFile(rawPath(code, "default"), "utf-8"), `ml${diagram}`), code, heading);
-    const dark = label(canonicalize(await readFile(rawPath(code, "dark"), "utf-8"), `md${diagram}`), code, heading);
+    const light = readable(label(canonicalize(await readFile(rawPath(code, "default"), "utf-8"), `ml${diagram}`), code, heading));
+    const dark = readable(label(canonicalize(await readFile(rawPath(code, "dark"), "utf-8"), `md${diagram}`), code, heading));
     figs.push(
       `<figure class="mermaid"><span class="mermaid-light">${light}</span>` +
         `<span class="mermaid-dark">${dark}</span></figure>`,
