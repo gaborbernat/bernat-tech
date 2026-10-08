@@ -89,6 +89,13 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   document.querySelectorAll(".project-table th[data-sort]").forEach(function (th) {
+    th.tabIndex = 0;
+    th.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        th.click();
+      }
+    });
     th.addEventListener("click", function () {
       var table = this.closest("table");
       var tbody = table.querySelector("tbody");
@@ -390,7 +397,9 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       toolbar.appendChild(filterToggle);
       toolbar.appendChild(panel);
-      table.parentNode.insertBefore(toolbar, table);
+      // above the scroll wrapper, so the filters stay put while a narrow screen scrolls the table sideways
+      var scroller = table.parentNode;
+      scroller.parentNode.insertBefore(toolbar, scroller);
     }
     applyFilter();
   });

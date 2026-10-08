@@ -20,6 +20,7 @@
   {{- end -}}
 {{- end -}}
 {{ $cells := delimit $headerRow "" }}
+<div class="project-table-scroll">
 <table class="project-table">
   <thead>
     <tr>{{ $cells | safeHTML }}</tr>
@@ -60,3 +61,4 @@
   </tfoot>
   {{- end }}
 </table>
+</div>

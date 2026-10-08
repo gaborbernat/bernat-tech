@@ -21,15 +21,23 @@ li p {
 /* the project-list shortcode only appears on the OSS page. ci-toggle bundles a <script> tag alongside its
    button, so the paragraph before the FIRST table has one in between (invisible — script has no box, but
    :has()'s "+" is structural and still has to skip over it); the paragraph before any later table doesn't. */
-p:has(+ .project-table),
+p:has(+ .project-table-scroll),
 p:has(+ .table-toolbar),
-p:has(+ script + .project-table),
+p:has(+ script + .project-table-scroll),
 p:has(+ script + .table-toolbar) {
   margin-bottom: 0.5rem;
 }
 table.project-table {
   counter-reset: row-num;
   margin-bottom: 1.5em;
+}
+/* the primary table is ~950px of nowrap cells; below that width let it scroll inside its own box instead of
+   dragging the whole page sideways. Only then: a scroll container also captures the sticky header, which
+   should keep sticking to the page wherever the table fits. */
+@media (max-width: 1024px) {
+  .project-table-scroll {
+    overflow-x: auto;
+  }
 }
 table.project-table td,
 table.project-table th {
@@ -200,6 +208,10 @@ table.project-table th[data-sort] {
 }
 table.project-table th[data-sort]:hover {
   text-decoration: underline;
+}
+table.project-table th[data-sort]:focus-visible {
+  outline: 2px solid var(--link-color, #42a5f5);
+  outline-offset: 2px;
 }
 table.project-table th.sort-asc::after {
   content: " \25B2";
