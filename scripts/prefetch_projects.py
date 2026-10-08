@@ -459,7 +459,10 @@ def _is_transient_http(exc: urllib.error.HTTPError) -> bool:
 
 def _is_retryable(exc: BaseException) -> bool:
     if isinstance(exc, urllib.error.HTTPError):
-        return _is_transient_http(exc)
+        # a primary rate limit can reset up to an hour out; waiting the capped delay four times only burns minutes
+        # per call, so give up at once and let the next hourly run pick the record up as transient
+        told = retry_after(exc)
+        return _is_transient_http(exc) and (told is None or told <= _BACKOFF_CAP)
     return isinstance(exc, (urllib.error.URLError, TimeoutError))  # connection reset, DNS, timeout
 
 
