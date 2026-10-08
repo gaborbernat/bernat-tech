@@ -37,7 +37,8 @@ jobs:
           persist-credentials: false
       - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
         with:
-          cache-dependency-glob: scripts/*.py
+          version: "0.12.23"
+          cache-dependency-glob: scripts/*.lock
       - name: Restore last refreshed stats
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
@@ -50,7 +51,7 @@ jobs:
         env:
           HUGO_GITHUB_TOKEN: ${{ secrets.HUGO_GITHUB_TOKEN }}
           PEPY: ${{ secrets.PEPY }}
-        run: uv run scripts/prefetch_projects.py
+        run: uv run --locked --script scripts/prefetch_projects.py
       - name: Save refreshed stats
         # save even on failure so the numbers it did manage to refresh carry into the next run
         if: always()
@@ -101,8 +102,10 @@ jobs:
       - run: npm ci
       - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
         with:
-          # scripts carry PEP 723 inline deps and there is no lockfile, so key the cache off the scripts
-          cache-dependency-glob: scripts/*.py
+          version: "0.12.23"
+          # each PEP 723 script has a lock beside it (uv lock --script); run them --locked so a stale lock fails
+          # the build instead of resolving whatever was released since
+          cache-dependency-glob: scripts/*.lock
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
@@ -127,7 +130,7 @@ jobs:
           key: ${{ runner.os }}-project-stats-${{ github.run_id }}
           restore-keys: ${{ runner.os }}-project-stats-
       - name: Record post publish dates
-        run: uv run scripts/publish_dates.py
+        run: uv run --locked --script scripts/publish_dates.py
       - name: Build
         run: hugo --minify --gc
         env:
@@ -169,7 +172,7 @@ jobs:
           - name: Validate HTML
             run: java -jar "$(node -p 'String(require("vnu-jar"))')" --errors-only --skip-non-html public
           - name: Subset fonts
-            run: uv run scripts/subset-fa.py
+            run: uv run --locked --script scripts/subset-fa.py
       - wait: images
       - name: Report image optimization failure
         if: steps.images.outcome == 'failure'
