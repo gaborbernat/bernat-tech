@@ -1,7 +1,7 @@
 +++
 author = "Bernat Gabor"
 date = 2026-03-10T00:00:00Z
-description = "A comprehensive guide to securing your Python dependencies from ingestion to deployment, covering linting, pinning, vulnerability scanning, SBOMs, and attestations"
+description = "Securing Python dependencies from ingestion to deployment: linting, pinning, vulnerability scanning, SBOMs and attestations."
 draft = false
 image = "splash.webp"
 images = [ "splash.webp"]

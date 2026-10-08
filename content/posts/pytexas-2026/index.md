@@ -2,7 +2,7 @@
 author = "Bernat Gabor"
 date = 2026-04-19T22:00:00Z
 lastmod = 2026-04-20T00:00:00Z
-description = "Per-talk notes from PyTexas 2026 in Austin: Hynek on domain modeling, Dawn Wages on specialization, MCP security, PEP 810 lazy imports, free-threading, Ruff, ty, uv, supply chain."
+description = "Notes from PyTexas 2026: Hynek on domain modeling, Dawn Wages on specialization, MCP security, PEP 810 lazy imports, free-threading, Ruff, ty and uv."
 draft = false
 image = "pytexas-2026-duck-mascot-og.webp"
 images = [ "pytexas-2026-duck-mascot-og.webp", "pytexas-2026-duck-mascot.webp"]

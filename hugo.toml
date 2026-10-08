@@ -16,7 +16,7 @@ pagination.pagerSize = 20
 
 [params]
 author = "Bernát Gábor"
-description = "Engineering notes from Bernát Gábor — PyPA maintainer of tox, virtualenv, pipx, filelock, and platformdirs. Python packaging, type hints, and supply chain security."
+description = "Engineering notes from Bernát Gábor, PyPA maintainer of tox, virtualenv, pipx, filelock and platformdirs: Python packaging, typing and supply chain security."
 keywords = "python packaging,tox,virtualenv,pipx,pep 517,pep 518,type hints,mypy,python supply chain,sbom,bernat gabor"
 images = ["img/avatar.webp"]
 avatarurl = "img/avatar.webp"

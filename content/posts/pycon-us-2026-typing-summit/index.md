@@ -2,7 +2,7 @@
 author = "Bernat Gabor"
 date = 2026-05-14T23:30:00Z
 lastmod = 2026-05-15T00:00:00Z
-description = "Per-talk notes from the PyCon US 2026 Typing Summit in Long Beach: Pyrefly and AI agents, ty constraint sets, Lean formalization, tensor shape types, intersection types, PEP 827, Guido on the direction of typing, and the Typing Council Q&A."
+description = "Notes from the PyCon US 2026 Typing Summit: Pyrefly and AI agents, ty constraint sets, tensor shape types, intersection types, PEP 827 and Typing Council Q&A."
 draft = false
 image = "typing-council-panel.webp"
 images = [ "typing-council-panel.webp"]

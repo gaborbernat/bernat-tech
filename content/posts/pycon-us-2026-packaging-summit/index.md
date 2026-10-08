@@ -2,7 +2,7 @@
 author = "Bernat Gabor"
 date = 2026-05-15T23:00:00Z
 lastmod = 2026-05-16T00:00:00Z
-description = "Per-talk notes from the PyCon US 2026 Packaging Summit in Long Beach: Emma Smith on Wheel 2.0 and Zstandard compression, Mike Fiedler on PyPI abuse vectors, Mahe Iram Khan on ecosystems, lightning talks on PEP 772, mobile wheels, AI accelerator variants, and the roundtable discussions."
+description = "Notes from the PyCon US 2026 Packaging Summit: Emma Smith on Wheel 2.0 and Zstandard, Mike Fiedler on PyPI abuse, PEP 772, mobile wheels and the roundtables."
 draft = false
 image = "mike-fiedler-pypi-as-cdn.webp"
 images = [ "mike-fiedler-pypi-as-cdn.webp"]
