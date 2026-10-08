@@ -1,13 +1,12 @@
 <section class="container list">
   <header>
+    {{/* visually hidden (the active tab names the page), so no self-link: it would take focus while invisible */}}
     <h1 class="title">
-      <a class="title-link" href="{{ .Permalink | safeURL }}">
-        {{- if eq .Kind "term" -}}
-          {{- i18n .Data.Plural 1 | title -}}
-          {{- print ": " -}}
-        {{- end -}}
-        {{- i18n (lower .Title) | default .Title | title -}}
-      </a>
+      {{- if eq .Kind "term" -}}
+        {{- i18n .Data.Plural 1 | title -}}
+        {{- print ": " -}}
+      {{- end -}}
+      {{- i18n (lower .Title) | default .Title | title -}}
     </h1>
   </header>
   {{ .Content }}

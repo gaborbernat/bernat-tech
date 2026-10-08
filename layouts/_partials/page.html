@@ -1,10 +1,9 @@
 <section class="container page">
   <article>
     <header>
+      {{/* visually hidden (the active tab names the page), so no self-link: it would take focus while invisible */}}
       <h1 class="title">
-        <a class="title-link" href="{{ .Permalink | safeURL }}">
-          {{ .Title }}
-        </a>
+        {{ .Title }}
       </h1>
     </header>
 
