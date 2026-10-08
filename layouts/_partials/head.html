@@ -6,7 +6,7 @@
 <link rel="canonical" href="{{ .Permalink }}">
 {{ end }}
 
-{{ partialCached "head/theme-styles.html" . }}
+{{ partialCached "head/theme-styles.html" . .IsHome }}
 
 {{ partialCached "head/color-scheme.html" . }}
 
