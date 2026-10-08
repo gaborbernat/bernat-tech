@@ -180,9 +180,9 @@ backend.build_sdist()
 It's up to the backend where and how they want to expose their official API:
 
 1. [flit](https://flit.pypa.io/en/latest/) does it via `flit.buildapi`
-2. [setuptools](https://setuptools.readthedocs.io/en/latest/history.html#v40-8-0) provides two variants:
+2. [setuptools](https://setuptools.pypa.io/en/latest/history.html#v40-8-0) provides two variants:
    `setuptools.build_meta` (on why read on later)
-3. [poetry](https://poetry.eustace.io/docs/pyproject/#poetry-and-pep-517) does it via `poetry.masonry.api`
+3. [poetry](https://python-poetry.org/docs/pyproject/) does it via `poetry.masonry.api`
 
 With this, we can start having packaging tools that are no longer bound to the legacy decisions of the `distutils` in
 the frontend.

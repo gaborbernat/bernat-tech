@@ -15,7 +15,7 @@ Nevertheless, in September 2014 [Guido van Rossum](https://twitter.com/gvanrossu
 [BDFL](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life)) created a python enhancement proposal
 ([PEP-484](https://peps.python.org/pep-0484/)) to add type hints to Python. It has been released for general usage a
 year later, in September 2015, as part of Python `3.5.0`.
-[Twenty-five years into its existence](http://python-history.blogspot.com/2009/01/brief-timeline-of-python.html) now
+[Twenty-five years into its existence](https://python-history.blogspot.com/2009/01/brief-timeline-of-python.html) now
 there was a standard way to add type information to Python code. In this blog post, I'll explore how the system matured,
 how you can use it, and what's next for type hints.
 

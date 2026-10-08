@@ -974,7 +974,7 @@ refactor: recover cross-file visibility before moving the code.
 
 [Link-time optimization](https://gcc.gnu.org/onlinedocs/gccint/LTO-Overview.html) (LTO) restores program-wide visibility
 at link time and can
-[inline across that boundary](http://hubicka.blogspot.com/2014/04/linktime-optimization-in-gcc-1-brief.html). The split
+[inline across that boundary](https://hubicka.blogspot.com/2014/04/linktime-optimization-in-gcc-1-brief.html). The split
 then lands within 0.1 percent of the monolithic file. LTO entered the build before the source split. The tokenizer marks
 its long bulk-text scan [`noinline`](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html), keeping the
 markup-heavy path compact enough for the instruction cache.
@@ -1332,8 +1332,8 @@ hazards around fixed-width integers and buffers.
 [`turbohtml.clean`](https://turbohtml.readthedocs.io/) replaces the allowlist role once served by
 [bleach](https://github.com/mozilla/bleach). Its output enters live pages, making an incorrect answer an XSS defect.
 HTML parsing has no guaranteed [fixpoint](<https://en.wikipedia.org/wiki/Fixed_point_(mathematics)>): serializing and
-parsing a tree can alter its structure. [Mutation XSS](https://research.securitum.com/dompurify-bypass-mxss/) lets an
-attacker submit inert markup that a browser reparses as executable content.
+parsing a tree can alter its structure. [Mutation XSS](https://cure53.de/fp170.pdf) lets an attacker submit inert markup
+that a browser reparses as executable content.
 
 That behavior changes the oracle. String equality with another sanitizer cannot prove safety because policies and
 serialization choices differ. Parsing once is insufficient because the browser performs the parse that matters after
@@ -1465,7 +1465,7 @@ against their independent results.
 - [RFC 3492](https://www.rfc-editor.org/rfc/rfc3492), the Punycode bootstring algorithm, and
   [UTS #46](https://www.unicode.org/reports/tr46/) and [UAX #15](https://www.unicode.org/reports/tr15/), the IDNA
   mapping and Unicode normalization the host encoder implements.
-- [Honza Hubička's link-time optimization series](http://hubicka.blogspot.com/2014/04/linktime-optimization-in-gcc-1-brief.html)
+- [Honza Hubička's link-time optimization series](https://hubicka.blogspot.com/2014/04/linktime-optimization-in-gcc-1-brief.html)
   and the GCC [LTO overview](https://gcc.gnu.org/onlinedocs/gccint/LTO-Overview.html), on re-inlining across translation
   units.
 - [Go's profile-guided optimization docs](https://go.dev/doc/pgo), the clearest writeup of the

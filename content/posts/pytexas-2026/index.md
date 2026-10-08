@@ -108,7 +108,7 @@ skills (size), experience (data), and energy/time (compute). "Just relax" burnou
 under real-world pressure. Build supportive communities (she called them "cadre friends").
 
 Slides: [dawnwages.info/pytexas-keynote-26](https://dawnwages.info/pytexas-keynote-26/) (also
-[bit.ly/pytexas-keynote-26](https://bit.ly/pytexas-keynote-26)).
+[bit.ly/pytexas-keynote-26](https://dawnwages.info/pytexas-keynote-26/)).
 
 ### Moshe Zadka: Python as Your DSL
 
@@ -340,7 +340,7 @@ used more than 25% of them. About 90% remain untested by the wider community. R 
    [Qt/PySide](https://doc.qt.io/qtforpython/), or built on top of Matplotlib/Bokeh/Plotly. The base tech determines the
    ceiling. If a library sits on Matplotlib, it inherits the strengths and the constraints.
 7. **Adjacent categories.** Color mapping ([`cmocean`](https://matplotlib.org/cmocean/),
-   [`colorcet`](https://colorcet.holoviz.org/)), table rendering ([`itables`](https://mwouts.github.io/itables/),
+   [`colorcet`](https://colorcet.holoviz.org/)), table rendering ([`itables`](https://itables.org/),
    [`pandas`](https://pandas.pydata.org/) styling), dashboarding ([Streamlit](https://streamlit.io/),
    [Panel](https://panel.holoviz.org/), [Dash](https://dash.plotly.com/)). Starts plot-adjacent, ends up app
    development.

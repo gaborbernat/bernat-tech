@@ -517,9 +517,9 @@ Each of these primitives is non-deterministic by design. The OS scheduler picks 
 first, which order a `Barrier` releases its waiters, which `Condition` waiter `notify()` wakes; it picks a different
 order each run. Production code relies on that flexibility: a lock exists to resolve contention without callers
 specifying an order. As Edward Lee put it in
-[_The Problem with Threads_](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2006/EECS-2006-1.pdf): _"threads represent a
-huge step. They discard the most essential and appealing properties of sequential computation: understandability,
-predictability, and determinism."_
+[_The Problem with Threads_](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2006/Archive/EECS-2006-1.pdf): _"threads
+represent a huge step. They discard the most essential and appealing properties of sequential computation:
+understandability, predictability, and determinism."_
 
 ## Why multithreaded Python tests are flaky
 
