@@ -66,7 +66,8 @@ jobs:
     # last-good cache while refresh keeps its own status as the staleness alarm
     if: ${{ !cancelled() }}
     runs-on: ubuntu-26.04
-    environment: build
+    # no environment: the build reads no secrets, and the build environment is limited to main so its
+    # secrets stay out of PR and branch builds
     env:
       HUGO_CACHEDIR: /tmp/hugo_cache
     steps:
