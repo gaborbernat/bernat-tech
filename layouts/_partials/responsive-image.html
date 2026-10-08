@@ -1,0 +1,26 @@
+{{- /* src, srcset and sizes for a raster image resource, shared by the markdown image hook, the figure shortcode and
+     the post hero. The srcset must list the full width too: browsers ignore src once srcset carries w descriptors,
+     so a 700px image offered only "500w" was always shown from the 500px resize. At full width the smaller of the
+     original and a lossy webp re-encode wins: some originals are lossless and three times the size, while already
+     lossy ones only grow when re-encoded. PNG keeps its file, as lossy encoding smears line art. sizes is the
+     displayed width: the natural width, capped by the viewport. */ -}}
+{{- $img := . -}}
+{{- $full := $img -}}
+{{- if ne $img.MediaType.SubType "png" -}}
+  {{- $lossy := $img.Resize (printf "%dx webp" $img.Width) -}}
+  {{- if lt (len $lossy.Content) (len $img.Content) }}{{ $full = $lossy }}{{ end -}}
+{{- end -}}
+{{- $candidates := slice -}}
+{{- range $w := slice 500 800 1200 -}}
+  {{- if lt $w $img.Width -}}
+    {{- $candidates = $candidates | append (printf "%s %dw" ($img.Resize (printf "%dx webp" $w)).RelPermalink $w) -}}
+  {{- end -}}
+{{- end -}}
+{{- $candidates = $candidates | append (printf "%s %dw" $full.RelPermalink $img.Width) -}}
+{{- return dict
+  "src" $full.RelPermalink
+  "srcset" (delimit $candidates ", ")
+  "sizes" (printf "min(%dpx, 100vw)" $img.Width)
+  "width" $img.Width
+  "height" $img.Height
+-}}
