@@ -92,9 +92,18 @@
     display: none;
 
     @media only screen and (max-width: 768px) {
+      // clipped rather than visibility: hidden, which drops the checkbox from the tab order and leaves the
+      // mobile menu unreachable by keyboard; the label still draws the button and its focus ring
       display: initial;
-      position: relative;
-      visibility: hidden;
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
 
       &:checked+label>i {
         color: $alt-bg-color;
