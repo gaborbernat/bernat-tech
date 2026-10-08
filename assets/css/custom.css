@@ -750,6 +750,25 @@ body.colorscheme-dark .toc-content a.toc-active {
 .code-copy-button:focus-visible {
   opacity: 1;
 }
+/* the button floats over the top-right of the block, where long first lines run under it. With a mouse it shows
+   only while the block is hovered or the button focused, so it is out of the way while reading; touch screens
+   have no hover, so there the block reserves a strip for a full-size button instead */
+@media (hover: hover) {
+  .code-copy-button {
+    opacity: 0;
+  }
+}
+@media (hover: none) {
+  .code-block-wrapper pre {
+    padding-top: 4.4rem;
+  }
+  .code-copy-button {
+    top: 0.6rem;
+    right: 0.6rem;
+    min-width: 3.2rem;
+    min-height: 3.2rem;
+  }
+}
 .code-copy-button:hover {
   color: #111827;
   background: #fff;
