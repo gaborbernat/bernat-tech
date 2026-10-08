@@ -1,0 +1,34 @@
+{{- /* Overrides Hugo's embedded helper behind the opengraph and twitter_cards templates so every page shares one
+     1200x630 card, the size summary_large_image previews expect: older heroes are 700px wide and pages without
+     an image fell back to the 512px avatar. A source at least that big is cropped to fill; a smaller one is
+     centred on a canvas in the page background rather than upscaled into blur. */ -}}
+{{- $src := false -}}
+{{- with .Params.images -}}
+  {{- $name := index . 0 -}}
+  {{- $src = or ($.Resources.GetMatch $name) (resources.GetMatch $name) -}}
+{{- end -}}
+{{- if not $src -}}
+  {{- with site.Params.images -}}
+    {{- $path := index . 0 -}}
+    {{- /* the fallback lives in static/, which is not a resource; read it so it can be processed */ -}}
+    {{- $src = resources.FromString $path (os.ReadFile (path.Join "static" $path)) -}}
+  {{- end -}}
+{{- end -}}
+{{- $imgs := slice -}}
+{{- with $src -}}
+  {{- $card := . -}}
+  {{- if not (and (eq .Width 1200) (eq .Height 630)) -}}
+    {{- if and (ge .Width 1200) (ge .Height 630) -}}
+      {{- $card = .Fill "1200x630 Center jpg q85" -}}
+    {{- else -}}
+      {{- $fit := . -}}
+      {{- if or (gt .Width 1200) (gt .Height 630) }}{{ $fit = .Fit "1200x630" }}{{ end -}}
+      {{- $left := div (sub 1200 $fit.Width) 2 -}}
+      {{- $top := div (sub 630 $fit.Height) 2 -}}
+      {{- $pad := images.Padding $top (sub (sub 1200 $fit.Width) $left) (sub (sub 630 $fit.Height) $top) $left "#fafafa" -}}
+      {{- $card = ($fit | images.Filter $pad).Process "jpg q85" -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $imgs = $imgs | append (dict "Image" $card "RelPermalink" $card.RelPermalink "Permalink" $card.Permalink) -}}
+{{- end -}}
+{{- return $imgs -}}
