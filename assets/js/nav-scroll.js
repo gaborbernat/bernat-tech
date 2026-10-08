@@ -6,6 +6,13 @@ const nav = document.querySelector(".navigation");
 const menuToggle = document.getElementById("menu-toggle");
 const toTop = document.getElementById("back-to-top");
 
+if (nav) {
+  // sticky table headers (the OSS tables) sit this far down while the nav shows, instead of underneath it
+  const publishHeight = () => document.documentElement.style.setProperty("--nav-height", `${nav.offsetHeight}px`);
+  publishHeight();
+  window.addEventListener("resize", publishHeight, { passive: true });
+}
+
 if (nav || toTop) {
   const reveal = nav ? nav.offsetHeight * 2 : 0;
   let last = window.scrollY;

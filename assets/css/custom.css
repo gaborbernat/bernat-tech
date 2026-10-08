@@ -54,6 +54,12 @@ table.project-table th {
 }
 table.project-table thead th {
   top: 0;
+  transition: top 0.25s ease;
+}
+/* while the sticky nav shows, the sticky header sits just below it rather than underneath; the matching
+   transition makes the two slide together */
+body:has(.navigation:not(.nav-hidden)) table.project-table thead th {
+  top: var(--nav-height, 0);
 }
 table.project-table tfoot th {
   bottom: 0;
@@ -2183,7 +2189,8 @@ body.colorscheme-dark .navigation {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .navigation {
+  .navigation,
+  table.project-table thead th {
     transition: none;
   }
 }
