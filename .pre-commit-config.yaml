@@ -26,7 +26,7 @@ repos:
           - mdformat-beautysh==1.0.0
           - mdformat-simple-breaks==0.1.0
           - mdformat-hugo==0.3.0
-  - repo: https://github.com/rhysd/actionlint
+  - repo: https://github.com/devantler/actionlint
     # Parallel-step support is pending in https://github.com/rhysd/actionlint/pull/695.
     rev: bf6b9188a5fd7b4e7b7d244a865a60165bdc6783
     hooks:
