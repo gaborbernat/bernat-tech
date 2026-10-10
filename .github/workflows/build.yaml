@@ -37,6 +37,7 @@ jobs:
           persist-credentials: false
       - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
         with:
+          python-version: "3.15"
           version: "0.12.23"
           cache-dependency-glob: scripts/*.lock
       - name: Restore last refreshed stats
@@ -51,7 +52,7 @@ jobs:
         env:
           HUGO_GITHUB_TOKEN: ${{ secrets.HUGO_GITHUB_TOKEN }}
           PEPY: ${{ secrets.PEPY }}
-        run: uv run --locked --script scripts/prefetch_projects.py
+        run: uv run --python 3.15 --locked --script scripts/prefetch_projects.py
       - name: Save refreshed stats
         # save even on failure so the numbers it did manage to refresh carry into the next run
         if: always()
@@ -110,6 +111,7 @@ jobs:
       - run: npm ci
       - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
         with:
+          python-version: "3.15"
           version: "0.12.23"
           # each PEP 723 script has a lock beside it (uv lock --script); run them --locked so a stale lock fails
           # the build instead of resolving whatever was released since
@@ -138,7 +140,7 @@ jobs:
           key: ${{ runner.os }}-project-stats-${{ github.run_id }}
           restore-keys: ${{ runner.os }}-project-stats-
       - name: Record post publish dates
-        run: uv run --locked --script scripts/publish_dates.py
+        run: uv run --python 3.15 --locked --script scripts/publish_dates.py
       - name: Build
         run: hugo --minify --gc
         env:
@@ -180,13 +182,13 @@ jobs:
           - name: Validate HTML
             run: java -jar "$(node -p 'String(require("vnu-jar"))')" --errors-only --skip-non-html public
           - name: Subset fonts
-            run: uv run --locked --script scripts/subset-fa.py
+            run: uv run --python 3.15 --locked --script scripts/subset-fa.py
       - wait: images
       - name: Report image optimization failure
         if: steps.images.outcome == 'failure'
         run: echo "::warning::image optimization failed"
       - name: Validate RSS feed
-        run: python3 -c "import xml.etree.ElementTree as ET; ET.parse('public/index.xml')"
+        run: uv run --no-project --python 3.15 python -c "import xml.etree.ElementTree as ET; ET.parse('public/index.xml')"
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
