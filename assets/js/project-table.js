@@ -453,7 +453,9 @@ document.addEventListener("DOMContentLoaded", function () {
       var nextBuiltAt = page.getElementById("footer-ts")?.dateTime;
       var article = document.querySelector(".container.page article");
       var nextArticle = page.querySelector(".container.page article");
-      if (!nextBuiltAt || !article || !nextArticle || nextBuiltAt <= builtAt) return;
+      var footer = document.querySelector(".footer .container");
+      var nextFooter = page.querySelector(".footer .container");
+      if (!nextBuiltAt || !article || !nextArticle || !footer || !nextFooter || nextBuiltAt <= builtAt) return;
 
       var state = Array.from(document.querySelectorAll(".project-table")).map(function (table) {
         var headers = Array.from(table.querySelectorAll("th[data-sort]"));
@@ -468,6 +470,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
       cleanup();
       article.innerHTML = nextArticle.innerHTML;
+      footer.innerHTML = nextFooter.innerHTML;
       cleanup = initProjectTables();
       document.querySelectorAll(".project-table").forEach(function (table, index) {
         var saved = state[index];
@@ -488,7 +491,6 @@ document.addEventListener("DOMContentLoaded", function () {
         table.parentNode.scrollLeft = saved.scrollLeft;
       });
       var footerTime = document.getElementById("footer-ts");
-      footerTime.dateTime = nextBuiltAt;
       var date = new Date(nextBuiltAt);
       var pad = function (number) {
         return String(number).padStart(2, "0");

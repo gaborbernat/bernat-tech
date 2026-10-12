@@ -12,7 +12,7 @@
     {{ end }}
     {{/* per-page commit where the content has git history (posts); otherwise the site build commit passed from CI, so every page's footer links its source commit */}}
     {{ $hash := "" }}{{ $short := "" }}
-    {{ with .GitInfo }}{{ $hash = .Hash }}{{ $short = .AbbreviatedHash }}{{ end }}
+    {{ if and .GitInfo (eq .Section "posts") }}{{ $hash = .GitInfo.Hash }}{{ $short = .GitInfo.AbbreviatedHash }}{{ end }}
     {{ if not $hash }}{{ with .Site.Params.buildCommit }}{{ $hash = . }}{{ $short = substr . 0 10 }}{{ end }}{{ end }}
     {{ with $short }}
       via <a href="https://github.com/gaborbernat/bernat-tech/commit/{{ $hash }}">{{ . }}</a>.
