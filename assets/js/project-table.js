@@ -456,6 +456,12 @@ document.addEventListener("DOMContentLoaded", function () {
       var footer = document.querySelector(".footer .container");
       var nextFooter = page.querySelector(".footer .container");
       if (!nextBuiltAt || !article || !nextArticle || !footer || !nextFooter || nextBuiltAt <= builtAt) return;
+      var currentCommit = footer.querySelector('a[href*="/commit/"]')?.href;
+      var nextCommit = nextFooter.querySelector('a[href*="/commit/"]')?.href;
+      if (currentCommit && nextCommit && currentCommit !== nextCommit) {
+        location.reload();
+        return;
+      }
 
       var state = Array.from(document.querySelectorAll(".project-table")).map(function (table) {
         var headers = Array.from(table.querySelectorAll("th[data-sort]"));
