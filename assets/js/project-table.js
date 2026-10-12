@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+function initProjectTables() {
   // the page is a static build refreshed out of band, so ages would freeze at build time in an open tab;
   // each badge reschedules itself for the moment its own label would next change
   var formatAge = function (timestamp, now) {
@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   var updateRelativeTime = function (badge) {
+    if (!badge.isConnected) return;
     var age = formatAge(Number(badge.dataset.timestamp), Date.now() / 1000);
     badge.querySelector(".relative-time-label").textContent = age.label;
     badge.classList.remove("badge-gray", "badge-green", "badge-yellow", "badge-red");
@@ -433,4 +434,77 @@ document.addEventListener("DOMContentLoaded", function () {
       observer.observe(table.parentNode);
     });
   }
+  return function () {
+    if (observer) observer.disconnect();
+  };
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  var cleanup = initProjectTables();
+  var builtAt = document.getElementById("footer-ts").dateTime;
+  var refreshing = false;
+  var refresh = async function () {
+    if (refreshing) return;
+    refreshing = true;
+    try {
+      var response = await fetch(location.pathname, { cache: "no-store" });
+      if (!response.ok) return;
+      var page = new DOMParser().parseFromString(await response.text(), "text/html");
+      var nextBuiltAt = page.getElementById("footer-ts")?.dateTime;
+      var article = document.querySelector(".container.page article");
+      var nextArticle = page.querySelector(".container.page article");
+      if (!nextBuiltAt || !article || !nextArticle || nextBuiltAt <= builtAt) return;
+
+      var state = Array.from(document.querySelectorAll(".project-table")).map(function (table) {
+        var headers = Array.from(table.querySelectorAll("th[data-sort]"));
+        var sorted = table.querySelector("th[aria-sort='ascending'], th[aria-sort='descending']");
+        var panel = table.parentNode.previousElementSibling?.querySelector(".type-filters-panel");
+        return {
+          sortIndex: headers.indexOf(sorted),
+          direction: sorted?.dataset.dir,
+          filtersOpen: panel ? !panel.hidden : false,
+          scrollLeft: table.parentNode.scrollLeft,
+        };
+      });
+      cleanup();
+      article.innerHTML = nextArticle.innerHTML;
+      cleanup = initProjectTables();
+      document.querySelectorAll(".project-table").forEach(function (table, index) {
+        var saved = state[index];
+        if (!saved) return;
+        var sorted = table.querySelectorAll("th[data-sort]")[saved.sortIndex];
+        if (sorted) {
+          delete sorted.dataset.dir;
+          sorted.click();
+          if (saved.direction === "asc") sorted.click();
+        }
+        var toolbar = table.parentNode.previousElementSibling;
+        var panel = toolbar?.querySelector(".type-filters-panel");
+        var toggle = toolbar?.querySelector(".type-filters-toggle");
+        if (panel && toggle) {
+          panel.hidden = !saved.filtersOpen;
+          toggle.setAttribute("aria-expanded", saved.filtersOpen ? "true" : "false");
+        }
+        table.parentNode.scrollLeft = saved.scrollLeft;
+      });
+      var footerTime = document.getElementById("footer-ts");
+      footerTime.dateTime = nextBuiltAt;
+      var date = new Date(nextBuiltAt);
+      var pad = function (number) {
+        return String(number).padStart(2, "0");
+      };
+      footerTime.textContent =
+        date.getFullYear() + "-" + pad(date.getMonth() + 1) + "-" + pad(date.getDate()) + " " +
+        pad(date.getHours()) + ":" + pad(date.getMinutes()) + ":" + pad(date.getSeconds());
+      builtAt = nextBuiltAt;
+    } catch (error) {
+      console.warn("Could not refresh project data", error);
+    } finally {
+      refreshing = false;
+    }
+  };
+  setInterval(refresh, 10 * 60 * 1000);
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden) refresh();
+  });
 });
