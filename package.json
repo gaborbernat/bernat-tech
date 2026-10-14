@@ -6,8 +6,8 @@
   },
   "devDependencies": {
     "glob": "13.0.6",
-    "shiki": "4.4.3",
-    "vnu-jar": "^26.9.30"
+    "shiki": "4.5.0",
+    "vnu-jar": "^26.10.7"
   },
   "dependencies": {
     "mermaid": "12.1.0",
