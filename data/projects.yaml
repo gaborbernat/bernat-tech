@@ -192,10 +192,10 @@ primary:
     kind: cli
     ci: tests.yml
     homebrew: pipx
-  - name: token-menu-bar-macos
-    org: tox-dev
-    label: Token Menu Bar
-    lang: swift
+  - name: quotaline
+    org: quotaline
+    label: Quotaline
+    lang: rust,swift
     kind: app
     ci: ci.yml
     pypi: "false"
