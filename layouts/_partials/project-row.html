@@ -39,17 +39,20 @@
 {{/* lang and kind are independent axes — what it is written in, and what it is to whoever installs it.
      Each drives its own filter bar in project-table.js through the data-filter-* attributes below, so
      "Rust" and "Pre-commit hook" can be asked for together rather than as one flat list. */}}
-{{ $langIcons := dict "python" "fab fa-python" "rust" "fab fa-rust" "c" "fas fa-microchip" "kotlin" "fab fa-java" "swift" "fab fa-swift" "tex" "fas fa-book" "shell" "fas fa-scroll" }}
-{{ $langLabels := dict "python" "Python" "rust" "Rust" "c" "C" "kotlin" "Kotlin" "swift" "Swift" "tex" "TeX" "shell" "Shell" }}
+{{ $langIcons := dict "python" "fab fa-python" "rust" "fab fa-rust" "c" "fas fa-microchip" "kotlin" "fab fa-java" "swift" "fab fa-swift" "typescript" "typescript-icon" "tex" "fas fa-book" "shell" "fas fa-scroll" }}
+{{ $langLabels := dict "python" "Python" "rust" "Rust" "c" "C" "kotlin" "Kotlin" "swift" "Swift" "typescript" "TypeScript" "tex" "TeX" "shell" "Shell" }}
 {{ $kindIcons := dict "library" "fas fa-cube" "cli" "fas fa-terminal" "plugin" "fas fa-plug" "pre-commit" "fab fa-git-alt" "action" "fas fa-bolt" "jetbrains" "fas fa-lightbulb" "monorepo" "fas fa-layer-group" "service" "fas fa-server" "app" "fas fa-desktop" "document" "fas fa-file-lines" "site" "fas fa-globe" "config" "fas fa-gear" }}
 {{ $kindLabels := dict "library" "Library" "cli" "Command-line tool" "plugin" "Plugin" "pre-commit" "Pre-commit hook" "action" "GitHub Action" "jetbrains" "JetBrains plugin" "monorepo" "Monorepo" "service" "Service" "app" "Desktop app" "document" "Document" "site" "Website" "config" "Configuration" }}
+{{ $platformIcons := dict "macos" "fab fa-apple" "gnome" "gnome-icon" }}
+{{ $platformLabels := dict "macos" "macOS" "gnome" "GNOME" }}
 
 {{ $langs := slice }}{{ range split (or $p.lang "") "," }}{{ with trim . " " }}{{ $langs = $langs | append . }}{{ end }}{{ end }}
 {{ $kinds := slice }}{{ range split (or $p.kind "") "," }}{{ with trim . " " }}{{ $kinds = $kinds | append . }}{{ end }}{{ end }}
+{{ $platforms := slice }}{{ range split (or $p.platforms "") "," }}{{ with trim . " " }}{{ $platforms = $platforms | append . }}{{ end }}{{ end }}
 
 {{ $badges := slice }}
 {{- range $langs -}}
-  {{- $badges = $badges | append (dict "slug" . "icon" (index $langIcons .) "label" (index $langLabels .) "tip" (index $langLabels .)) -}}
+  {{- $badges = $badges | append (dict "slug" . "icon" (index $langIcons .) "mark" (cond (eq . "typescript") "TS" "") "label" (index $langLabels .) "tip" (index $langLabels .)) -}}
 {{- end -}}
 {{- range $kinds -}}
   {{- $label := index $kindLabels . -}}
@@ -61,6 +64,9 @@
 {{- if and $p.monorepo (not (in $kinds "monorepo")) -}}
   {{- $badges = $badges | append (dict "slug" "" "icon" "fas fa-layer-group" "label" "" "tip" $p.monorepo) -}}
 {{- end }}
+{{- range $platforms -}}
+  {{- $badges = $badges | append (dict "slug" "" "icon" (index $platformIcons .) "label" (index $platformLabels .) "tip" (index $platformLabels .)) -}}
+{{- end -}}
 
 <tr{{ with $p.role }} class="{{ . }}"{{ end }} data-filter-langs="{{ delimit $langs "," }}" data-filter-kinds="{{ delimit $kinds "," }}" data-filter-orgs="{{ $org }}">
   <td class="row-num"></td>
@@ -88,7 +94,7 @@
     {{- end -}}
   </td>
   <td class="col-type">
-    {{- range $badges -}}{{- $b := . -}}<span class="pkg-type has-tip"{{ with $b.slug }} data-slug="{{ . }}" data-label="{{ $b.label }}"{{ end }}><i class="{{ $b.icon }}"></i><span class="tip">{{ $b.tip }}</span></span>{{- end -}}
+    {{- range $badges -}}{{- $b := . -}}<span class="pkg-type has-tip"{{ with $b.slug }} data-slug="{{ . }}" data-label="{{ $b.label }}"{{ end }}><i class="{{ $b.icon }}" aria-hidden="true">{{ $b.mark }}</i><span class="tip">{{ $b.tip }}</span></span>{{- end -}}
   </td>
   {{- range $cols -}}
     {{- $col := trim . " " -}}

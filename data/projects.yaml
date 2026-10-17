@@ -195,8 +195,9 @@ primary:
   - name: quotaline
     org: quotaline
     label: Quotaline
-    lang: rust,swift
+    lang: rust,swift,typescript
     kind: app
+    platforms: macos,gnome
     ci: ci.yml
     pypi: "false"
 
