@@ -10,9 +10,9 @@
     {{- range $year := $years }}
     <li><a href="#year-{{ $year }}">{{ $year }}</a>
       <ul>
-        {{- range $presentations -}}
-          {{- if eq .year $year }}
-        <li><a href="#{{ .id }}">{{ .title }}{{ with .type }} ({{ . }}){{ end }} - {{ .event }}</a></li>
+        {{- range $i, $p := $presentations -}}
+          {{- if eq $p.year $year }}
+        <li><a href="#{{ $p.id }}">{{ add $i 1 }}. {{ $p.title }}{{ with $p.type }} ({{ . }}){{ end }} - {{ $p.event }}</a></li>
           {{- end -}}
         {{- end }}
       </ul>
