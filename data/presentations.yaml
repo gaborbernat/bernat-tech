@@ -32,6 +32,7 @@
 
 - title: "The new wave of Python Packaging"
   event: PyTexas 2025
+  type: workshop
   year: 2025
   date: 2025-04-18
   slides: https://gaborbernat.github.io/new-wave-of-python-packaging/
