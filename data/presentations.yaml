@@ -2,18 +2,21 @@
   event: PyTexas 2026
   type: workshop
   year: 2026
+  date: 2026-04-17
   slides: https://gaborbernat.github.io/py-texas-26-workshop/
   id: better-python-developer-ai-pytexas-26
 
 - title: "How to be a Better Software Engineer in the World of AI Agents"
   event: PyBay 2026
   year: 2026
+  date: 2026-10-03
   slides: https://gaborbernat.github.io/better-software-engineer-ai/
   id: better-software-engineer-ai-pybay-26
 
 - title: "Python meets the crab - Friendship at first sight?"
   event: PyCon US 2025
   year: 2025
+  date: 2025-05-15
   youtube: CqOZdTFb4io
   slides: https://gaborbernat.github.io/python-meets-crab/
   id: python-meets-crab-py-us-25
@@ -22,6 +25,7 @@
 - title: "Python meets the crab - Friendship at first sight?"
   event: PyTexas 2025
   year: 2025
+  date: 2025-04-19
   youtube: krJZmNvUqK4
   slides: https://gaborbernat.github.io/python-meets-crab/
   id: python-meets-crab-pytexas-25
@@ -29,12 +33,14 @@
 - title: "The new wave of Python Packaging"
   event: PyTexas 2025
   year: 2025
+  date: 2025-04-18
   slides: https://gaborbernat.github.io/new-wave-of-python-packaging/
   id: new-wave-packaging-pytexas-25
 
 - title: "Lessons learned maintaining open source Python projects"
   event: EuroPython 2024
   year: 2024
+  date: 2024-07-12
   youtube: 4qmuZQYxdrU
   slides: https://gaborbernat.github.io/europython-24/
   id: lessons-learned-europython-24
@@ -42,6 +48,7 @@
 - title: "Lessons learned maintaining open source Python projects"
   event: PyTexas 2024
   year: 2024
+  date: 2024-04-20
   youtube: rcSLOqwpJk8
   slides: https://gaborbernat.github.io/py-texas-24/
   id: lessons-learned-py-texas-24
@@ -50,6 +57,7 @@
   event: PyCon US 2023
   type: lightning talk
   year: 2023
+  date: 2023-04-21
   youtube: 95tjPYvbJc0
   start: 480
   slides: https://gaborbernat.github.io/pycon-us-23-lighting/
@@ -58,6 +66,7 @@
 - title: "How we standardized editable installs PEP 660 vs PEP 662"
   event: PyCon US 2022
   year: 2022
+  date: 2022-05-01
   youtube: Z_-PuPwN6ZI
   start: 5
   slides: https://gaborbernat.github.io/pep-660-662-2022/#/
@@ -67,6 +76,7 @@
   event: PyCon US 2021
   type: lightning talk
   year: 2021
+  date: 2021-06-03
   youtube: 5zEn3Jta2Dg
   start: 389
   slides: https://gaborbernat.github.io/pycon-us-21-lighting/#/
@@ -76,6 +86,7 @@
   event: PyCon US 2021
   type: tutorial
   year: 2021
+  date: 2021-05-13
   youtube: ApDThpsr2Fw
   start: 5
   slides: https://gaborbernat.github.io/packaging-tutorial-pycon-us-21/#/
@@ -85,12 +96,14 @@
   event: EuroPython 2021
   type: tutorial
   year: 2021
+  date: 2021-07-27
   slides: https://gaborbernat.github.io/packaging-tutorial-euro-21/
   id: py-packaging-eu-21
 
 - title: "Virtualenv - A Deep Dive"
   event: PyCharm Webinar 2021
-  year: 2021
+  year: 2020
+  date: 2020-10-21
   youtube: O9_MJHDkej8
   start: 7
   id: virtualenv-deep-dive-21
@@ -98,6 +111,7 @@
 - title: "Lessons from the Trenches: rewriting and re-releasing virtualenv"
   event: EuroPython 2020
   year: 2020
+  date: 2020-07-23
   youtube: l9A0a8qZgOs
   start: 27
   slides: https://gaborbernat.github.io/virtualenv-rewrite-eupy20/
@@ -106,6 +120,7 @@
 - title: "status quo of virtual environments"
   event: EuroPython 2019
   year: 2019
+  date: 2019-07-12
   youtube: o1Vue9CWRxU
   start: 4
   slides: https://gaborbernat.github.io/euro_python_2019/#/
@@ -114,6 +129,7 @@
 - title: "How to best package your library?"
   event: PyLondinium 2019
   year: 2019
+  date: 2019-06
   youtube: OSnRl8yF9a4
   start: 17
   slides: https://gaborbernat.github.io/pylondinium2019/#/
@@ -122,6 +138,7 @@
 - title: "Type hinting (and mypy)"
   event: PyCon US 2019
   year: 2019
+  date: 2019-05-04
   youtube: hTrjTAPnA_k
   start: 47
   slides: https://gaborbernat.github.io/pycon-us-2019/#/
@@ -130,12 +147,14 @@
 - title: "Type hinting with mypy"
   event: London Python 2018
   year: 2018
+  date: 2018-04-27
   slides: https://gaborbernat.github.io/presentation-london-apr-2018-type-hints/
   id: type-hinting-mypy-london-18
 
 - title: "Standardize Testing in Python"
   event: EuroPython 2018
   year: 2018
+  date: 2018-07-26
   youtube: SFqna5ilqig
   start: 8
   slides: https://gaborbernat.github.io/pycon-eu-2018/#/
@@ -144,6 +163,7 @@
 - title: "Type hints inside the snake pit"
   event: PyLondinium 2018
   year: 2018
+  date: 2018-06-09
   youtube: DzRlR3BFCko
   slides: https://gaborbernat.github.io/pylondinium18/
   id: type-hints-snake-pit-lon-18

@@ -1,4 +1,4 @@
-{{- $presentations := hugo.Data.presentations -}}
+{{- $presentations := sort hugo.Data.presentations "date" "desc" -}}
 {{- $years := slice -}}
 {{- range $presentations -}}
   {{- if not (in $years .year) -}}
@@ -22,11 +22,10 @@
 </nav>
 {{- range $year := $years }}
 <h2 id="year-{{ $year }}">{{ $year }}</h2>
-{{- range $presentations -}}
-  {{- $p := . -}}
+{{- range $i, $p := $presentations -}}
   {{- if eq $p.year $year }}
 <h3 id="{{ $p.id }}">
-  {{- with $p.emoji }}{{ . }} {{ end -}}
+  {{- add $i 1 }}. {{ with $p.emoji }}{{ . }} {{ end -}}
   {{ $p.title }}
   {{- with $p.type }} - {{ . }}{{ end }} - {{ $p.event -}}
   {{- with $p.slides }} - <a href="{{ . }}">slides</a>{{ end -}}
