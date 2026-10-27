@@ -2,7 +2,7 @@
 author = "Bernat Gabor"
 date = 2026-10-26T22:00:00Z
 description = "PyBeach 2026 notes: free-threading costs, class internals, SPICE in the browser, K–12 CS, supply chains, code review, mountain rescue, and docs for LLMs."
-draft = true
+draft = false
 image = "pybeach-2026-opening-og.webp"
 images = [ "pybeach-2026-opening-og.webp"]
 slug = "pybeach-2026-recap"
@@ -12,18 +12,14 @@ title = "PyBeach 2026 Recap"
 
 [PyBeach](https://2026.pybeach.org/) is the Los Angeles area's community Python conference. The 2026 edition was a
 single-track, single-day event on Saturday, October 24, at the [Illusion Magic Lounge](https://illusionmagiclounge.com/)
-in Santa Monica: eight talks, plus a lightning talk block that took over the slot of a talk withdrawn shortly before the
-event. I gave two of those talks myself, one on supply chain security after lunch and a five-minute lightning talk about
-how much memory a single emoji can cost.
-
-This post is a synthesis of my notes and the messages I heard during the conference, talk by talk in schedule order,
-with links to the slides wherever the speakers have shared them.
+in Santa Monica: eight talks and a block of lightning talks. This post is a synthesis of my notes and the messages I
+heard during the conference.
 
 > [!TLDR] **TLDR:**
 >
 > - **Humans fail in predictable ways, so design for it.** Noah Kantrowitz argued for checklists, objective tooling, and
 >   honest limits on what code review can catch. Andrew Godwin brought the same lesson from mountain rescue: practice
->   the response before you need it, leave slack in the schedule, and let anyone call stop.
+>   the response before you need it, keep spare capacity in the schedule, and let anyone call stop.
 > - **Removing the GIL has a price.** Christopher Neugebauer benchmarked sub-interpreters and the free-threaded build on
 >   ordinary Python code. Free-threading made shared-data workloads slower; isolating data between workers is what made
 >   things fast.
@@ -57,9 +53,7 @@ locking. The cost is that only one thread runs Python at a time.
 **Should you care?** Probably not, he said. Python gets faster every release, network-bound code is better served by
 [asyncio](https://docs.python.org/3/library/asyncio.html), and compute-heavy workloads often belong in another language.
 The cases that do care are existing code that would benefit from parallelism, or extension code that still needs to
-touch Python objects.
-
-He compared three ways around the GIL:
+touch Python objects. He compared three ways around the GIL:
 
 - **Processes** via [`multiprocessing`](https://docs.python.org/3/library/multiprocessing.html) and
   [`ProcessPoolExecutor`](https://docs.python.org/3/library/concurrent.futures.html#processpoolexecutor). Each process
@@ -69,11 +63,11 @@ He compared three ways around the GIL:
 - **Sub-interpreters.** Long available from the C API for embedders, but all interpreters shared one GIL until Python
   3.12 gave each its own ([PEP 684](https://peps.python.org/pep-0684/)). Python 3.14 exposes them to Python code through
   [`concurrent.interpreters`](https://docs.python.org/3/library/concurrent.interpreters.html) and
-  `InterpreterPoolExecutor` ([PEP 734](https://peps.python.org/pep-0734/)). Mutable objects must be copied between
-  interpreters; immutable ones (strings, tuples) can be shared. Swapping `ProcessPoolExecutor` for
-  `InterpreterPoolExecutor` sped up both his palindrome demo and the old Wordle solver. He noted that
-  `InterpreterPoolExecutor` still serializes what passes through its queue, and suspected the gain could be larger
-  without that.
+  [`InterpreterPoolExecutor`](https://docs.python.org/3/library/concurrent.futures.html#interpreterpoolexecutor)
+  ([PEP 734](https://peps.python.org/pep-0734/)). Mutable objects must be copied between interpreters; immutable ones
+  (strings, tuples) can be shared. Swapping `ProcessPoolExecutor` for `InterpreterPoolExecutor` sped up both his
+  palindrome demo and the old Wordle solver. He noted that `InterpreterPoolExecutor` still serializes what passes
+  through its queue, and suspected the gain could be larger without that.
 - **Free-threading** ([PEP 703](https://peps.python.org/pep-0703/)), a separate build you have to ask for. It puts locks
   on individual objects, and the [free-threading HOWTO](https://docs.python.org/3/howto/free-threading-python.html) puts
   the average single-threaded overhead on [pyperformance](https://github.com/python/pyperformance) at about 1% on macOS
@@ -99,9 +93,7 @@ shared memory at the cost of complexity you cannot opt out of.
 Elizabeth was up next. She teaches middle school computer science at [Wildwood School](https://www.wildwood.org/) in Los
 Angeles, represents LA County for the [Computer Science Teachers Association](https://csteachers.org/) (CSTA), and sits
 on the CSTA conference committee. Her talk was a tour of the K–12 landscape for people who mostly see it from the
-outside.
-
-She opened by asking the room what CS education is for, then mapped the answers onto a 2019
+outside. She opened by asking the room what CS education is for, then mapped the answers onto a 2019
 [CUNY](https://www.cuny.edu/) study of the reasons people give: equity and social justice, competencies and literacies,
 citizenship, innovation, workforce development, school improvement, and her favorite, personal agency and joy. Then came
 the headlines about the "end of coding", falling CS enrollment, and Microsoft replacing its
@@ -156,7 +148,8 @@ function or class? [`print`](https://docs.python.org/3/library/functions.html#pr
 [`type`](https://docs.python.org/3/library/functions.html#type),
 [`enumerate`](https://docs.python.org/3/library/functions.html#enumerate), and
 [`list`](https://docs.python.org/3/library/functions.html#func-list) are classes. In Python, "function" usually means
-"callable". He then put 25 topics on screen and promised to cover about a dozen in 25 minutes.
+"callable". He then put 25 topics on screen and promised to cover about a dozen in 25 minutes, telling the room from the
+start that you don't need to know most of this to use classes.
 
 **Methods are functions attached to classes.** `numbers.append(7)` is
 [`list.append(numbers, 7)`](https://docs.python.org/3/library/stdtypes.html#mutable-sequence-types), which is why
@@ -194,11 +187,10 @@ compiler; a function attached to a class after the fact doesn't, so its `super()
 [`typing.NamedTuple`](https://docs.python.org/3/library/typing.html#typing.NamedTuple) is a function you can inherit
 from, thanks to [`__mro_entries__`](https://docs.python.org/3/reference/datamodel.html#object.__mro_entries__).
 
-From the start, he told the room that you don't need to know most of this to use classes. The
-[talk page](https://treyhunner.com/classes-talk/) has the [slides](https://treyhunner.com/classes-talk/slides/) and a
-reading list for each section, including his [descriptors article](https://www.pythonmorsels.com/descriptors/), Brett
-Cannon's [Unravelling attribute access](https://snarky.ca/unravelling-attribute-access-in-python/), and Raymond
-Hettinger's [Descriptor Guide](https://docs.python.org/3/howto/descriptor.html).
+The [talk page](https://treyhunner.com/classes-talk/) has the [slides](https://treyhunner.com/classes-talk/slides/) and
+a reading list for each section, including his [descriptors article](https://www.pythonmorsels.com/descriptors/), Brett
+Cannon's [Unravelling attribute access](https://snarky.ca/unravelling-attribute-access-in-python/), and the official
+[Descriptor Guide](https://docs.python.org/3/howto/descriptor.html).
 
 ### Andrew Annex: Accessing NASA Planetary Ephemeris with SpiceyPy
 
@@ -226,7 +218,8 @@ wrapped function for any C wrapper, run against every wheel, including inside Py
 The demos ran live in the slides with [Pyodide](https://pyodide.org/) and [PyScript](https://pyscript.net/):
 
 - Mars 2020 *Perseverance*'s traverse to the Three Forks sample depot, plotted from 21,600 positions returned by one
-  vectorized `spkpos` call, then overlaid on the [HiRISE](https://www.uahirise.org/) mosaic with
+  vectorized [`spkpos`](https://spiceypy.readthedocs.io/en/main/documentation.html#spiceypy.spiceypy.spkpos) call, then
+  overlaid on the [HiRISE](https://www.uahirise.org/) mosaic with
   [folium](https://python-visualization.github.io/folium/).
 - [Cassini](https://science.nasa.gov/mission/cassini/)'s 2009 E8 flyby of
   [Enceladus](https://science.nasa.gov/saturn/moons/enceladus/), computed in Python and replayed in 3D with
@@ -263,10 +256,11 @@ respond, using nine problems I found in [virtualenv](https://virtualenv.pypa.io/
 The nine findings landed on four of those stops:
 
 - **Source (findings two to seven):** activation-script quoting bugs across [bash](https://www.gnu.org/software/bash/),
-  [fish](https://fishshell.com/), [zsh](https://www.zsh.org/), and `cmd.exe`, where a path or prompt became a command.
-  virtualenv published 21 advisories in five weeks. Our [CodeQL](https://codeql.github.com/) queries treated the quoting
-  call as a barrier, so they could not see wrong quoting rules or a later replacement that edited the quoted value. Keep
-  regression examples both ways, and fuzz for the property "no extra command runs".
+  [fish](https://fishshell.com/), [zsh](https://www.zsh.org/), and
+  [`cmd.exe`](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/cmd), where a path or
+  prompt became a command. virtualenv published 21 advisories in five weeks. Our [CodeQL](https://codeql.github.com/)
+  queries treated the quoting call as a barrier, so they could not see wrong quoting rules or a later replacement that
+  edited the quoted value. Keep regression examples both ways, and fuzz for the property "no extra command runs".
 - **Dependencies (finding eight):** virtualenv downloaded pip and setuptools updates without checking their hashes. Hash
   pinning in [`requirements.txt`](https://pip.pypa.io/en/stable/reference/requirements-file-format/) or
   [`pylock.toml`](https://packaging.python.org/en/latest/specifications/pylock-toml/) rejects a wheel whose only change
@@ -274,12 +268,15 @@ The nine findings landed on four of those stops:
 - **Build (finding one):** the job that generated the changelog also held the release credential. We split it so the
   unprivileged job produces text and the privileged one validates and commits it. [zizmor](https://docs.zizmor.sh/)
   lints for the Elementary-style template injection. Start every [GitHub Actions](https://docs.github.com/en/actions)
-  workflow from `permissions: {}`, pin Actions, turn off checkout's persisted credentials, don't restore shared caches
-  in the release job, and restrict the hosts the build can reach.
+  workflow from
+  [`permissions: {}`](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#permissions),
+  pin Actions, turn off checkout's persisted credentials, don't restore shared caches in the release job, and restrict
+  the hosts the build can reach.
 - **Respond (finding nine):** our rebuilds didn't match because the SBOM embedded in the wheel recorded build-machine
   details; we removed them. The SBOM ([PEP 770](https://peps.python.org/pep-0770/)) is what answers "are we affected?"
   when an advisory lands, because it lists what ships *inside* the wheel: virtualenv bundles pip (which vendors requests
-  and urllib3) and setuptools (which vendors its own dependencies), and `pip list` shows none of them.
+  and urllib3) and setuptools (which vendors its own dependencies), and
+  [`pip list`](https://pip.pypa.io/en/stable/cli/pip_list/) shows none of them.
 
 The other two stops got advice rather than findings:
 
@@ -290,12 +287,12 @@ The other two stops got advice rather than findings:
 - **Install:** a dependency cooldown, with
   [`exclude-newer`](https://docs.astral.sh/uv/concepts/resolution/#dependency-cooldowns) in
   [uv](https://docs.astral.sh/uv/) or [`--uploaded-prior-to`](https://pip.pypa.io/en/stable/cli/pip_lock/) in pip. uv
-  can exempt a single package for an urgent fix with `exclude-newer-package`; pip has no per-package exception. Run
-  [pip-audit](https://github.com/pypa/pip-audit) on the lock file.
+  can exempt a single package for an urgent fix with
+  [`exclude-newer-package`](https://docs.astral.sh/uv/reference/settings/#exclude-newer-package); pip has no per-package
+  exception. Run [pip-audit](https://github.com/pypa/pip-audit) on the lock file.
 
 Slides: [gaborbernat.github.io/pybeach-2026](https://gaborbernat.github.io/pybeach-2026/). For a longer treatment, see
-my earlier post on [Python supply chain security](/posts/securing-python-supply-chain/). Thanks to Maggie Fero for
-[live-posting the talk](https://hachyderm.io/@MaggieFero/117497943853848682).
+my earlier post on [Python supply chain security](/posts/securing-python-supply-chain/).
 
 ### Noah Kantrowitz: I am bad at things – And that's okay
 
@@ -356,9 +353,7 @@ safety system), and high angle (the rope holds your full weight).
 since "at least one person is already having a bad day", so the team works on likelihood. (The most dangerous part is
 driving to the rescue.) Their tools: a safety culture (*slow is smooth, smooth is fast*), more hours of training than
 missions in some years, and a clear command structure, studied from FEMA's
-[incident command guidance](https://training.fema.gov/emiweb/is/icsresource/).
-
-Software can move both axes:
+[incident command guidance](https://training.fema.gov/emiweb/is/icsresource/). Software can move both axes:
 
 - **Consequence:** contain the blast radius, don't keep data you don't need, and isolate what you must keep from the
   main system ("you can't leak what you don't have"), and measure your rollback time, not your deploy time.
@@ -426,7 +421,7 @@ contact is a summary.
 - Freshness matters more than it used to. Maggie cited an
   [Ahrefs study](https://ahrefs.com/blog/do-ai-assistants-prefer-to-cite-fresh-content/) finding that pages AI
   assistants cite are on average about 25.7% newer than pages in Google's organic results. Maggie recommended updating
-  existing pages over writing new ones, since an updated older page is generally better than a new one.
+  existing pages over writing new ones.
 - Use the same words as your users, since semantic similarity drives the match.
 - "Don't do this unless…" is risky: the warning can land in a different chunk, and LLMs often reverse the negation. The
   next day they shared [an example](https://hachyderm.io/@MaggieFero/117502942039772933) of exactly that.
@@ -436,13 +431,12 @@ habits, instructions that slide into a competitor's procedure, and exotic troubl
 registry edit before clearing the browser cache). AI-writing detectors are bogus and penalize people who write
 professionally, especially in open source. Check your traffic for LLM user agents, and use
 [`robots.txt`](https://www.rfc-editor.org/rfc/rfc9309) to allow the retrieval crawlers while blocking the training ones,
-which most vendors now run separately.
-
-The homework Maggie left the room with: find one long document and split it in two.
+which most vendors now run separately. The homework Maggie left the room with: find one long document and split it in
+two.
 
 ### Lightning talks
 
-The day closed with a block of five-minute lightning talks, and I gave one of them.
+The day closed with a block of five-minute lightning talks.
 
 - **Philip James** ([@phildini](https://wandering.shop/@phildini)): *Three (or whatever) ways to put something on the
   internet*, about reverse proxies, which he admitted he only recently understood are proxies that work in reverse.
@@ -453,11 +447,12 @@ The day closed with a block of five-minute lightning talks, and I gave one of th
   [Civic Band](https://civic.band/).
   [Slides](https://speakerdeck.com/phildini/3-or-whatever-ways-to-put-something-on-the-internet).
 - **Bernát Gábor** (me): *One smiley, a lot of RAM*. A million `"a"` characters take about 1 MB in CPython; add one 🙂
-  and `sys.getsizeof` reports about 4 MB. Under [PEP 393](https://peps.python.org/pep-0393/), CPython stores each string
-  with one, two, or four bytes per code point, picked by the widest character, so one emoji widens every `"a"`. Encoding
-  to UTF-8 gives a 1,000,004-byte payload, and decoding brings back the four-byte layout. Slicing the emoji off creates
-  a second, one-byte string while the original stays alive, so the peak goes up to 5 MB before it comes down. The same
-  width split drives the tokenizer in [turbohtml](https://turbohtml.readthedocs.io/), described in
+  and [`sys.getsizeof`](https://docs.python.org/3/library/sys.html#sys.getsizeof) reports about 4 MB. Under
+  [PEP 393](https://peps.python.org/pep-0393/), CPython stores each string with one, two, or four bytes per code point,
+  picked by the widest character, so one emoji widens every `"a"`. Encoding to UTF-8 gives a 1,000,004-byte payload, and
+  decoding brings back the four-byte layout. Slicing the emoji off creates a second, one-byte string while the original
+  stays alive, so the peak goes up to 5 MB before it comes down. The same width split drives the tokenizer in
+  [turbohtml](https://turbohtml.readthedocs.io/), described in
   [my article on it](/posts/blazing-fast-html-parser/#one-machine-becomes-three).
   [Slides](https://gaborbernat.github.io/pybeach-2026-lightning/).
 - **Kattni** ([@kattni](https://kattstodon.com/@kattni)): PyScribBLE, a Bluetooth Low Energy package built on
