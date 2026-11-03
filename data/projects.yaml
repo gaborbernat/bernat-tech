@@ -136,6 +136,11 @@ primary:
     lang: python
     kind: cli
     ci: check
+  - name: simplint
+    org: gaborbernat
+    lang: rust
+    kind: cli
+    ci: test
   - name: mdformat-hugo
     org: gaborbernat
     lang: python
