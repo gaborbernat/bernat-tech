@@ -1,6 +1,7 @@
 # bernat-tech
 
 [![Build and deploy](https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml/badge.svg)](https://github.com/gaborbernat/bernat-tech/actions/workflows/build.yaml)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/gaborbernat/bernat-tech/badge)](https://scorecard.dev/viewer/?uri=github.com/gaborbernat/bernat-tech)
 
 This hosts my blog https://www.bernat.tech/
 
