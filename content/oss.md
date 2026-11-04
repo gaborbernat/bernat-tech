@@ -8,6 +8,7 @@ The [open-source](https://en.wikipedia.org/wiki/Open_source) projects I maintain
 more [about me](/) is on the home page.
 
 {{< ci-toggle >}}
+{{< openssf-toggle >}}
 
 {{< project-list group="primary" footer="true" >}}
 

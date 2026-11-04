@@ -18,7 +18,7 @@ li p {
   margin: 0;
   display: inline;
 }
-/* the project-list shortcode only appears on the OSS page. ci-toggle bundles a <script> tag alongside its
+/* the project-list shortcode only appears on the OSS page. The first view toggle emits a <script> tag after its
    button, so the paragraph before the FIRST table has one in between (invisible — script has no box, but
    :has()'s "+" is structural and still has to skip over it); the paragraph before any later table doesn't. */
 p:has(+ .project-table-scroll),
@@ -100,6 +100,7 @@ table.project-table.openssf-view .col-openssf {
   display: table-cell;
 }
 button.ci-toggle,
+button.openssf-toggle,
 button.type-filters-toggle {
   background: none;
   border: 1px solid currentColor;
@@ -111,6 +112,7 @@ button.type-filters-toggle {
   opacity: 0.65;
 }
 button.ci-toggle:hover,
+button.openssf-toggle:hover,
 button.type-filters-toggle:hover,
 button.type-filters-toggle[aria-expanded="true"] {
   opacity: 1;
