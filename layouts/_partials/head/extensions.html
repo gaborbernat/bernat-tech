@@ -14,7 +14,7 @@
   {{- $connect = " https://esm.sh https://cdn.jsdelivr.net ws:" -}}
 {{- end -}}
 {{- /* webmention.io is fetched client-side for received mentions; names/links only, no remote images */ -}}
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com{{ $script }}; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://github.com https://img.youtube.com https://img.shields.io https://www.bestpractices.dev; font-src 'self'; connect-src 'self' https://static.cloudflareinsights.com https://cloudflareinsights.com https://webmention.io{{ $connect }}; frame-src https://www.youtube-nocookie.com https://www.youtube.com; base-uri 'self'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com{{ $script }}; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://github.com https://img.youtube.com; font-src 'self'; connect-src 'self' https://static.cloudflareinsights.com https://cloudflareinsights.com https://webmention.io{{ $connect }}; frame-src https://www.youtube-nocookie.com https://www.youtube.com; base-uri 'self'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 
 <link rel="preconnect" href="https://github.com" crossorigin>

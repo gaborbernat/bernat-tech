@@ -216,12 +216,23 @@
     {{- else if eq $col "openssf" -}}
   {{- $scorecard := index $d "scorecard_score" -}}
   <td class="col-openssf"{{ if ne $scorecard nil }} data-value="{{ $scorecard }}"{{ end }}>
-        <a href="https://scorecard.dev/viewer/?uri=github.com/{{ $org }}/{{ $repo }}"><img src="https://img.shields.io/ossf-scorecard/github.com/{{ $org }}/{{ $repo }}?label=openssf+scorecard&style=flat" alt="{{ $label }} OpenSSF Scorecard"></a>
+      {{- if ne $scorecard nil -}}
+        {{- $color := cond (ge $scorecard 7.0) "green" (cond (ge $scorecard 4.0) "yellow" "red") -}}
+        <a href="https://scorecard.dev/viewer/?uri=github.com/{{ $org }}/{{ $repo }}"><span class="badge badge-{{ $color }}">{{ printf "%.1f" (float $scorecard) }}/10</span></a>
+      {{- end -}}
   </td>
+  {{- /* Best Practices reports one tiered number: 0-99 is the percentage towards passing, then 100 passing,
+         200 silver and 300 gold */ -}}
   {{- $bestpractices := index $d "bestpractices_tiered" -}}
-  <td class="col-openssf"{{ if and $p.bestpractices_id (ne $bestpractices nil) }} data-value="{{ $bestpractices }}"{{ end }}>
-      {{- with $p.bestpractices_id -}}
-        <a href="https://www.bestpractices.dev/projects/{{ . }}"><img src="https://www.bestpractices.dev/projects/{{ . }}/badge" alt="{{ $label }} OpenSSF Best Practices"></a>
+  {{- $hasBestPractices := and $p.bestpractices_id (ne $bestpractices nil) -}}
+  <td class="col-openssf"{{ if $hasBestPractices }} data-value="{{ $bestpractices }}"{{ end }}>
+      {{- if $hasBestPractices -}}
+        {{- $tier := int $bestpractices -}}
+        {{- $text := printf "%d%%" $tier -}}{{- $color := "gray" -}}
+        {{- if ge $tier 300 }}{{ $text = "gold" }}{{ $color = "yellow" }}
+        {{- else if ge $tier 200 }}{{ $text = "silver" }}{{ $color = "blue" }}
+        {{- else if ge $tier 100 }}{{ $text = "passing" }}{{ $color = "green" }}{{ end -}}
+        <a href="https://www.bestpractices.dev/projects/{{ $p.bestpractices_id }}"><span class="badge badge-{{ $color }}">{{ $text }}</span></a>
       {{- end -}}
   </td>
     {{- else if eq $col "slides" -}}
