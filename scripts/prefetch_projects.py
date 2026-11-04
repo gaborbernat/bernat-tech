@@ -13,6 +13,9 @@ succeeds, so a rate-limited call keeps the last known value instead of zeroing i
 time it was last fetched cleanly (no transient failure); the stalest go first, and the run exits non-zero
 when any record has gone unrefreshed for more than three days so the workflow surfaces it.
 
+OpenSSF scores ride along too, at most once a day: Scorecard re-runs weekly and Best Practices changes by hand, and
+bestpractices.dev throttles hard. Like ranks, a failed fetch keeps the prior score and does not hold back fetched_at.
+
 Popularity ranks ride along: PyPI and Homebrew publish a ranked list each, loaded once per run, while JetBrains has
 none, so its rank comes from a binary search over the marketplace's download-sorted listing, at most once a day. A
 failed rank fetch keeps the prior rank and does not hold back fetched_at."""
@@ -71,6 +74,7 @@ _STALE_AFTER: Final = timedelta(days=3)  # a record unrefreshed this long fails 
 _RANK_EVERY: Final = timedelta(days=1)  # JetBrains costs ~14 requests per rank; neighbours sit days of downloads apart
 _PYPI_TOP: Final = "https://hugovk.dev/top-pypi-packages/top-pypi-packages.min.json"
 _BREW_TOP: Final = "https://formulae.brew.sh/api/analytics/install-on-request/30d.json"
+_OPENSSF_EVERY: Final = timedelta(days=1)
 _JB_RANKED: Final = 10_000  # the marketplace listing refuses offset + max past this
 _FETCH_ERRORS: Final = (urllib.error.URLError, TimeoutError, json.JSONDecodeError)
 # the previous run's records, keyed as below; the baseline every best-effort fetch merges onto
@@ -110,6 +114,9 @@ class Stats:
     jb_version: str = ""
     jb_release_unix: int = 0
     ranks: dict[str, Rank] = field(default_factory=dict)  # keyed by source: pypi, homebrew, jetbrains
+    scorecard_score: float | None = None  # OpenSSF Scorecard, 0-10
+    bestpractices_tiered: int | None = None  # OpenSSF Best Practices tiered percentage: 0-99, then 100/200/300
+    openssf_as_of: str = ""
     fetched_at: str = ""  # day this record last fetched with no transient failure; drives staleness
 
 
@@ -291,6 +298,8 @@ def stats_for(project: dict[str, str], boards: dict[str, Board]) -> tuple[Stats,
         collect_jetbrains(record, jetbrains_id, attempt)
 
     collect_ranks(record, project, boards, errors)
+    if openssf_due(record):
+        collect_openssf(record, org, repo, project.get("bestpractices-id"), errors)
 
     if not transient:
         record.fetched_at = _STAMP
@@ -323,6 +332,9 @@ def from_baseline(data: Json) -> Stats:
             )
             for source, entry in as_dict(dig(data, "ranks")).items()
         },
+        scorecard_score=as_number(dig(data, "scorecard_score")),
+        bestpractices_tiered=as_optional_int(dig(data, "bestpractices_tiered")),
+        openssf_as_of=as_text(dig(data, "openssf_as_of")),
         fetched_at=as_text(dig(data, "fetched_at")),
     )
 
@@ -417,6 +429,25 @@ def collect_ranks(record: Stats, project: dict[str, str], boards: dict[str, Boar
         record.ranks.pop("jetbrains", None)
         if jetbrains.position:
             record.ranks["jetbrains"] = jetbrains
+
+
+def openssf_due(record: Stats) -> bool:
+    return not record.openssf_as_of or datetime.fromisoformat(record.openssf_as_of) < _NOW - _OPENSSF_EVERY
+
+
+def collect_openssf(record: Stats, org: str, repo: str, bestpractices_id: str | None, errors: list[str]) -> None:
+    # outside attempt(): a missed score must not hold back fetched_at, the prior one stays until the next day
+    try:
+        scorecard = get(f"https://api.scorecard.dev/projects/github.com/{org}/{repo}")
+        bestpractices = (
+            get(f"https://www.bestpractices.dev/projects/{bestpractices_id}.json") if bestpractices_id else None
+        )
+    except (urllib.error.HTTPError, *_FETCH_ERRORS) as exc:
+        errors.append(f"openssf: {exc}")
+        return
+    record.scorecard_score = as_number(dig(scorecard, "score"))
+    record.bestpractices_tiered = as_optional_int(dig(bestpractices, "tiered_percentage"))
+    record.openssf_as_of = _STAMP
 
 
 def place(record: Stats, source: str, board: Board, key: str) -> None:
@@ -535,6 +566,14 @@ def as_text(value: Json) -> str:
 
 def as_int(value: Json) -> int:
     return value if isinstance(value, int) and not isinstance(value, bool) else 0
+
+
+def as_number(value: Json) -> float | None:
+    return float(value) if isinstance(value, int | float) and not isinstance(value, bool) else None
+
+
+def as_optional_int(value: Json) -> int | None:
+    return value if isinstance(value, int) and not isinstance(value, bool) else None
 
 
 if __name__ == "__main__":
