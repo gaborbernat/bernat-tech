@@ -24,3 +24,15 @@ updates:
     open-pull-requests-limit: 10
     cooldown:
       default-days: 7
+  - package-ecosystem: "pre-commit"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+    groups:
+      pre-commit:
+        patterns:
+          - "*"
+    open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
