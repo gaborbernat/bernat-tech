@@ -82,16 +82,22 @@ table.project-table tfoot tr.summary-row td {
 table.project-table tfoot tr.summary-row td.summary-label {
   text-align: right;
 }
-table.project-table .col-ci {
+table.project-table .col-ci,
+table.project-table .col-openssf {
   display: none;
 }
-table.project-table.ci-view .col-data {
+table.project-table.ci-view .col-data,
+table.project-table.openssf-view .col-data {
   display: none;
 }
 table.project-table.ci-view .col-ci {
   display: table-cell;
   white-space: normal;
   max-width: 350px;
+}
+/* always the Scorecard badge plus at most the Best Practices one, so one line fits without the CI column's cap */
+table.project-table.openssf-view .col-openssf {
+  display: table-cell;
 }
 button.ci-toggle,
 button.type-filters-toggle {
@@ -109,7 +115,7 @@ button.type-filters-toggle:hover,
 button.type-filters-toggle[aria-expanded="true"] {
   opacity: 1;
 }
-/* the page-wide CI toggle and the first table's Filters toggle share one row; the panel is a separate
+/* the page-wide view toggles and the first table's Filters toggle share one row; the panel is a separate
    sibling that claims the full row width when shown, so opening it never moves either button */
 .table-toolbar {
   display: flex;

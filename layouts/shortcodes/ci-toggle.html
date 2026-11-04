@@ -1,3 +1,4 @@
 <button class="ci-toggle" id="ci-toggle-btn">Toggle CI view</button>
+<button class="ci-toggle" id="openssf-toggle-btn">Toggle OpenSSF view</button>
 {{ $js := resources.Get "js/project-table.js" | resources.Minify | resources.Fingerprint }}
 <script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>

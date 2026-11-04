@@ -3,7 +3,7 @@
   {{ warnf "%s: data/project_stats.json is missing (Actions cache miss, or a local build: run scripts/prefetch_projects.py), so the %s table renders without stats" .Page.File.Path $group }}
 {{ end }}
 {{ $projects := index hugo.Data.projects $group }}
-{{ $cols := split (or (.Get "cols") "downloads,version,release,last-commit,issues,stars,ci") "," }}
+{{ $cols := split (or (.Get "cols") "downloads,version,release,last-commit,issues,stars,ci,openssf") "," }}
 {{/* unlabeled, like "#" — a "Type" header would force the column wider than the badges it actually holds */}}
 {{ $headerRow := slice (printf `<th>#</th><th data-sort="name">%s</th><th class="col-type" title="Language / Kind" aria-label="Language / Kind"></th>` (or (.Get "name") "Name")) }}
 {{- range $cols -}}
@@ -13,6 +13,7 @@
   {{- else if eq $col "release" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="date">Release</th>` }}
   {{- else if eq $col "last-commit" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="date">Last Commit</th>` }}
   {{- else if eq $col "ci" -}}{{ $headerRow = $headerRow | append `<th class="col-ci">CI</th>` }}
+  {{- else if eq $col "openssf" -}}{{ $headerRow = $headerRow | append `<th class="col-openssf">OpenSSF</th>` }}
   {{- else if eq $col "issues" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="issues" title="Issues/Pull Requests">I/P</th>` }}
   {{- else if eq $col "stars" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="stars">Stars</th>` }}
   {{- else if eq $col "slides" -}}{{ $headerRow = $headerRow | append `<th class="col-data">Slides</th>` }}
@@ -41,6 +42,7 @@
         "role" .role
         "jetbrains_id" (index . "jetbrains-id")
         "jetbrains_slug" (index . "jetbrains-slug")
+        "bestpractices_id" (index . "bestpractices-id")
         "date" .date
       }}
       {{ partialCached "project-row.html" (dict "project" $p "cols" $cols) .org .name .repo .lang .kind .pypi (delimit $cols ",") }}
@@ -53,6 +55,7 @@
     {{- if eq $col "downloads" -}}{{ $footRow = $footRow | append `<td class="dl-cell col-data summary-downloads"></td>` }}
     {{- else if eq $col "stars" -}}{{ $footRow = $footRow | append `<td class="col-data summary-stars"></td>` }}
     {{- else if eq $col "ci" -}}{{ $footRow = $footRow | append `<td class="col-ci"></td>` }}
+    {{- else if eq $col "openssf" -}}{{ $footRow = $footRow | append `<td class="col-openssf"></td>` }}
     {{- else -}}{{ $footRow = $footRow | append `<td class="col-data"></td>` }}
     {{- end -}}
   {{- end -}}

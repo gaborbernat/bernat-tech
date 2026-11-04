@@ -14,7 +14,7 @@ more [about me](/) is on the home page.
 Grayed out rows are projects where I hold the write commit bit but only help with maintainership when needed. Below are
 repositories helping with maintaining and self:
 
-{{< project-list group="maintenance" cols="last-commit,issues,stars,ci" >}}
+{{< project-list group="maintenance" cols="last-commit,issues,stars,ci,openssf" >}}
 
 You can find my Curriculum Vitae (or résumé) on the following link
 [![View as PDF, latest CV](/img/cv-pdf-badge.svg)](https://gaborbernat.github.io/cv/main.pdf).

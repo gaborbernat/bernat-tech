@@ -213,6 +213,13 @@
         {{- end -}}
       {{- end -}}
   </td>
+    {{- else if eq $col "openssf" -}}
+  <td class="col-openssf">
+        <a href="https://scorecard.dev/viewer/?uri=github.com/{{ $org }}/{{ $repo }}"><img src="https://img.shields.io/ossf-scorecard/github.com/{{ $org }}/{{ $repo }}?label=openssf+scorecard&style=flat" alt="{{ $label }} OpenSSF Scorecard"></a>
+      {{- with $p.bestpractices_id -}}
+        <a href="https://www.bestpractices.dev/projects/{{ . }}"><img src="https://www.bestpractices.dev/projects/{{ . }}/badge" alt="{{ $label }} OpenSSF Best Practices"></a>
+      {{- end -}}
+  </td>
     {{- else if eq $col "slides" -}}
   <td class="col-data">
         <a href="https://{{ $org }}.github.io/{{ $repo }}/"><span class="badge badge-blue">slides</span></a>

@@ -4,65 +4,77 @@ primary:
     lang: python
     kind: library
     ci: check
+    bestpractices-id: "16249"
   - name: filelock
     org: tox-dev
     lang: python
     kind: library
     ci: check
+    bestpractices-id: "16250"
   - name: virtualenv
     org: pypa
     lang: python
     kind: cli,library
     ci: check
     homebrew: virtualenv
+    bestpractices-id: "14689"
   - name: get-virtualenv
     org: pypa
     lang: python
     kind: cli
     ci: release.yml
     pypi: "false"
+    bestpractices-id: "16271"
   - name: tox
     org: tox-dev
     lang: python
     kind: cli
     ci: check
     homebrew: tox
+    bestpractices-id: "16248"
   - name: pyproject-api
     org: tox-dev
     lang: python
     kind: library
     ci: check
+    bestpractices-id: "16251"
   - name: pytest-env
     org: pytest-dev
     lang: python
     kind: plugin
     ci: check
+    bestpractices-id: "16274"
   - name: pipdeptree
     org: tox-dev
     lang: python,rust
     kind: cli
     ci: check
     homebrew: pipdeptree
+    bestpractices-id: "16252"
   - name: sphinx-autodoc-typehints
     org: tox-dev
     lang: python
     kind: plugin
     ci: check
+    bestpractices-id: "16253"
   - name: pre-commit-uv
     org: tox-dev
     lang: python
     kind: plugin
     ci: check
+    bestpractices-id: "16254"
   - name: action-pre-commit-uv
     org: tox-dev
     kind: action
     ci: main.yml
     pypi: "false"
+    bestpractices-id: "16255"
   - name: tox-uv
     org: tox-dev
     lang: python
     kind: plugin
     ci: check
+    bestpractices-id: "16256"
   - name: toml-fmt
     org: tox-dev
     kind: monorepo
@@ -70,6 +82,7 @@ primary:
     pypi: "false"
     no-release: "true"
     monorepo: Monorepo for pyproject-fmt, toml-fmt-common, and tox-toml-fmt
+    bestpractices-id: "16257"
   - name: pyproject-fmt
     org: tox-dev
     repo: toml-fmt
@@ -77,12 +90,14 @@ primary:
     kind: cli,pre-commit
     ci: pyproject_fmt_build,pyproject_fmt_test
     monorepo: Part of toml-fmt monorepo
+    bestpractices-id: "16257"
   - name: pyproject-fmt
     org: tox-dev
     label: pyproject-fmt
     kind: pre-commit
     ci: main
     pypi: "false"
+    bestpractices-id: "16258"
   - name: tox-toml-fmt
     org: tox-dev
     repo: toml-fmt
@@ -90,83 +105,99 @@ primary:
     kind: cli,pre-commit
     ci: tox_toml_fmt_build,tox_toml_fmt_test
     monorepo: Part of toml-fmt monorepo
+    bestpractices-id: "16257"
   - name: tox-toml-fmt
     org: tox-dev
     label: tox-toml-fmt
     kind: pre-commit
     ci: main
     pypi: "false"
+    bestpractices-id: "16259"
   - name: pytest-print
     org: pytest-dev
     lang: python
     kind: plugin
     ci: check
+    bestpractices-id: "16275"
   - name: tox-gh
     org: tox-dev
     lang: python
     kind: plugin
     ci: check
+    bestpractices-id: "16260"
   - name: sphinx-argparse-cli
     org: tox-dev
     lang: python
     kind: plugin
     ci: check
+    bestpractices-id: "16261"
   - name: python-discovery
     org: tox-dev
     lang: python
     kind: library
     ci: check
+    bestpractices-id: "16262"
   - name: devpi-process
     org: tox-dev
     lang: python
     kind: library
     ci: check
+    bestpractices-id: "16263"
   - name: tox-ini-fmt
     org: tox-dev
     lang: python
     kind: cli,pre-commit
     ci: check
+    bestpractices-id: "16264"
   - name: bump-deps-index
     org: gaborbernat
     lang: python
     kind: cli
     ci: check
+    bestpractices-id: "16276"
   - name: pypi-changes
     org: gaborbernat
     lang: python
     kind: cli
     ci: check
+    bestpractices-id: "16277"
   - name: simplint
     org: gaborbernat
     lang: rust
     kind: cli
     ci: test
+    bestpractices-id: "16281"
   - name: mdformat-hugo
     org: gaborbernat
     lang: python
     kind: plugin
     ci: check
+    bestpractices-id: "16278"
   - name: xml-fmt
     org: tox-dev
     lang: python
     kind: cli,pre-commit
     ci: check
+    bestpractices-id: "16265"
   - name: turbohtml
     org: tox-dev
     lang: python,c
     kind: cli,library
     ci: check
+    bestpractices-id: "16266"
   - name: peryx
     org: tox-dev
     lang: rust
     kind: service
     ci: ci.yml
     pypi: "false"
+    bestpractices-id: "16267"
   - name: mdformat-zola
     org: tox-dev
     lang: python
     kind: plugin
     ci: check
+    bestpractices-id: "16268"
   - name: PyVenvManage
     org: tox-dev
     label: PyVenv Manage 2
@@ -176,6 +207,7 @@ primary:
     pypi: "false"
     jetbrains-id: "20536"
     jetbrains-slug: pyvenv-manage-2
+    bestpractices-id: "16269"
   - name: jetbrains-fish
     org: tox-dev
     label: Fish Shell
@@ -185,6 +217,7 @@ primary:
     pypi: "false"
     jetbrains-id: "29973"
     jetbrains-slug: fish-shell
+    bestpractices-id: "16270"
   - name: build
     org: pypa
     lang: python
@@ -197,6 +230,7 @@ primary:
     kind: cli
     ci: tests.yml
     homebrew: pipx
+    bestpractices-id: "16273"
   - name: quotaline
     org: quotaline
     label: Quotaline
@@ -204,6 +238,7 @@ primary:
     kind: app,gnome-extension
     ci: ci.yml
     pypi: "false"
+    bestpractices-id: "16280"
 
 maintenance:
   - name: all-repos-self
@@ -213,6 +248,7 @@ maintenance:
     ci: check
     pypi: "false"
     no-release: "true"
+    bestpractices-id: "16279"
   - name: bernat-tech
     org: gaborbernat
     kind: site
