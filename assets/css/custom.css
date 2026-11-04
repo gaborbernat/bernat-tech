@@ -113,45 +113,100 @@ button.type-filters-toggle:hover,
 button.type-filters-toggle[aria-expanded="true"] {
   opacity: 1;
 }
-/* styled like the Filters toggle: the native arrow is replaced by the same ▾ glyph, drawn as an SVG so it
-   follows currentColor in both colour schemes */
+/* styled like the Filters toggle; the open list sits over the table below, in the page's colours */
 .view-select {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   font-size: 0.8em;
 }
-.view-select select {
-  appearance: none;
-  background: transparent
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0h10L5 6z' fill='%23888'/%3E%3C/svg%3E")
-    no-repeat right 8px center;
+.view-select-anchor {
+  position: relative;
+}
+.view-select-button {
+  display: inline-flex;
+  align-items: center;
+  background: none;
   border: 1px solid currentColor;
   border-radius: 4px;
   color: inherit;
   cursor: pointer;
   font: inherit;
-  line-height: normal; /* the body's 1.8 would make it twice the Filters toggle's height */
-  padding: 2px 26px 2px 8px;
+  line-height: 1.15; /* the Filters toggle's; the body's 1.8 would make it taller */
+  padding: 2px 8px;
   opacity: 0.65;
 }
-.view-select select:hover,
-.view-select select:focus-visible {
+.view-select-button::after {
+  content: "\25be"; /* ▾, the Filters toggle's glyph */
+  margin-left: 6px;
+}
+.view-select-button:hover,
+.view-select-button[aria-expanded="true"] {
   opacity: 1;
 }
-/* the open list is drawn by the OS, which ignores the transparent background; give it the page colours */
-.view-select option {
-  background: #fafafa;
-  color: #212121;
+#view-select-current {
+  display: inline-flex;
+  align-items: center;
 }
-body.colorscheme-dark .view-select option {
+.view-select i {
+  line-height: 1;
+  width: 1.2em;
+  margin-right: 6px;
+  text-align: center;
+}
+.view-select-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 3; /* above the sticky table header */
+  min-width: 100%;
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+  background: #fafafa;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.view-select-menu:focus {
+  outline: none;
+}
+.view-select-menu li {
+  display: flex;
+  line-height: 1.15;
+  align-items: center;
+  padding: 3px 12px 3px 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.view-select-menu li.active {
+  background: rgba(59, 130, 246, 0.12);
+}
+.view-select-menu li[aria-selected="true"] {
+  color: #1d4ed8;
+}
+body.colorscheme-dark .view-select-menu {
   background: #070707;
-  color: #e1e1e1;
+  border-color: #303030;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+body.colorscheme-dark .view-select-menu li.active {
+  background: rgba(96, 165, 250, 0.15);
+}
+body.colorscheme-dark .view-select-menu li[aria-selected="true"] {
+  color: #60a5fa;
 }
 @media (prefers-color-scheme: dark) {
-  body.colorscheme-auto .view-select option {
+  body.colorscheme-auto .view-select-menu {
     background: #070707;
-    color: #e1e1e1;
+    border-color: #303030;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  }
+  body.colorscheme-auto .view-select-menu li.active {
+    background: rgba(96, 165, 250, 0.15);
+  }
+  body.colorscheme-auto .view-select-menu li[aria-selected="true"] {
+    color: #60a5fa;
   }
 }
 /* the page-wide view picker and the first table's Filters toggle share one row; the panel is a separate

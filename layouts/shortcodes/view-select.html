@@ -1,9 +1,15 @@
-<label class="view-select" id="view-select">View
-  <select>
-    <option value="">Overview</option>
-    <option value="ci">CI</option>
-    <option value="openssf">OpenSSF</option>
-  </select>
-</label>
+<div class="view-select" id="view-select">
+  <span id="view-select-label">View</span>
+  <span class="view-select-anchor">
+    <button type="button" class="view-select-button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="view-select-label view-select-current">
+      <span id="view-select-current"><i class="fas fa-table-list" aria-hidden="true"></i>Overview</span>
+    </button>
+    <ul class="view-select-menu" role="listbox" aria-labelledby="view-select-label" tabindex="-1" hidden>
+      <li role="option" data-view="" aria-selected="true"><i class="fas fa-table-list" aria-hidden="true"></i>Overview</li>
+      <li role="option" data-view="ci" aria-selected="false"><i class="fas fa-circle-check" aria-hidden="true"></i>CI</li>
+      <li role="option" data-view="openssf" aria-selected="false"><i class="fas fa-shield-halved" aria-hidden="true"></i>OpenSSF</li>
+    </ul>
+  </span>
+</div>
 {{ $js := resources.Get "js/project-table.js" | resources.Minify | resources.Fingerprint }}
 <script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>

@@ -65,31 +65,100 @@ function initProjectTables() {
 
   // each view other than the overview swaps the data columns for its badge columns (ci-view, openssf-view); the
   // choice lives in the URL (?view=ci) so it survives reload and is shareable, and the older ?ci=1 links still work
+  // a native <select> cannot show icons in its options, so the picker is a button plus a listbox
   var views = ["ci", "openssf"];
-  var viewSelect = document.querySelector("#view-select select");
-  if (viewSelect) {
+  var picker = document.getElementById("view-select");
+  if (picker) {
+    var pickerButton = picker.querySelector(".view-select-button");
+    var pickerCurrent = picker.querySelector("#view-select-current");
+    var menu = picker.querySelector(".view-select-menu");
+    var options = Array.from(menu.querySelectorAll("[role=option]"));
     var setView = function (view) {
       document.querySelectorAll(".project-table").forEach(function (t) {
         views.forEach(function (v) {
           t.classList.toggle(v + "-view", v === view);
         });
       });
-      viewSelect.value = view;
+      options.forEach(function (option) {
+        var chosen = option.dataset.view === view;
+        option.setAttribute("aria-selected", chosen ? "true" : "false");
+        if (chosen) pickerCurrent.innerHTML = option.innerHTML;
+      });
     };
-    var params = new URLSearchParams(location.search);
-    var requested = params.get("view") || (params.get("ci") === "1" ? "ci" : "");
-    setView(views.indexOf(requested) === -1 ? "" : requested);
-    viewSelect.addEventListener("change", function () {
-      setView(viewSelect.value);
+    var chooseView = function (view) {
+      setView(view);
       var next = new URLSearchParams(location.search);
       next.delete("ci");
-      if (viewSelect.value) {
-        next.set("view", viewSelect.value);
+      if (view) {
+        next.set("view", view);
       } else {
         next.delete("view");
       }
       var qs = next.toString();
       history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash);
+    };
+    var setActive = function (option) {
+      options.forEach(function (o) {
+        o.classList.toggle("active", o === option);
+      });
+      option.id = option.id || "view-option-" + (option.dataset.view || "overview");
+      menu.setAttribute("aria-activedescendant", option.id);
+    };
+    var openMenu = function () {
+      menu.hidden = false;
+      pickerButton.setAttribute("aria-expanded", "true");
+      setActive(menu.querySelector("[aria-selected=true]"));
+      menu.focus();
+    };
+    var closeMenu = function (refocus) {
+      menu.hidden = true;
+      pickerButton.setAttribute("aria-expanded", "false");
+      if (refocus) pickerButton.focus();
+    };
+    var params = new URLSearchParams(location.search);
+    var requested = params.get("view") || (params.get("ci") === "1" ? "ci" : "");
+    setView(views.indexOf(requested) === -1 ? "" : requested);
+    pickerButton.addEventListener("click", function () {
+      if (menu.hidden) {
+        openMenu();
+      } else {
+        closeMenu(true);
+      }
+    });
+    pickerButton.addEventListener("keydown", function (event) {
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        openMenu();
+      }
+    });
+    options.forEach(function (option) {
+      option.addEventListener("click", function () {
+        chooseView(option.dataset.view);
+        closeMenu(true);
+      });
+      option.addEventListener("mousemove", function () {
+        setActive(option);
+      });
+    });
+    menu.addEventListener("keydown", function (event) {
+      var index = options.indexOf(menu.querySelector(".active"));
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        var step = event.key === "ArrowDown" ? 1 : -1;
+        setActive(options[(index + step + options.length) % options.length]);
+      } else if (event.key === "Home" || event.key === "End") {
+        event.preventDefault();
+        setActive(options[event.key === "Home" ? 0 : options.length - 1]);
+      } else if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        chooseView(options[index].dataset.view);
+        closeMenu(true);
+      } else if (event.key === "Escape" || event.key === "Tab") {
+        closeMenu(event.key === "Escape");
+      }
+    });
+    document.addEventListener("click", function (event) {
+      if (!menu.hidden && !picker.contains(event.target)) closeMenu(false);
     });
   }
 
