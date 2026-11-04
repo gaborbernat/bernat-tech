@@ -1,0 +1,9 @@
+<label class="view-select" id="view-select">View
+  <select>
+    <option value="">Overview</option>
+    <option value="ci">CI</option>
+    <option value="openssf">OpenSSF</option>
+  </select>
+</label>
+{{ $js := resources.Get "js/project-table.js" | resources.Minify | resources.Fingerprint }}
+<script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>

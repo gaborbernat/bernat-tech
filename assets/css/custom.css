@@ -18,7 +18,7 @@ li p {
   margin: 0;
   display: inline;
 }
-/* the project-list shortcode only appears on the OSS page. The first view toggle emits a <script> tag after its
+/* the project-list shortcode only appears on the OSS page. view-select bundles a <script> tag alongside its
    button, so the paragraph before the FIRST table has one in between (invisible — script has no box, but
    :has()'s "+" is structural and still has to skip over it); the paragraph before any later table doesn't. */
 p:has(+ .project-table-scroll),
@@ -99,8 +99,6 @@ table.project-table.ci-view .col-ci {
 table.project-table.openssf-view .col-openssf {
   display: table-cell;
 }
-button.ci-toggle,
-button.openssf-toggle,
 button.type-filters-toggle {
   background: none;
   border: 1px solid currentColor;
@@ -111,13 +109,52 @@ button.type-filters-toggle {
   border-radius: 4px;
   opacity: 0.65;
 }
-button.ci-toggle:hover,
-button.openssf-toggle:hover,
 button.type-filters-toggle:hover,
 button.type-filters-toggle[aria-expanded="true"] {
   opacity: 1;
 }
-/* the page-wide view toggles and the first table's Filters toggle share one row; the panel is a separate
+/* styled like the Filters toggle: the native arrow is replaced by the same ▾ glyph, drawn as an SVG so it
+   follows currentColor in both colour schemes */
+.view-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8em;
+}
+.view-select select {
+  appearance: none;
+  background: transparent
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0h10L5 6z' fill='%23888'/%3E%3C/svg%3E")
+    no-repeat right 8px center;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  line-height: normal; /* the body's 1.8 would make it twice the Filters toggle's height */
+  padding: 2px 26px 2px 8px;
+  opacity: 0.65;
+}
+.view-select select:hover,
+.view-select select:focus-visible {
+  opacity: 1;
+}
+/* the open list is drawn by the OS, which ignores the transparent background; give it the page colours */
+.view-select option {
+  background: #fafafa;
+  color: #212121;
+}
+body.colorscheme-dark .view-select option {
+  background: #070707;
+  color: #e1e1e1;
+}
+@media (prefers-color-scheme: dark) {
+  body.colorscheme-auto .view-select option {
+    background: #070707;
+    color: #e1e1e1;
+  }
+}
+/* the page-wide view picker and the first table's Filters toggle share one row; the panel is a separate
    sibling that claims the full row width when shown, so opening it never moves either button */
 .table-toolbar {
   display: flex;

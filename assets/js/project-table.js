@@ -63,36 +63,35 @@ function initProjectTables() {
   };
   document.querySelectorAll(".relative-time[data-timestamp]").forEach(updateRelativeTime);
 
-  // each badge view (CI, OpenSSF) swaps the data columns for its badge column and is reflected in the URL
-  // (?ci=1, ?openssf=1) so it survives reload and is shareable
-  [
-    { id: "ci-toggle-btn", param: "ci", view: "ci-view" },
-    { id: "openssf-toggle-btn", param: "openssf", view: "openssf-view" },
-  ].forEach(function (toggle) {
-    var btn = document.getElementById(toggle.id);
-    if (!btn) return;
-    var setView = function (on) {
+  // each view other than the overview swaps the data columns for its badge columns (ci-view, openssf-view); the
+  // choice lives in the URL (?view=ci) so it survives reload and is shareable, and the older ?ci=1 links still work
+  var views = ["ci", "openssf"];
+  var viewSelect = document.querySelector("#view-select select");
+  if (viewSelect) {
+    var setView = function (view) {
       document.querySelectorAll(".project-table").forEach(function (t) {
-        t.classList.toggle(toggle.view, on);
+        views.forEach(function (v) {
+          t.classList.toggle(v + "-view", v === view);
+        });
       });
-      btn.setAttribute("aria-pressed", on ? "true" : "false");
+      viewSelect.value = view;
     };
-    if (new URLSearchParams(location.search).get(toggle.param) === "1") {
-      setView(true);
-    }
-    btn.addEventListener("click", function () {
-      var on = !document.querySelector(".project-table").classList.contains(toggle.view);
-      setView(on);
-      var params = new URLSearchParams(location.search);
-      if (on) {
-        params.set(toggle.param, "1");
+    var params = new URLSearchParams(location.search);
+    var requested = params.get("view") || (params.get("ci") === "1" ? "ci" : "");
+    setView(views.indexOf(requested) === -1 ? "" : requested);
+    viewSelect.addEventListener("change", function () {
+      setView(viewSelect.value);
+      var next = new URLSearchParams(location.search);
+      next.delete("ci");
+      if (viewSelect.value) {
+        next.set("view", viewSelect.value);
       } else {
-        params.delete(toggle.param);
+        next.delete("view");
       }
-      var qs = params.toString();
+      var qs = next.toString();
       history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash);
     });
-  });
+  }
 
   document.querySelectorAll(".project-table th[data-sort]").forEach(function (th) {
     th.tabIndex = 0;
@@ -266,7 +265,7 @@ function initProjectTables() {
 
     // hide a data column entirely once every currently-visible row has nothing in it (e.g. filtering down to
     // the monorepo leaves Downloads, Version and Release empty); recomputed on every filter change. The CI and
-    // OpenSSF columns are skipped — their display is driven by the view toggles, which would override [hidden].
+    // OpenSSF columns are skipped — their display is driven by the view picker, which would override [hidden].
     var headerCells = Array.from(table.querySelectorAll("thead tr th"));
     var footerRow = table.querySelector("tfoot tr.summary-row");
     var updateColumnVisibility = function (visibleRows) {
@@ -395,13 +394,11 @@ function initProjectTables() {
       updateSummary();
       var toolbar = document.createElement("div");
       toolbar.className = "table-toolbar";
-      // the page-wide view toggles switch every table at once; pair them with the first table's filter row
-      // so collapsed they read as one compact line instead of stacked controls
+      // the page-wide view picker switches every table at once; pair it with the first table's filter row so
+      // collapsed they read as one compact line instead of stacked controls
       if (tableIndex === 0) {
-        ["ci-toggle-btn", "openssf-toggle-btn"].forEach(function (id) {
-          var viewToggle = document.getElementById(id);
-          if (viewToggle) toolbar.appendChild(viewToggle);
-        });
+        var picker = document.getElementById("view-select");
+        if (picker) toolbar.appendChild(picker);
       }
       toolbar.appendChild(filterToggle);
       toolbar.appendChild(panel);
@@ -416,16 +413,24 @@ function initProjectTables() {
   // wide windows. Size the column to the widest table's natural width instead (the stylesheet caps it at the
   // window), and scroll a table sideways only when the window is too narrow for it: a scroll box also anchors
   // the sticky header, which should keep sticking to the page whenever the table fits. Re-measured whenever a
-  // table or its box changes size (window resize, CI or OpenSSF view, filters).
+  // table or its box changes size (window resize, filters, badges loading). Every view is measured, not just the
+  // shown one, so switching between them never changes the page width.
   var tables = Array.from(document.querySelectorAll(".project-table"));
   var column = tables.length ? tables[0].closest(".container") : null;
+  var viewClasses = ["ci-view", "openssf-view"];
   var fitTables = function () {
     var widest = 0;
     tables.forEach(function (table) {
-      var previous = table.style.width;
+      var previousWidth = table.style.width;
+      var previousClass = table.className;
       table.style.width = "max-content";
-      widest = Math.max(widest, table.offsetWidth);
-      table.style.width = previous;
+      [""].concat(viewClasses).forEach(function (view) {
+        table.classList.remove.apply(table.classList, viewClasses);
+        if (view) table.classList.add(view);
+        widest = Math.max(widest, table.offsetWidth);
+      });
+      table.className = previousClass;
+      table.style.width = previousWidth;
     });
     if (column) column.style.setProperty("--project-table-width", widest + "px");
     tables.forEach(function (table) {

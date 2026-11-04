@@ -7,7 +7,7 @@ aliases = [ "/about/"]
 The [open-source](https://en.wikipedia.org/wiki/Open_source) projects I maintain and, in most cases, authored. A little
 more [about me](/) is on the home page.
 
-{{< ci-toggle >}} {{< openssf-toggle >}}
+{{< view-select >}}
 
 {{< project-list group="primary" footer="true" >}}
 

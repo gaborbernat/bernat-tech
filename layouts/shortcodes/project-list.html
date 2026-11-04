@@ -13,7 +13,7 @@
   {{- else if eq $col "release" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="date">Release</th>` }}
   {{- else if eq $col "last-commit" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="date">Last Commit</th>` }}
   {{- else if eq $col "ci" -}}{{ $headerRow = $headerRow | append `<th class="col-ci">CI</th>` }}
-  {{- else if eq $col "openssf" -}}{{ $headerRow = $headerRow | append `<th class="col-openssf">OpenSSF</th>` }}
+  {{- else if eq $col "openssf" -}}{{ $headerRow = $headerRow | append `<th class="col-openssf" data-sort="scorecard">Scorecard</th><th class="col-openssf" data-sort="bestpractices">Best Practices</th>` }}
   {{- else if eq $col "issues" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="issues" title="Issues/Pull Requests">I/P</th>` }}
   {{- else if eq $col "stars" -}}{{ $headerRow = $headerRow | append `<th class="col-data" data-sort="stars">Stars</th>` }}
   {{- else if eq $col "slides" -}}{{ $headerRow = $headerRow | append `<th class="col-data">Slides</th>` }}
@@ -55,7 +55,7 @@
     {{- if eq $col "downloads" -}}{{ $footRow = $footRow | append `<td class="dl-cell col-data summary-downloads"></td>` }}
     {{- else if eq $col "stars" -}}{{ $footRow = $footRow | append `<td class="col-data summary-stars"></td>` }}
     {{- else if eq $col "ci" -}}{{ $footRow = $footRow | append `<td class="col-ci"></td>` }}
-    {{- else if eq $col "openssf" -}}{{ $footRow = $footRow | append `<td class="col-openssf"></td>` }}
+    {{- else if eq $col "openssf" -}}{{ $footRow = $footRow | append `<td class="col-openssf"></td><td class="col-openssf"></td>` }}
     {{- else -}}{{ $footRow = $footRow | append `<td class="col-data"></td>` }}
     {{- end -}}
   {{- end -}}

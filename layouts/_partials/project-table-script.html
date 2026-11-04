@@ -1,6 +1,0 @@
-{{/* both view toggles need the table script; the first one on the page emits it, so it never loads twice */}}
-{{- if not (.Store.Get "projectTableScript") -}}
-  {{- .Store.Set "projectTableScript" true -}}
-  {{- $js := resources.Get "js/project-table.js" | resources.Minify | resources.Fingerprint -}}
-<script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
-{{- end -}}

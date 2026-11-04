@@ -214,8 +214,12 @@
       {{- end -}}
   </td>
     {{- else if eq $col "openssf" -}}
-  <td class="col-openssf">
+  {{- $scorecard := index $d "scorecard_score" -}}
+  <td class="col-openssf"{{ if ne $scorecard nil }} data-value="{{ $scorecard }}"{{ end }}>
         <a href="https://scorecard.dev/viewer/?uri=github.com/{{ $org }}/{{ $repo }}"><img src="https://img.shields.io/ossf-scorecard/github.com/{{ $org }}/{{ $repo }}?label=openssf+scorecard&style=flat" alt="{{ $label }} OpenSSF Scorecard"></a>
+  </td>
+  {{- $bestpractices := index $d "bestpractices_tiered" -}}
+  <td class="col-openssf"{{ if and $p.bestpractices_id (ne $bestpractices nil) }} data-value="{{ $bestpractices }}"{{ end }}>
       {{- with $p.bestpractices_id -}}
         <a href="https://www.bestpractices.dev/projects/{{ . }}"><img src="https://www.bestpractices.dev/projects/{{ . }}/badge" alt="{{ $label }} OpenSSF Best Practices"></a>
       {{- end -}}
