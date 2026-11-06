@@ -26,6 +26,31 @@ repos:
           - mdformat-beautysh==1.0.0
           - mdformat-simple-breaks==0.1.0
           - mdformat-hugo==0.3.4
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: 25bcf95026b96e2dd3c0aec3090c3d6ef6ca2e6c # frozen: v0.17.3
+    hooks:
+      # --isolated keeps a developer's own ruff config from changing what CI enforces
+      - id: ruff-check
+        args:
+          - --fix
+          - --isolated
+          - --target-version=py313
+          - --line-length=120
+          - --preview
+          - --select=ALL
+          # COM812 fights the formatter; the build scripts keep no copyright headers or docstring policy, and
+          # S only flags their git/fonttools subprocess calls and https API fetches built from hard-coded hosts
+          - --ignore=COM812,CPY,D,S
+        files: ^scripts/
+      - id: ruff-format
+        args: ["--isolated", "--target-version=py313", "--line-length=120", "--preview"]
+        files: ^scripts/
+  - repo: https://github.com/biomejs/pre-commit
+    rev: eb45ebf3cb7c3a872b3ff0814883e8ab81fc451f # frozen: v2.6.4
+    hooks:
+      - id: biome-check
+        args: ["--indent-style=space", "--line-width=120"]
+        files: ^scripts/
   - repo: https://github.com/devantler/actionlint
     # Parallel-step support is pending in https://github.com/rhysd/actionlint/pull/695.
     rev: bf6b9188a5fd7b4e7b7d244a865a60165bdc6783
