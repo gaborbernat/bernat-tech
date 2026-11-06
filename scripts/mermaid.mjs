@@ -1,6 +1,6 @@
-import { createHash } from "crypto";
-import { existsSync } from "fs";
-import { mkdir, readFile, writeFile } from "fs/promises";
+import { createHash } from "node:crypto";
+import { existsSync } from "node:fs";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { glob } from "glob";
 import { chromium } from "playwright";
 
@@ -170,8 +170,12 @@ for (const file of targets) {
     diagram++;
     // both variants carry the name; CSS display:none on the inactive one already keeps it out of the
     // accessibility tree, so a fixed aria-hidden would hide the diagram from dark-mode screen readers
-    const light = readable(label(canonicalize(await readFile(rawPath(code, "default"), "utf-8"), `ml${diagram}`), code, heading));
-    const dark = readable(label(canonicalize(await readFile(rawPath(code, "dark"), "utf-8"), `md${diagram}`), code, heading));
+    const light = readable(
+      label(canonicalize(await readFile(rawPath(code, "default"), "utf-8"), `ml${diagram}`), code, heading),
+    );
+    const dark = readable(
+      label(canonicalize(await readFile(rawPath(code, "dark"), "utf-8"), `md${diagram}`), code, heading),
+    );
     figs.push(
       `<figure class="mermaid"><span class="mermaid-light">${light}</span>` +
         `<span class="mermaid-dark">${dark}</span></figure>`,
@@ -179,7 +183,10 @@ for (const file of targets) {
     placed++;
   }
   let index = 0;
-  await writeFile(file, html.replace(BLOCK, () => figs[index++]));
+  await writeFile(
+    file,
+    html.replace(BLOCK, () => figs[index++]),
+  );
 }
 console.log(`mermaid: ${placed} diagrams across ${targets.length} files (${misses.length} rendered, rest cached)`);
 process.exit(0);

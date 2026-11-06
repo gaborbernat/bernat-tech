@@ -8,7 +8,7 @@ it. Writes data/publish_dates.json keyed by the content-relative path; posts/li.
 back to the frontmatter date for posts that were never drafts."""
 
 # print is this CLI build script's progress output; stdout is intended
-# ruff: noqa: T201
+# ruff: file-ignore[print]
 
 from __future__ import annotations
 

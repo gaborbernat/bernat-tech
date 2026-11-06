@@ -1,6 +1,6 @@
-import { createHighlighter } from "shiki";
-import { readFile, writeFile } from "fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { glob } from "glob";
+import { createHighlighter } from "shiki";
 
 // github-light/github-dark clear WCAG 4.5:1 for their tokens; catppuccin-latte did not
 const THEMES = { light: "github-light", dark: "github-dark" };
@@ -25,14 +25,17 @@ const LANGS = [
   "css",
 ];
 const CODE_BLOCK_RE = /<pre><code class=["']?language-(\w+)["']?>([\s\S]*?)<\/code><\/pre>/g;
-const INLINE_CODE_RE = /<code>([^<]*?[.()\[\]=:][^<]*?)<\/code>/g;
+const INLINE_CODE_RE = /<code>([^<]*?[.()[\]=:][^<]*?)<\/code>/g;
 
 // WCAG 4.5:1 minimum for token text, enforced per theme after highlighting: syntax themes
 // de-emphasize comments (and github-light's orange) below the threshold, so nudge any failing
 // token toward the background's opposite, preserving hue, until it clears 4.5:1.
 const BG = { light: "e0e0e0", dark: "303030" }; // the coder theme's actual code backgrounds ($alt-bg-color[-dark])
 const relLum = (r, g, b) => {
-  const f = (c) => ((c /= 255), c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+  const f = (c) => {
+    const s = c / 255;
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  };
   return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
 };
 const rgb = (hex) => [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16));
@@ -71,8 +74,8 @@ function ensureContrast(fgHex, bgHex, min = 4.6) {
 }
 const enforceContrast = (html) =>
   html
-    .replace(/--shiki-light:#([0-9A-Fa-f]{6})/g, (_m, c) => "--shiki-light:#" + ensureContrast(c, BG.light))
-    .replace(/--shiki-dark:#([0-9A-Fa-f]{6})/g, (_m, c) => "--shiki-dark:#" + ensureContrast(c, BG.dark));
+    .replace(/--shiki-light:#([0-9A-Fa-f]{6})/g, (_m, c) => `--shiki-light:#${ensureContrast(c, BG.light)}`)
+    .replace(/--shiki-dark:#([0-9A-Fa-f]{6})/g, (_m, c) => `--shiki-dark:#${ensureContrast(c, BG.dark)}`);
 
 const highlighter = await createHighlighter({ themes: Object.values(THEMES), langs: LANGS });
 
