@@ -198,6 +198,11 @@ primary:
     kind: plugin
     ci: check
     bestpractices-id: "16268"
+  - name: python-sbom
+    org: tox-dev
+    lang: python
+    kind: cli,plugin
+    ci: check
   - name: PyVenvManage
     org: tox-dev
     label: PyVenv Manage 2
