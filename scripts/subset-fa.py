@@ -2,8 +2,9 @@
 # requires-python = ">=3.13"
 # dependencies = ["fonttools>=4.55", "brotli>=1.1"]
 # ///
-"""Subset the FontAwesome webfonts in public/fonts/ to only the glyphs the built site actually uses,
-then verify every used codepoint survived. Runs after Hugo, against the rendered output. FA6 defines
+r"""Subset FontAwesome webfonts to the glyphs the site uses.
+
+Verify every used codepoint survived. Runs after Hugo, against the rendered output. FA6 defines
 each icon's codepoint as a CSS variable (`.fa-name { --fa: "\\fXXXX" }`), so we map used `fa-name`
 classes to codepoints via the built CSS and drop everything else from the fonts.
 
@@ -15,10 +16,11 @@ codepoint ever associated with a used name rather than guessing which rule wins 
 
 Fail-safe: if the extraction finds nothing, a used codepoint is missing from every font after subsetting, or a
 page uses an fa- class that no stylesheet defines, exit non-zero so the build fails instead of shipping broken
-icons. The last one guards assets/scss/_fa-used.scss, which limits the compiled icon rules to a fixed list."""
+icons. The last one guards assets/scss/_fa-used.scss, which limits the compiled icon rules to a fixed list.
+"""
 
-# print is this CLI build script's progress output; stdout is intended
-# ruff: file-ignore[print]
+# CLI progress uses stdout; Python runs a fixed fontTools module with path arguments.
+# ruff: file-ignore[print,suspicious-subprocess-import,subprocess-without-shell-equals-true]
 
 from __future__ import annotations
 

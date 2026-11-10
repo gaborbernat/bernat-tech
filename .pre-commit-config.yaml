@@ -38,9 +38,9 @@ repos:
           - --line-length=120
           - --preview
           - --select=ALL
-          # COM812 fights the formatter; the build scripts keep no copyright headers or docstring policy, and
-          # S only flags their git/fonttools subprocess calls and https API fetches built from hard-coded hosts
-          - --ignore=COM812,CPY,D,S
+          # COM812 fights the formatter; D203/D211 and D212/D213 conflict.
+          # The repository LICENSE covers CPY001; D103 treats internal script functions as public.
+          - --ignore=COM812,CPY001,D103,D203,D213
         files: ^scripts/
       - id: ruff-format
         args: ["--isolated", "--target-version=py313", "--line-length=120", "--preview"]

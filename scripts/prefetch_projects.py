@@ -2,8 +2,10 @@
 # requires-python = ">=3.13"
 # dependencies = ["pyyaml>=6", "rich>=13", "tenacity>=9"]
 # ///
-"""Refresh the GitHub/PyPI/JetBrains/Homebrew stats the project tables show into data/project_stats.json, so Hugo
-reads a static file instead of making ~150 fragile API calls inside its render timeout. An hourly workflow
+"""Refresh project stats for Hugo.
+
+The GitHub/PyPI/JetBrains/Homebrew stats go into data/project_stats.json, so Hugo reads a static file instead of making
+~150 fragile API calls inside its render timeout. An hourly workflow
 runs this off the build's hot path and stores the result in the Actions cache, the file's only home: it is not
 committed, so the build restores it and a cache miss renders the tables without stats. project-row.html consumes it
 by the key keyed() builds here.
@@ -18,10 +20,11 @@ bestpractices.dev throttles hard. Like ranks, a failed fetch keeps the prior sco
 
 Popularity ranks ride along: PyPI and Homebrew publish a ranked list each, loaded once per run, while JetBrains has
 none, so its rank comes from a binary search over the marketplace's download-sorted listing, at most once a day. A
-failed rank fetch keeps the prior rank and does not hold back fetched_at."""
+failed rank fetch keeps the prior rank and does not hold back fetched_at.
+"""
 
-# print is this CLI build script's progress output; stdout is intended
-# ruff: file-ignore[print]
+# CLI progress uses stdout; get() callers use fixed HTTPS hosts.
+# ruff: file-ignore[print,suspicious-url-open-usage]
 
 from __future__ import annotations
 
@@ -83,6 +86,8 @@ _BASELINE: Final[dict[str, Json]] = json.loads(_OUT.read_text()) if _OUT.exists(
 
 @dataclass
 class Rank:
+    """A project's position in a ranked source."""
+
     position: int
     of: int  # how many the source ranks; 0 when it does not say
     as_of: str  # the upstream data date, or the fetch time when the source has none
@@ -90,6 +95,8 @@ class Rank:
 
 @dataclass(frozen=True)
 class Board:
+    """A snapshot of one source's rankings."""
+
     positions: dict[str, int]
     of: int
     as_of: str
@@ -97,6 +104,8 @@ class Board:
 
 @dataclass
 class Stats:
+    """The cached values shown for a project."""
+
     default_branch: str = "main"
     stars: int = 0
     open_total: int = 0

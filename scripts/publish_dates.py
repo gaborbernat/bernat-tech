@@ -1,14 +1,18 @@
 # /// script
 # requires-python = ">=3.13"
 # ///
-"""Record when each post went from draft to live so the posts index shows the real publish date rather
-than the frontmatter start date (which is set when writing begins). The go-live commit is the newest one
+"""Record when each post went from draft to live.
+
+The posts index shows the real publish date rather than the frontmatter start date (which is set when writing begins).
+The go-live commit is the newest one
 that touched `draft = true`: a published post is no longer a draft, so that commit is the one that removed
 it. Writes data/publish_dates.json keyed by the content-relative path; posts/li.html reads it and falls
-back to the frontmatter date for posts that were never drafts."""
+back to the frontmatter date for posts that were never drafts.
+"""
 
-# print is this CLI build script's progress output; stdout is intended
+# CLI progress uses stdout; git receives fixed arguments and a content path after --.
 # ruff: file-ignore[print]
+# ruff: file-ignore[suspicious-subprocess-import,subprocess-without-shell-equals-true,start-process-with-partial-path]
 
 from __future__ import annotations
 
