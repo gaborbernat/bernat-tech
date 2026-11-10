@@ -32,16 +32,16 @@ jobs:
     runs-on: ubuntu-26.04
     environment: build
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+      - uses: astral-sh/setup-uv@v10.3.3
         with:
           python-version: "3.15"
           version: "0.12.23"
           cache-dependency-glob: scripts/*.lock
       - name: Restore last refreshed stats
-        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache/restore@v6.1.0
         with:
           # the previous run's numbers; the fetch merges onto them and keeps any it cannot refresh this time
           path: data/project_stats.json
@@ -56,7 +56,7 @@ jobs:
       - name: Save refreshed stats
         # save even on failure so the numbers it did manage to refresh carry into the next run
         if: always()
-        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache/save@v6.1.0
         with:
           path: data/project_stats.json
           key: ${{ runner.os }}-project-stats-${{ github.run_id }}
@@ -72,7 +72,7 @@ jobs:
     env:
       HUGO_CACHEDIR: /tmp/hugo_cache
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -102,21 +102,21 @@ jobs:
           echo "${sha256}  ${archive}" | sha256sum --check --strict
           tar -xzf "$archive" -C "$HOME"
           echo "$HOME/dart-sass" >> "$GITHUB_PATH"
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      - uses: actions/setup-node@v7.1.0
         with:
           node-version: 22
           cache: npm
       # always npm ci: it checks every package against the lockfile's integrity hashes, which a restored
       # node_modules cache would skip; setup-node's npm cache still keeps the downloads local
       - run: npm ci
-      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+      - uses: astral-sh/setup-uv@v10.3.3
         with:
           python-version: "3.15"
           version: "0.12.23"
           # each PEP 723 script has a lock beside it (uv lock --script); run them --locked so a stale lock fails
           # the build instead of resolving whatever was released since
           cache-dependency-glob: scripts/*.lock
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/cache@v6.1.0
         with:
           path: |
             /tmp/hugo_cache
@@ -125,14 +125,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-hugo-
       - name: Cache rendered mermaid diagrams
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@v6.1.0
         with:
           # unchanged diagrams reuse their cached SVG, so the browser is not launched for them
           path: .cache/mermaid
           key: ${{ runner.os }}-mermaid-${{ github.run_id }}
           restore-keys: ${{ runner.os }}-mermaid-
       - name: Restore refreshed project stats
-        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache/restore@v6.1.0
         with:
           # exact hit when the refresh job ran this build, else the newest earlier refresh; a full miss builds
           # the tables without stats (the file is not committed) and project-list logs a warning
@@ -151,7 +151,7 @@ jobs:
       # only restore the 270 MB browser and install it when a diagram actually changed
       - name: Cache the Playwright browser
         if: steps.mermaid.outputs.misses != '0'
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@v6.1.0
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
@@ -190,7 +190,7 @@ jobs:
       - name: Validate RSS feed
         run: uv run --no-project --python 3.15 python -c "import xml.etree.ElementTree as ET; ET.parse('public/index.xml')"
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        uses: actions/upload-pages-artifact@v5.0.0
         with:
           path: public
           # keep /.well-known/security.txt; the action otherwise strips all dot-dirs (.git/.github still excluded)
@@ -213,4 +213,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+        uses: actions/deploy-pages@v5.0.1
