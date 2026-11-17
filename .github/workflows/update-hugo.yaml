@@ -61,7 +61,7 @@ jobs:
       - name: Create Pull Request
         id: cpr
         if: steps.check.outputs.needed == 'true'
-        uses: peter-evans/create-pull-request@v8.1.1
+        uses: peter-evans/create-pull-request@v8.1.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: Bump Hugo from ${{ steps.current.outputs.version }} to ${{ steps.latest.outputs.version }}
