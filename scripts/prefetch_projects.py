@@ -78,6 +78,20 @@ _RANK_EVERY: Final = timedelta(days=1)  # JetBrains costs ~14 requests per rank;
 _PYPI_TOP: Final = "https://hugovk.dev/top-pypi-packages/top-pypi-packages.min.json"
 _BREW_TOP: Final = "https://formulae.brew.sh/api/analytics/install-on-request/30d.json"
 _OPENSSF_EVERY: Final = timedelta(days=1)
+_WORKFLOWS_QUERY: Final = """
+query($owner: String!, $repo: String!) {
+  repository(owner: $owner, name: $repo) {
+    object(expression: "HEAD:.github/workflows") {
+      ... on Tree {
+        entries {
+          name
+          object { ... on Blob { text } }
+        }
+      }
+    }
+  }
+}
+"""
 _JB_RANKED: Final = 10_000  # the marketplace listing refuses offset + max past this
 _FETCH_ERRORS: Final = (urllib.error.URLError, TimeoutError, json.JSONDecodeError)
 # the previous run's records, keyed as below; the baseline every best-effort fetch merges onto
@@ -126,6 +140,7 @@ class Stats:
     scorecard_score: float | None = None  # OpenSSF Scorecard, 0-10
     bestpractices_tiered: int | None = None  # OpenSSF Best Practices tiered percentage: 0-99, then 100/200/300
     openssf_as_of: str = ""
+    scheduled: dict[str, Json] = field(default_factory=dict)
     fetched_at: str = ""  # day this record last fetched with no transient failure; drives staleness
 
 
@@ -344,6 +359,7 @@ def from_baseline(data: Json) -> Stats:
         scorecard_score=as_number(dig(data, "scorecard_score")),
         bestpractices_tiered=as_optional_int(dig(data, "bestpractices_tiered")),
         openssf_as_of=as_text(dig(data, "openssf_as_of")),
+        scheduled=as_dict(dig(data, "scheduled")),
         fetched_at=as_text(dig(data, "fetched_at")),
     )
 
@@ -368,6 +384,74 @@ def collect_github(record: Stats, org: str, repo: str, attempt: Attempt, *, no_r
 
     if (pulls := attempt("gh-pulls", lambda: gh(f"repos/{org}/{repo}/pulls?state=open&per_page=100"))) is not None:
         record.open_prs = len(as_list(pulls))
+
+    if _TOKEN:
+        collect_scheduled(record, org, repo, attempt)
+
+
+def collect_scheduled(record: Stats, org: str, repo: str, attempt: Attempt) -> None:
+    request = json.dumps({"query": _WORKFLOWS_QUERY, "variables": {"owner": org, "repo": repo}}).encode()
+    response = attempt(
+        "workflow definitions",
+        partial(
+            get, "https://api.github.com/graphql", {**_GH_HEADERS, "Content-Type": "application/json"}, data=request
+        ),
+    )
+    repository = dig(response, "data", "repository")
+    if repository is None or dig(response, "errors"):
+        return
+
+    scheduled = {}
+    for entry in as_list(dig(repository, "object", "entries")):
+        filename = as_text(dig(entry, "name"))
+        if not filename.endswith((".yml", ".yaml")):
+            continue
+        definition = as_text(dig(entry, "object", "text"))
+        try:
+            workflow = as_dict(yaml.load(definition, Loader=yaml.BaseLoader))
+        except yaml.YAMLError:
+            if filename in record.scheduled:
+                scheduled[filename] = record.scheduled[filename]
+            continue
+        schedules = as_list(dig(workflow, "on", "schedule"))
+        if not schedules:
+            continue
+        name = as_text(dig(workflow, "name")) or filename.rsplit(".", 1)[0]
+        path = f"repos/{org}/{repo}/actions/workflows/{urllib.parse.quote(filename, safe='')}/runs"
+        query = urllib.parse.urlencode({"branch": record.default_branch, "event": "schedule", "per_page": 1})
+        result = attempt(f"scheduled {filename}", partial(gh, f"{path}?{query}"))
+        runs = dig(result, "workflow_runs")
+        if not isinstance(runs, list):
+            if filename in record.scheduled:
+                scheduled[filename] = record.scheduled[filename]
+            continue
+        run = runs[0] if runs else None
+        check: dict[str, Json] = {
+            "name": name,
+            "run_id": as_int(dig(run, "id")),
+            "status": as_text(dig(run, "status")),
+            "conclusion": as_text(dig(run, "conclusion")),
+            "started_at": as_text(dig(run, "created_at")),
+        }
+        if len(schedules) > 1:
+            # GitHub does not expose the cron entry on a run. Keep a visible failure if a different cadence runs later.
+            check["last_failure"] = latest_scheduled_failure(path, query, attempt, record.scheduled.get(filename))
+        scheduled[filename] = check
+    record.scheduled = scheduled
+
+
+def latest_scheduled_failure(path: str, query: str, attempt: Attempt, previous: Json) -> Json:
+    after = (_NOW - timedelta(days=35)).date().isoformat()
+    filters = urllib.parse.urlencode({"status": "failure", "created": f">={after}"})
+    failures = dig(attempt(f"failed {path}", partial(gh, f"{path}?{query}&{filters}")), "workflow_runs")
+    if not isinstance(failures, list):
+        return dig(previous, "last_failure")
+    if not failures:
+        return None
+    return {
+        "run_id": as_int(dig(failures[0], "id")),
+        "date": as_text(dig(failures[0], "created_at"))[:10],
+    }
 
 
 def collect_pypi(record: Stats, name: str, attempt: Attempt) -> None:
@@ -549,8 +633,8 @@ def _log_retry(state: tenacity.RetryCallState) -> None:
     before_sleep=_log_retry,
     reraise=True,
 )
-def get(url: str, headers: dict[str, str] | None = None) -> Json:
-    request = urllib.request.Request(url, headers={"User-Agent": "bernat-tech-prefetch", **(headers or {})})
+def get(url: str, headers: dict[str, str] | None = None, *, data: bytes | None = None) -> Json:
+    request = urllib.request.Request(url, data=data, headers={"User-Agent": "bernat-tech-prefetch", **(headers or {})})
     with urllib.request.urlopen(request, timeout=30) as response:
         return json.load(response)
 
