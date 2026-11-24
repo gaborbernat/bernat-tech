@@ -28,6 +28,10 @@ p:has(+ script + .table-toolbar) {
   margin-bottom: 0.5rem;
 }
 table.project-table {
+  --project-row-highlight: #e4efff;
+  --project-row-marker: #345a87;
+  --project-row-text: #202b3b;
+  --project-row-link: #174b86;
   counter-reset: row-num;
   margin-bottom: 1.5em;
 }
@@ -271,6 +275,30 @@ body.colorscheme-dark .type-filter-pill.active {
     border-color: #60a5fa;
     color: #60a5fa;
   }
+}
+body.colorscheme-dark table.project-table {
+  --project-row-highlight: #243851;
+  --project-row-marker: #9cc5ff;
+  --project-row-text: #edf4ff;
+  --project-row-link: #a7ccff;
+}
+@media (prefers-color-scheme: dark) {
+  body.colorscheme-auto table.project-table {
+    --project-row-highlight: #243851;
+    --project-row-marker: #9cc5ff;
+    --project-row-text: #edf4ff;
+    --project-row-link: #a7ccff;
+  }
+}
+table.project-table tbody tr:is(:hover, :has(:focus-visible)) > td {
+  background: var(--project-row-highlight);
+  color: var(--project-row-text);
+}
+table.project-table tbody tr:is(:hover, :has(:focus-visible)) > td a:not(.badge *) {
+  color: var(--project-row-link);
+}
+table.project-table tbody tr:is(:hover, :has(:focus-visible)) > td:first-child {
+  box-shadow: inset 3px 0 var(--project-row-marker);
 }
 /* keep filtered-out rows out of the row-num counter, which counts every tbody tr */
 table.project-table tbody tr[hidden] {

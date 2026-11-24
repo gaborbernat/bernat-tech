@@ -213,6 +213,27 @@
         {{- end -}}
       {{- end -}}
   </td>
+  <td class="col-ci">
+      {{- range $filename, $run := $d.scheduled -}}
+        {{- $url := printf "https://github.com/%s/%s/actions/workflows/%s" $org $repo $filename -}}
+        {{- $label := "No run yet" -}}
+        {{- $color := "gray" -}}
+        {{- with $run.run_id -}}
+          {{- $url = printf "https://github.com/%s/%s/actions/runs/%d" $org $repo (int .) -}}
+          {{- $label = replace (or $run.conclusion $run.status) "_" " " -}}
+          {{- if eq $run.conclusion "success" -}}{{- $color = "green" -}}
+          {{- else if in (slice "failure" "timed_out" "action_required" "startup_failure" "stale" "cancelled") $run.conclusion -}}{{- $color = "red" -}}
+          {{- else if or (eq $run.status "in_progress") (eq $run.status "queued") -}}{{- $color = "yellow" -}}
+          {{- end -}}
+        {{- end -}}
+        <div><a href="{{ $url }}" title="{{ $run.started_at }}"><span class="badge badge-{{ $color }}">{{ $run.name }} · {{ $label }}</span></a></div>
+        {{- with $run.last_failure -}}
+          {{- if and (.run_id) (ne .run_id $run.run_id) -}}
+            <div><a href="https://github.com/{{ $org }}/{{ $repo }}/actions/runs/{{ int .run_id }}" aria-label="{{ $run.name }} failed on {{ .date }}"><span class="badge badge-red">Last failure · {{ .date }}</span></a></div>
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+  </td>
     {{- else if eq $col "openssf" -}}
   {{- $scorecard := index $d "scorecard_score" -}}
   <td class="col-openssf"{{ if ne $scorecard nil }} data-value="{{ $scorecard }}"{{ end }}>
