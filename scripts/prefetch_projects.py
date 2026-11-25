@@ -93,7 +93,8 @@ query($owner: String!, $repo: String!) {
 }
 """
 _JB_RANKED: Final = 10_000  # the marketplace listing refuses offset + max past this
-_FETCH_ERRORS: Final = (urllib.error.URLError, TimeoutError, json.JSONDecodeError)
+_TRANSPORT_ERRORS: Final = (urllib.error.URLError, ConnectionError, TimeoutError)
+_FETCH_ERRORS: Final = (*_TRANSPORT_ERRORS, json.JSONDecodeError)
 # the previous run's records, keyed as below; the baseline every best-effort fetch merges onto
 _BASELINE: Final[dict[str, Json]] = json.loads(_OUT.read_text()) if _OUT.exists() else {}
 
@@ -587,7 +588,7 @@ def _is_retryable(exc: BaseException) -> bool:
         # per call, so give up at once and let the next hourly run pick the record up as transient
         told = retry_after(exc)
         return _is_transient_http(exc) and (told is None or told <= _BACKOFF_CAP)
-    return isinstance(exc, (urllib.error.URLError, TimeoutError))  # connection reset, DNS, timeout
+    return isinstance(exc, _TRANSPORT_ERRORS)
 
 
 # deterministic doubling (1s, 2s, 4s, 8s) with a little jitter so 8 threads do not retry in lockstep
